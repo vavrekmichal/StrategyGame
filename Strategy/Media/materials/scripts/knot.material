@@ -1,0 +1,14 @@
+material Knot
+{
+	technique
+	{
+		pass
+		{
+
+			texture_unit
+			{
+				texture gold.jpg
+			}
+		}
+	}
+}

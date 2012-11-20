@@ -1,0 +1,23 @@
+Win
+{
+	container BorderPanel(Win/MessageBox)
+	{
+		metrics_mode          pixels
+		width                 250
+		height                50
+		material              Core/StatsBlockCenter
+		border_material       Core/StatsBlockBorder
+		border_size           1 1 1 1
+
+		element TextArea(Win/MessageBox/Body)
+		{
+			metrics_mode  pixels
+			left          125
+			top           20
+			font_name     BlueHighway
+			char_height   16
+			alignment     center
+			colour        0.5 0.7 0.5
+		}
+	}
+}

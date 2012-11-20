@@ -1,0 +1,39 @@
+material birdbody
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.94902 0.94902 0.94902 1
+			diffuse 0.94902 0.94902 0.94902 1
+			specular 0 0 0 39.3966
+			emissive 0 0 0
+		}
+	}
+}
+material Beak
+{
+	technique
+	{
+		pass
+		{
+			ambient 1 0.270588 0.270588 1
+			diffuse 1 0.270588 0.270588 1
+			specular 0 0 0 2
+			emissive 0 0 0
+		}
+	}
+}
+material eyes
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.7 0.7 0.7 1
+			diffuse 0.7 0.7 0.7 1
+			specular 0.707 0.707 0.707 32
+			emissive 0 0 0
+		}
+	}
+}

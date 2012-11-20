@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TrueTypeFonts>
+  <TrueTypeFont Name="BlueHighway">
+    <FileName>../../Media/bluehigh.ttf</FileName>
+    <FontStyle>Regular</FontStyle>
+    <Resolution>96</Resolution>
+    <Size>16</Size>
+  </TrueTypeFont>  
+</TrueTypeFonts>

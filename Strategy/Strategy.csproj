@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{F02B6CE3-DA8A-4B23-BAD0-8FAF0DB4DAFE}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Strategy</RootNamespace>
+    <AssemblyName>Strategy</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="irrKlang.NET4, Version=1.0.4534.25937, Culture=neutral, PublicKeyToken=a854741bd80517c7, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\irrKlang.NET4.dll</HintPath>
+    </Reference>
+    <Reference Include="Miyagi, Version=1.3.0.18796, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Miyagi.dll</HintPath>
+    </Reference>
+    <Reference Include="Mogre, Version=1.7.1.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Mogre.dll</HintPath>
+    </Reference>
+    <Reference Include="MOIS, Version=1.1.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\MOIS.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="FightControl\FightManager.cs" />
+    <Compile Include="FightControl\IFightManager.cs" />
+    <Compile Include="GroupControl\Game Objects\GameActions\IGameAction.cs" />
+    <Compile Include="GroupControl\Game Objects\GameObjectParameter\IGameObjectParameter.cs" />
+    <Compile Include="GroupControl\Game Objects\MovableGameObjectBox\IMovableGameObject.cs" />
+    <Compile Include="GroupControl\Game Objects\StaticGameObjectBox\Sun.cs" />
+    <Compile Include="GroupControl\Game Objects\StaticGameObjectBox\IStaticGameObject.cs" />
+    <Compile Include="GroupControl\Group.cs" />
+    <Compile Include="GroupControl\Game Objects\MovableGameObjectBox\MovableGameObject.cs" />
+    <Compile Include="GroupControl\Game Objects\StaticGameObjectBox\StaticGameObject.cs" />
+    <Compile Include="GroupControl\Game Objects\ObjectCreator.cs" />
+    <Compile Include="GroupControl\Game Objects\StaticGameObjectBox\Planet.cs" />
+    <Compile Include="GroupControl\GroupManager.cs" />
+    <Compile Include="MogreControl\MouseControl.cs" />
+    <Compile Include="GameGUI\MyGUI.cs" />
+    <Compile Include="GUIControler.cs" />
+    <Compile Include="MoveControl\IMoveControler.cs" />
+    <Compile Include="MoveControl\MoveControler.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Exception\ShutdownException.cs" />
+    <Compile Include="Sound\IGameSoundMaker.cs" />
+    <Compile Include="Sound\SongMaker.cs" />
+    <Compile Include="MogreControl\Tutorial Framework\BaseApplication.cs" />
+    <Compile Include="MogreControl\Tutorial Framework\BaseApplication.input.cs" />
+    <Compile Include="MogreControl\Tutorial Framework\CameraMan.cs" />
+    <Compile Include="MogreControl\Tutorial Framework\DebugOverlay.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

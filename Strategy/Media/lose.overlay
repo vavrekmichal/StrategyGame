@@ -1,0 +1,23 @@
+Loser
+{
+	container BorderPanel(Loser/MessageBox)
+	{
+		metrics_mode          pixels
+		width                 500
+		height                500
+		material              Core/StatsBlockCenter
+		border_material       Core/StatsBlockBorder
+		border_size           10 10 10 10
+
+		element TextArea(Loser/MessageBox/Body)
+		{
+			metrics_mode  pixels
+			left          250
+			top           150
+			font_name     BlueHighway
+			char_height   32
+			alignment     center
+			colour        1 0.5 0.4
+		}
+	}
+}

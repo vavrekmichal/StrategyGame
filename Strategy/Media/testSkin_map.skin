@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Exported with Sprite Sheet Packer using Aralox's Miyagi Skin Exporter-->
+<Skins>
+    <Skin Name="Button">
+	<SubSkins>
+	    <SubSkin Name="Button.MouseDown">
+		<Frames>
+		    <Frame>
+			<FileName>Button.png</FileName>
+			<Duration>0</Duration>
+			<UV>
+			    <X>0</X>
+			    <Y>0</Y>
+			    <Width>0.996108949</Width>
+			    <Height>0.2819383</Height>
+			</UV>
+		    </Frame>
+		</Frames>
+		<GpuPrograms />
+		<FrameAnimationMode>ForwardOnce</FrameAnimationMode>
+		<ScrollVector>
+		    <X>0</X>
+		    <Y>0</Y>
+		</ScrollVector>
+	    </SubSkin>
+	    <SubSkin Name="Button.MouseEnter">
+		<Frames>
+		    <Frame>
+			<FileName>Button.png</FileName>
+			<Duration>0</Duration>
+			<UV>
+			    <X>0</X>
+			    <Y>0.2863436</Y>
+			    <Width>0.996108949</Width>
+			    <Height>0.2819383</Height>
+			</UV>
+		    </Frame>
+		</Frames>
+		<GpuPrograms />
+		<FrameAnimationMode>ForwardOnce</FrameAnimationMode>
+		<ScrollVector>
+		    <X>0</X>
+		    <Y>0</Y>
+		</ScrollVector>
+	    </SubSkin>
+	    <SubSkin Name="Button">
+		<Frames>
+		    <Frame>
+			<FileName>Button.png</FileName>
+			<Duration>0</Duration>
+			<UV>
+			    <X>0</X>
+			    <Y>0.5726872</Y>
+			    <Width>0.996108949</Width>
+			    <Height>0.2819383</Height>
+			</UV>
+		    </Frame>
+		</Frames>
+		<GpuPrograms />
+		<FrameAnimationMode>ForwardOnce</FrameAnimationMode>
+		<ScrollVector>
+		    <X>0</X>
+		    <Y>0</Y>
+		</ScrollVector>
+	    </SubSkin>
+	</SubSkins>
+    </Skin>
+    <Skin Name="ProgressBarH">
+	<SubSkins>
+	    <SubSkin Name="ProgressBarH.Bar">
+		<Frames>
+		    <Frame>
+			<FileName>testSkin.png</FileName>
+			<Duration>0</Duration>
+			<UV>
+			    <X>0</X>
+			    <Y>0.859030843</Y>
+			    <Width>0.124513619</Width>
+			    <Height>0.140969157</Height>
+			</UV>
+		    </Frame>
+		</Frames>
+		<GpuPrograms />
+		<FrameAnimationMode>ForwardOnce</FrameAnimationMode>
+		<ScrollVector>
+		    <X>0</X>
+		    <Y>0</Y>
+		</ScrollVector>
+	    </SubSkin>
+	    <SubSkin Name="ProgressBarH">
+		<Frames>
+		    <Frame>
+			<FileName>testSkin.png</FileName>
+			<Duration>0</Duration>
+			<UV>
+			    <X>0.128404662</X>
+			    <Y>0.859030843</Y>
+			    <Width>0.124513619</Width>
+			    <Height>0.140969157</Height>
+			</UV>
+		    </Frame>
+		</Frames>
+		<GpuPrograms />
+		<FrameAnimationMode>ForwardOnce</FrameAnimationMode>
+		<ScrollVector>
+		    <X>0</X>
+		    <Y>0</Y>
+		</ScrollVector>
+	    </SubSkin>
+	</SubSkins>
+    </Skin>
+    <Skin Name="Panel">
+	<SubSkins>
+	    <SubSkin Name="Panel">
+		<Frames>
+		    <Frame>
+			<FileName>dark-blue-sky.jpg</FileName>
+			<Duration>0</Duration>
+			<UV>
+			    <X>0</X>
+			    <Y>0</Y>
+			    <Width>1</Width>
+			    <Height>1</Height>
+			</UV>
+		    </Frame>
+		</Frames>
+		<GpuPrograms />
+		<FrameAnimationMode>ForwardOnce</FrameAnimationMode>
+		<ScrollVector>
+		    <X>0</X>
+		    <Y>0</Y>
+		</ScrollVector>
+	    </SubSkin>
+	</SubSkins>
+    </Skin>
+    <Skin Name="PanelR">
+	<SubSkins>
+	    <SubSkin Name="PanelR">
+		<Frames>
+		    <Frame>
+			<FileName>dark-blue-skyR.jpg</FileName>
+			<Duration>0</Duration>
+			<UV>
+			    <X>0</X>
+			    <Y>0</Y>
+			    <Width>1</Width>
+			    <Height>1</Height>
+			</UV>
+		    </Frame>
+		</Frames>
+		<GpuPrograms />
+		<FrameAnimationMode>ForwardOnce</FrameAnimationMode>
+		<ScrollVector>
+		    <X>0</X>
+		    <Y>0</Y>
+		</ScrollVector>
+	    </SubSkin>
+	</SubSkins>
+    </Skin>
+</Skins>
