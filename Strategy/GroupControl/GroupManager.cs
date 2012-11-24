@@ -45,7 +45,9 @@ namespace Strategy.GroupControl {
 
 		//grupy planet / lodi dle teamu rozdelit
 		private void makeGroups(List<IStaticGameObject> s, List<IMovableGameObject> m, out List<GroupStatics> gS, out List<GroupMovables> gM) {
-			GroupMovables g = new GroupMovables();
+			//just one solar system
+            GroupMovables g = new GroupMovables();
+
 			foreach (IMovableGameObject obj in m){
 				g.insertMemeber(obj);
 			}

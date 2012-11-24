@@ -32,7 +32,7 @@ namespace Strategy.MogreControl {
 
 			if (id == MOIS.MouseButtonID.MB_Left) {
 				//mCameraMan.Freeze = true;
-				/*using (Mogre.RaySceneQuery raySceneQuery = sceneMgr.CreateRayQuery(new Mogre.Ray())) {
+				using (Mogre.RaySceneQuery raySceneQuery = sceneMgr.CreateRayQuery(new Mogre.Ray())) {
 					float mouseX = (float)evt.state.X.abs / (float)evt.state.width;
 					float mouseY = (float)evt.state.Y.abs / (float)evt.state.height;
 
@@ -48,7 +48,7 @@ namespace Strategy.MogreControl {
 
 						}
 					}
-				}*/
+				}
 
                //pokus start
                 
