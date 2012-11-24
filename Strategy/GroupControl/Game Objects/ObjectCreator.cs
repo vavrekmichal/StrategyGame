@@ -46,7 +46,7 @@ namespace Strategy.GroupControl.Game_Objects {
 		}
 
 		private void createSun() {
-			listOfISGO.Add(new Sun("Sun","earth.mesh",0, Mogre.Vector3.ZERO,manager));
+			listOfISGO.Add(new Sun("Sun","sun.mesh",0, Mogre.Vector3.ZERO,manager));
 		}
 
 		private void createIMGO() {	}
