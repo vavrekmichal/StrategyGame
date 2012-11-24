@@ -67,10 +67,11 @@ namespace Strategy.GroupControl{
 			groupMembers.Remove(m);
 		}
 
-		public void rotate() {
-			sun.rotate();
+		public void rotate(float f) {
+			sun.rotate(f);
 			foreach (IStaticGameObject obj in groupMembers) {
 				//rotate...not implemented
+                obj.rotate(f);
 			}
 		}
 	}

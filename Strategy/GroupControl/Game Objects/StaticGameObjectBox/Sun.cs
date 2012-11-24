@@ -22,9 +22,8 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 			sceneNode.Pitch(new Mogre.Degree(-90f));
 		}
 
-		public void rotate() {
-			sceneNode.Roll(new Mogre.Degree(.1f));
-			
+		public void rotate(float f) {
+			sceneNode.Roll(new Mogre.Degree(50 *f));
 		}
 
 	}

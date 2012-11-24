@@ -42,7 +42,8 @@ namespace Strategy.GroupControl.Game_Objects {
 		}
 
 		private void createISGO() {
-			listOfISGO.Add( new Planet("Planet" + RandomUtil.GetRandomString(), "mercury.mesh",0, 0, new Mogre.Vector3(200, 0, 200), manager));
+			listOfISGO.Add( new Planet("PlanetMercury", "mercury.mesh", 0, 0, manager, 500));
+            listOfISGO.Add(new Planet("PlanetVenus", "venus.mesh", 0, 0, manager, 1000));
 		}
 
 		private void createSun() {

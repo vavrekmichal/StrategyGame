@@ -10,12 +10,14 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 		protected Mogre.Entity entity;
 		protected Mogre.SceneNode sceneNode;
 		protected string mesh;
-		protected List<IGameAction> listOfAction = new List<IGameAction> ();
-		protected Mogre.Vector3 position;
+		protected List<IGameAction> listOfAction;
+        protected LinkedList<Mogre.Vector3> circularPositions;
 		protected int team;
 		protected int planetSystem;
 
-		public abstract void rotate();
+
+
+		public abstract void rotate(float f);
 
 		public abstract void produce(float f);
 

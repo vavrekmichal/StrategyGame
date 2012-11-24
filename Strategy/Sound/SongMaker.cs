@@ -35,7 +35,8 @@ namespace Strategy {
 			r = new Random();
 			this.mWindow = mWindow;
 			sound = engine.Play2D(fileNames[0]);
-			sound.setSoundStopEventReceiver(this);	
+			sound.setSoundStopEventReceiver(this);
+            nowPlaying(fileNames[actual]);
 		}
 
 		/// <summary>

@@ -5,8 +5,7 @@ using System.Text;
 
 namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 	interface IStaticGameObject {
-		void rotate();
-		
+		void rotate(float f);
 		
 	}
 }

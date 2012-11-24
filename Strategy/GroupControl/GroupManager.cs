@@ -65,7 +65,7 @@ namespace Strategy.GroupControl {
 
 		public void update(float f) {
 			foreach (GroupStatics group in groupListStatic) {
-				group.rotate();
+				group.rotate(f);
 			}
 			foreach (GroupMovables group in groupListMovable) {
 				group.move(f);
