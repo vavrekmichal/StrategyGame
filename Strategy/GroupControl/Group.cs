@@ -37,42 +37,46 @@ namespace Strategy.GroupControl{
 				obj.move(f);
 			}
 		}
+
+        public void nonVisibleMove(float f) {
+        }
 	}
 
-	class GroupStatics {
-		private int number;
-		private List<IStaticGameObject> groupMembers;
-		private Sun sun;
+    class GroupStatics {
+        private int number;
+        private List<IStaticGameObject> groupMembers;
+        //Sun cannot be in this
+        public GroupStatics() {
+            groupMembers = new List<IStaticGameObject>();
+        }
 
-		public GroupStatics() {
-			groupMembers = new List<IStaticGameObject>();
-		}
+        public void setNumberOfGroup(int i) {
+            number = i;
+        }
 
-		public void setSun(Sun s) {
-			sun = s;
-		}
-		public void setNumberOfGroup(int i) {
-			number = i;
-		}
+        public int getNumberOfGroup() {
+            return number;
+        }
 
-		public int getNumberOfGroup() {
-			return number;
-		}
+        public void insertMemeber(IStaticGameObject m) {
+            groupMembers.Add(m);
+        }
 
-		public void insertMemeber(IStaticGameObject m) {
-			groupMembers.Add(m);
-		}
+        public void removeMember(IStaticGameObject m) {
+            groupMembers.Remove(m);
+        }
 
-		public void removeMember(IStaticGameObject m) {
-			groupMembers.Remove(m);
-		}
+        public void rotate(float f, int activeSolarSystem) {
+            foreach (IStaticGameObject obj in groupMembers) {
+                if (obj.getSolarSystem == activeSolarSystem) {
+                    obj.rotate(f);
+                } else {
+                    obj.nonActiveRotate(f);
+                }
+                
+            }
+        }
 
-		public void rotate(float f) {
-			sun.rotate(f);
-			foreach (IStaticGameObject obj in groupMembers) {
-				//rotate...not implemented
-                obj.rotate(f);
-			}
-		}
-	}
+        
+    }
 }

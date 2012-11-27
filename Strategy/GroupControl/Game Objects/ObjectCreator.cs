@@ -39,13 +39,22 @@ namespace Strategy.GroupControl.Game_Objects {
 			listOfIMGO = new List<IMovableGameObject>();
 		}
 
-        
-		public void initializeWorld(string mission){
+        /// <summary>
+        /// inicialization of game World
+        /// </summary>
+        /// <param name="mission">name of mission</param>
+		public void initializeWorld(string mission){ //not implemented
 			//XML Reader on mission will be here                !!!!!!!!!!!!!!!!!!!!!!!!!!!! 
             //TODO list invisible sol. system Manager > rember and watch it
+            //visual part 
 			createISGO();
 			createSun();
 		}
+
+        //public void createVirtualISGO
+        //public void createVirualIMGO  not inicialized entity and sceneNode
+        //public void makeInvisibleIMGO(IMGO)
+        //public void makeInvisibleISGO(ISGO) dispose entity and sceneNode ...used when you changing visibility
 
 		public void getInicializedObjects(out List<IStaticGameObject> s, out List<IMovableGameObject> m){
 			s= listOfISGO;
@@ -56,7 +65,7 @@ namespace Strategy.GroupControl.Game_Objects {
 
 		private void createISGO() {
             #region The Solar System
-            listOfISGO.Add( new Planet("PlanetMercury", "mercury.mesh", 0, 0, manager, 500));
+            listOfISGO.Add( new Planet("PlanetMercury", "mercury.mesh", 0, 1, manager, 500));
             listOfISGO.Add(new Planet("PlanetVenus", "venus.mesh", 0, 0, manager, 1500));
             listOfISGO.Add(new Planet("PlanetEarth", "earth.mesh", 0, 0, manager, 2500));
             listOfISGO.Add(new Planet("PlanetMars", "mars.mesh", 0, 0, manager, 3500));
@@ -68,7 +77,7 @@ namespace Strategy.GroupControl.Game_Objects {
         }
 
 		private void createSun() {
-			listOfISGO.Add(new Sun("Sun","sun.mesh",0, Mogre.Vector3.ZERO,manager));
+			listOfISGO.Add(new Sun("Sun", "sun.mesh", 0, manager));
 		}
 
 		private void createIMGO() {	}

@@ -12,15 +12,31 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 		protected string mesh;
 		protected List<IGameAction> listOfAction;
         protected LinkedList<Mogre.Vector3> circularPositions;
-		protected int team;
-		protected int planetSystem;
 
+		protected int solarSystem;
 
+        protected int planetTeam;
+        protected Mogre.SceneManager manager;
 
 		public abstract void rotate(float f);
+        public abstract void nonActiveRotate(float f);
+
+        public abstract void changeVisible(bool visible);
 
 		public abstract void produce(float f);
 
+        public int team {
+            get {
+                return planetTeam;
+            }
+            set {
+                planetTeam = team;
+            }
+        }
 
-	}
+
+        public int getSolarSystem {
+            get { return solarSystem; }
+        }
+    }
 }
