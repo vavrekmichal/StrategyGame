@@ -92,7 +92,10 @@ namespace Strategy.GroupControl {
 
         }
 
-
+        /// <summary>
+        /// Function inserting into ISGO dictionaries
+        /// </summary>
+        /// <param name="isgo">inserting object</param>
         private void insertIntoStaticGroup(IStaticGameObject isgo) {
             if (!solarSystem.ContainsKey(isgo.getSolarSystem)) {
                 solarSystem.Add(isgo.getSolarSystem, new GroupStatics());
@@ -126,6 +129,10 @@ namespace Strategy.GroupControl {
             }
         }
 
+        /// <summary>
+        /// Show given solar system and hide actual
+        /// </summary>
+        /// <param name="newSolarSystem">integer of showing solar system</param>
         public void changeSolarSystem(int newSolarSystem) {
             if (newSolarSystem == activeSolarSystem) {
                 return;
@@ -167,8 +174,7 @@ namespace Strategy.GroupControl {
                 } 
             }
 
-            activeSolarSystem = newSolarSystem;
-            
+            activeSolarSystem = newSolarSystem; //set new active solar system     
         }
 
 
