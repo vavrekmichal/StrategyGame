@@ -65,7 +65,7 @@ namespace Strategy.GroupControl.Game_Objects {
 
 		private void createISGO() {
             #region The Solar System
-            listOfISGO.Add( new Planet("PlanetMercury", "mercury.mesh", 0, 1, manager, 500));
+            listOfISGO.Add(new Planet("PlanetMercury", "mercury.mesh", 0, 0, manager, 500));
             listOfISGO.Add(new Planet("PlanetVenus", "venus.mesh", 0, 0, manager, 1500));
             listOfISGO.Add(new Planet("PlanetEarth", "earth.mesh", 0, 0, manager, 2500));
             listOfISGO.Add(new Planet("PlanetMars", "mars.mesh", 0, 0, manager, 3500));
@@ -74,10 +74,17 @@ namespace Strategy.GroupControl.Game_Objects {
             listOfISGO.Add(new Planet("PlanetUranus", "uranus.mesh", 0, 0, manager, 10000));
             listOfISGO.Add(new Planet("PlanetNeptune", "neptune.mesh", 0, 0, manager, 12000));
             #endregion
+
+            listOfISGO.Add(new Planet("FunnyThinks", "knot.mesh", 0, 1, manager, 2000));
+
+            listOfISGO.Add(new Planet("FunnyThinks2", "ninja.mesh", 0, 1, manager, 4000));
+
+            listOfISGO.Add(new Planet("FunnyThinks3", "robot.mesh", 0, 1, manager, 1000));
         }
 
 		private void createSun() {
 			listOfISGO.Add(new Sun("Sun", "sun.mesh", 0, manager));
+            listOfISGO.Add(new Sun("Sun2", "jupiter.mesh", 1, manager));
 		}
 
 		private void createIMGO() {	}

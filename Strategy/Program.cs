@@ -20,7 +20,6 @@ namespace Strategy {
 	class MyMogre : Mogre.TutorialFramework.BaseApplication {
 
 		protected MOIS.InputManager mInputMgr; //use for create control (mouse, keyborard) instance
-		protected Mogre.Light spotLight; //part of the "sun"
 		protected float mTimer; //float as timer to determine of duration overlay 
 		protected bool exit = false; //controlor if player is alive
 		protected IGameSoundMaker songMaker; //to make background music
@@ -45,44 +44,6 @@ namespace Strategy {
 			//createBars();
 			#endregion
 			panelControler = new GUIControler(mWindow, mMouse, mKeyboard);
-
-			//Mogre.Entity e = mSceneMgr.CreateEntity("pokus","SpaceShip1.mesh");
-			//Mogre.SceneNode s = mSceneMgr.RootSceneNode.CreateChildSceneNode("pokusNode",new Mogre.Vector3(0,500,0));
-			//s.AttachObject(e);
-
-			//Mogre.Entity e2 = mSceneMgr.CreateEntity("pokus2", "SpaceShip2.mesh");
-			//Mogre.SceneNode s2 = mSceneMgr.RootSceneNode.CreateChildSceneNode("pokusNode2", new Mogre.Vector3(0, 500, -1000));
-			//s2.AttachObject(e2);
-
-			//Mogre.Entity e3 = mSceneMgr.CreateEntity("pokus3", "mercury.mesh");
-			//Mogre.SceneNode s3 = mSceneMgr.RootSceneNode.CreateChildSceneNode("pokusNode3", new Mogre.Vector3(0, 500, 1000));
-			//s3.AttachObject(e3);
-
-			//Mogre.Entity e4 = mSceneMgr.CreateEntity("pokus4", "venus.mesh");
-			//Mogre.SceneNode s4 = mSceneMgr.RootSceneNode.CreateChildSceneNode("pokusNode4", new Mogre.Vector3(500, 500, 1000));
-			//s4.AttachObject(e4);
-			//Mogre.Entity e5 = mSceneMgr.CreateEntity("pokus5", "earth.mesh");
-			//Mogre.SceneNode s5 = mSceneMgr.RootSceneNode.CreateChildSceneNode("pokusNode5", new Mogre.Vector3(1000, 500, 1000));
-			//s5.AttachObject(e5);
-			//Mogre.Entity e6 = mSceneMgr.CreateEntity("pokus6", "mars.mesh");
-			//Mogre.SceneNode s6 = mSceneMgr.RootSceneNode.CreateChildSceneNode("pokusNode6", new Mogre.Vector3(1500, 500, 1000));
-			//s6.AttachObject(e6);
-			//Mogre.Entity e7 = mSceneMgr.CreateEntity("pokus7", "jupiter.mesh");
-			//Mogre.SceneNode s7 = mSceneMgr.RootSceneNode.CreateChildSceneNode("pokusNode7", new Mogre.Vector3(2000, 500, 1000));
-			//s7.AttachObject(e7);
-			//Mogre.Entity e8 = mSceneMgr.CreateEntity("pokus8", "saturn.mesh");
-			//Mogre.SceneNode s8 = mSceneMgr.RootSceneNode.CreateChildSceneNode("pokusNode8", new Mogre.Vector3(2500, 500, 1000));
-			//s8.AttachObject(e8);
-			//Mogre.Entity e9 = mSceneMgr.CreateEntity("pokus9", "uranus.mesh");
-			//Mogre.SceneNode s9 = mSceneMgr.RootSceneNode.CreateChildSceneNode("pokusNode9", new Mogre.Vector3(3000, 500, 1000));
-			//s9.AttachObject(e9);
-			//Mogre.Entity e10 = mSceneMgr.CreateEntity("pokus10", "neptune.mesh");
-			//Mogre.SceneNode s10 = mSceneMgr.RootSceneNode.CreateChildSceneNode("pokusNode10", new Mogre.Vector3(3500, 500, 1000));
-			//s10.AttachObject(e10);
-
-			//Mogre.Entity e11 = mSceneMgr.CreateEntity("pokus11", "airplane.mesh");
-			//Mogre.SceneNode s11 = mSceneMgr.RootSceneNode.CreateChildSceneNode("pokusNode11", new Mogre.Vector3(0, 500, 500));
-			//s11.AttachObject(e11);
 
 			loadFont();
 
@@ -239,10 +200,6 @@ namespace Strategy {
 					songMaker.actualPlaying();
 					break;
 				//End of music section
-				case MOIS.KeyCode.KC_SPACE:
-					spotLight.Visible = !spotLight.Visible;
-					break;
-
 				case MOIS.KeyCode.KC_R:
 					restartCamera();
 					break;
@@ -304,12 +261,7 @@ namespace Strategy {
 		/// The function to set the ground
 		/// </summary>
 		private void setGround() {
-			//Mogre.Plane plane = new Mogre.Plane(Mogre.Vector3.UNIT_Y, 0);
-			//Mogre.MeshManager.Singleton.CreatePlane("ground", Mogre.ResourceGroupManager.DEFAULT_RESOURCE_GROUP_NAME, plane, 150000, 150000, 200, 200, true, 1, 500, 500, Mogre.Vector3.NEGATIVE_UNIT_Z);
-			//Mogre.Entity groundEnt = mSceneMgr.CreateEntity("GroundEntity", "ground");
-			//mSceneMgr.RootSceneNode.CreateChildSceneNode().AttachObject(groundEnt);
-			//groundEnt.SetMaterialName("Examples/SpaceSkyBox");
-			//groundEnt.CastShadows = false;
+
 		}
 
 
@@ -320,17 +272,23 @@ namespace Strategy {
 
 			Mogre.Light directionalLight = mSceneMgr.CreateLight("directionalLight");
 			directionalLight.Type = Mogre.Light.LightTypes.LT_DIRECTIONAL;
-			directionalLight.DiffuseColour = new Mogre.ColourValue(.2f, .2f, .2f);
-			directionalLight.SpecularColour = new Mogre.ColourValue(.25f, .25f, 0);
-			directionalLight.Direction = new Mogre.Vector3(0, -5, 1);
+			directionalLight.DiffuseColour =  Mogre.ColourValue.White;
+			directionalLight.SpecularColour =  Mogre.ColourValue.Blue;
+			directionalLight.Direction = new Mogre.Vector3(0, -1000, 0);
 
-			spotLight = mSceneMgr.CreateLight("spotLight");
-			spotLight.Type = Mogre.Light.LightTypes.LT_SPOTLIGHT;
-			spotLight.DiffuseColour = Mogre.ColourValue.White;
-			spotLight.SpecularColour = Mogre.ColourValue.Blue;
-			spotLight.Direction = new Mogre.Vector3(0, -1, -3);
-			spotLight.Position = new Mogre.Vector3(0, 5000, 9000);
-			spotLight.SetSpotlightRange(new Mogre.Degree(35), new Mogre.Degree(90));
+			Mogre.Light pointLight = mSceneMgr.CreateLight("pointLight");
+			pointLight.Type = Mogre.Light.LightTypes.LT_POINT;
+			pointLight.DiffuseColour = Mogre.ColourValue.White;
+			pointLight.SpecularColour = Mogre.ColourValue.Blue;
+			pointLight.Position = new Mogre.Vector3(0, 0, 0);
+            
+            Mogre.Light spotLight = mSceneMgr.CreateLight("spotLight");
+            spotLight.Type = Mogre.Light.LightTypes.LT_SPOTLIGHT;
+            spotLight.DiffuseColour = Mogre.ColourValue.White;
+            spotLight.SpecularColour = Mogre.ColourValue.Blue;
+            spotLight.Direction = new Mogre.Vector3(-1, -1, 0);
+            spotLight.Position = new Mogre.Vector3(-50, 5000, -3000);
+
 		}
 
 		/// <summary>

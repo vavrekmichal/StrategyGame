@@ -12,7 +12,10 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         protected Mogre.Vector3 mDestination = Mogre.Vector3.ZERO; // The destination the object is moving towards
         protected bool mFlying = false; //bool to detect if object walking or stay
         protected double mFlySpeed = 200f; //speed of planet
-        protected Mogre.Vector3 invisblePosition;
+
+        protected double travelledInvisible;
+
+        private static Random random = new Random();
 
         public Planet(string name, string mesh, int team, int solarSystem, Mogre.SceneManager manager, double distanceFromCenter, int circularNum = 20) {
             this.name = name;
@@ -24,21 +27,20 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
             //prepare list of positions
             circularPositions = calculatePositions(circularNum, distanceFromCenter);
             randomizeStartPosition(circularNum); // randomize start position
+            invisblePosition = circularPositions.First();
 
-            
             //Mogre inicialization of object
+            entity = manager.CreateEntity(name, mesh);
             if (solarSystem==0) {
-                entity = manager.CreateEntity(name, mesh);
+                
                 sceneNode = manager.RootSceneNode.CreateChildSceneNode(name + "Node", circularPositions.First());
-
-                //circularPositions[random.Next(circularNum) ]
                 sceneNode.Pitch(new Mogre.Degree(-90f));
                 sceneNode.AttachObject(entity);
             }
         }
 
         /// <summary>
-        /// Rotating in active mood, it means with active SolarSystem
+        /// Rotating in visible mood, it means when planet is in active solar system
         /// </summary>
         /// <param name="f">delay between frames</param>
         public override void rotate(float f) {
@@ -58,6 +60,7 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
                 double move = mFlySpeed * f;
                 mDistance -= move;
                 if (mDistance <= .0f) { //reach destination
+                    travelledInvisible = 0;
                     sceneNode.Position = mDestination;
                     mDirection = Mogre.Vector3.ZERO;
                     mFlying = false;
@@ -67,6 +70,10 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
             }
         }
 
+        /// <summary>
+        /// Function calculate moves in invisible mode
+        /// </summary>
+        /// <param name="f">delay between frames</param>
         public override void nonActiveRotate(float f) {
             if (!mFlying) {
                 if (nextLocation()) {
@@ -82,34 +89,16 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
                 double move = mFlySpeed * f;
                 mDistance -= move;
                 if (mDistance <= .0f) { //reach destination
+                    travelledInvisible = 0;
                     invisblePosition = mDestination;
                     mDirection = Mogre.Vector3.ZERO;
                     mFlying = false;
+                    
+                } else {
+                    travelledInvisible += move;
                 }
             }
         }
-
-
-        /// <summary>
-        /// Called when object will be invisible
-        /// </summary>
-        public override void changeVisible(bool visible){   //now creating
-            if (visible) {
-                entity = manager.CreateEntity(name, mesh);
-                if (invisblePosition == null) {
-                    invisblePosition = circularPositions.First();
-                }
-                sceneNode = manager.RootSceneNode.CreateChildSceneNode(name + "Node", invisblePosition);
-
-                sceneNode.Pitch(new Mogre.Degree(-90f));
-                sceneNode.AttachObject(entity);
-            } else {
-                entity.Dispose();
-                invisblePosition = sceneNode.Position;
-                sceneNode.Dispose();
-            }
-        }
-
 
         public override void produce(float f) {
             throw new NotImplementedException();
@@ -122,12 +111,16 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         /// Randomize starting position of planet
         /// </summary>
         /// <param name="max">max of rotates</param>
-        private void randomizeStartPosition(int max) {
+        private  void randomizeStartPosition(int max) {
             Random random = new Random();
-            int r = random.Next(max);
-            for (int i = 0; i < r; i++) {
+            for (int i = 0; i < getRandomNumber(max); i++) {
                 prepareNextPosition();
             }
+        }
+
+        private static int getRandomNumber(int max) {
+      
+            return random.Next(max);
         }
 
         /// <summary>
@@ -168,5 +161,12 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
             return true;
         }
 
+        /// <summary>
+        /// Called when object is displayed (invisible to visible)
+        /// </summary>
+        protected override void onDisplayed() {
+            sceneNode.Position = invisblePosition;
+            sceneNode.Translate(mDirection * (float)travelledInvisible);
+        }
     }
 }

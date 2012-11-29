@@ -6,9 +6,10 @@ using Strategy.Game_Objects;
 using Strategy.Game_Objects.MovableGameObjectBox;
 using Strategy.GroupControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GroupControl.Game_Objects.StaticGameObjectBox;
+using System.Collections;
 
 namespace Strategy.GroupControl{
-	class GroupMovables {
+	class GroupMovables :IEnumerable{
 		private int number;
 		private List<IMovableGameObject> groupMembers;
 
@@ -40,12 +41,16 @@ namespace Strategy.GroupControl{
 
         public void nonVisibleMove(float f) {
         }
+
+        public IEnumerator GetEnumerator() {
+            return groupMembers.GetEnumerator();
+        }
 	}
 
-    class GroupStatics {
+    class GroupStatics :IEnumerable{
         private int number;
         private List<IStaticGameObject> groupMembers;
-        //Sun cannot be in this
+
         public GroupStatics() {
             groupMembers = new List<IStaticGameObject>();
         }
@@ -67,16 +72,19 @@ namespace Strategy.GroupControl{
         }
 
         public void rotate(float f, int activeSolarSystem) {
-            foreach (IStaticGameObject obj in groupMembers) {
-                if (obj.getSolarSystem == activeSolarSystem) {
-                    obj.rotate(f);
+            foreach (IStaticGameObject isgo in groupMembers) {
+                if (isgo.getSolarSystem == activeSolarSystem) {
+                    isgo.rotate(f);
                 } else {
-                    obj.nonActiveRotate(f);
+                    isgo.nonActiveRotate(f);
                 }
                 
             }
         }
 
-        
+
+        public IEnumerator GetEnumerator() {
+            return groupMembers.GetEnumerator();
+        }
     }
 }

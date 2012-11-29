@@ -9,20 +9,20 @@ using Strategy.GroupControl.Game_Objects.StaticGameObjectBox;
 using Strategy.MoveControl;
 
 namespace Strategy.GroupControl {
-	class GroupManager {
-		protected ObjectCreator objectCreator;
+    class GroupManager {
+        protected ObjectCreator objectCreator;
 
-		protected List<GroupMovables> groupListMovable; //group ->group, shout distance
-        protected Dictionary<int,GroupStatics> ISGOGroups; //each team has own planets
-        protected Dictionary<int,GroupStatics> solarSystem;
+        protected List<GroupMovables> groupListMovable; //group ->group, shout distance
+        protected Dictionary<int, GroupStatics> ISGOGroups; //each team has own planets
+        protected Dictionary<int, GroupStatics> solarSystem;
         protected List<Sun> suns; //Each SolarSystem has one Sun special type of GroupMovables
 
-		protected IMoveControler moveControler;
-		protected IFightManager fightManager;
+        protected IMoveControler moveControler;
+        protected IFightManager fightManager;
 
-		private static GroupManager instance;
+        private static GroupManager instance;
 
-		private GroupMovables selectedGroup; //not implemented ...will be actual selected group
+        private GroupMovables selectedGroup; //not implemented ...will be actual selected group
         private int activeSolarSystem = 0; //now active solarSystem
 
         /// <summary>
@@ -30,39 +30,39 @@ namespace Strategy.GroupControl {
         /// </summary>
         /// <param name="manager">Mogre SceneManager</param>
         /// <returns>instance of GroupManager</returns>
-		public static GroupManager getInstance(Mogre.SceneManager manager){
-			if (instance==null) {
-				instance = new GroupManager(manager);
-			}
-			return instance;
-		}
+        public static GroupManager getInstance(Mogre.SceneManager manager) {
+            if (instance == null) {
+                instance = new GroupManager(manager);
+            }
+            return instance;
+        }
 
         /// <summary>
         /// Private constructor
         /// </summary>
         /// <param name="manager">Mogre SceneManager</param>
-		private GroupManager(Mogre.SceneManager manager) {
+        private GroupManager(Mogre.SceneManager manager) {
 
-			moveControler = MoveControler.getInstance();
-			fightManager = FightManager.getInstance();
-			objectCreator = ObjectCreator.getInstance(manager);
+            moveControler = MoveControler.getInstance();
+            fightManager = FightManager.getInstance();
+            objectCreator = ObjectCreator.getInstance(manager);
 
-			selectedGroup = null;
+            selectedGroup = null;
             ISGOGroups = new Dictionary<int, GroupStatics>();
             solarSystem = new Dictionary<int, GroupStatics>();
             suns = new List<Sun>();
 
-			objectCreator.initializeWorld("nameOfMission");
-			
-			makeGroups();
-		}
+            objectCreator.initializeWorld("nameOfMission");
 
-		//grupy planet / lodi dle teamu rozdelit
-		private void makeGroups() {
-			//just one solar system and one group
+            makeGroups();
+        }
+
+        //grupy planet / lodi dle teamu rozdelit
+        private void makeGroups() {
+            //just one solar system and one group
             //switch on team ISGO
             //shout on IMGO
-            
+
             //inicialization
             List<IMovableGameObject> listOfIMGO;
             List<IStaticGameObject> listOfISGO;
@@ -74,23 +74,23 @@ namespace Strategy.GroupControl {
             //SolarSystem active will be 0
 
             foreach (IMovableGameObject obj in listOfIMGO) {//not implemented
-				g.insertMemeber(obj);
+                g.insertMemeber(obj);
                 //not just insert but shout while is not empty
-			}
-			groupListMovable = new List<GroupMovables>();
+            }
+            groupListMovable = new List<GroupMovables>();
             groupListMovable.Add(g);
-			
+
             foreach (IStaticGameObject isgo in listOfISGO) {
                 //must detect SolarSystem
-				if (typeof(Sun) == isgo.GetType()) {
+                if (typeof(Sun) == isgo.GetType()) {
                     suns.Add((Sun)isgo);
-				} else {
+                } else {
                     //try insert into st with group of this team
                     insertIntoStaticGroup(isgo);
-				}
-			}
+                }
+            }
 
-		}
+        }
 
 
         private void insertIntoStaticGroup(IStaticGameObject isgo) {
@@ -110,24 +110,69 @@ namespace Strategy.GroupControl {
         /// Called on frame update
         /// </summary>
         /// <param name="f">delay between frames</param>
-		public void update(float f) {
+        public void update(float f) {
             foreach (Sun sun in suns) {
-                sun.rotate(f);
+                if (sun.getSolarSystem==activeSolarSystem) {
+                    sun.rotate(f);
+                }      
             }
-			foreach (GroupMovables group in groupListMovable) {
-				group.move(f);
-			}
-
-        //developing dictionary
+            foreach (GroupMovables group in groupListMovable) {
+                group.move(f);
+            }
             foreach (KeyValuePair<int, GroupStatics> groupStaticPair in solarSystem) {
-               
-                groupStaticPair.Value.rotate(f,activeSolarSystem);
-                
+
+                groupStaticPair.Value.rotate(f, activeSolarSystem);
+
             }
-		}
+        }
+
+        public void changeSolarSystem(int newSolarSystem) {
+            if (newSolarSystem == activeSolarSystem) {
+                return;
+            }
+            //firts hide all 
+            Sun s = null;
+            foreach (Sun sun in suns) {
+                if (sun.getSolarSystem == activeSolarSystem) {
+                    sun.changeVisible(false);
+                } else {
+                    if (sun.getSolarSystem == newSolarSystem) {
+                        s = sun;
+                    }
+                }
+            }
+
+            if (s!=null) {
+                s.changeVisible(true);
+            }
+            
+            //foreach (GroupMovables group in groupListMovable) {
+
+            //}
+            GroupStatics gs = null;
+            foreach (KeyValuePair<int, GroupStatics> groupStaticPair in solarSystem) {
+                if (groupStaticPair.Key == activeSolarSystem) {
+                    foreach (IStaticGameObject isgo in groupStaticPair.Value) {
+                        isgo.changeVisible(false);
+                    }
+                } else {
+                    if (groupStaticPair.Key == newSolarSystem) {
+                        gs = groupStaticPair.Value;
+                    }
+                }
+            }
+            if (gs!=null) {
+                foreach (IStaticGameObject isgo in gs) {
+                    isgo.changeVisible(true);
+                } 
+            }
+
+            activeSolarSystem = newSolarSystem;
+            
+        }
 
 
-	}
+    }
 
 
 }

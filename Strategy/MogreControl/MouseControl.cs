@@ -11,6 +11,8 @@ namespace Strategy.MogreControl {
 		protected Mogre.SceneManager sceneMgr;
 		protected GroupManager groupManager;
 
+        protected int changeMe = 1;
+
 		public MouseControl(Mogre.TutorialFramework.CameraMan c , Mogre.SceneManager m ,GroupManager g){
 			cameraMan = c;
 			sceneMgr = m;
@@ -30,34 +32,30 @@ namespace Strategy.MogreControl {
 		public bool OnMyMousePressed(MOIS.MouseEvent evt, MOIS.MouseButtonID id) {
 
 
-			if (id == MOIS.MouseButtonID.MB_Left) {
-				//mCameraMan.Freeze = true;
-				using (Mogre.RaySceneQuery raySceneQuery = sceneMgr.CreateRayQuery(new Mogre.Ray())) {
-					float mouseX = (float)evt.state.X.abs / (float)evt.state.width;
-					float mouseY = (float)evt.state.Y.abs / (float)evt.state.height;
+            if (id == MOIS.MouseButtonID.MB_Left) {
+                //mCameraMan.Freeze = true;
+                using (Mogre.RaySceneQuery raySceneQuery = sceneMgr.CreateRayQuery(new Mogre.Ray())) {
+                    float mouseX = (float)evt.state.X.abs / (float)evt.state.width;
+                    float mouseY = (float)evt.state.Y.abs / (float)evt.state.height;
 
-					Mogre.Ray mouseRay = cameraMan.getCamera().GetCameraToViewportRay(mouseX, mouseY);
-					raySceneQuery.Ray = mouseRay;
-					raySceneQuery.SetSortByDistance(true);
+                    Mogre.Ray mouseRay = cameraMan.getCamera().GetCameraToViewportRay(mouseX, mouseY);
+                    raySceneQuery.Ray = mouseRay;
+                    raySceneQuery.SetSortByDistance(true);
 
-					using (Mogre.RaySceneQueryResult result = raySceneQuery.Execute()) {
-						foreach (Mogre.RaySceneQueryResultEntry entry in result) {
-							if (entry.movable.Name != "GroundEntity") {
-								GUIControler.targetObject(entry.movable.Name);
-							}
+                    using (Mogre.RaySceneQueryResult result = raySceneQuery.Execute()) {
+                        foreach (Mogre.RaySceneQueryResultEntry entry in result) {
+                            if (entry.movable.Name != "GroundEntity") {
+                                GUIControler.targetObject(entry.movable.Name);
+                            }
 
-						}
-					}
-				}
+                        }
+                    }
+                }
 
-               //pokus start
-                
-
-                //pokus end
-
-
-
-			}
+            } else {
+                groupManager.changeSolarSystem(changeMe);
+                changeMe=(changeMe + 1)%2;
+            }
 			return true;
 		}
 
