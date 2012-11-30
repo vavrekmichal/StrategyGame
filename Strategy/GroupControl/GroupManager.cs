@@ -40,17 +40,6 @@ namespace Strategy.GroupControl {
         }
 
         /// <summary>
-        /// Nonparametric contructor
-        /// </summary>
-        /// <returns>instance of GroupManager</returns>
-        public static GroupManager getInstance() {
-            if (instance == null) {
-                throw new NullReferenceException();
-            }
-            return instance;
-        }
-
-        /// <summary>
         /// Private constructor
         /// </summary>
         /// <param name="manager">Mogre SceneManager</param>
@@ -64,11 +53,7 @@ namespace Strategy.GroupControl {
             selectedGroup = null;
             ISGOGroups = new Dictionary<int, GroupStatics>();
             solarSystem = new Dictionary<int, GroupStatics>();
-            suns = new List<Sun>();
-
-            objectCreator.initializeWorld("nameOfMission");
-
-            makeGroups();
+            suns = new List<Sun>();                      
         }
 
         //grupy planet / lodi dle teamu rozdelit
@@ -198,6 +183,15 @@ namespace Strategy.GroupControl {
         /// <returns>return list with IMaterial</returns>
         public List<IMaterial> getMaterials() {
             return materials;
+        }
+
+        /// <summary>
+        /// inicializetion of world
+        /// </summary>
+        public void inicializeWorld() { 
+            //
+            objectCreator.initializeWorld("nameOfMission");
+            makeGroups();
         }
     }
 

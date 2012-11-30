@@ -11,9 +11,9 @@ namespace Strategy {
 		protected static MyGUI myGUI;
         protected List<IMaterial> materials;
 
-		public GUIControler(Mogre.RenderWindow mWindow, MOIS.Mouse m, MOIS.Keyboard k) {
+		public GUIControler(Mogre.RenderWindow mWindow, MOIS.Mouse m, MOIS.Keyboard k, GroupManager groupMgr) {
 			myGUI = new MyGUI((int)mWindow.Width, (int)mWindow.Height, m, k);
-            materials=GroupManager.getInstance().getMaterials();
+            materials=groupMgr.getMaterials();
 		}
 
 		public void dispose() {

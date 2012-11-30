@@ -46,7 +46,8 @@ namespace Strategy {
 			#region BAD MIY..
 			//createBars();
 			#endregion
-			panelControler = new GUIControler(mWindow, mMouse, mKeyboard);
+
+            groupManager.inicializeWorld();
 
 			loadFont();
 
@@ -149,6 +150,7 @@ namespace Strategy {
 
 			groupManager = GroupManager.getInstance(mSceneMgr);
 			mouseControl = new MouseControl(cameraMan, mSceneMgr, groupManager);
+            panelControler = new GUIControler(mWindow, mMouse, mKeyboard, groupManager);
 
 			mMouse.MousePressed += new MOIS.MouseListener.MousePressedHandler(mouseControl.OnMyMousePressed);
 			mMouse.MouseReleased += new MOIS.MouseListener.MouseReleasedHandler(mouseControl.OnMyMouseReleased);
