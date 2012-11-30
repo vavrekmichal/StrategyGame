@@ -22,11 +22,14 @@ namespace Strategy {
 		protected MOIS.InputManager mInputMgr; //use for create control (mouse, keyborard) instance
 		protected float mTimer; //float as timer to determine of duration overlay 
 		protected bool exit = false; //controlor if player is alive
-		protected IGameSoundMaker songMaker; //to make background music
+		
 		protected Mogre.ColourValue fadeColour = new Mogre.ColourValue(0.05f, 0.05f, 0.05f); //color of fog and shadow
 		protected static readonly Mogre.Vector3 cameraStart = new Mogre.Vector3(0, 1000, 1000);
-		protected MouseControl mouseControl;
+		
 		protected Mogre.TutorialFramework.CameraMan cameraMan;
+
+        protected IGameSoundMaker songMaker; //to make background music
+        protected MouseControl mouseControl;
 		protected GUIControler panelControler;
 		protected GroupManager groupManager;
 
@@ -297,9 +300,7 @@ namespace Strategy {
 		private void setSky() {
 			//mSceneMgr.SetSkyDome(true, "Examples/SpaceSkyBox", 10, 20);
 			mSceneMgr.SetFog(Mogre.FogMode.FOG_EXP2, fadeColour, 0.0003f);
-
 		}
-
 	}
 
 

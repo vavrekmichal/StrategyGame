@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Strategy.GameMaterial;
+using Strategy.GameGUI;
+using Strategy.GroupControl;
 
 namespace Strategy {
 	class GUIControler {
-		protected static Strategy.GameGUI.MyGUI myGUI;
+		protected static MyGUI myGUI;
+        protected List<IMaterial> materials;
 
 		public GUIControler(Mogre.RenderWindow mWindow, MOIS.Mouse m, MOIS.Keyboard k) {
-			myGUI = new Strategy.GameGUI.MyGUI((int)mWindow.Width, (int)mWindow.Height, m, k);
+			myGUI = new MyGUI((int)mWindow.Width, (int)mWindow.Height, m, k);
+            materials=GroupManager.getInstance().getMaterials();
 		}
 
 		public void dispose() {

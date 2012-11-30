@@ -7,6 +7,7 @@ using Strategy.GroupControl.Game_Objects;
 using Strategy.GroupControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GroupControl.Game_Objects.StaticGameObjectBox;
 using Strategy.MoveControl;
+using Strategy.GameMaterial;
 
 namespace Strategy.GroupControl {
     class GroupManager {
@@ -19,20 +20,32 @@ namespace Strategy.GroupControl {
 
         protected IMoveControler moveControler;
         protected IFightManager fightManager;
+        protected List<IMaterial> materials; //will be singleton and shared with this and GUI to show state
 
         private static GroupManager instance;
 
-        private GroupMovables selectedGroup; //not implemented ...will be actual selected group
+        private GroupMovables selectedGroup; //not implemented ...will be actual selected group - need rectangular select
         private int activeSolarSystem = 0; //now active solarSystem
 
         /// <summary>
-        /// Singleton instance
+        /// Singleton constructor
         /// </summary>
         /// <param name="manager">Mogre SceneManager</param>
         /// <returns>instance of GroupManager</returns>
         public static GroupManager getInstance(Mogre.SceneManager manager) {
             if (instance == null) {
                 instance = new GroupManager(manager);
+            }
+            return instance;
+        }
+
+        /// <summary>
+        /// Nonparametric contructor
+        /// </summary>
+        /// <returns>instance of GroupManager</returns>
+        public static GroupManager getInstance() {
+            if (instance == null) {
+                throw new NullReferenceException();
             }
             return instance;
         }
@@ -46,6 +59,7 @@ namespace Strategy.GroupControl {
             moveControler = MoveControler.getInstance();
             fightManager = FightManager.getInstance();
             objectCreator = ObjectCreator.getInstance(manager);
+            materials = new List<IMaterial>(){new Wolenium()};
 
             selectedGroup = null;
             ISGOGroups = new Dictionary<int, GroupStatics>();
@@ -178,6 +192,13 @@ namespace Strategy.GroupControl {
         }
 
 
+        /// <summary>
+        /// get all IMaterials 
+        /// </summary>
+        /// <returns>return list with IMaterial</returns>
+        public List<IMaterial> getMaterials() {
+            return materials;
+        }
     }
 
 

@@ -47,6 +47,9 @@ namespace Strategy.GameGUI {
 			createCameraBounds();
 		}
 
+        /// <summary>
+        /// Function creates invisible bounds for moving with world
+        /// </summary>
 		private void createCameraBounds() {
 			var topSection = new Button() {
 				Size = new Size(screenWidth*13/15, screenHeight/10),
@@ -121,6 +124,9 @@ namespace Strategy.GameGUI {
 			gui.Controls.Add(leftUpSection);
 		}
 
+        /// <summary>
+        /// Creates top bar
+        /// </summary>
 		private void createTopMenu(){
 			Button upperMenu = new Button() {
 				Size = new Size(screenWidth*18/20, screenHeight / 20),
@@ -130,6 +136,10 @@ namespace Strategy.GameGUI {
 			gui.Controls.Add(upperMenu);
 		
 		}
+
+        /// <summary>
+        /// Creates main bar
+        /// </summary>
 		private void createMainMenu() {
 			mainMenu = new FlowLayoutPanel() {
 				Size = new Size(screenWidth, screenHeight / 5),
@@ -271,11 +281,16 @@ namespace Strategy.GameGUI {
 		}
 
 
-
+        /// <summary>
+        /// Dispose GUI system
+        /// </summary>
 		public void dispose() {
 			system.Dispose();
 		}
 
+        /// <summary>
+        /// Function updete GUI
+        /// </summary>
 		public void update() {
 			system.Update();
 		}

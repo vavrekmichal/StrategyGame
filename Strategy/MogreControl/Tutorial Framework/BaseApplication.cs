@@ -3,48 +3,43 @@ using System;
 
 
 
-namespace Mogre.TutorialFramework
-{    
-    public abstract partial class BaseApplication
-    {
-        protected Root         mRoot;
+namespace Mogre.TutorialFramework {
+    public abstract partial class BaseApplication {
+        protected Root mRoot;
         protected SceneManager mSceneMgr;
-        protected Camera       mCamera;
-        protected CameraMan    mCameraMan;
+        protected Camera mCamera;
+        protected CameraMan mCameraMan;
         protected RenderWindow mWindow;
-        protected string       mPluginsCfg   = "plugins.cfg";
-        protected string       mResourcesCfg = "resources.cfg";
-        protected bool         mShutDown     = false;
-        protected int          mTextureMode  = 0;
-        protected int          mRenderMode   = 0;
-       // protected DebugOverlay mDebugOverlay;
+        protected string mPluginsCfg = "plugins.cfg";
+        protected string mResourcesCfg = "resources.cfg";
+        protected bool mShutDown = false;
+        protected int mTextureMode = 0;
+        protected int mRenderMode = 0;
+        // protected DebugOverlay mDebugOverlay;
 
 
 
-        public void Go()
-        {
-            try
-            {
+        public void Go() {
+            try {
                 if (!Setup())
                     return;
 
                 mRoot.StartRendering();
 
-				mRoot.Dispose();
+                mRoot.Dispose();
 
                 DestroyScene();
-            }
-            catch (System.Runtime.InteropServices.SEHException e)
-            {
+            } catch (System.AccessViolationException e) {
+                Console.WriteLine(e);
+                Console.WriteLine("Be carefull, because AccessViolationException was thrown!");
+            } catch (System.Runtime.InteropServices.SEHException e) {
                 Console.WriteLine(e);
 
                 System.Windows.Forms.MessageBox.Show(
                     "An Ogre error has occurred. Check the Ogre.log file for details", "Exception",
                     System.Windows.Forms.MessageBoxButtons.OK,
                     System.Windows.Forms.MessageBoxIcon.Error);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 Console.WriteLine(e);
 
                 System.Windows.Forms.MessageBox.Show(
@@ -54,8 +49,7 @@ namespace Mogre.TutorialFramework
             }
         }
 
-        protected virtual bool Setup()
-        {
+        protected virtual bool Setup() {
             mRoot = new Root(mPluginsCfg);
 
             if (!Configure())
@@ -75,34 +69,28 @@ namespace Mogre.TutorialFramework
             CreateScene();
 
             CreateFrameListeners();
-            
+
 
             //mDebugOverlay = new DebugOverlay(mWindow);
-           // mDebugOverlay.AdditionalInfo = "Bilinear";
+            // mDebugOverlay.AdditionalInfo = "Bilinear";
 
             return true;
         }
 
-        protected virtual bool Configure()
-        {
-            if (mRoot.ShowConfigDialog())
-            {
+        protected virtual bool Configure() {
+            if (mRoot.ShowConfigDialog()) {
                 mWindow = mRoot.Initialise(true, "TutorialApplication Render Window");
                 return true;
-            }
-            else
-            {
+            } else {
                 return false;
             }
         }
 
-        protected virtual void ChooseSceneManager()
-        {
+        protected virtual void ChooseSceneManager() {
             mSceneMgr = mRoot.CreateSceneManager(SceneType.ST_GENERIC);
         }
 
-        protected virtual void CreateCamera()
-        {
+        protected virtual void CreateCamera() {
             mCamera = mSceneMgr.CreateCamera("PlayerCam");
 
             mCamera.Position = new Vector3(0, 100, 250);
@@ -113,8 +101,7 @@ namespace Mogre.TutorialFramework
             mCameraMan = new CameraMan(mCamera);
         }
 
-        protected virtual void CreateViewports()
-        {
+        protected virtual void CreateViewports() {
             // Create one viewport, entire window
             var vp = mWindow.AddViewport(mCamera);
             vp.BackgroundColour = new ColourValue(0.3f, 0.3f, 0.3f);
@@ -123,22 +110,18 @@ namespace Mogre.TutorialFramework
             mCamera.AspectRatio = (vp.ActualWidth / vp.ActualHeight);
         }
 
-        protected virtual void CreateResourceListener()
-        {
+        protected virtual void CreateResourceListener() {
         }
 
-        protected virtual void LoadResources()
-        {
+        protected virtual void LoadResources() {
             // Load resource paths from config file
             var cf = new ConfigFile();
             cf.Load(mResourcesCfg, "\t:=", true);
 
             // Go through all sections & settings in the file
             var seci = cf.GetSectionIterator();
-            while (seci.MoveNext())
-            {
-                foreach (var pair in seci.Current)
-                {
+            while (seci.MoveNext()) {
+                foreach (var pair in seci.Current) {
                     ResourceGroupManager.Singleton.AddResourceLocation(
                         pair.Value, pair.Key, seci.CurrentKey);
                 }
@@ -147,16 +130,13 @@ namespace Mogre.TutorialFramework
             ResourceGroupManager.Singleton.InitialiseAllResourceGroups();
         }
 
-        protected void ReloadAllTextures()
-        {
+        protected void ReloadAllTextures() {
             TextureManager.Singleton.ReloadAll();
         }
 
-        protected void CycleTextureFilteringMode()
-        {
+        protected void CycleTextureFilteringMode() {
             mTextureMode = (mTextureMode + 1) % 4;
-            switch (mTextureMode)
-            {
+            switch (mTextureMode) {
                 case 0:
                     MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_BILINEAR);
                     //mDebugOverlay.AdditionalInfo = "BiLinear";
@@ -181,11 +161,9 @@ namespace Mogre.TutorialFramework
             }
         }
 
-        protected void CyclePolygonMode()
-        {
+        protected void CyclePolygonMode() {
             mRenderMode = (mRenderMode + 1) % 3;
-            switch (mRenderMode)
-            {
+            switch (mRenderMode) {
                 case 0:
                     mCamera.PolygonMode = PolygonMode.PM_SOLID;
                     break;
@@ -200,26 +178,22 @@ namespace Mogre.TutorialFramework
             }
         }
 
-        protected void TakeScreenshot()
-        {
+        protected void TakeScreenshot() {
             mWindow.WriteContentsToTimestampedFile("screenshot", ".png");
         }
 
-        protected virtual void CreateFrameListeners()
-        {
+        protected virtual void CreateFrameListeners() {
             mRoot.FrameRenderingQueued += new FrameListener.FrameRenderingQueuedHandler(OnFrameRenderingQueued);
         }
 
-        protected virtual bool OnFrameRenderingQueued(FrameEvent evt)
-        {
+        protected virtual bool OnFrameRenderingQueued(FrameEvent evt) {
             if (mWindow.IsClosed)
                 return false;
 
             if (mShutDown)
                 return false;
 
-            try
-            {
+            try {
                 ProcessInput();
 
                 UpdateScene(evt);
@@ -229,29 +203,23 @@ namespace Mogre.TutorialFramework
                 //mDebugOverlay.Update(evt.timeSinceLastFrame);
 
                 return true;
-            }
-            catch (Strategy.ShutdownException)
-            {
+            } catch (Strategy.ShutdownException) {
                 mShutDown = true;
                 return false;
             }
         }
 
-        protected void Shutdown()
-        {
-			throw new Strategy.ShutdownException();
+        protected void Shutdown() {
+            throw new Strategy.ShutdownException();
         }
 
-        protected virtual void CreateScene()
-        {
+        protected virtual void CreateScene() {
         }
 
-        protected virtual void UpdateScene(FrameEvent evt)
-        {
+        protected virtual void UpdateScene(FrameEvent evt) {
         }
 
-        protected virtual void DestroyScene()
-        {
+        protected virtual void DestroyScene() {
         }
     }
 }
