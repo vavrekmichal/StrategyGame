@@ -27,7 +27,6 @@ namespace Strategy {
 		public static void targetObject(string s) {
 			myGUI.showTargeted(s);
 		}
-
 		
 
 	}

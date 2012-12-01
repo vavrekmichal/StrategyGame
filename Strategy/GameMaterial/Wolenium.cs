@@ -7,7 +7,7 @@ using Strategy.GroupControl.Game_Objects.StaticGameObjectBox;
 namespace Strategy.GameMaterial {
     class Wolenium :IMaterial{
 
-        private string myName;
+        private string myName; 
 
         public Wolenium() {
             myName = "Wolenium";
