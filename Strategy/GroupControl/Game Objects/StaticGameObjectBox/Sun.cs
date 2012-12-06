@@ -12,8 +12,7 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 		protected List<IGameAction> listOfAction = new List<IGameAction>();
         protected Mogre.SceneManager manager;
         
-        protected int sunTeam = 0;
-        protected int solarSystem;
+        protected string sunTeam ="SUN";
 
         /// <summary>
         /// Public constructor. Detect active solar system (0)
@@ -22,18 +21,11 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         /// <param name="mesh">mesh of this sun</param>
         /// <param name="solarSystem">number of solar system</param>
         /// <param name="manager">Mogre SceneManager</param>
-		public Sun(string name, string mesh, int solarSystem, Mogre.SceneManager manager) {
+		public Sun(string name, string mesh, Mogre.SceneManager manager) {
 			this.name = name;
 			this.mesh = mesh;
             this.manager = manager;
-            this.solarSystem = solarSystem;
             entity = manager.CreateEntity(name, mesh);
-
-            if (solarSystem==0) {
-                sceneNode = manager.RootSceneNode.CreateChildSceneNode(name + "Node", Mogre.Vector3.ZERO);
-                sceneNode.AttachObject(entity);
-                sceneNode.Pitch(new Mogre.Degree(-90f));
-            }
 		}
 
         /// <summary>
@@ -50,20 +42,12 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         /// <summary>
         /// It will be always 0.
         /// </summary>
-        public int team {
+        public string team {
             get {
                 return sunTeam;
             }
             set {
                 sunTeam=team;
-            }
-        }
-
-        /// <summary>
-        /// returning int value of planet´s solar system
-        /// </summary>
-        public int getSolarSystem{
-            get { return solarSystem; 
             }
         }
 
@@ -83,6 +67,11 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
             } else {
                 manager.DestroySceneNode(sceneNode);
             }
+        }
+
+
+        public string getName() {
+            return name;
         }
     }
 }

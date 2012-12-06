@@ -8,8 +8,11 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 		void rotate(float f);
         void nonActiveRotate(float f);
         void changeVisible(bool visible);
+        string getName();
 
-        int team { get; set; }
-        int getSolarSystem { get; }
+        //int team { get; set; }
+        string team { get; set; }
+        
+        //int getSolarSystem { get; }
 	}
 }

@@ -67,6 +67,7 @@
     <Compile Include="GroupControl\Game Objects\GameActions\IGameAction.cs" />
     <Compile Include="GroupControl\Game Objects\GameObjectParameter\IGameObjectParameter.cs" />
     <Compile Include="GroupControl\Game Objects\MovableGameObjectBox\IMovableGameObject.cs" />
+    <Compile Include="GroupControl\Game Objects\MovableGameObjectBox\SpaceShip.cs" />
     <Compile Include="GroupControl\Game Objects\StaticGameObjectBox\Sun.cs" />
     <Compile Include="GroupControl\Game Objects\StaticGameObjectBox\IStaticGameObject.cs" />
     <Compile Include="GroupControl\Group.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="GroupControl\Game Objects\ObjectCreator.cs" />
     <Compile Include="GroupControl\Game Objects\StaticGameObjectBox\Planet.cs" />
     <Compile Include="GroupControl\GroupManager.cs" />
+    <Compile Include="GroupControl\SolarSystem.cs" />
     <Compile Include="MogreControl\MouseControl.cs" />
     <Compile Include="GameGUI\MyGUI.cs" />
     <Compile Include="GUIControler.cs" />
@@ -89,6 +91,8 @@
     <Compile Include="MogreControl\Tutorial Framework\BaseApplication.input.cs" />
     <Compile Include="MogreControl\Tutorial Framework\CameraMan.cs" />
     <Compile Include="MogreControl\Tutorial Framework\DebugOverlay.cs" />
+    <Compile Include="TeamControl\Team.cs" />
+    <Compile Include="TeamControl\TeamManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

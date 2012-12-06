@@ -10,14 +10,14 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         protected Mogre.Entity entity;
         protected Mogre.SceneNode sceneNode;
         protected string mesh;
-        protected List<IGameAction> listOfAction;
+        //protected List<IGameAction> listOfAction; not implemented
         protected LinkedList<Mogre.Vector3> circularPositions;
 
-        protected int solarSystem;
-        protected Mogre.Vector3 invisblePosition;
+        //protected int solarSystem;
+        //protected Mogre.Vector3 invisblePosition;
+        protected Mogre.Vector3 mDestination = Mogre.Vector3.ZERO; // The destination the object is moving towards
 
-
-        protected int planetTeam;
+        protected string planetTeam;
         protected Mogre.SceneManager manager;
 
         public abstract void rotate(float f);
@@ -30,7 +30,7 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         /// <summary>
         /// int of planets owner
         /// </summary>
-        public int team {
+        public string team {
             get {
                 return planetTeam;
             }
@@ -40,35 +40,32 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         }
 
         /// <summary>
-        /// returning int value of planet´s solar system
-        /// </summary>
-        public int getSolarSystem {
-            get { return solarSystem; }
-        }
-
-        /// <summary>
         /// Called when object will be invisible
         /// </summary>
-        public void changeVisible(bool visible) {   //now creating
+        public virtual void changeVisible(bool visible) {   //now creating
             if (visible) {
 
                 if (entity==null) { //control if the entity is inicialized
                     entity = manager.CreateEntity(name, mesh);
                 }
-            
-                if (invisblePosition == null) { //control inicialization
-                    invisblePosition = circularPositions.Last();
+
+                if (mDestination == null) { //control inicialization
+                    mDestination = circularPositions.Last();
                 }
 
-                sceneNode = manager.RootSceneNode.CreateChildSceneNode(name + "Node", invisblePosition);
+                sceneNode = manager.RootSceneNode.CreateChildSceneNode(name + "Node", mDestination);
 
                 sceneNode.Pitch(new Mogre.Degree(-90f));
                 sceneNode.AttachObject(entity);
                 onDisplayed(); 
             } else {
-                invisblePosition = sceneNode.Position;
                 manager.DestroySceneNode(sceneNode);
             }
+        }
+
+
+        public string getName() {
+            return name;
         }
     }
 }

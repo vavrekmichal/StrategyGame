@@ -5,6 +5,7 @@ using Strategy.Game_Objects;
 using Strategy.GroupControl;
 using Strategy.MogreControl;
 using Strategy.Sound;
+using Strategy.TeamControl;
 
 
 
@@ -30,8 +31,9 @@ namespace Strategy {
 
         protected IGameSoundMaker songMaker; //to make background music
         protected MouseControl mouseControl;
-		protected GUIControler panelControler;
-		protected GroupManager groupManager;
+		protected GUIControler guiControler;
+        protected TeamManager teamManager;
+		//protected GroupManager groupManager;
 
 		public static void Main() {
 			new MyMogre().Go();
@@ -47,7 +49,8 @@ namespace Strategy {
 			//createBars();
 			#endregion
 
-            groupManager.inicializeWorld();
+            teamManager.inicialization();
+           // groupManager.inicializeWorld();
 
 			loadFont();
 
@@ -122,18 +125,19 @@ namespace Strategy {
 		/// <param name="evt">delay between last frames</param>
 		protected override void UpdateScene(Mogre.FrameEvent evt) {
 
-			
-			panelControler.update();
+			float f = evt.timeSinceLastFrame;
+			guiControler.update();
 			base.UpdateScene(evt);
 			if (mTimer > 0) { //if overlay showed
-				mTimer -= evt.timeSinceLastFrame;
+				mTimer -= f;
 				if (mTimer <= 0) {
 					Mogre.OverlayManager.Singleton.GetByName("Author").Hide(); //timer is timeout -> hide overlay
 					exit = false;
 				}
 			}
-			groupManager.update(evt.timeSinceLastEvent);
-			songMaker.hideBox(evt.timeSinceLastFrame);
+            teamManager.update(f);
+			//groupManager.update(evt.timeSinceLastEvent);
+			songMaker.hideBox(f);
 
 		}
 		#endregion
@@ -148,9 +152,12 @@ namespace Strategy {
 			mWindow.GetCustomAttribute("WINDOW", out windowHandle);
 			mInputMgr = MOIS.InputManager.CreateInputSystem((uint)windowHandle);
 
-			groupManager = GroupManager.getInstance(mSceneMgr);
-			mouseControl = new MouseControl(cameraMan, mSceneMgr, groupManager);
-            panelControler = new GUIControler(mWindow, mMouse, mKeyboard, groupManager);
+            teamManager = TeamManager.getInstance(mSceneMgr);
+			//groupManager = GroupManager.getInstance(mSceneMgr);
+			mouseControl = new MouseControl(cameraMan, mSceneMgr, teamManager);
+            guiControler = new GUIControler(mWindow, mMouse, mKeyboard, teamManager);
+            teamManager.setGUI(guiControler);
+
 
 			mMouse.MousePressed += new MOIS.MouseListener.MousePressedHandler(mouseControl.OnMyMousePressed);
 			mMouse.MouseReleased += new MOIS.MouseListener.MouseReleasedHandler(mouseControl.OnMyMouseReleased);
@@ -221,7 +228,7 @@ namespace Strategy {
 		#endregion
 
 		private void quit() {
-			panelControler.dispose();
+			guiControler.dispose();
 			throw new ShutdownException();
 		}
 

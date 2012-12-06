@@ -15,11 +15,15 @@ namespace Strategy.GameGUI {
 		protected int screenWidth;
 		protected int screenHeight;
 
+        protected FlowLayoutPanel upperMenu;
+        protected FlowLayoutPanel mainMenu;
+        protected Label nameOfSolarSystem;
+
 		Dictionary<string, Skin> skinDict;
 		Dictionary<string, Font> fonts;
 		MiyagiSystem system;
 		GUI gui;
-		FlowLayoutPanel mainMenu;
+	
 
 		public MyGUI(int w,int h, MOIS.Mouse m, MOIS.Keyboard k) {
 			screenHeight = h;
@@ -128,14 +132,46 @@ namespace Strategy.GameGUI {
         /// Creates top bar
         /// </summary>
 		private void createTopMenu(){
-			Button upperMenu = new Button() {
+            upperMenu = new FlowLayoutPanel() {
 				Size = new Size(screenWidth*18/20, screenHeight / 20),
 				Location = new Point(screenWidth  / 20, 0),
 				Skin = skinDict["Panel"],
 			};
 			gui.Controls.Add(upperMenu);
-		
+
+            Label label1 = new Label() {
+                Name = "nameOfSolarSystem",
+                Size = new Size(upperMenu.Width/6,upperMenu.Height*4/5),
+                Text = "Actual solar system: ",
+                TextStyle = {
+                    Alignment = Miyagi.Common.Alignment.MiddleLeft,
+                    ForegroundColour = Colours.White
+                },
+                Padding=new Thickness(10,0,0,0)
+            };
+            upperMenu.Controls.Add(label1);
+
+            nameOfSolarSystem = new Label() {
+                Name = "nameOfSolarSystem",
+                Size = new Size(upperMenu.Width / 5, upperMenu.Height * 4 / 5),
+                Text = "Booted system ",
+                TextStyle = {
+                    Alignment = Miyagi.Common.Alignment.MiddleLeft,
+                    ForegroundColour = Colours.Black
+                },
+                Padding = new Thickness(1)
+            };
+            upperMenu.Controls.Add(nameOfSolarSystem);
+
 		}
+
+        /// <summary>
+        /// Change printed solar system name
+        /// </summary>
+        /// <param name="name">new printed name</param>
+        public void setSolarSystemName(string name) {
+            nameOfSolarSystem.Text = name;
+        }
 
         /// <summary>
         /// Creates main bar

@@ -9,7 +9,7 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 
         protected double mDistance = 0.0f; //distance to positoin
         protected Mogre.Vector3 mDirection = Mogre.Vector3.ZERO;   // The direction the object is moving
-        protected Mogre.Vector3 mDestination = Mogre.Vector3.ZERO; // The destination the object is moving towards
+        
         protected bool mFlying = false; //bool to detect if object walking or stay
         protected double mFlySpeed = 200f; //speed of planet
 
@@ -17,26 +17,20 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 
         private static Random random = new Random();
 
-        public Planet(string name, string mesh, int team, int solarSystem, Mogre.SceneManager manager, double distanceFromCenter, int circularNum = 20) {
+        public Planet(string name, string mesh, string team, Mogre.SceneManager manager, double distanceFromCenter, 
+            int circularNum = 30) {
             this.name = name;
             this.mesh = mesh;
             this.team = team;
             this.manager = manager;
-            this.solarSystem = solarSystem;
             
             //prepare list of positions
             circularPositions = calculatePositions(circularNum, distanceFromCenter);
             randomizeStartPosition(circularNum); // randomize start position
-            invisblePosition = circularPositions.First();
+            mDestination = circularPositions.First();
 
             //Mogre inicialization of object
             entity = manager.CreateEntity(name, mesh);
-            if (solarSystem==0) {
-                
-                sceneNode = manager.RootSceneNode.CreateChildSceneNode(name + "Node", circularPositions.First());
-                sceneNode.Pitch(new Mogre.Degree(-90f));
-                sceneNode.AttachObject(entity);
-            }
         }
 
         /// <summary>
@@ -80,8 +74,6 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
                     mFlying = true;
                     mDestination = circularPositions.First.Value; //get the next destination.
                     prepareNextPosition();
-                    //update the direction and the distance
-                    mDirection = mDestination - invisblePosition;
                     mDistance = mDirection.Normalise();
                 } else {
                 }//nothing to do so stay in position    
@@ -90,7 +82,6 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
                 mDistance -= move;
                 if (mDistance <= .0f) { //reach destination
                     travelledInvisible = 0;
-                    invisblePosition = mDestination;
                     mDirection = Mogre.Vector3.ZERO;
                     mFlying = false;
                     
@@ -165,8 +156,11 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         /// Called when object is displayed (invisible to visible)
         /// </summary>
         protected override void onDisplayed() {
-            sceneNode.Position = invisblePosition;
-            sceneNode.Translate(mDirection * (float)travelledInvisible);
+            //sceneNode.Position = invisblePosition;
+            //sceneNode.Translate(mDirection * (float)travelledInvisible);
+            sceneNode.Position = mDestination;
+            mFlying = false; //jump correction
         }
+
     }
 }

@@ -5,15 +5,16 @@ using System.Text;
 using Strategy.GameMaterial;
 using Strategy.GameGUI;
 using Strategy.GroupControl;
+using Strategy.TeamControl;
 
 namespace Strategy {
 	class GUIControler {
 		protected static MyGUI myGUI;
         protected List<IMaterial> materials;
 
-		public GUIControler(Mogre.RenderWindow mWindow, MOIS.Mouse m, MOIS.Keyboard k, GroupManager groupMgr) {
+		public GUIControler(Mogre.RenderWindow mWindow, MOIS.Mouse m, MOIS.Keyboard k, TeamManager teamMgr) {
 			myGUI = new MyGUI((int)mWindow.Width, (int)mWindow.Height, m, k);
-            materials=groupMgr.getMaterials();
+            materials = teamMgr.getMaterials();
 		}
 
 		public void dispose() {
@@ -27,7 +28,10 @@ namespace Strategy {
 		public static void targetObject(string s) {
 			myGUI.showTargeted(s);
 		}
-		
+
+        public void setSolarSystemName(string name) {
+            myGUI.setSolarSystemName(name);
+        }
 
 	}
 

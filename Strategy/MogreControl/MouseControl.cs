@@ -4,19 +4,20 @@ using System.Linq;
 using System.Text;
 using Strategy.GroupControl;
 using Mogre;
+using Strategy.TeamControl;
 
 namespace Strategy.MogreControl {
 	class MouseControl {
 		protected static Mogre.TutorialFramework.CameraMan cameraMan ;
 		protected Mogre.SceneManager sceneMgr;
-		protected GroupManager groupManager;
+		protected TeamManager teamManager;
 
         protected int changeMe = 1;
 
-		public MouseControl(Mogre.TutorialFramework.CameraMan c , Mogre.SceneManager m ,GroupManager g){
+        public MouseControl(Mogre.TutorialFramework.CameraMan c, Mogre.SceneManager m, TeamManager t) {
 			cameraMan = c;
 			sceneMgr = m;
-			groupManager = g;
+            teamManager = t;
 		}
 
 		public void print() {
@@ -53,8 +54,8 @@ namespace Strategy.MogreControl {
                 }
 
             } else {
-                groupManager.changeSolarSystem(changeMe);
-                changeMe=(changeMe + 1)%2;
+                teamManager.changeSolarSystem(changeMe);
+                changeMe=(changeMe + 1) % 2;
             }
 			return true;
 		}

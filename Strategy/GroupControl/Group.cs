@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Strategy.Game_Objects;
-using Strategy.Game_Objects.MovableGameObjectBox;
 using Strategy.GroupControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GroupControl.Game_Objects.StaticGameObjectBox;
 using System.Collections;
@@ -71,16 +70,16 @@ namespace Strategy.GroupControl{
             groupMembers.Remove(m);
         }
 
-        public void rotate(float f, int activeSolarSystem) {
-            foreach (IStaticGameObject isgo in groupMembers) {
-                if (isgo.getSolarSystem == activeSolarSystem) {
-                    isgo.rotate(f);
-                } else {
-                    isgo.nonActiveRotate(f);
-                }
+        //public void rotate(float f, int activeSolarSystem) {
+        //    foreach (IStaticGameObject isgo in groupMembers) {
+        //        if (isgo.getSolarSystem == activeSolarSystem) {
+        //            isgo.rotate(f);
+        //        } else {
+        //            isgo.nonActiveRotate(f);
+        //        }
                 
-            }
-        }
+        //    }
+        //}
 
 
         public IEnumerator GetEnumerator() {
