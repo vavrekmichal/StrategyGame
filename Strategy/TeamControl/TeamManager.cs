@@ -11,10 +11,6 @@ using Mogre;
 namespace Strategy.TeamControl {
     class TeamManager {
         //TODO: ProduceManager
-
-        protected GroupManager groupManager;
-        protected IMoveControler moveControler;
-        protected IFightManager fightManager;
         protected List<IMaterial> materials; //will be singleton and shared with this and GUI to show state
 
         protected GUIControler guiControler;
@@ -24,40 +20,30 @@ namespace Strategy.TeamControl {
         #region singleton and constructor
         public static TeamManager instance;
 
-        public static TeamManager getInstance(SceneManager sceneManager) {
+        public static TeamManager getInstance() {
             if (instance==null) {
-                instance = new TeamManager(sceneManager);
+                instance = new TeamManager();
             }
             return instance;
         }
 
-        private TeamManager(SceneManager sceneManager) {
-            groupManager = GroupManager.getInstance(sceneManager);
-            moveControler = MoveControler.getInstance();
-            fightManager = FightManager.getInstance();
-            materials = new List<IMaterial>() { new Wolenium() };
+        private TeamManager() {
+            materials = new List<IMaterial>() { new Wolenium() ,new Wolenarium(), new Class1()};
         }
         #endregion
 
         //public
-        public void update(float delay) {
-            groupManager.update(delay);
-            //production of Materials
-        }
+        
 
         
-        public void inicialization() {
-            groupManager.inicializeWorld();
-            teams = groupManager.getTeams();
-            Console.WriteLine("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        public void inicialization(Dictionary<string,Team> settingTeam) {
+            teams = settingTeam;
+            Console.WriteLine("Team print at Start of the Game:");
             foreach(KeyValuePair<string,Team> team in teams){
                 Console.WriteLine(team.Value.ToString());
             }
         }
 
-        public GroupManager getGroupManager() {
-            return groupManager;
-        }
 
 
         /// <summary>
@@ -68,10 +54,7 @@ namespace Strategy.TeamControl {
             return materials;
         }
 
-        public void changeSolarSystem(int numberOfSolarSystem) {
-            groupManager.changeSolarSystem(numberOfSolarSystem);
-            guiControler.setSolarSystemName(groupManager.getSolarSystemName(numberOfSolarSystem));
-        }
+
 
         //think about me
         public void setGUI(GUIControler gui) {

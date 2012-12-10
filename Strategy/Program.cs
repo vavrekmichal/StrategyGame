@@ -6,6 +6,7 @@ using Strategy.GroupControl;
 using Strategy.MogreControl;
 using Strategy.Sound;
 using Strategy.TeamControl;
+using Mogre.TutorialFramework;
 
 
 
@@ -16,8 +17,6 @@ namespace Strategy {
 	/// Main class derives BaseApplication for easier work with MOGRE
 	/// </summary>
 	/// 
-
-
 	class MyMogre : Mogre.TutorialFramework.BaseApplication {
 
 		protected MOIS.InputManager mInputMgr; //use for create control (mouse, keyborard) instance
@@ -27,13 +26,11 @@ namespace Strategy {
 		protected Mogre.ColourValue fadeColour = new Mogre.ColourValue(0.05f, 0.05f, 0.05f); //color of fog and shadow
 		protected static readonly Mogre.Vector3 cameraStart = new Mogre.Vector3(0, 1000, 1000);
 		
-		protected Mogre.TutorialFramework.CameraMan cameraMan;
+		protected CameraMan cameraMan;
 
         protected IGameSoundMaker songMaker; //to make background music
-        protected MouseControl mouseControl;
-		protected GUIControler guiControler;
-        protected TeamManager teamManager;
-		//protected GroupManager groupManager;
+
+        protected Game myGame;
 
 		public static void Main() {
 			new MyMogre().Go();
@@ -49,8 +46,7 @@ namespace Strategy {
 			//createBars();
 			#endregion
 
-            teamManager.inicialization();
-           // groupManager.inicializeWorld();
+            myGame.inicialization();
 
 			loadFont();
 
@@ -126,7 +122,7 @@ namespace Strategy {
 		protected override void UpdateScene(Mogre.FrameEvent evt) {
 
 			float f = evt.timeSinceLastFrame;
-			guiControler.update();
+			myGame.update(f);
 			base.UpdateScene(evt);
 			if (mTimer > 0) { //if overlay showed
 				mTimer -= f;
@@ -135,7 +131,7 @@ namespace Strategy {
 					exit = false;
 				}
 			}
-            teamManager.update(f);
+
 			//groupManager.update(evt.timeSinceLastEvent);
 			songMaker.hideBox(f);
 
@@ -152,15 +148,11 @@ namespace Strategy {
 			mWindow.GetCustomAttribute("WINDOW", out windowHandle);
 			mInputMgr = MOIS.InputManager.CreateInputSystem((uint)windowHandle);
 
-            teamManager = TeamManager.getInstance(mSceneMgr);
-			//groupManager = GroupManager.getInstance(mSceneMgr);
-			mouseControl = new MouseControl(cameraMan, mSceneMgr, teamManager);
-            guiControler = new GUIControler(mWindow, mMouse, mKeyboard, teamManager);
-            teamManager.setGUI(guiControler);
+            myGame = Game.getInstance(mSceneMgr, cameraMan, mWindow, mMouse, mKeyboard);
 
 
-			mMouse.MousePressed += new MOIS.MouseListener.MousePressedHandler(mouseControl.OnMyMousePressed);
-			mMouse.MouseReleased += new MOIS.MouseListener.MouseReleasedHandler(mouseControl.OnMyMouseReleased);
+            mMouse.MousePressed += new MOIS.MouseListener.MousePressedHandler(myGame.getMouseControl().OnMyMousePressed);
+			mMouse.MouseReleased += new MOIS.MouseListener.MouseReleasedHandler(myGame.getMouseControl().OnMyMouseReleased);
 		}
 
 		#region Keyboard control
@@ -228,7 +220,7 @@ namespace Strategy {
 		#endregion
 
 		private void quit() {
-			guiControler.dispose();
+			myGame.quit();
 			throw new ShutdownException();
 		}
 
@@ -252,7 +244,7 @@ namespace Strategy {
 		protected override bool Configure() {
 			Mogre.RenderSystem rs = mRoot.GetRenderSystemByName("OpenGL Rendering Subsystem");
 			rs.SetConfigOption("Full Screen", "No");
-			rs.SetConfigOption("Video Mode", "1280 x 720 @ 32-bit colour");
+            rs.SetConfigOption("Video Mode", "1280 x 720 @ 32-bit colour");
 			rs.SetConfigOption("FSAA", "0");
 			mRoot.RenderSystem = rs;
 			mWindow = mRoot.Initialise(true, "Render Window");

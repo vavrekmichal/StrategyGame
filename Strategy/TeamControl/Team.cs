@@ -8,9 +8,13 @@ using Strategy.GroupControl.Game_Objects.MovableGameObjectBox;
 namespace Strategy.TeamControl {
     class Team {
 
+        //TODO: Production 
+        //Ideas List<IMateria> Netreba jen jmeno...v sesite popsano.
+
         protected List<IMovableGameObject> imgoObjects;
         protected List<IStaticGameObject> isgoObjects;
         protected string name;
+
 
         public Team(string name) {
             this.name = name;

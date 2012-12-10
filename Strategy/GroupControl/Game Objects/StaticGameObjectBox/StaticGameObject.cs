@@ -22,7 +22,9 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 
         public abstract void rotate(float f);
         public abstract void nonActiveRotate(float f);
-        public abstract void produce(float f);
+
+     //   public abstract void produce(float f);
+        public abstract bool canExecute(string executingMethod);
 
         protected abstract void onDisplayed();
 

@@ -62,8 +62,18 @@
   <ItemGroup>
     <Compile Include="FightControl\FightManager.cs" />
     <Compile Include="FightControl\IFightManager.cs" />
-    <Compile Include="GameMaterial\IMaterial.cs" />
-    <Compile Include="GameMaterial\Wolenium.cs" />
+    <Compile Include="Game.cs" />
+    <Compile Include="GameGUI\MaterialPair.cs" />
+    <Compile Include="GameMaterial\Class1.cs" />
+    <Compile Include="GameMaterial\IMaterial.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GameMaterial\Wolenarium.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GameMaterial\Wolenium.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="GroupControl\Game Objects\GameActions\IGameAction.cs" />
     <Compile Include="GroupControl\Game Objects\GameObjectParameter\IGameObjectParameter.cs" />
     <Compile Include="GroupControl\Game Objects\MovableGameObjectBox\IMovableGameObject.cs" />

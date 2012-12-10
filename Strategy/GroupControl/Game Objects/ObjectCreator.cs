@@ -7,6 +7,7 @@ using Strategy.Game_Objects;
 using Strategy.GroupControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GroupControl.Game_Objects.StaticGameObjectBox;
 using Strategy.TeamControl;
+using Mogre;
 
 
 namespace Strategy.GroupControl.Game_Objects {
@@ -51,26 +52,28 @@ namespace Strategy.GroupControl.Game_Objects {
             //visual part 
 
             string myTeam = "This is my team";
+            Sun sun = createSun("Sun", "sun.mesh");
             solarSystems.Add(createSolarSystem("SolarSystem", new List<IStaticGameObject>(){
-                createPlanet("PlanetMercury", "mercury.mesh", myTeam, 500),
-                createPlanet("PlanetVenus", "venus.mesh", myTeam, 1500),
-                createPlanet("PlanetEarth", "earth.mesh", myTeam, 2500),
-                createPlanet("PlanetMars", "mars.mesh", myTeam, 3500),
-                createPlanet("PlanetJupiter", "jupiter.mesh", myTeam, 6000),
-                createPlanet("PlanetSaturn", "saturn.mesh", myTeam, 8000),
-                createPlanet("PlanetUranus", "uranus.mesh", myTeam, 10000),
-                createPlanet("PlanetNeptune", "neptune.mesh", myTeam, 12000)
+                createPlanet("PlanetMercury", "mercury.mesh", myTeam, new Vector3(200,0,200), 500),
+                createPlanet("PlanetVenus", "venus.mesh", myTeam, sun.getPosition(), 1500),
+                createPlanet("PlanetEarth", "earth.mesh", myTeam, sun.getPosition(), 2500),
+                createPlanet("PlanetMars", "mars.mesh", myTeam, sun.getPosition(), 3500),
+                createPlanet("PlanetJupiter", "jupiter.mesh", myTeam, sun.getPosition(), 6000),
+                createPlanet("PlanetSaturn", "saturn.mesh", myTeam, sun.getPosition(), 8000),
+                createPlanet("PlanetUranus", "uranus.mesh", myTeam, sun.getPosition(), 10000),
+                createPlanet("PlanetNeptune", "neptune.mesh", myTeam, sun.getPosition(), 12000)
             }, 
             new List<IMovableGameObject>(),
-            createSun("Sun", "sun.mesh")));
+            sun));
             myTeam = "This is funny Team";
+            sun =  createSun("FunnySun", "jupiter.mesh");
             solarSystems.Add(createSolarSystem("FunnySystem", new List<IStaticGameObject>() {
-                createPlanet("FunnyThings", "knot.mesh", myTeam, 2000),
-                createPlanet("FunnyThings2", "ninja.mesh", myTeam, 4000),
-                createPlanet("FunnyThings3", "robot.mesh", myTeam, 1000)
+                createPlanet("FunnyThings", "knot.mesh", myTeam, sun.getPosition(), 2000),
+                createPlanet("FunnyThings2", "ninja.mesh", myTeam, sun.getPosition(), 4000),
+                createPlanet("FunnyThings3", "robot.mesh", myTeam, sun.getPosition(), 1000)
             },
             new List<IMovableGameObject>(),
-            createSun("FunnySun", "jupiter.mesh")));
+           sun));
 
             solarSystems[0].showSolarSystem();
 		}
@@ -97,9 +100,9 @@ namespace Strategy.GroupControl.Game_Objects {
             return new Sun(name, mesh, manager);
         }
 
-        private Planet createPlanet(string name,string mesh, string team, int radius) {
-            Planet p = new Planet(name, mesh, team, manager, radius);
-            if (!teams.ContainsKey(team)){
+        private Planet createPlanet(string name,string mesh, string team, Vector3 center, int radius) {
+            Planet p = new Planet(name, mesh, team, manager, radius, center);
+            if (!teams.ContainsKey(team)){  
                 teams.Add(team,new Team(team));
             }
             teams[team].addISGO(p);

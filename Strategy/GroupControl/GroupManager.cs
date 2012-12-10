@@ -14,8 +14,6 @@ namespace Strategy.GroupControl {
     class GroupManager {
         protected ObjectCreator objectCreator;
         //TODO: complete IMGO
-        //TODO: send ISGO to TeamMgr
-        //TODO: Solar System Class or not
 
         protected Dictionary<int, SolarSystem> solarSystemBetter;
         protected int lastSolarSystem = 0;
@@ -80,12 +78,12 @@ namespace Strategy.GroupControl {
             }
         }
 
+
         /// <summary>
         /// Show given solar system and hide actual
         /// </summary>
         /// <param name="newSolarSystem">integer of showing solar system</param>
         public void changeSolarSystem(int newSolarSystem) {
-
             //better system
             solarSystemBetter[activeSolarSystem].hideSolarSystem();
             solarSystemBetter[newSolarSystem].showSolarSystem();

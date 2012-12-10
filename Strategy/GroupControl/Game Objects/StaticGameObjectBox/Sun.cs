@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Mogre;
 
 namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 	class Sun : IStaticGameObject {
@@ -72,6 +73,10 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 
         public string getName() {
             return name;
+        }
+
+        public Vector3 getPosition() {
+            return Vector3.ZERO;
         }
     }
 }

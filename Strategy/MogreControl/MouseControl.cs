@@ -5,24 +5,34 @@ using System.Text;
 using Strategy.GroupControl;
 using Mogre;
 using Strategy.TeamControl;
+using Mogre.TutorialFramework;
 
 namespace Strategy.MogreControl {
 	class MouseControl {
+        //TODO: Rectangular select
 		protected static Mogre.TutorialFramework.CameraMan cameraMan ;
 		protected Mogre.SceneManager sceneMgr;
-		protected TeamManager teamManager;
+        protected GroupManager groupManager;
+        protected GUIControler guiControl;
 
         protected int changeMe = 1;
 
-        public MouseControl(Mogre.TutorialFramework.CameraMan c, Mogre.SceneManager m, TeamManager t) {
+        private static MouseControl instance;
+
+        public static MouseControl getInstance(CameraMan c, Mogre.SceneManager m, GroupManager groupManager, GUIControler guiControl) {
+            if (instance==null) {
+                instance = new MouseControl(c, m, groupManager, guiControl);
+            }
+            return instance;
+        }
+
+        private MouseControl(CameraMan c, Mogre.SceneManager m, GroupManager groupManager, GUIControler guiControl) {
 			cameraMan = c;
 			sceneMgr = m;
-            teamManager = t;
+            this.groupManager = groupManager;
+            this.guiControl = guiControl;
 		}
 
-		public void print() {
-			Console.WriteLine("povedlo se");
-		}
 
 		/// <summary>
 		/// This special function is called when any mouse button is pressed
@@ -54,7 +64,8 @@ namespace Strategy.MogreControl {
                 }
 
             } else {
-                teamManager.changeSolarSystem(changeMe);
+                groupManager.changeSolarSystem(changeMe);
+                guiControl.setSolarSystemName(groupManager.getSolarSystemName(changeMe));
                 changeMe=(changeMe + 1) % 2;
             }
 			return true;

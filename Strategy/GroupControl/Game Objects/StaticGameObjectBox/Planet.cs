@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Mogre;
+
 
 
 namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
     class Planet : StaticGameObject {
-
+        
         protected double mDistance = 0.0f; //distance to positoin
         protected Mogre.Vector3 mDirection = Mogre.Vector3.ZERO;   // The direction the object is moving
         
@@ -15,17 +16,18 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 
         protected double travelledInvisible;
 
+
         private static Random random = new Random();
 
         public Planet(string name, string mesh, string team, Mogre.SceneManager manager, double distanceFromCenter, 
-            int circularNum = 30) {
+            Vector3 center, int circularNum = 30) {
             this.name = name;
             this.mesh = mesh;
             this.team = team;
             this.manager = manager;
             
             //prepare list of positions
-            circularPositions = calculatePositions(circularNum, distanceFromCenter);
+            circularPositions = calculatePositions(circularNum, distanceFromCenter,center);
             randomizeStartPosition(circularNum); // randomize start position
             mDestination = circularPositions.First();
 
@@ -91,10 +93,6 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
             }
         }
 
-        public override void produce(float f) {
-            throw new NotImplementedException();
-        }
-
 
         //own functions 
 
@@ -129,12 +127,12 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         /// <param name="circularNum">Number of positions on circle</param>
         /// <param name="distanceFromCenter">radius on circle</param>
         /// <returns>linkedList with position on ngon (circle)</returns>
-        private LinkedList<Mogre.Vector3> calculatePositions(int circularNum, double distanceFromCenter) {
+        private LinkedList<Mogre.Vector3> calculatePositions(int circularNum, double distanceFromCenter,Vector3 center) {
             var list = new LinkedList<Mogre.Vector3>();
             for (int i = 0; i < circularNum; i++) {
-                double x = Math.Cos(i * 2 * Math.PI / circularNum) * distanceFromCenter;
-                double y = Math.Sin(i * 2 * Math.PI / circularNum) * distanceFromCenter;
-                list.AddFirst(new Mogre.Vector3((float)x, 0, (float)y));
+                double x = System.Math.Cos(i * 2 * System.Math.PI / circularNum) * distanceFromCenter;
+                double y = System.Math.Sin(i * 2 * System.Math.PI / circularNum) * distanceFromCenter;
+                list.AddFirst(new Mogre.Vector3((float)x + center.x, 0, (float)y)+ center.y);
             }
 
             return list;
@@ -156,11 +154,14 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         /// Called when object is displayed (invisible to visible)
         /// </summary>
         protected override void onDisplayed() {
-            //sceneNode.Position = invisblePosition;
-            //sceneNode.Translate(mDirection * (float)travelledInvisible);
             sceneNode.Position = mDestination;
             mFlying = false; //jump correction
         }
 
-    }
+    
+        public override bool  canExecute(string executingMethod)
+        {
+ 	        throw new NotImplementedException();
+        }
+}
 }
