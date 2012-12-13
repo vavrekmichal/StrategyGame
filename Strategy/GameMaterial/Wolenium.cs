@@ -7,18 +7,16 @@ using Strategy.GroupControl.Game_Objects.StaticGameObjectBox;
 namespace Strategy.GameMaterial {
     class Wolenium :IMaterial{
 
-        private string myName; 
+        private string myName;
+        private double actualQuantity;
+
 
         public Wolenium() {
             myName = "Wolenium";
         }
 
-        public void registerProducer(IStaticGameObject isgo) {
-            throw new NotImplementedException();
-        }
-
-        public void produce(float delay) {
-            throw new NotImplementedException();
+        public string name {
+            get { return myName; }
         }
 
         public double displayChangees() {
@@ -33,13 +31,12 @@ namespace Strategy.GameMaterial {
             throw new NotImplementedException();
         }
 
-
-
-        public string name {
-            get { return myName; }
+        public int state {
+            get { return (int)actualQuantity; }
         }
 
-
-        
+        public void addQuantity(double quantity) {
+            actualQuantity += quantity;
+        }
     }
 }

@@ -5,12 +5,11 @@ using System.Text;
 
 namespace Strategy.GameMaterial {
     class Class1 :IMaterial{
-        public void registerProducer(GroupControl.Game_Objects.StaticGameObjectBox.IStaticGameObject isgo) {
-            throw new NotImplementedException();
-        }
 
-        public void produce(float delay) {
-            throw new NotImplementedException();
+        private double actualQuantity;
+
+        public string name {
+            get { return "PIcopaso"; }
         }
 
         public double displayChangees() {
@@ -25,8 +24,14 @@ namespace Strategy.GameMaterial {
             throw new NotImplementedException();
         }
 
-        public string name {
-            get { return "PIcopaso"; }
+        public int state {
+            get {
+                return (int)actualQuantity;
+            }
+        }
+
+        public void addQuantity(double quantity) {
+            actualQuantity+=quantity;
         }
     }
 }

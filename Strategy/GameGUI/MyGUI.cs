@@ -29,7 +29,7 @@ namespace Strategy.GameGUI {
 
         protected Dictionary<string, MaterialGUIPair> materialList;
 
-        public MyGUI(int w, int h, MOIS.Mouse m, MOIS.Keyboard k, List<IMaterial> materials) {
+        public MyGUI(int w, int h, MOIS.Mouse m, MOIS.Keyboard k, Dictionary<string, IMaterial> materials) {
             materialList = new Dictionary<string, MaterialGUIPair>();
             screenHeight = h;
             screenWidth = w;
@@ -138,7 +138,7 @@ namespace Strategy.GameGUI {
         /// <summary>
         /// Creates top bar
         /// </summary>
-        private void createTopMenu(List<IMaterial> materials) {
+        private void createTopMenu(Dictionary<string, IMaterial> materials) {
             upperMenu = new FlowLayoutPanel() {
                 Size = new Size(screenWidth * 18 / 20, screenHeight*2 / 30),
                 Location = new Point(screenWidth / 20, 0),
@@ -215,11 +215,17 @@ namespace Strategy.GameGUI {
             };
 
 
-            for (int i = 0; i < materials.Count; i++) {
-                materialList.Add(materials[i].name, new MaterialGUIPair(materials[i].name, 0, materialBox.Width, i));
-            }
+            //for (int i = 0; i < materials.Count; i++) {
+            //    materialList.Add(materials[i].name, new MaterialGUIPair(materials[i].name, 0, materialBox.Width, i));
+            //}
 
             int row = 0;
+            foreach (KeyValuePair<string, IMaterial> k in materials) {
+                materialList.Add(k.Key, new MaterialGUIPair(k.Key,k.Value.state, materialBox.Width,row));
+                row++;
+            }
+
+            row = 0;
             foreach (KeyValuePair<string, MaterialGUIPair> valuePair in materialList) {
                 materialBox.Controls.Add(valuePair.Value.name);
                 materialBox.Controls.Add(valuePair.Value.value);
@@ -292,7 +298,7 @@ namespace Strategy.GameGUI {
         //Button Actions
         private void quitOnClick(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
             system.Dispose();
-            throw new ShutdownException();
+            throw new Strategy.Exceptions.ShutdownException();
         }
 
         private void mouseOver(object sender, Miyagi.Common.Events.MouseEventArgs e) {
@@ -320,9 +326,12 @@ namespace Strategy.GameGUI {
 
         }
 
-        public void increaseMaterialState(string material, int inc){
-            int i = int.Parse(materialList[material].value.Text);
-            materialList[material].value.Text = (i + inc).ToString(); //TODO: delete this line
+        public void setMaterialState(string material, int inc){
+            if (materialList.ContainsKey(material)) {
+                materialList[material].value.Text = (inc).ToString();
+            } else {
+                throw new Strategy.Exceptions.MissingMaterialException("This Material is not in your list. You can not set value to nonexist material.");
+            }
         }
 
         ///
@@ -331,7 +340,7 @@ namespace Strategy.GameGUI {
         ///
         public void showTargeted(string s) {
             ((Label)mainMenu.Controls[1].Controls[0]).Text = s;
-            increaseMaterialState("Wolenium", 1);
+            setMaterialState("Wolenium", 1);//TODO: delete this line
         }
 
     }

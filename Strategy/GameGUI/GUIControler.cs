@@ -9,24 +9,33 @@ using Strategy.TeamControl;
 using Mogre;
 using MOIS;
 
-namespace Strategy {
+namespace Strategy.GameGUI {
 	class GUIControler {
 		protected static MyGUI myGUI;
+        protected RenderWindow window;
+        protected Mouse mouse;
+        protected Keyboard keyboard;
         //protected List<IMaterial> materials; //maybe just number of it ...and names ...and make value list
 
         private static GUIControler instance;
 
-        public static GUIControler getInstance(RenderWindow mWindow, Mouse m, Keyboard k, List<IMaterial> listMaterial) {
+        public static GUIControler getInstance(RenderWindow mWindow, Mouse m, Keyboard k) {
             if (instance==null) {
-                instance = new GUIControler(mWindow, m, k, listMaterial);
+                instance = new GUIControler(mWindow, m, k);
             }
             return instance;
         }
 
-        private GUIControler(RenderWindow mWindow, Mouse m, Keyboard k, List<IMaterial> listMaterial) {
-			myGUI = new MyGUI((int)mWindow.Width, (int)mWindow.Height, m, k, listMaterial);
+        private GUIControler(RenderWindow mWindow, Mouse m, Keyboard k) {
+            window = mWindow;
+            mouse = m;
+            keyboard = k;
             //materials = listMaterial;
 		}
+
+        public void inicialization( Dictionary<string, IMaterial> listMaterial) {
+            myGUI = new MyGUI((int)window.Width, (int)window.Height, mouse, keyboard, listMaterial);
+        }
 
 		public void dispose() {
 			myGUI.dispose();
@@ -44,6 +53,9 @@ namespace Strategy {
             myGUI.setSolarSystemName(name);
         }
 
+        public void setMaterialState(string material, int inc) {
+            myGUI.setMaterialState(material, inc);
+        }
 	}
 
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mogre;
+using Strategy.TeamControl;
 
 
 
@@ -19,11 +20,11 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 
         private static Random random = new Random();
 
-        public Planet(string name, string mesh, string team, Mogre.SceneManager manager, double distanceFromCenter, 
+        public Planet(string name, string mesh, Team myTeam, Mogre.SceneManager manager, double distanceFromCenter, 
             Vector3 center, int circularNum = 30) {
             this.name = name;
             this.mesh = mesh;
-            this.team = team;
+            planetTeam = myTeam;
             this.manager = manager;
             
             //prepare list of positions
@@ -40,6 +41,7 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         /// </summary>
         /// <param name="f">delay between frames</param>
         public override void rotate(float f) {
+            tryExecute("Produce");
             sceneNode.Roll(new Mogre.Degree((float)(mFlySpeed * 0.5 *f)));
             //position in LinkedList now moving
             if (!mFlying) {
@@ -71,6 +73,7 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         /// </summary>
         /// <param name="f">delay between frames</param>
         public override void nonActiveRotate(float f) {
+            tryExecute("Produce");
             if (!mFlying) {
                 if (nextLocation()) {
                     mFlying = true;
@@ -101,14 +104,12 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         /// </summary>
         /// <param name="max">max of rotates</param>
         private  void randomizeStartPosition(int max) {
-            Random random = new Random();
             for (int i = 0; i < getRandomNumber(max); i++) {
                 prepareNextPosition();
             }
         }
 
         private static int getRandomNumber(int max) {
-      
             return random.Next(max);
         }
 
@@ -159,9 +160,6 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         }
 
     
-        public override bool  canExecute(string executingMethod)
-        {
- 	        throw new NotImplementedException();
-        }
+
 }
 }

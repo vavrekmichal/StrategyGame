@@ -10,6 +10,7 @@ using Strategy.TeamControl;
 using Strategy.MogreControl;
 using Mogre.TutorialFramework;
 using MOIS;
+using Strategy.GameGUI;
 
 namespace Strategy {
     class Game {
@@ -37,7 +38,8 @@ namespace Strategy {
             moveControler = MoveControler.getInstance();
             fightManager = FightManager.getInstance();
             teamManager = TeamManager.getInstance();
-            guiControler = GUIControler.getInstance(mWindow, mouse, keyboard, teamManager.getMaterials());
+            guiControler = GUIControler.getInstance(mWindow, mouse, keyboard);
+            teamManager.setGUI(guiControler);
             mouseControl = MouseControl.getInstance(c, sceneManager, groupManager, guiControler);
             
         }
@@ -46,6 +48,7 @@ namespace Strategy {
         public void update(float delay) {
             guiControler.update();
             groupManager.update(delay);
+            teamManager.update();
             //production of Materials
         }
 
@@ -55,8 +58,9 @@ namespace Strategy {
 
         public void inicialization() {
             groupManager.inicializeWorld();
-            guiControler.setSolarSystemName(groupManager.getSolarSystemName(0));
             teamManager.inicialization(groupManager.getTeams());
+            guiControler.inicialization(teamManager.playerTeam.getMaterials());
+            guiControler.setSolarSystemName(groupManager.getSolarSystemName(0));
             
         }
 

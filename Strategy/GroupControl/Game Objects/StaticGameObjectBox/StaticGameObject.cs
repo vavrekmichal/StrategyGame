@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Strategy.GroupControl.Game_Objects.StaticGameObjectBox;
+using Strategy.TeamControl;
+using Strategy.GroupControl.Game_Objects.GameActions;
+using Strategy.GameMaterial;
 
 namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
     abstract class StaticGameObject : IStaticGameObject {
@@ -10,29 +11,59 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         protected Mogre.Entity entity;
         protected Mogre.SceneNode sceneNode;
         protected string mesh;
-        //protected List<IGameAction> listOfAction; not implemented
+        protected static Dictionary<string, IGameAction> gameActions; 
+        protected static Dictionary<string, List<IStaticGameObject>> gameActionsPermitions;
         protected LinkedList<Mogre.Vector3> circularPositions;
 
-        //protected int solarSystem;
-        //protected Mogre.Vector3 invisblePosition;
         protected Mogre.Vector3 mDestination = Mogre.Vector3.ZERO; // The destination the object is moving towards
 
-        protected string planetTeam;
+        protected Team planetTeam;
         protected Mogre.SceneManager manager;
+
+        static StaticGameObject() {
+            gameActionsPermitions = new Dictionary<string, List<IStaticGameObject>>();
+            gameActions = new Dictionary<string, IGameAction>();
+            IGameAction o = (IGameAction)System.Reflection.Assembly.GetExecutingAssembly().CreateInstance("Strategy.GroupControl.Game_Objects.GameActions.Produce");
+
+            gameActions.Add(o.getName(), o);
+            gameActionsPermitions.Add(o.getName(), new List<IStaticGameObject>());
+        }
+
+        public void registerExecuter(string nameOfAction, Dictionary<string, IMaterial> materials) {
+            if (gameActionsPermitions.ContainsKey(nameOfAction)) {
+                gameActionsPermitions[nameOfAction].Add(this);
+            }
+            registerProducer(materials["Wolenium"], 0.0001);
+        }
+
+        private void registerProducer(IMaterial specificType, double value) {
+            ((Produce)gameActions["Produce"]).registerExecuter(this,specificType,value);
+        }
+
 
         public abstract void rotate(float f);
         public abstract void nonActiveRotate(float f);
-
-     //   public abstract void produce(float f);
-        public abstract bool canExecute(string executingMethod);
-
         protected abstract void onDisplayed();
+
+
+        public bool tryExecute(string executingAction){
+            if (gameActionsPermitions.ContainsKey(executingAction) && gameActionsPermitions[executingAction].Contains(this)) {
+                gameActions[executingAction].execute(this, planetTeam);
+                return true;
+            }
+            return false;
+        }
+
+        
+        
+
+        
 
         
         /// <summary>
         /// int of planets owner
         /// </summary>
-        public string team {
+        public Team team {
             get {
                 return planetTeam;
             }

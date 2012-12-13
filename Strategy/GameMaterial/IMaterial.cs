@@ -6,13 +6,13 @@ using Strategy.GroupControl.Game_Objects.StaticGameObjectBox;
 
 namespace Strategy.GameMaterial {
     interface IMaterial {
-        void registerProducer(IStaticGameObject isgo);
-        void produce(float delay);
+  
         double displayChangees();
         int getQuantityOfMaterial();
         bool tryBuild(int wantedQuantity);
-     
+        void addQuantity(double quantity);
 
+        int state {  get; }
         string name { get; }
     }
 }

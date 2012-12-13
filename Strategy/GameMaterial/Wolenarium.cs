@@ -6,17 +6,14 @@ using System.Text;
 namespace Strategy.GameMaterial {
     class Wolenarium :IMaterial{
         private string myName;
+        private double actualQuantity;
 
         public Wolenarium() {
             myName = "Wolenarium";
         }
 
-        public void registerProducer(GroupControl.Game_Objects.StaticGameObjectBox.IStaticGameObject isgo) {
-            throw new NotImplementedException();
-        }
-
-        public void produce(float delay) {
-            throw new NotImplementedException();
+        public string name {
+            get { return myName; }
         }
 
         public double displayChangees() {
@@ -31,8 +28,12 @@ namespace Strategy.GameMaterial {
             throw new NotImplementedException();
         }
 
-        public string name {
-            get { return myName; }
+        public int state {
+            get { return (int)actualQuantity; }
+        }
+
+        public void addQuantity(double quantity) {
+            actualQuantity += quantity;
         }
     }
 }

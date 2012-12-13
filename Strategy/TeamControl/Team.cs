@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using Strategy.GroupControl.Game_Objects.StaticGameObjectBox;
 using Strategy.GroupControl.Game_Objects.MovableGameObjectBox;
+using Strategy.GameMaterial;
 
 namespace Strategy.TeamControl {
     class Team {
 
         //TODO: Production 
         //Ideas List<IMateria> Netreba jen jmeno...v sesite popsano.
+        protected Dictionary<string, IMaterial> materialsStates;
 
         protected List<IMovableGameObject> imgoObjects;
         protected List<IStaticGameObject> isgoObjects;
@@ -18,8 +20,17 @@ namespace Strategy.TeamControl {
 
         public Team(string name) {
             this.name = name;
+            materialsStates = new Dictionary<string, IMaterial>();
             imgoObjects = new List<IMovableGameObject>();
             isgoObjects = new List<IStaticGameObject>();
+        }
+
+        public Team(string name, List<IMaterial> materialList) {
+            this.name = name;
+            materialsStates = new Dictionary<string, IMaterial>();
+            imgoObjects = new List<IMovableGameObject>();
+            isgoObjects = new List<IStaticGameObject>();
+            setMaterials(materialList);
         }
 
         //isgo
@@ -67,6 +78,21 @@ namespace Strategy.TeamControl {
             }
 
             return s.ToString();
+        }
+
+        public void setMaterials(List<IMaterial> materials) {
+            foreach (IMaterial mat in materials) {
+                materialsStates.Add(mat.name, mat);
+            }
+        }
+
+        public void addMaterial(string materialName, double materialQuantity){
+            materialsStates[materialName].addQuantity(materialQuantity);
+        }
+
+
+        public Dictionary<string, IMaterial> getMaterials() {
+            return materialsStates;
         }
     }
 }

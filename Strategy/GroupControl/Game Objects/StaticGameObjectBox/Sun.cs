@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Mogre;
+using Strategy.TeamControl;
+using Strategy.GroupControl.Game_Objects.GameActions;
 
 namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 	class Sun : IStaticGameObject {
@@ -13,8 +15,7 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 		protected List<IGameAction> listOfAction = new List<IGameAction>();
         protected Mogre.SceneManager manager;
         
-        protected string sunTeam ="SUN";
-
+        protected static Team sunTeam = new Team("Suns");
         /// <summary>
         /// Public constructor. Detect active solar system (0)
         /// </summary>
@@ -43,12 +44,12 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         /// <summary>
         /// It will be always 0.
         /// </summary>
-        public string team {
+        public Team team {
             get {
                 return sunTeam;
             }
             set {
-                sunTeam=team;
+               
             }
         }
 
@@ -77,6 +78,11 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 
         public Vector3 getPosition() {
             return Vector3.ZERO;
+        }
+
+
+        public bool tryExecute(string executingAction) {
+            throw new NotImplementedException();
         }
     }
 }

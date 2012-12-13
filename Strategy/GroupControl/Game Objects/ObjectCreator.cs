@@ -8,11 +8,13 @@ using Strategy.GroupControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GroupControl.Game_Objects.StaticGameObjectBox;
 using Strategy.TeamControl;
 using Mogre;
+using Strategy.GameMaterial;
 
 
 namespace Strategy.GroupControl.Game_Objects {
 	class ObjectCreator {
 
+        protected List<IMaterial> materialList;
         protected List<SolarSystem> solarSystems;
 		protected Mogre.SceneManager manager;
         protected Dictionary<string,Team> teams;
@@ -50,6 +52,7 @@ namespace Strategy.GroupControl.Game_Objects {
 		public void initializeWorld(string mission){ //not implemented
 			//TODO: XML Reader on mission will be here                !!!!!!!!!!!!!!!!!!!!!!!!!!!! 
             //visual part 
+            createMaterials();
 
             string myTeam = "This is my team";
             Sun sun = createSun("Sun", "sun.mesh");
@@ -101,11 +104,15 @@ namespace Strategy.GroupControl.Game_Objects {
         }
 
         private Planet createPlanet(string name,string mesh, string team, Vector3 center, int radius) {
-            Planet p = new Planet(name, mesh, team, manager, radius, center);
             if (!teams.ContainsKey(team)){  
-                teams.Add(team,new Team(team));
+                teams.Add(team,new Team(team, materialList));
             }
+            
+            Planet p = new Planet(name, mesh, teams[team], manager, radius, center);
             teams[team].addISGO(p);
+            Console.WriteLine("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+            Console.WriteLine(p.team.getName());
+            p.registerExecuter("Produce",teams[team].getMaterials());
             return p;
         }
 
@@ -117,6 +124,9 @@ namespace Strategy.GroupControl.Game_Objects {
             return teams;
         }
 
+        private void createMaterials() {
+            materialList = new List<IMaterial>() { new Wolenium(), new Wolenarium(), new Class1() };
+        }
 	}
 
 	static class RandomUtil {

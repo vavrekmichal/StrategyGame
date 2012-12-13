@@ -89,6 +89,7 @@ namespace Strategy.GroupControl {
             if (active) {
                 foreach (IStaticGameObject isgo in isgoObjects) {
                     isgo.rotate(delay);
+                    
                 }
                 if (sun != null) {
                     sun.rotate(delay);

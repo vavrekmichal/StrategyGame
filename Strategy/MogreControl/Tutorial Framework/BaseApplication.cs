@@ -1,5 +1,5 @@
-﻿using Mogre;
-using System;
+﻿using System;
+using Strategy.Exceptions;
 
 
 
@@ -203,14 +203,14 @@ namespace Mogre.TutorialFramework {
                 //mDebugOverlay.Update(evt.timeSinceLastFrame);
 
                 return true;
-            } catch (Strategy.ShutdownException) {
+            } catch (ShutdownException) {
                 mShutDown = true;
                 return false;
             }
         }
 
         protected void Shutdown() {
-            throw new Strategy.ShutdownException();
+            throw new ShutdownException();
         }
 
         protected virtual void CreateScene() {

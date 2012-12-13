@@ -7,6 +7,7 @@ using Strategy.MogreControl;
 using Strategy.Sound;
 using Strategy.TeamControl;
 using Mogre.TutorialFramework;
+using Strategy.Exceptions;
 
 
 
@@ -170,7 +171,7 @@ namespace Strategy {
 					if (exit) {
 						try {
 							Shutdown();
-						} catch (Exception) {
+						} catch (System.Exception) {
 							quit();
 						}
 					} else {

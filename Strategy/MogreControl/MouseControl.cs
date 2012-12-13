@@ -6,12 +6,14 @@ using Strategy.GroupControl;
 using Mogre;
 using Strategy.TeamControl;
 using Mogre.TutorialFramework;
+using Strategy.GameGUI;
+using MOIS;
 
 namespace Strategy.MogreControl {
 	class MouseControl {
         //TODO: Rectangular select
 		protected static Mogre.TutorialFramework.CameraMan cameraMan ;
-		protected Mogre.SceneManager sceneMgr;
+		protected SceneManager sceneMgr;
         protected GroupManager groupManager;
         protected GUIControler guiControl;
 
@@ -19,14 +21,14 @@ namespace Strategy.MogreControl {
 
         private static MouseControl instance;
 
-        public static MouseControl getInstance(CameraMan c, Mogre.SceneManager m, GroupManager groupManager, GUIControler guiControl) {
+        public static MouseControl getInstance(CameraMan c, SceneManager m, GroupManager groupManager, GUIControler guiControl) {
             if (instance==null) {
                 instance = new MouseControl(c, m, groupManager, guiControl);
             }
             return instance;
         }
 
-        private MouseControl(CameraMan c, Mogre.SceneManager m, GroupManager groupManager, GUIControler guiControl) {
+        private MouseControl(CameraMan c, SceneManager m, GroupManager groupManager, GUIControler guiControl) {
 			cameraMan = c;
 			sceneMgr = m;
             this.groupManager = groupManager;
@@ -40,10 +42,10 @@ namespace Strategy.MogreControl {
 		/// <param name="arg">argument of press</param>
 		/// <param name="id">which button was pressed</param>
 		/// <returns>was pressed true</returns>
-		public bool OnMyMousePressed(MOIS.MouseEvent evt, MOIS.MouseButtonID id) {
+		public bool OnMyMousePressed(MouseEvent evt, MouseButtonID id) {
 
 
-            if (id == MOIS.MouseButtonID.MB_Left) {
+            if (id == MouseButtonID.MB_Left) {
                 //mCameraMan.Freeze = true;
                 using (Mogre.RaySceneQuery raySceneQuery = sceneMgr.CreateRayQuery(new Mogre.Ray())) {
                     float mouseX = (float)evt.state.X.abs / (float)evt.state.width;
@@ -77,8 +79,8 @@ namespace Strategy.MogreControl {
 		/// <param name="arg">argument of release</param>
 		/// <param name="id">which button was released</param>
 		/// <returns>was released true</returns>
-		public bool OnMyMouseReleased(MOIS.MouseEvent arg, MOIS.MouseButtonID id) {
-			if (id == MOIS.MouseButtonID.MB_Left) { }
+		public bool OnMyMouseReleased(MouseEvent arg, MouseButtonID id) {
+			if (id == MouseButtonID.MB_Left) { }
 			//mCameraMan.Freeze = false;
 
 			return true;

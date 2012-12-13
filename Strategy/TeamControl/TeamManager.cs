@@ -7,15 +7,18 @@ using Strategy.FightControl;
 using Strategy.GameMaterial;
 using Strategy.GroupControl;
 using Mogre;
+using Strategy.GameGUI;
 
 namespace Strategy.TeamControl {
     class TeamManager {
         //TODO: ProduceManager
-        protected List<IMaterial> materials; //will be singleton and shared with this and GUI to show state
+        //protected List<IMaterial> materials; //will be singleton and shared with this and GUI to show state
 
         protected GUIControler guiControler;
 
         protected Dictionary<string, Team> teams; //implementation in mybook think about delete. MUST delete from team and group
+        
+        public Team playerTeam;
 
         #region singleton and constructor
         public static TeamManager instance;
@@ -28,18 +31,18 @@ namespace Strategy.TeamControl {
         }
 
         private TeamManager() {
-            materials = new List<IMaterial>() { new Wolenium() ,new Wolenarium(), new Class1()};
+            
         }
         #endregion
 
         //public
         
-
-        
         public void inicialization(Dictionary<string,Team> settingTeam) {
             teams = settingTeam;
+            playerTeam = teams["This is my team"];
             Console.WriteLine("Team print at Start of the Game:");
             foreach(KeyValuePair<string,Team> team in teams){
+                //team.Value.setMaterials(materials);
                 Console.WriteLine(team.Value.ToString());
             }
         }
@@ -50,9 +53,9 @@ namespace Strategy.TeamControl {
         /// get all IMaterials 
         /// </summary>
         /// <returns>return list with IMaterial</returns>
-        public List<IMaterial> getMaterials() {
-            return materials;
-        }
+        //public List<IMaterial> getMaterials() {
+        //    return materials;
+        //}
 
 
 
@@ -60,6 +63,13 @@ namespace Strategy.TeamControl {
         public void setGUI(GUIControler gui) {
             guiControler = gui;
         }
+
+        public void update() {
+            foreach (KeyValuePair<string, IMaterial> k in playerTeam.getMaterials()) {
+                guiControler.setMaterialState(k.Key, k.Value.state);
+            }
+        }
+
         //private
     }
 }
