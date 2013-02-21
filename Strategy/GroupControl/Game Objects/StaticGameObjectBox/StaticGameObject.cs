@@ -11,8 +11,7 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         protected Mogre.Entity entity;
         protected Mogre.SceneNode sceneNode;
         protected string mesh;
-        protected static Dictionary<string, IGameAction> gameActions; 
-        protected static Dictionary<string, List<IStaticGameObject>> gameActionsPermitions;
+
         protected LinkedList<Mogre.Vector3> circularPositions;
 
         protected Mogre.Vector3 mDestination = Mogre.Vector3.ZERO; // The destination the object is moving towards
@@ -20,6 +19,10 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         protected Team planetTeam;
         protected Mogre.SceneManager manager;
 
+		protected static Dictionary<string, IGameAction> gameActions;
+		protected static Dictionary<string, List<IStaticGameObject>> gameActionsPermitions;
+
+		//Look here create file load file
         static StaticGameObject() {
             gameActionsPermitions = new Dictionary<string, List<IStaticGameObject>>();
             gameActions = new Dictionary<string, IGameAction>();

@@ -12,6 +12,8 @@ using Strategy.GameMaterial;
 
 
 namespace Strategy.GroupControl.Game_Objects {
+
+	enum isgoType { Planet, Sun}
 	class ObjectCreator {
 
         protected List<IMaterial> materialList;
@@ -54,30 +56,8 @@ namespace Strategy.GroupControl.Game_Objects {
             //visual part 
             createMaterials();
 
-            string myTeam = "This is my team";
-            Sun sun = createSun("Sun", "sun.mesh");
-            solarSystems.Add(createSolarSystem("SolarSystem", new List<IStaticGameObject>(){
-                createPlanet("PlanetMercury", "mercury.mesh", myTeam, new Vector3(200,0,200), 500),
-                createPlanet("PlanetVenus", "venus.mesh", myTeam, sun.getPosition(), 1500),
-                createPlanet("PlanetEarth", "earth.mesh", myTeam, sun.getPosition(), 2500),
-                createPlanet("PlanetMars", "mars.mesh", myTeam, sun.getPosition(), 3500),
-                createPlanet("PlanetJupiter", "jupiter.mesh", myTeam, sun.getPosition(), 6000),
-                createPlanet("PlanetSaturn", "saturn.mesh", myTeam, sun.getPosition(), 8000),
-                createPlanet("PlanetUranus", "uranus.mesh", myTeam, sun.getPosition(), 10000),
-                createPlanet("PlanetNeptune", "neptune.mesh", myTeam, sun.getPosition(), 12000)
-            }, 
-            new List<IMovableGameObject>(),
-            sun));
-            myTeam = "This is funny Team";
-            sun =  createSun("FunnySun", "jupiter.mesh");
-            solarSystems.Add(createSolarSystem("FunnySystem", new List<IStaticGameObject>() {
-                createPlanet("FunnyThings", "knot.mesh", myTeam, sun.getPosition(), 2000),
-                createPlanet("FunnyThings2", "ninja.mesh", myTeam, sun.getPosition(), 4000),
-                createPlanet("FunnyThings3", "robot.mesh", myTeam, sun.getPosition(), 1000)
-            },
-            new List<IMovableGameObject>(),
-           sun));
-
+			ObjectXMLCreator xml = new ObjectXMLCreator("../../Media/Mission/MyMission.xml", manager, teams, materialList, solarSystems);
+			xml.load("StartMission");
             solarSystems[0].showSolarSystem();
 		}
 

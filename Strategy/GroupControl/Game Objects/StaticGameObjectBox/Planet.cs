@@ -19,6 +19,15 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 
 
         private static Random random = new Random();
+	
+		///testing
+		public Planet() {
+
+		}
+		public Planet(string s) {
+			name = s;
+		}
+		//end
 
         public Planet(string name, string mesh, Team myTeam, Mogre.SceneManager manager, double distanceFromCenter, 
             Vector3 center, int circularNum = 30) {

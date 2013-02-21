@@ -20,6 +20,8 @@ namespace Strategy {
 	/// 
 	class MyMogre : Mogre.TutorialFramework.BaseApplication {
 
+		public static string playerName = "Player";
+
 		protected MOIS.InputManager mInputMgr; //use for create control (mouse, keyborard) instance
 		protected float mTimer; //float as timer to determine of duration overlay 
 		protected bool exit = false; //controlor if player is alive

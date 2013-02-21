@@ -43,8 +43,6 @@ namespace Strategy.MogreControl {
 		/// <param name="id">which button was pressed</param>
 		/// <returns>was pressed true</returns>
 		public bool OnMyMousePressed(MouseEvent evt, MouseButtonID id) {
-
-
             if (id == MouseButtonID.MB_Left) {
                 //mCameraMan.Freeze = true;
                 using (Mogre.RaySceneQuery raySceneQuery = sceneMgr.CreateRayQuery(new Mogre.Ray())) {
@@ -60,7 +58,6 @@ namespace Strategy.MogreControl {
                             if (entry.movable.Name != "GroundEntity") {
                                 GUIControler.targetObject(entry.movable.Name);
                             }
-
                         }
                     }
                 }

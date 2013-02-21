@@ -39,7 +39,7 @@ namespace Strategy.TeamControl {
         
         public void inicialization(Dictionary<string,Team> settingTeam) {
             teams = settingTeam;
-            playerTeam = teams["This is my team"];
+            playerTeam = teams[MyMogre.playerName];
             Console.WriteLine("Team print at Start of the Game:");
             foreach(KeyValuePair<string,Team> team in teams){
                 //team.Value.setMaterials(materials);

@@ -64,7 +64,9 @@ namespace Strategy.GroupControl {
                 foreach (IStaticGameObject isgo in isgoObjects) {
                     isgo.changeVisible(false);
                 }
-                sun.changeVisible(false);
+				if (sun != null) {
+					sun.changeVisible(false);
+				}
                 active = false;
             }
         }
@@ -77,7 +79,9 @@ namespace Strategy.GroupControl {
                 foreach (IStaticGameObject isgo in isgoObjects) {
                     isgo.changeVisible(true);
                 }
-                sun.changeVisible(true);
+				if (sun != null) {
+					sun.changeVisible(true);
+				}
                 active = true;
             }
         }
