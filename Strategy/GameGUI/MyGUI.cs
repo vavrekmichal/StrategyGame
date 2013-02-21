@@ -214,11 +214,6 @@ namespace Strategy.GameGUI {
 
             };
 
-
-            //for (int i = 0; i < materials.Count; i++) {
-            //    materialList.Add(materials[i].name, new MaterialGUIPair(materials[i].name, 0, materialBox.Width, i));
-            //}
-
             int row = 0;
             foreach (KeyValuePair<string, IMaterial> k in materials) {
                 materialList.Add(k.Key, new MaterialGUIPair(k.Key,k.Value.state, materialBox.Width,row));
@@ -233,8 +228,6 @@ namespace Strategy.GameGUI {
             }
 
             upperMenu.Controls.Add(materialBox);
-
-
         }
 
         /// <summary>
@@ -250,38 +243,53 @@ namespace Strategy.GameGUI {
         /// </summary>
         private void createMainMenu() {
             mainMenu = new FlowLayoutPanel() {
+				
                 Size = new Size(screenWidth, screenHeight / 5),
                 Skin = skinDict["PanelR"],
                 Location = new Point(0, screenHeight * 8 / 10)
             };
             gui.Controls.Add(mainMenu);
+
             for (int i = 0; i < 3; i++) {
-                mainMenu.Controls.Add(new Button() {
+                mainMenu.Controls.Add(new Panel() {
+					ResizeMode = ResizeModes.None,
+					Padding = new Thickness(5),
                     Size = new Size((int)mainMenu.Width / 3, (int)mainMenu.Height),
-                    //Location = new Point(50, (int)mainMenu.Width * i / 4),
                     Skin = skinDict["PanelR"],
-                    //HitTestVisible = false
                 });
             }
 
+			//Ceate control Bar
+			int row = 45;
+			mainMenu.Controls[0].Controls.Add(new Button() {
+				Size = new Size(mainMenu.Controls[0].Width/2, 40),
+				Location = new Point(0, 0),
+				
+				Skin = skinDict["Button"],
+				Text = "  Pause BUTTON"
+			});
+			mainMenu.Controls[0].Controls[0].MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(pause);
 
-            mainMenu.Controls[0].Controls.Add(new Button() {
-                Size = new Size(140, 40),
-                Skin = skinDict["Button"],
-                Text = "  EXIT BUTTON"
-            });
-            mainMenu.Controls[0].Controls[0].MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(quitOnClick);
+			mainMenu.Controls[0].Controls.Add(new Button() {
+				Size = new Size(mainMenu.Controls[0].Width/2, 40),
+				Location = new Point(0, row),
+				Skin = skinDict["Button"],
+				Text = "  EXIT BUTTON"
+			});
+
+			//Others
+			mainMenu.Controls[0].Controls[1].MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(quitOnClick);
 
             mainMenu.Controls[1].Controls.Add(new Label() {
                 Size = new Size(140, 50),
-                Text = " bla",
+                Text = " Developing",
                 Padding = new Thickness(5)
 
             });
 
             mainMenu.Controls[2].Controls.Add(new Label() {
                 Size = new Size(140, 50),
-                Text = " bla",
+				Text = " Developing",
                 Padding = new Thickness(5)
 
 
@@ -300,6 +308,10 @@ namespace Strategy.GameGUI {
             system.Dispose();
             throw new Strategy.Exceptions.ShutdownException();
         }
+
+		private void pause(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
+			Game.pause(!Game.gameStatus());
+		}
 
         private void mouseOver(object sender, Miyagi.Common.Events.MouseEventArgs e) {
             MogreControl.MouseControl.move(((Button)sender).Name);

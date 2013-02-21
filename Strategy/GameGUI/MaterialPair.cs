@@ -12,7 +12,6 @@ namespace Strategy.GameGUI {
 
             public MaterialGUIPair(string nameString, int valueInt, int maxWidth, int position) {
             int newWidth = maxWidth/5;
-            Console.WriteLine(maxWidth+"THIS IS MAX AND NOW IS NEW "+ newWidth );
             name = new Label() {
                 Size = new Size(newWidth*3, 25),
                 Text = nameString,

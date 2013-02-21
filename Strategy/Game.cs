@@ -19,6 +19,8 @@ namespace Strategy {
         protected IFightManager fightManager;
         protected TeamManager teamManager;
         protected MouseControl mouseControl;
+		
+		private static bool gamePaused;
 
         protected GUIControler guiControler;
         #region Singleton and constructor
@@ -41,14 +43,16 @@ namespace Strategy {
             guiControler = GUIControler.getInstance(mWindow, mouse, keyboard);
             teamManager.setGUI(guiControler);
             mouseControl = MouseControl.getInstance(c, sceneManager, groupManager, guiControler);
-            
+			gamePaused = false;
         }
         #endregion
 
         public void update(float delay) {
             guiControler.update();
-            groupManager.update(delay);
-            teamManager.update();
+			if(!gamePaused){
+				groupManager.update(delay);
+				teamManager.update();
+			}
             //production of Materials
         }
 
@@ -73,5 +77,14 @@ namespace Strategy {
         public void quit() {
             guiControler.dispose();
         }
+
+		//PAUSE
+		public static void pause(bool paused) {
+			gamePaused = paused;
+		}
+
+		public static bool gameStatus() {
+			return gamePaused;
+		}
     }
 }
