@@ -22,6 +22,11 @@ namespace Strategy.GameGUI {
         protected FlowLayoutPanel mainMenu;
         protected Label nameOfSolarSystem;
 
+		private Panel buttonsPanel;
+		private Panel statPanel;
+		private Panel actionPanel;
+
+
         Dictionary<string, Skin> skinDict;
         Dictionary<string, Font> fonts;
         MiyagiSystem system;
@@ -250,50 +255,9 @@ namespace Strategy.GameGUI {
             };
             gui.Controls.Add(mainMenu);
 
-            for (int i = 0; i < 3; i++) {
-                mainMenu.Controls.Add(new Panel() {
-					ResizeMode = ResizeModes.None,
-					Padding = new Thickness(5),
-                    Size = new Size((int)mainMenu.Width / 3, (int)mainMenu.Height),
-                    Skin = skinDict["PanelR"],
-                });
-            }
-
-			//Ceate control Bar
-			int row = 45;
-			mainMenu.Controls[0].Controls.Add(new Button() {
-				Size = new Size(mainMenu.Controls[0].Width/2, 40),
-				Location = new Point(0, 0),
-				
-				Skin = skinDict["Button"],
-				Text = "  Pause BUTTON"
-			});
-			mainMenu.Controls[0].Controls[0].MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(pause);
-
-			mainMenu.Controls[0].Controls.Add(new Button() {
-				Size = new Size(mainMenu.Controls[0].Width/2, 40),
-				Location = new Point(0, row),
-				Skin = skinDict["Button"],
-				Text = "  EXIT BUTTON"
-			});
-
-			//Others
-			mainMenu.Controls[0].Controls[1].MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(quitOnClick);
-
-            mainMenu.Controls[1].Controls.Add(new Label() {
-                Size = new Size(140, 50),
-                Text = " Developing",
-                Padding = new Thickness(5)
-
-            });
-
-            mainMenu.Controls[2].Controls.Add(new Label() {
-                Size = new Size(140, 50),
-				Text = " Developing",
-                Padding = new Thickness(5)
-
-
-            });
+			mainMenu.Controls.Add(createButtonPanel());
+			mainMenu.Controls.Add(createStatPanel());
+			mainMenu.Controls.Add(createActionPanel());
 
             // Cursor
             Skin cursorSkin = Skin.CreateFromXml("../../Media/cursorSkin.xml")[0];
@@ -322,6 +286,63 @@ namespace Strategy.GameGUI {
             MogreControl.MouseControl.moveStop(((Button)sender).Name);
         }
 
+		private Panel createMainmenuPanel() {
+			var p = new Panel() {
+				ResizeMode = ResizeModes.None,
+				Padding = new Thickness(5),
+				Size = new Size((int)mainMenu.Width / 3, (int)mainMenu.Height),
+				Skin = skinDict["PanelR"],
+			};
+			return p;
+		}
+
+		private Panel createButtonPanel() {
+			buttonsPanel= createMainmenuPanel();
+
+			int row = buttonsPanel.Height / 5 + 5;
+			Button b = new Button() {
+				Size = new Size(buttonsPanel.Width / 2, buttonsPanel.Height / 5),
+				Location = new Point(0, 0),
+
+				Skin = skinDict["Button"],
+				Text = "  Pause BUTTON"
+			};
+			buttonsPanel.Controls.Add(b);
+			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(pause);
+
+			b = new Button() {
+				Size = new Size(buttonsPanel.Width / 2, 40),
+				Location = new Point(0, row),
+				Skin = skinDict["Button"],
+				Text = "  EXIT BUTTON"
+			};
+			buttonsPanel.Controls.Add(b);
+			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(quitOnClick);
+
+			return buttonsPanel;
+		}
+
+		private Panel createStatPanel() {
+			statPanel = createMainmenuPanel();
+			statPanel.Controls.Add(new Label() {
+				Size = new Size(140, 50),
+				Text = " Developing",
+				Padding = new Thickness(5)
+
+			});
+			return statPanel;
+		}
+
+		private Panel createActionPanel() {
+			actionPanel = createMainmenuPanel();
+			actionPanel.Controls.Add(new Label() {
+				Size = new Size(140, 50),
+				Text = " Developing",
+				Padding = new Thickness(5)
+
+			});
+			return actionPanel;
+		}
 
         /// <summary>
         /// Dispose GUI system
@@ -345,6 +366,9 @@ namespace Strategy.GameGUI {
                 throw new Strategy.Exceptions.MissingMaterialException("This Material is not in your list. You can not set value to nonexist material.");
             }
         }
+
+
+
 
         ///
         ///
