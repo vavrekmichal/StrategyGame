@@ -45,8 +45,12 @@ namespace Strategy.GameGUI {
 			myGUI.update();
 		}
 
-		public static void targetObject(string s) {
-			myGUI.showTargeted(s);
+		public void showTargeted(GroupControl.GroupStatics group) {
+			myGUI.showTargeted(group);
+		}
+
+		public void showTargeted(GroupControl.GroupMovables group) {
+			myGUI.showTargeted(group);
 		}
 
         public void setSolarSystemName(string name) {

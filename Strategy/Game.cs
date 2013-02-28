@@ -40,8 +40,7 @@ namespace Strategy {
             moveControler = MoveControler.getInstance();
             fightManager = FightManager.getInstance();
             teamManager = TeamManager.getInstance();
-            guiControler = GUIControler.getInstance(mWindow, mouse, keyboard);
-            teamManager.setGUI(guiControler);
+            guiControler = GUIControler.getInstance(mWindow, mouse, keyboard);  
             mouseControl = MouseControl.getInstance(c, sceneManager, groupManager, guiControler);
 			gamePaused = false;
         }
@@ -61,7 +60,9 @@ namespace Strategy {
         }
 
         public void inicialization() {
+			groupManager.setGUI(guiControler);
             groupManager.inicializeWorld();
+			teamManager.setGUI(guiControler);
             teamManager.inicialization(groupManager.getTeams());
             guiControler.inicialization(teamManager.playerTeam.getMaterials());
             guiControler.setSolarSystemName(groupManager.getSolarSystemName(0));

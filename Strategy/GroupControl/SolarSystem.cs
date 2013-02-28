@@ -26,6 +26,10 @@ namespace Strategy.GroupControl {
             this.sun = sun;
         }
 
+		public IStaticGameObject getSun() {
+			return sun;
+		}
+
         public void addISGO(IStaticGameObject isgo) {
             if (!isgoObjects.Contains(isgo)) {
                 isgoObjects.Add(isgo);
@@ -57,9 +61,6 @@ namespace Strategy.GroupControl {
         }
 
         public void hideSolarSystem() {
-            //foreach (IMovableGameObject imgo in imgoObjects) {
-            //    imgo.changeVisibility(false);
-            //}
             if (active) {
                 foreach (IStaticGameObject isgo in isgoObjects) {
                     isgo.changeVisible(false);
@@ -72,9 +73,6 @@ namespace Strategy.GroupControl {
         }
 
         public void showSolarSystem() {
-            //foreach (IMovableGameObject imgo in imgoObjects) {
-            //    imgo.changeVisibility(true);
-            //}
             if (!active) {
                 foreach (IStaticGameObject isgo in isgoObjects) {
                     isgo.changeVisible(true);
@@ -87,9 +85,6 @@ namespace Strategy.GroupControl {
         }
 
         public void update(float delay) {
-            //foreach (IMovableGameObject imgo in imgoObjects) {
-            //    imgo.move(delay);
-            //}
             if (active) {
                 foreach (IStaticGameObject isgo in isgoObjects) {
                     isgo.rotate(delay);
@@ -113,12 +108,20 @@ namespace Strategy.GroupControl {
             return name;
         }
 
-        public List<IStaticGameObject> getISGO() {
-            return isgoObjects;
-        }
+		//public List<IStaticGameObject> getISGO() {
+		//	return isgoObjects;
+		//}
 
-        public List<IMovableGameObject> getIMGO() {
-            return imgoObjects;
-        }
+		public List<IStaticGameObject> getISGOs() {
+			return isgoObjects;
+		}
+
+		//public List<IMovableGameObject> getIMGO() {
+		//	return imgoObjects;
+		//}
+
+		public List<IMovableGameObject> getIMGOs() {
+			return imgoObjects;
+		}
     }
 }

@@ -102,7 +102,17 @@ namespace Mogre.TutorialFramework
            //     return;
 
             mCamera.Yaw(new Degree(-x * 0.15f));
-            mCamera.Pitch(new Degree(-y * 0.15f));
+           // mCamera.Pitch(new Degree(-y * 0.15f));
         }
+
+		//myadded
+
+		public void MouseZoom(int x) {
+			var move = Vector3.ZERO;
+			move += mCamera.Direction;
+			move.Normalise();
+			move *= x;
+			mCamera.Move(move);
+		}
     }
 }

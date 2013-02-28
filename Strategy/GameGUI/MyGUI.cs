@@ -26,6 +26,9 @@ namespace Strategy.GameGUI {
 		private Panel statPanel;
 		private Panel actionPanel;
 
+		//statPanel members
+		private Label statPanelName;
+		private Label statPanelMesh;
 
         Dictionary<string, Skin> skinDict;
         Dictionary<string, Font> fonts;
@@ -243,6 +246,16 @@ namespace Strategy.GameGUI {
             nameOfSolarSystem.Text = name;
         }
 
+		public void showTargeted(GroupControl.GroupMovables group) {
+			//statPanelName.Text = 
+		}
+
+		public void showTargeted(GroupControl.GroupStatics group) {
+			//Just one object
+			statPanelName.Text = group[0].getName();
+			statPanelMesh.Text = group[0].getMesh();
+		}
+
         /// <summary>
         /// Creates main bar
         /// </summary>
@@ -324,12 +337,40 @@ namespace Strategy.GameGUI {
 
 		private Panel createStatPanel() {
 			statPanel = createMainmenuPanel();
+			int x1 = statPanel.Width / 3;
+			int y = 50;
+			//Name
 			statPanel.Controls.Add(new Label() {
-				Size = new Size(140, 50),
-				Text = " Developing",
+				Size = new Size(x1, y),
+				Text = " Name: ",
 				Padding = new Thickness(5)
 
 			});
+			int x2 = statPanel.Width * 2 / 3;
+			statPanelName = new Label() {
+				Size = new Size(x2, y),
+				Location = new Point(statPanel.Width * 2 / 8, 0),
+				Text = " Jeste neni",
+				Padding = new Thickness(5)
+			};
+			statPanel.Controls.Add(statPanelName);
+
+			//Mesh
+			statPanel.Controls.Add(new Label() {
+				Size = new Size(x1, y),
+				Location= new Point(0,y),
+				Text = " Mesh: ",
+				Padding = new Thickness(5)
+
+			});
+
+			statPanelMesh = new Label() {
+				Size = new Size(x2, y),
+				Location = new Point(statPanel.Width * 2 / 8, y),
+				Text = " Jeste neni",
+				Padding = new Thickness(5)
+			};
+			statPanel.Controls.Add(statPanelMesh);
 			return statPanel;
 		}
 
@@ -359,25 +400,22 @@ namespace Strategy.GameGUI {
 
         }
 
-        public void setMaterialState(string material, int inc){
-            if (materialList.ContainsKey(material)) {
-                materialList[material].value.Text = (inc).ToString();
-            } else {
-                throw new Strategy.Exceptions.MissingMaterialException("This Material is not in your list. You can not set value to nonexist material.");
-            }
-        }
 
 
 
+		
 
         ///
         ///
         ///pokusy
         ///
-        public void showTargeted(string s) {
-            ((Label)mainMenu.Controls[1].Controls[0]).Text = s;
-            setMaterialState("Wolenium", 1);//TODO: delete this line
-        }
-
+        
+		public void setMaterialState(string material, int inc) {
+			if (materialList.ContainsKey(material)) {
+				materialList[material].value.Text = (inc).ToString();
+			} else {
+				throw new Strategy.Exceptions.MissingMaterialException("This Material is not in your list. You can not set value to nonexist material.");
+			}
+		}
     }
 }

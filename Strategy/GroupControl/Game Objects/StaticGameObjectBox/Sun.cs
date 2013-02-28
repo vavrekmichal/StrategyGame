@@ -44,7 +44,7 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         /// <summary>
         /// It will be always 0.
         /// </summary>
-        public Team team {
+        public Team Team {
             get {
                 return sunTeam;
             }
@@ -75,6 +75,10 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         public string getName() {
             return name;
         }
+
+		public string getMesh() {
+			return mesh;
+		}
 
         public Vector3 getPosition() {
             return Vector3.ZERO;

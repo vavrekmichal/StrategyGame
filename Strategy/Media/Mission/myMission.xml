@@ -14,9 +14,15 @@
   <solarSystems>
     <solarSystem name="This is my">
       <isgo type="Sun" name="Sun" mesh="sun.mesh"  team="None" centerPossition="0,0,0" distance="0"/>
-      <isgo type="Planet" name="Mercury" mesh="mercury.mesh" team="Player" centerPossition="200,0,200" distance="500"/>
-      <isgo type="Planet" name="Venus" mesh="venus.mesh" team="Player" centerPossition="0,0,0" distance="1500"/>
-      <isgo type="Planet" name="Earth" mesh="earth.mesh" team="Player" centerPossition="0,0,0" distance="2500"/>
+      <isgo type="Planet" name="Mercury" mesh="mercury.mesh" team="Player" centerPossition="200,0,200" distance="500">
+        <gameAction name="Produce" value="Wolenium"/>
+      </isgo>
+      <isgo type="Planet" name="Venus" mesh="venus.mesh" team="Player" centerPossition="0,0,0" distance="1500">
+       <gameAction name="Produce" value="Wolenium"/>
+      </isgo>
+      <isgo type="Planet" name="Earth" mesh="earth.mesh" team="Player" centerPossition="0,0,0" distance="2500">
+       <gameAction name="Produce" value="Wolenarium"/>
+      </isgo>
       <isgo type="Planet" name="Mars" mesh="mars.mesh" team="Player" centerPossition="0,0,0" distance="3500"/>
       <isgo type="Planet" name="Jupiter" mesh="jupiter.mesh" team="Player" centerPossition="0,0,0" distance="6000"/>
       <isgo type="Planet" name="Saturn" mesh="saturn.mesh" team="Player" centerPossition="0,0,0" distance="8000"/>

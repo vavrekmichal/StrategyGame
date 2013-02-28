@@ -15,7 +15,7 @@ namespace Strategy.MogreControl {
 		protected static Mogre.TutorialFramework.CameraMan cameraMan ;
 		protected SceneManager sceneMgr;
         protected GroupManager groupManager;
-        protected GUIControler guiControl;
+        protected GUIControler guiControl; //TODO:mys nebude mit guicko
 
         protected int changeMe = 1;
 
@@ -55,18 +55,20 @@ namespace Strategy.MogreControl {
 
                     using (Mogre.RaySceneQueryResult result = raySceneQuery.Execute()) {
                         foreach (Mogre.RaySceneQueryResultEntry entry in result) {
-                            if (entry.movable.Name != "GroundEntity") {
-                                GUIControler.targetObject(entry.movable.Name);
+                            if (entry.movable.Name != "GroundEntity") {                       
+								groupManager.selectGroup(entry.movable);
                             }
                         }
                     }
                 }
 
             } else {
+				if (id == MouseButtonID.MB_Right) {
                 groupManager.changeSolarSystem(changeMe);
                 guiControl.setSolarSystemName(groupManager.getSolarSystemName(changeMe));
                 changeMe=(changeMe + 1) % 2;
-            }
+				}
+			}
 			return true;
 		}
 
@@ -79,7 +81,6 @@ namespace Strategy.MogreControl {
 		public bool OnMyMouseReleased(MouseEvent arg, MouseButtonID id) {
 			if (id == MouseButtonID.MB_Left) { }
 			//mCameraMan.Freeze = false;
-
 			return true;
 		}
 

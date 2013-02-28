@@ -44,6 +44,17 @@ namespace Strategy.GroupControl{
         public IEnumerator GetEnumerator() {
             return groupMembers.GetEnumerator();
         }
+
+		public IMovableGameObject this[int i] {
+			get {
+				return groupMembers[i];
+			}
+			set {
+				groupMembers[i] = value;
+			}
+		}
+
+
 	}
 
     class GroupStatics :IEnumerable{
@@ -70,20 +81,17 @@ namespace Strategy.GroupControl{
             groupMembers.Remove(m);
         }
 
-        //public void rotate(float f, int activeSolarSystem) {
-        //    foreach (IStaticGameObject isgo in groupMembers) {
-        //        if (isgo.getSolarSystem == activeSolarSystem) {
-        //            isgo.rotate(f);
-        //        } else {
-        //            isgo.nonActiveRotate(f);
-        //        }
-                
-        //    }
-        //}
-
-
         public IEnumerator GetEnumerator() {
             return groupMembers.GetEnumerator();
         }
+
+		public IStaticGameObject this[int i] {
+			get {
+				return groupMembers[i];
+			}
+			set {
+				groupMembers[i] = value;
+			}
+		}
     }
 }

@@ -47,18 +47,6 @@ namespace Strategy.TeamControl {
             }
         }
 
-
-
-        /// <summary>
-        /// get all IMaterials 
-        /// </summary>
-        /// <returns>return list with IMaterial</returns>
-        //public List<IMaterial> getMaterials() {
-        //    return materials;
-        //}
-
-
-
         //think about me
         public void setGUI(GUIControler gui) {
             guiControler = gui;

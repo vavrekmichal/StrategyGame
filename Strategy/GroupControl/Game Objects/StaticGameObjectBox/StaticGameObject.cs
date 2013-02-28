@@ -32,11 +32,11 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
             gameActionsPermitions.Add(o.getName(), new List<IStaticGameObject>());
         }
 
-        public void registerExecuter(string nameOfAction, Dictionary<string, IMaterial> materials) {
+		public void registerExecuter(string nameOfAction, Dictionary<string, IMaterial> materials, string material) {
             if (gameActionsPermitions.ContainsKey(nameOfAction)) {
                 gameActionsPermitions[nameOfAction].Add(this);
             }
-            registerProducer(materials["Wolenium"], 0.0001);
+            registerProducer(materials[material], 0.01);
         }
 
         private void registerProducer(IMaterial specificType, double value) {
@@ -58,20 +58,15 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         }
 
         
-        
-
-        
-
-        
         /// <summary>
         /// int of planets owner
         /// </summary>
-        public Team team {
+        public Team Team {
             get {
                 return planetTeam;
             }
             set {
-                planetTeam = team;
+                planetTeam = Team;
             }
         }
 
@@ -103,5 +98,9 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         public string getName() {
             return name;
         }
-    }
+
+		public string getMesh() {
+			return mesh;
+		}
+	}
 }
