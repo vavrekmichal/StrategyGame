@@ -35,24 +35,26 @@ namespace Strategy.GroupControl.Game_Objects {
 		public void load(string missionName) {
 			bool hasSun = false;
 			IStaticGameObject sun = null;
-			XmlNode solerSystems = root.SelectNodes("/mission[@name='" + missionName + "'][1]/solarSystems[1]")[0];
-			foreach (XmlNode solarSystem in solerSystems) {
+			XmlNode missionSolarSystems = root.SelectNodes("/mission[@name='" + missionName + "'][1]/solarSystems[1]")[0];
+			foreach (XmlNode solarSystem in missionSolarSystems) {
 				List<IStaticGameObject> isgos = new List<IStaticGameObject>();
 				foreach (XmlNode gameObject in solarSystem.ChildNodes) {
-					
 					switch (gameObject.Name) {
 							case "isgo":
 							isgoType t;
 							switch (gameObject.Attributes["type"].InnerText) {
 								case "Planet":
 									t=isgoType.Planet;
-									isgos.Add(createISGO(gameObject.Attributes["name"].InnerText,
+									IStaticGameObject isgo = createISGO(gameObject.Attributes["name"].InnerText,
 										gameObject.Attributes["mesh"].InnerText,
 										gameObject.Attributes["team"].InnerText,
 										parseInputToVector3(gameObject.Attributes["centerPossition"].InnerText),
 										Int32.Parse(gameObject.Attributes["distance"].InnerText),
 										t
-										));
+										);
+									isgos.Add(isgo);
+									//here register
+									readSGOActions(gameObject.SelectNodes("gameAction"), (StaticGameObject)isgo);	
 									break;
 								case "Sun":
 									hasSun = true;
@@ -121,11 +123,22 @@ namespace Strategy.GroupControl.Game_Objects {
 			return sSys;
 		}
 
+		private void registerSGOaction(StaticGameObject sgo, string action, string value) {			
+			sgo.registerExecuter(action, sgo.Team.getMaterials(), value);
+		}
+
+		private void readSGOActions(XmlNodeList actionList, StaticGameObject sgo) {
+			//XmlNodeList actionList = sgoNode.SelectNodes("/gameAction");
+			foreach (XmlNode action in actionList) {
+				registerSGOaction(sgo, action.Attributes["name"].Value, action.Attributes["value"].Value);
+			}
+		}
 
 		private Mogre.Vector3 parseInputToVector3(string input) {
 			string[] splitted = input.Split(',');
 			return new Vector3(Int32.Parse(splitted[0]), Int32.Parse(splitted[1]), Int32.Parse(splitted[2]));
 		}
+
 
 	}
 }

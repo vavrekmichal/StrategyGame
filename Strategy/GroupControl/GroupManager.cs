@@ -20,7 +20,7 @@ namespace Strategy.GroupControl {
         protected Dictionary<int, SolarSystem> solarSystemBetter;
         protected int lastSolarSystem = 0;
 
-		public bool activeMGroup; //active movable group
+		public bool activeMGroup; //active is movable group
 
         private GroupMovables selectedGroupM; //not implemented ...will be actual selected group - need rectangular select
 		private GroupStatics selectedGroupS;
