@@ -113,6 +113,7 @@ namespace Strategy.GroupControl.Game_Objects {
 		}
 
 		//DELETE VSE DOLU
+		/*
         private SolarSystem createSolarSystem(string name, List<IStaticGameObject> isgoObjects, List<IMovableGameObject> imgoObjects,
             Sun sun = null) {
       
@@ -147,10 +148,11 @@ namespace Strategy.GroupControl.Game_Objects {
 
         
 
-		//TOTO TU NESMI ZUSTAT
+		//TOTO TU NESMI ZUSTAT*/
         private void createMaterials() {
             materialList = new List<IMaterial>() { new Wolenium(), new Wolenarium(), new Class1() };
         }
+		/*
 	}
 	//delete
 	static class RandomUtil {
@@ -162,6 +164,6 @@ namespace Strategy.GroupControl.Game_Objects {
 			string path = Path.GetRandomFileName();
 			path = path.Replace(".", ""); // Remove period.
 			return path;
-		}
+		}*/
 	}
 }

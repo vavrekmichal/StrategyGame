@@ -9,7 +9,7 @@ namespace Strategy.GameMaterial {
         private double actualQuantity;
 
         public string name {
-            get { return "PIcopaso"; }
+            get { return "PIkopaso"; }
         }
 
         public double displayChangees() {

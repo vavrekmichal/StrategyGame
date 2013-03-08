@@ -21,6 +21,15 @@ namespace Strategy.MogreControl {
 
         private static MouseControl instance;
 
+
+		//rect items
+		Vector2 mStart, mStop;
+		//PlaneBoundedVolumeListSceneQuery mVolQuery;
+		List<MovableObject> mSelected = new List<MovableObject>();
+		SelectionRectangle mRect;
+		bool bSelecting;
+		//end rect
+
         public static MouseControl getInstance(CameraMan c, SceneManager m, GroupManager groupManager, GUIControler guiControl) {
             if (instance==null) {
                 instance = new MouseControl(c, m, groupManager, guiControl);
@@ -33,6 +42,7 @@ namespace Strategy.MogreControl {
 			sceneMgr = m;
             this.groupManager = groupManager;
             this.guiControl = guiControl;
+			mRect = new SelectionRectangle("RectangularSelect");
 		}
 
 
@@ -44,7 +54,6 @@ namespace Strategy.MogreControl {
 		/// <returns>was pressed true</returns>
 		public bool OnMyMousePressed(MouseEvent evt, MouseButtonID id) {
             if (id == MouseButtonID.MB_Left) {
-                //mCameraMan.Freeze = true;
                 using (Mogre.RaySceneQuery raySceneQuery = sceneMgr.CreateRayQuery(new Mogre.Ray())) {
                     float mouseX = (float)evt.state.X.abs / (float)evt.state.width;
                     float mouseY = (float)evt.state.Y.abs / (float)evt.state.height;
@@ -64,9 +73,22 @@ namespace Strategy.MogreControl {
 
             } else {
 				if (id == MouseButtonID.MB_Right) {
-                groupManager.changeSolarSystem(changeMe);
-                guiControl.setSolarSystemName(groupManager.getSolarSystemName(changeMe));
-                changeMe=(changeMe + 1) % 2;
+					groupManager.changeSolarSystem(changeMe);
+					guiControl.setSolarSystemName(groupManager.getSolarSystemName(changeMe));
+					changeMe = (changeMe + 1) % 2;
+				} else {
+					if (id == MouseButtonID.MB_Middle) {
+						//rectangular select
+						mStart.x = (float)evt.state.X.abs / (float)evt.state.width;
+						mStart.y = (float)evt.state.Y.abs / (float)evt.state.height;
+						mStop = mStart;
+
+						bSelecting = true;
+						mRect.Clear();
+						mRect.Visible = true;
+
+						Console.WriteLine(evt.state.X.abs + ", " + evt.state.Y.abs);
+					}
 				}
 			}
 			return true;
@@ -79,13 +101,94 @@ namespace Strategy.MogreControl {
 		/// <param name="id">which button was released</param>
 		/// <returns>was released true</returns>
 		public bool OnMyMouseReleased(MouseEvent arg, MouseButtonID id) {
-			if (id == MouseButtonID.MB_Left) { }
-			//mCameraMan.Freeze = false;
+			switch (id) {
+				case MOIS.MouseButtonID.MB_Middle:
+					performSelection(mStart, mStop);
+					bSelecting = false;
+					mRect.Visible = false;
+					break;
+			}
 			return true;
 		}
 
 
+		public bool OnMyMouseMoved(MouseEvent evt) {
+			if (bSelecting) {
+				mStop.x = evt.state.X.abs / (float)evt.state.width;
+				mStop.y = evt.state.Y.abs / (float)evt.state.height;
+
+				Console.WriteLine( evt.state.X.abs + ", " + evt.state.Y.abs );
+
+				mRect.setCorners(mStart, mStop);
+			}
+			//if (evt.state.ButtonDown(MOIS.MouseButtonID.MB_Middle) ) {
+			//	mCameraMan.MouseMovement(evt.state.X.rel, evt.state.Y.rel);
+			//}
+			if (evt.state.Z.rel != 0) {
+				cameraMan.MouseZoom(evt.state.Z.rel / 4);
+			}
+			return true;
+		}
+
+
+		private void performSelection(Vector2 first, Vector2 second) {
+			deselectObjects(); //delete
+			float left = first.x, right = second.x,
+			top = first.y, bottom = second.y;
+
+			if (left > right) swap(ref left, ref right);
+			if (top > bottom) swap(ref top, ref bottom);
+
+			if ((right - left) * (bottom - top) < 0.0001) return;
+
+			Camera c = sceneMgr.GetCamera("myCam");
+			Ray topLeft = c.GetCameraToViewportRay(left, top);
+			Ray topRight = c.GetCameraToViewportRay(right, top);
+			Ray bottomLeft = c.GetCameraToViewportRay(left, bottom);
+			Ray bottomRight = c.GetCameraToViewportRay(right, bottom);
+
+			PlaneBoundedVolume vol = new PlaneBoundedVolume();
+			vol.planes.Add(new Plane(topLeft.GetPoint(3), topRight.GetPoint(3), bottomRight.GetPoint(3)));    // front plane
+			vol.planes.Add(new Plane(topLeft.Origin, topLeft.GetPoint(100), topRight.GetPoint(100)));         // top plane
+			vol.planes.Add(new Plane(topLeft.Origin, bottomLeft.GetPoint(100), topLeft.GetPoint(100)));       // left plane
+			vol.planes.Add(new Plane(bottomLeft.Origin, bottomRight.GetPoint(100), bottomLeft.GetPoint(100)));// bottom plane
+			vol.planes.Add(new Plane(topRight.Origin, topRight.GetPoint(100), bottomRight.GetPoint(100)));    // right plane
+
+			PlaneBoundedVolumeList volList = new PlaneBoundedVolumeList();
+			volList.Add(vol);
+			PlaneBoundedVolumeListSceneQuery volQuery = sceneMgr.CreatePlaneBoundedVolumeQuery(volList);
+			SceneQueryResult result = volQuery.Execute();
+
+			foreach (var obj in result.movables) {
+				selectObject(obj);
+			}
+
+			sceneMgr.DestroyQuery(volQuery);
+		}
+
+		void selectObject(MovableObject obj) {
+			obj.ParentSceneNode.ShowBoundingBox = true;
+			mSelected.Add(obj);
+		}
+
+		void deselectObjects() {
+			foreach (var obj in mSelected) {
+				obj.ParentSceneNode.ShowBoundingBox = false;
+				Console.WriteLine(obj.Name);
+			}
+			mSelected.Clear();
+		}
+
+
+
 		//static method tests
+
+		static void swap(ref float x, ref float y) {
+			float tmp = x;
+			x = y;
+			y = tmp;
+		}
+
 		public static void move(string s) {
 			switch (s) {
 				case "topSection":
@@ -167,6 +270,42 @@ namespace Strategy.MogreControl {
 				default: Console.WriteLine("Error mouse move");
 					break;
 			}
+		}
+	}
+
+	public class SelectionRectangle : ManualObject {
+		public SelectionRectangle(String name)
+			: base(name) {
+			RenderQueueGroup = (byte)RenderQueueGroupID.RENDER_QUEUE_OVERLAY; // when using this, ensure Depth Check is Off in the material
+			UseIdentityProjection = true;
+			UseIdentityView = true;
+			QueryFlags = 0;
+		}
+
+		/**
+		* Sets the corners of the SelectionRectangle.  Every parameter should be in the
+		* range [0, 1] representing a percentage of the screen the SelectionRectangle
+		* should take up.
+		*/
+		void setCorners(float left, float top, float right, float bottom) {
+			left = left * 2 - 1;
+			right = right * 2 - 1;
+			top = 1 - top * 2;
+			bottom = 1 - bottom * 2;
+			Clear();
+			Begin("", RenderOperation.OperationTypes.OT_LINE_STRIP);
+			Position(left, top, -1);
+			Position(right, top, -1);
+			Position(right, bottom, -1);
+			Position(left, bottom, -1);
+			Position(left, top, -1);
+			End();
+			BoundingBox.SetInfinite();
+		}
+
+		public void setCorners(Vector2 topLeft, Vector2 bottomRight) {
+			
+			setCorners(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
 		}
 	}
 }

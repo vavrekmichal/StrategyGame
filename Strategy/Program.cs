@@ -156,6 +156,7 @@ namespace Strategy {
 
             mMouse.MousePressed += new MOIS.MouseListener.MousePressedHandler(myGame.getMouseControl().OnMyMousePressed);
 			mMouse.MouseReleased += new MOIS.MouseListener.MouseReleasedHandler(myGame.getMouseControl().OnMyMouseReleased);
+			mMouse.MouseMoved += new MOIS.MouseListener.MouseMovedHandler(myGame.getMouseControl().OnMyMouseMoved);
 		}
 
 		#region Keyboard control

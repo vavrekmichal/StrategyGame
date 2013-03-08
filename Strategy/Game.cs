@@ -34,7 +34,6 @@ namespace Strategy {
         }
 
         private Game(SceneManager sceneManager, CameraMan c, RenderWindow mWindow, Mouse mouse, Keyboard keyboard) {
-            //guiControler = new GUIControler(
            
             groupManager = GroupManager.getInstance(sceneManager);
             moveControler = MoveControler.getInstance();

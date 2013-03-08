@@ -150,14 +150,7 @@ namespace Mogre.TutorialFramework
         }
 
         protected virtual bool OnMouseMoved(MouseEvent evt)
-        {
-			if (evt.state.ButtonDown(MOIS.MouseButtonID.MB_Middle) ) {
-				mCameraMan.MouseMovement(evt.state.X.rel, evt.state.Y.rel);
-			}
-			if (mMouse.MouseState.Z.rel != 0) {
-				mCameraMan.MouseZoom(mMouse.MouseState.Z.rel/4);
-			}
-			
+        {			
             return true;
         }
 

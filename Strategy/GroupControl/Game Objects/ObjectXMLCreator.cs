@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Xml;
 using Mogre;
@@ -9,6 +8,11 @@ using Strategy.GameMaterial;
 using Strategy.GroupControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GroupControl.Game_Objects.StaticGameObjectBox;
 using Strategy.TeamControl;
+using Roslyn.Compilers;
+using Roslyn.Compilers.CSharp;
+using System.IO;
+using System.Reflection;
+using System.Linq;
 
 
 namespace Strategy.GroupControl.Game_Objects {
@@ -29,7 +33,8 @@ namespace Strategy.GroupControl.Game_Objects {
 			this.solarSystems = solarSystems;
 			xml = new XmlDocument();
 			xml.Load(path);
-			root = xml.DocumentElement;  
+			root = xml.DocumentElement;
+			testingFunction(); //TODO remove
 		}
 
 		public void load(string missionName) {
@@ -128,7 +133,6 @@ namespace Strategy.GroupControl.Game_Objects {
 		}
 
 		private void readSGOActions(XmlNodeList actionList, StaticGameObject sgo) {
-			//XmlNodeList actionList = sgoNode.SelectNodes("/gameAction");
 			foreach (XmlNode action in actionList) {
 				registerSGOaction(sgo, action.Attributes["name"].Value, action.Attributes["value"].Value);
 			}
@@ -140,5 +144,38 @@ namespace Strategy.GroupControl.Game_Objects {
 		}
 
 
+
+		//testing loading classes
+		private void testingFunction() {
+			SyntaxTree syntaxTree = SyntaxTree.ParseText(
+				@"using System;
+				using System.Collections;
+				using System.Linq;
+				using System.Text;
+ 
+				namespace HelloWorld
+				{
+					class Program
+					{
+						static void Main(string[] args)
+						{
+							Console.WriteLine(""Hello, World!"");
+						}
+					}
+				}");
+
+			var root = (CompilationUnitSyntax)syntaxTree.GetRoot();
+
+			var firstMember = root.Members[0];
+
+			var helloWorldDeclaration = (NamespaceDeclarationSyntax)firstMember;
+
+			var programDeclaration = (TypeDeclarationSyntax)helloWorldDeclaration.Members[0];
+
+			var mainDeclaration = (MethodDeclarationSyntax)programDeclaration.Members[0];
+
+			var argsParameter = mainDeclaration.ParameterList.Parameters[0];
+
+		}
 	}
 }
