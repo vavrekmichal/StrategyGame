@@ -158,7 +158,7 @@ namespace Strategy.GameGUI {
             Label label1 = new Label() {
                 Name = "nameOfSolarSystem",
                 Size = new Size(upperMenu.Width / 6, upperMenu.Height * 4 / 5),
-                Text = "Actual solar system: ",
+                Text = "Current solar system: ",
                 TextStyle = {
                     Alignment = Miyagi.Common.Alignment.MiddleLeft,
                     ForegroundColour = Colours.White

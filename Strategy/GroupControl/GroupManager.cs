@@ -135,6 +135,24 @@ namespace Strategy.GroupControl {
 				selectedGroupS = group;
 			}
 		}
+		public void selectGroup(List<Mogre.MovableObject> movableList) {
+			//first check if is moveble or not
+			GroupMovables groupM = new GroupMovables();
+			GroupStatics groupS = new GroupStatics();
+			foreach (var mobleItem in movableList) {
+				if (objectCreator.isObjectMovable(mobleItem.Name)) {
+					activeMGroup = true;//TODO select all
+					guiControler.showTargeted(groupM);
+					selectedGroupM = groupM;
+				} else {
+					groupS.insertMemeber(objectCreator.getISGO(mobleItem.Name));
+					activeMGroup = false;
+					guiControler.showTargeted(groupS);
+					selectedGroupS = groupS;
+				}
+			}
+			
+		}
     }
 
 

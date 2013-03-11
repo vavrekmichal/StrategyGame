@@ -23,6 +23,7 @@ namespace Strategy.MogreControl {
 
 
 		//rect items
+		bool isRectagularSelect;
 		Vector2 mStart, mStop;
 		//PlaneBoundedVolumeListSceneQuery mVolQuery;
 		List<MovableObject> mSelected = new List<MovableObject>();
@@ -43,6 +44,7 @@ namespace Strategy.MogreControl {
             this.groupManager = groupManager;
             this.guiControl = guiControl;
 			mRect = new SelectionRectangle("RectangularSelect");
+			sceneMgr.RootSceneNode.CreateChildSceneNode().AttachObject(mRect);
 		}
 
 
@@ -53,44 +55,77 @@ namespace Strategy.MogreControl {
 		/// <param name="id">which button was pressed</param>
 		/// <returns>was pressed true</returns>
 		public bool OnMyMousePressed(MouseEvent evt, MouseButtonID id) {
-            if (id == MouseButtonID.MB_Left) {
-                using (Mogre.RaySceneQuery raySceneQuery = sceneMgr.CreateRayQuery(new Mogre.Ray())) {
-                    float mouseX = (float)evt.state.X.abs / (float)evt.state.width;
-                    float mouseY = (float)evt.state.Y.abs / (float)evt.state.height;
+			#region old
+			//if (id == MouseButtonID.MB_Left) {
+			//	using (Mogre.RaySceneQuery raySceneQuery = sceneMgr.CreateRayQuery(new Mogre.Ray())) {
+			//		float mouseX = (float)evt.state.X.abs / (float)evt.state.width;
+			//		float mouseY = (float)evt.state.Y.abs / (float)evt.state.height;
 
-                    Mogre.Ray mouseRay = cameraMan.getCamera().GetCameraToViewportRay(mouseX, mouseY);
-                    raySceneQuery.Ray = mouseRay;
-                    raySceneQuery.SetSortByDistance(true);
+			//		Mogre.Ray mouseRay = cameraMan.getCamera().GetCameraToViewportRay(mouseX, mouseY);
+			//		raySceneQuery.Ray = mouseRay;
+			//		raySceneQuery.SetSortByDistance(true);
 
-                    using (Mogre.RaySceneQueryResult result = raySceneQuery.Execute()) {
-                        foreach (Mogre.RaySceneQueryResultEntry entry in result) {
-                            if (entry.movable.Name != "GroundEntity") {                       
-								groupManager.selectGroup(entry.movable);
-                            }
-                        }
-                    }
-                }
+			//		using (Mogre.RaySceneQueryResult result = raySceneQuery.Execute()) {
+			//			foreach (Mogre.RaySceneQueryResultEntry entry in result) {
+			//				if (entry.movable.Name != "GroundEntity") {
+			//					groupManager.selectGroup(entry.movable);
+			//				}
+			//			}
+			//		}
+			//	}
 
-            } else {
-				if (id == MouseButtonID.MB_Right) {
+			//} else {
+			//	if (id == MouseButtonID.MB_Right) {
+			//		groupManager.changeSolarSystem(changeMe);
+			//		guiControl.setSolarSystemName(groupManager.getSolarSystemName(changeMe));
+			//		changeMe = (changeMe + 1) % 2;
+			//	} else {
+			//		if (id == MouseButtonID.MB_Middle) {
+			//			//rectangular select
+			//			mStart.x = (float)evt.state.X.abs / (float)evt.state.width;
+			//			mStart.y = (float)evt.state.Y.abs / (float)evt.state.height;
+			//			mStop = mStart;
+
+			//			bSelecting = true;
+			//			mRect.Clear();
+			//			mRect.Visible = true;
+
+			//			Console.WriteLine(evt.state.X.abs + ", " + evt.state.Y.abs);
+			//		}
+			//	}
+			//}
+			#endregion
+			switch (id) {
+				case MouseButtonID.MB_Button3:
+					break;
+				case MouseButtonID.MB_Button4:
+					break;
+				case MouseButtonID.MB_Button5:
+					break;
+				case MouseButtonID.MB_Button6:
+					break;
+				case MouseButtonID.MB_Button7:
+					break;
+				case MouseButtonID.MB_Left:
+					//rectangular select
+					mStart.x = (float)evt.state.X.abs / (float)evt.state.width;
+					mStart.y = (float)evt.state.Y.abs / (float)evt.state.height;
+					mStop = mStart;
+					bSelecting = true;
+					
+					Console.WriteLine(evt.state.X.abs + ", " + evt.state.Y.abs);
+					break;
+				case MouseButtonID.MB_Middle:
+					break;
+				case MouseButtonID.MB_Right:
 					groupManager.changeSolarSystem(changeMe);
 					guiControl.setSolarSystemName(groupManager.getSolarSystemName(changeMe));
 					changeMe = (changeMe + 1) % 2;
-				} else {
-					if (id == MouseButtonID.MB_Middle) {
-						//rectangular select
-						mStart.x = (float)evt.state.X.abs / (float)evt.state.width;
-						mStart.y = (float)evt.state.Y.abs / (float)evt.state.height;
-						mStop = mStart;
-
-						bSelecting = true;
-						mRect.Clear();
-						mRect.Visible = true;
-
-						Console.WriteLine(evt.state.X.abs + ", " + evt.state.Y.abs);
-					}
-				}
+					break;
+				default:
+					break;
 			}
+
 			return true;
 		}
 
@@ -102,10 +137,33 @@ namespace Strategy.MogreControl {
 		/// <returns>was released true</returns>
 		public bool OnMyMouseReleased(MouseEvent arg, MouseButtonID id) {
 			switch (id) {
-				case MOIS.MouseButtonID.MB_Middle:
-					performSelection(mStart, mStop);
+				case MOIS.MouseButtonID.MB_Left:
 					bSelecting = false;
-					mRect.Visible = false;
+					if (isRectagularSelect) {
+						performSelection(mStart, mStop);
+						mRect.Visible = false;
+						isRectagularSelect = false;
+					} else {
+						using (Mogre.RaySceneQuery raySceneQuery = sceneMgr.CreateRayQuery(new Mogre.Ray())) {
+							float mouseX = (float)arg.state.X.abs / (float)arg.state.width;
+							float mouseY = (float)arg.state.Y.abs / (float)arg.state.height;
+
+							Mogre.Ray mouseRay = cameraMan.getCamera().GetCameraToViewportRay(mouseX, mouseY);
+							raySceneQuery.Ray = mouseRay;
+							raySceneQuery.SetSortByDistance(true);
+
+							using (Mogre.RaySceneQueryResult result = raySceneQuery.Execute()) {
+								List<MovableObject> list = new List<MovableObject>();
+								foreach (Mogre.RaySceneQueryResultEntry entry in result) {
+									if (entry.movable.Name != "GroundEntity") {
+										list.Add(entry.movable);
+										//groupManager.selectGroup(entry.movable);
+									}
+								}
+								groupManager.selectGroup(list);
+							}
+						}
+					}
 					break;
 			}
 			return true;
@@ -114,6 +172,11 @@ namespace Strategy.MogreControl {
 
 		public bool OnMyMouseMoved(MouseEvent evt) {
 			if (bSelecting) {
+				if (!isRectagularSelect) {
+					mRect.Clear();
+					mRect.Visible = true;
+					isRectagularSelect = true;
+				}
 				mStop.x = evt.state.X.abs / (float)evt.state.width;
 				mStop.y = evt.state.Y.abs / (float)evt.state.height;
 
@@ -121,9 +184,9 @@ namespace Strategy.MogreControl {
 
 				mRect.setCorners(mStart, mStop);
 			}
-			//if (evt.state.ButtonDown(MOIS.MouseButtonID.MB_Middle) ) {
-			//	mCameraMan.MouseMovement(evt.state.X.rel, evt.state.Y.rel);
-			//}
+			if (evt.state.ButtonDown(MOIS.MouseButtonID.MB_Middle)) {
+				cameraMan.MouseMovement(evt.state.X.rel, evt.state.Y.rel);
+			}
 			if (evt.state.Z.rel != 0) {
 				cameraMan.MouseZoom(evt.state.Z.rel / 4);
 			}
@@ -159,9 +222,13 @@ namespace Strategy.MogreControl {
 			PlaneBoundedVolumeListSceneQuery volQuery = sceneMgr.CreatePlaneBoundedVolumeQuery(volList);
 			SceneQueryResult result = volQuery.Execute();
 
-			foreach (var obj in result.movables) {
-				selectObject(obj);
+			List<MovableObject> list = new List<MovableObject>();
+			foreach (var entry in result.movables) {
+				if (entry.Name != "GroundEntity") {
+					list.Add(entry);
+				}
 			}
+			groupManager.selectGroup(list);
 
 			sceneMgr.DestroyQuery(volQuery);
 		}

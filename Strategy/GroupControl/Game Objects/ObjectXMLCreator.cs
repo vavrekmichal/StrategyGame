@@ -13,6 +13,7 @@ using Roslyn.Compilers.CSharp;
 using System.IO;
 using System.Reflection;
 using System.Linq;
+using Roslyn.Scripting.CSharp;
 
 
 namespace Strategy.GroupControl.Game_Objects {
@@ -34,7 +35,7 @@ namespace Strategy.GroupControl.Game_Objects {
 			xml = new XmlDocument();
 			xml.Load(path);
 			root = xml.DocumentElement;
-			testingFunction(); //TODO remove
+			//testingFunction(); //TODO remove
 		}
 
 		public void load(string missionName) {
@@ -147,27 +148,33 @@ namespace Strategy.GroupControl.Game_Objects {
 
 		//testing loading classes
 		private void testingFunction() {
-			SyntaxTree syntaxTree = SyntaxTree.ParseText(
-				@"using System;
-				using System.Collections;
-				using System.Linq;
-				using System.Text;
- 
-				namespace HelloWorld
-				{
-					class Program
-					{
-						static void Main(string[] args)
-						{
-							Console.WriteLine(""Hello, World!"");
-						}
-					}
-				}");
-
+//			SyntaxTree syntaxTree = SyntaxTree.ParseText(
+//				@"using System;
+//				using System.Collections;
+//				using System.Linq;
+//				using System.Text;
+// 
+//				namespace HelloWorld
+//				{
+//					class Program
+//					{
+//						static void Main(string[] args)
+//						{
+//							Console.WriteLine(""Hello, World!"");
+//						}
+//					}
+//				}");
+			SyntaxTree syntaxTree = SyntaxTree.ParseFile("../../GroupControl/Game Objects/StaticGameObjectBox/Planet.cs");
 			var root = (CompilationUnitSyntax)syntaxTree.GetRoot();
+			//MetadataReference mt = MetadataReference.CreateAssemblyReference("manager");
+			List<SyntaxTree> listek = new List<SyntaxTree>();
+			listek.Add(syntaxTree);
+			var comp = Compilation.Create("class", null, listek, null, null, null);
+			
+
 
 			var firstMember = root.Members[0];
-
+			
 			var helloWorldDeclaration = (NamespaceDeclarationSyntax)firstMember;
 
 			var programDeclaration = (TypeDeclarationSyntax)helloWorldDeclaration.Members[0];
