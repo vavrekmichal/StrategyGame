@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
-	interface IMovableGameObject {
+	public interface IMovableGameObject {
 		void move(float f);
 		void shout();
         string getName();

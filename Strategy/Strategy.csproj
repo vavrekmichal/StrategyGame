@@ -87,13 +87,11 @@
     <Compile Include="GroupControl\Game Objects\MovableGameObjectBox\IMovableGameObject.cs" />
     <Compile Include="GroupControl\Game Objects\MovableGameObjectBox\SpaceShip.cs" />
     <Compile Include="GroupControl\Game Objects\ObjectXMLCreator.cs" />
-    <Compile Include="GroupControl\Game Objects\StaticGameObjectBox\Sun.cs" />
     <Compile Include="GroupControl\Game Objects\StaticGameObjectBox\IStaticGameObject.cs" />
     <Compile Include="GroupControl\Group.cs" />
     <Compile Include="GroupControl\Game Objects\MovableGameObjectBox\MovableGameObject.cs" />
     <Compile Include="GroupControl\Game Objects\StaticGameObjectBox\StaticGameObject.cs" />
     <Compile Include="GroupControl\Game Objects\ObjectCreator.cs" />
-    <Compile Include="GroupControl\Game Objects\StaticGameObjectBox\Planet.cs" />
     <Compile Include="GroupControl\GroupManager.cs" />
     <Compile Include="GroupControl\SolarSystem.cs" />
     <Compile Include="MogreControl\MouseControl.cs" />

@@ -2,12 +2,9 @@
 <mission name="StartMission">
   <usedObjects>
     <isgos>
-      <sgo name="Planet">
-        Strategy.GroupControl.Game_Objects.StaticGameObjectBox.Planet
-      </sgo>
-      <sgo name="Sun">
-        Strategy.GroupControl.Game_Objects.StaticGameObjectBox.Sun
-      </sgo>
+      <sgo name="Planet" path="StaticGameObjectBox/Planet.cs" fullName="Strategy.GroupControl.Game_Objects.StaticGameObjectBox.Planet"/>
+      <sgo name="Sun" path="StaticGameObjectBox/Sun.cs" fullName="Strategy.GroupControl.Game_Objects.StaticGameObjectBox.Sun"/>
+
     </isgos>
     <imgos></imgos>
   </usedObjects>

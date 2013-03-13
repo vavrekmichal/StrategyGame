@@ -14,17 +14,27 @@ using System.IO;
 using System.Reflection;
 using System.Linq;
 using Roslyn.Scripting.CSharp;
+using System.Reflection.Emit;
+using System.Linq.Expressions;
+using Roslyn.Scripting;
 
 
 namespace Strategy.GroupControl.Game_Objects {
 	class ObjectXMLCreator {
 
-		protected XmlDocument xml;  
+		protected XmlDocument xml;
 		protected Mogre.SceneManager manager;
 		protected Dictionary<string, Team> teams;
 		protected List<IMaterial> materialList;
 		protected List<SolarSystem> solarSystems;
 		protected XmlElement root;
+
+		//assembly load
+		protected AssemblyBuilder assemblyBuilder;
+		protected ModuleBuilder moduleBuilder;
+		List<MetadataReference> metadataRef;
+		CompilationOptions comilationOption;
+		List<string> isCompiled;
 
 		public ObjectXMLCreator(string path, Mogre.SceneManager manager, Dictionary<string, Team> teams,
 			List<IMaterial> materialList, List<SolarSystem> solarSystems) {
@@ -36,88 +46,127 @@ namespace Strategy.GroupControl.Game_Objects {
 			xml.Load(path);
 			root = xml.DocumentElement;
 			//testingFunction(); //TODO remove
+
+			isCompiled = new List<string>();
+			var t = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
+			metadataRef = new List<MetadataReference>();
+			metadataRef.Add(MetadataFileReference.CreateAssemblyReference("mscorlib"));
+			metadataRef.Add(new MetadataFileReference(typeof(Strategy.MyMogre).Assembly.Location));
+			metadataRef.Add(new MetadataFileReference(typeof(Strategy.Game).Assembly.Location));
+			metadataRef.Add(new MetadataFileReference(typeof(GroupControl.Game_Objects.StaticGameObjectBox.StaticGameObject).Assembly.Location));
+			metadataRef.Add(new MetadataFileReference(typeof(Team).Assembly.Location));
+			metadataRef.Add(new MetadataFileReference(typeof(System.Linq.Enumerable).Assembly.Location));
+			metadataRef.Add(new MetadataFileReference(typeof(LinkedList<>).Assembly.Location));
+			metadataRef.Add(new MetadataFileReference(Path.GetFullPath((new Uri(t + "\\\\" + "Mogre.dll")).LocalPath)));
+			metadataRef.Add(new MetadataFileReference(typeof(GroupControl.Game_Objects.StaticGameObjectBox.IStaticGameObject).Assembly.Location));
+			metadataRef.Add(new MetadataFileReference(typeof(Strategy.Game).Assembly.Location));
+
+			comilationOption = new CompilationOptions(OutputKind.DynamicallyLinkedLibrary);
+
+			assemblyBuilder =
+				AppDomain.CurrentDomain.DefineDynamicAssembly(new AssemblyName("DynamicAssembly" + Guid.NewGuid()),
+															  AssemblyBuilderAccess.RunAndCollect);
+			moduleBuilder = assemblyBuilder.DefineDynamicModule("DynamicModule");
 		}
 
 		public void load(string missionName) {
 			bool hasSun = false;
 			IStaticGameObject sun = null;
-			XmlNode missionSolarSystems = root.SelectNodes("/mission[@name='" + missionName + "'][1]/solarSystems[1]")[0];
+			XmlNode missionNode = root.SelectNodes("/mission[@name='" + missionName + "'][1]")[0];
+			XmlNode missionSolarSystems = missionNode.SelectNodes("solarSystems[1]")[0];
 			foreach (XmlNode solarSystem in missionSolarSystems) {
 				List<IStaticGameObject> isgos = new List<IStaticGameObject>();
 				foreach (XmlNode gameObject in solarSystem.ChildNodes) {
 					switch (gameObject.Name) {
-							case "isgo":
-							isgoType t;
-							switch (gameObject.Attributes["type"].InnerText) {
-								case "Planet":
-									t=isgoType.Planet;
-									IStaticGameObject isgo = createISGO(gameObject.Attributes["name"].InnerText,
-										gameObject.Attributes["mesh"].InnerText,
-										gameObject.Attributes["team"].InnerText,
-										parseInputToVector3(gameObject.Attributes["centerPossition"].InnerText),
-										Int32.Parse(gameObject.Attributes["distance"].InnerText),
-										t
-										);
-									isgos.Add(isgo);
-									//here register
-									readSGOActions(gameObject.SelectNodes("gameAction"), (StaticGameObject)isgo);	
-									break;
-								case "Sun":
-									hasSun = true;
-									t = isgoType.Sun;
-									sun = createISGO(gameObject.Attributes["name"].InnerText,
-										gameObject.Attributes["mesh"].InnerText,
-										gameObject.Attributes["team"].InnerText,
-										parseInputToVector3(gameObject.Attributes["centerPossition"].InnerText),
-										Int32.Parse(gameObject.Attributes["distance"].InnerText),
-										t
-										);
-									
-									break;
-								default:
-									t = isgoType.Sun;
-									break;
-								}
-
+						case "isgo":
+							IsgoType t;
+							string gameObjectType = gameObject.Attributes["type"].InnerText;
+							if (gameObjectType == "Sun") {
+								hasSun = true;
+								t = IsgoType.Sun;
+								sun = createISGO(gameObject, missionNode.SelectNodes("usedObjects/isgos/sgo[@name='Sun']")[0], t);
+							} else {
+								t = IsgoType.StaticObject;
+								IStaticGameObject isgo = createISGO(gameObject, 
+									missionNode.SelectNodes("usedObjects/isgos/sgo[@name='" + gameObjectType + "']")[0],
+									t
+									);
+								isgos.Add(isgo);
+								//here register
+								readSGOActions(gameObject.SelectNodes("gameAction"), (StaticGameObject)isgo);
 								break;
-							case "imgo":
+							}
 
-								break;
-							default:
-								throw new XmlLoadException("Bad XML format. In SolarSystem cannot be node " + gameObject.Name);
-						}
+							break;
+						case "imgo":
+
+							break;
+						default:
+							throw new XmlLoadException("Bad XML format. In SolarSystem cannot be node " + gameObject.Name);
+					}
 				}
-
+				string solarSystemName = solarSystem.Attributes["name"].Value;
 				if (hasSun) {
-					this.solarSystems.Add(createSolarSystem(solarSystem.Attributes["name"].Value, isgos, new List<IMovableGameObject>(), sun));
+					this.solarSystems.Add(createSolarSystem(solarSystemName, isgos, new List<IMovableGameObject>(), sun));
 					hasSun = false;
 				} else {
-					this.solarSystems.Add(createSolarSystem(solarSystem.Attributes["name"].Value, isgos, new List<IMovableGameObject>()));
+					this.solarSystems.Add(createSolarSystem(solarSystemName, isgos, new List<IMovableGameObject>()));
 				}
-				
-			}  
+
+			}
 		}
 
-		
+		private IStaticGameObject createISGO(XmlNode gameObject, XmlNode gameObjectPath, IsgoType isgoType, int pointsOnCircle = 30) {
+			string team = gameObject.Attributes["team"].InnerText;
+			string name = gameObject.Attributes["name"].InnerText;
+			string mesh = gameObject.Attributes["mesh"].InnerText;
+			string type = gameObject.Attributes["type"].InnerText;
+			int radius = Int32.Parse(gameObject.Attributes["distance"].InnerText);
+			Vector3 center = parseInputToVector3(gameObject.Attributes["centerPossition"].InnerText);
 
-		private IStaticGameObject createISGO(string name, string mesh, string team, Vector3 center, int radius, isgoType type, int pointsOnCircle = 30) {
+			string fullPath = gameObjectPath.Attributes["path"].InnerText;
+			string fullName = gameObjectPath.Attributes["fullName"].InnerText;
+
 			if (!teams.ContainsKey(team)) {
 				teams.Add(team, new Team(team, materialList));
 			}
-			System.Reflection.Assembly ass = System.Reflection.Assembly.GetExecutingAssembly();
-			Type t = ass.GetType("Strategy.GroupControl.Game_Objects.StaticGameObjectBox."+type);
-			IStaticGameObject o;
-			if(type==isgoType.Sun){
-				Object[] args = { name, mesh, manager};
-				o = (IStaticGameObject)Activator.CreateInstance(t, args);
-			}else{
-				Object[] args = { name, mesh, teams[team], manager, radius, center, pointsOnCircle };
-				o = (IStaticGameObject)Activator.CreateInstance(t, args);
-			}
+
+			//start
+
+			if (!isCompiled.Contains(type)) {
+				isCompiled.Add(type);
+				var syntaxTree = SyntaxTree.ParseFile("../../GroupControl/Game Objects/" + fullPath);
+
+				var comp = Compilation.Create("Test.dll"
+					, syntaxTrees: new[] { syntaxTree }
+					, references: metadataRef
+					, options: comilationOption
+					);
+
+				var result = comp.Emit(moduleBuilder);
+				if (!result.Success) {
+					foreach (var d in result.Diagnostics) {
+						Console.WriteLine(d);
+					}
+					throw new XmlLoadException("Class not found " + fullPath);
+				}
+			} 
 			
-			return o;
+
+			var o = moduleBuilder.GetType(fullName);
+
+			object helloObject;
+
+			if (isgoType == IsgoType.Sun) {
+				helloObject = Activator.CreateInstance(o, name, mesh, manager);
+			} else {
+				helloObject = Activator.CreateInstance(o, name, mesh, teams[team], manager, radius, center, pointsOnCircle);
+			}
+			IStaticGameObject isgo = (IStaticGameObject)helloObject;
+			//end
+
+			return isgo;
 		}
-		
 
 		private SolarSystem createSolarSystem(string name, List<IStaticGameObject> isgoObjects, List<IMovableGameObject> imgoObjects,
 			IStaticGameObject sun = null) {
@@ -125,11 +174,11 @@ namespace Strategy.GroupControl.Game_Objects {
 			SolarSystem sSys = new SolarSystem(name);
 			sSys.addISGO(isgoObjects);
 			sSys.addIMGO(imgoObjects);
-			sSys.setSun((Sun)sun);
+			sSys.setSun(sun);
 			return sSys;
 		}
 
-		private void registerSGOaction(StaticGameObject sgo, string action, string value) {			
+		private void registerSGOaction(StaticGameObject sgo, string action, string value) {
 			sgo.registerExecuter(action, sgo.Team.getMaterials(), value);
 		}
 
@@ -148,41 +197,54 @@ namespace Strategy.GroupControl.Game_Objects {
 
 		//testing loading classes
 		private void testingFunction() {
-//			SyntaxTree syntaxTree = SyntaxTree.ParseText(
-//				@"using System;
-//				using System.Collections;
-//				using System.Linq;
-//				using System.Text;
-// 
-//				namespace HelloWorld
-//				{
-//					class Program
-//					{
-//						static void Main(string[] args)
-//						{
-//							Console.WriteLine(""Hello, World!"");
-//						}
-//					}
-//				}");
-			SyntaxTree syntaxTree = SyntaxTree.ParseFile("../../GroupControl/Game Objects/StaticGameObjectBox/Planet.cs");
-			var root = (CompilationUnitSyntax)syntaxTree.GetRoot();
-			//MetadataReference mt = MetadataReference.CreateAssemblyReference("manager");
-			List<SyntaxTree> listek = new List<SyntaxTree>();
-			listek.Add(syntaxTree);
-			var comp = Compilation.Create("class", null, listek, null, null, null);
 			
+			var syntaxTree = SyntaxTree.ParseFile("../../GroupControl/Game Objects/StaticGameObjectBox/Planet.cs");
 
-
-			var firstMember = root.Members[0];
+			var t = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
+			var comp = Compilation.Create("Test.dll"
+				, syntaxTrees: new[] { syntaxTree }
+				, references: new[] { 
+					MetadataFileReference.CreateAssemblyReference("mscorlib"),
+					new MetadataFileReference(typeof(Strategy.MyMogre).Assembly.Location),
+					new MetadataFileReference(typeof(Strategy.Game).Assembly.Location),
+					new MetadataFileReference(typeof(GroupControl.Game_Objects.StaticGameObjectBox.StaticGameObject).Assembly.Location),
+					new MetadataFileReference(typeof(Team).Assembly.Location),
+					new MetadataFileReference(typeof(System.Linq.Enumerable).Assembly.Location),
+					new MetadataFileReference(typeof(LinkedList<>).Assembly.Location),
+					new MetadataFileReference(Path.GetFullPath((new Uri(t + "\\\\" + "Mogre.dll")).LocalPath)),
+					new MetadataFileReference(typeof(GroupControl.Game_Objects.StaticGameObjectBox.IStaticGameObject).Assembly.Location),
+					new MetadataFileReference(typeof(Strategy.Game).Assembly.Location)
+				}
+				, options: new CompilationOptions(OutputKind.DynamicallyLinkedLibrary)
+				);
+			var assemblyBuilder =
+				AppDomain.CurrentDomain.DefineDynamicAssembly(new AssemblyName("DynamicAssembly" + Guid.NewGuid()),
+															  AssemblyBuilderAccess.RunAndCollect);
+			var moduleBuilder = assemblyBuilder.DefineDynamicModule("DynamicModule");
+			var result = comp.Emit(moduleBuilder);
+			if (!result.Success)
+            {
+                foreach(var d in result.Diagnostics){
+                    Console.WriteLine(d);
+                }
+				throw new XmlLoadException("Class not found ");
+            }
 			
-			var helloWorldDeclaration = (NamespaceDeclarationSyntax)firstMember;
+			var o = moduleBuilder.GetType("Strategy.GroupControl.Game_Objects.StaticGameObjectBox.Planet");
+			if (!teams.ContainsKey("bla")) {
+				teams.Add("bla", new Team("bla", materialList));
+			}
+			
+			
+			MethodInfo mainMethod = o.GetMethod("rotate");
+			MethodInfo testMethod = o.GetMethod("registerExecuter");
 
-			var programDeclaration = (TypeDeclarationSyntax)helloWorldDeclaration.Members[0];
 
-			var mainDeclaration = (MethodDeclarationSyntax)programDeclaration.Members[0];
-
-			var argsParameter = mainDeclaration.ParameterList.Parameters[0];
-
+			object helloObject = Activator.CreateInstance(o, "name", "jupiter.mesh", teams["bla"], manager, 500, Mogre.Vector3.ZERO, 30);
+			
+			IStaticGameObject isgo = (IStaticGameObject)helloObject;
 		}
+
 	}
+
 }

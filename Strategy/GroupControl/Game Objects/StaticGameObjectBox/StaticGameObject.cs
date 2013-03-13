@@ -6,7 +6,7 @@ using Strategy.GroupControl.Game_Objects.GameActions;
 using Strategy.GameMaterial;
 
 namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
-    abstract class StaticGameObject : IStaticGameObject {
+    public abstract class StaticGameObject : IStaticGameObject {
         protected string name;
         protected Mogre.Entity entity;
         protected Mogre.SceneNode sceneNode;

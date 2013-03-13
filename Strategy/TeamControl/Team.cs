@@ -7,7 +7,7 @@ using Strategy.GroupControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameMaterial;
 
 namespace Strategy.TeamControl {
-    class Team {
+    public class Team {
 
         //TODO: Production 
         //Ideas List<IMateria> Netreba jen jmeno...v sesite popsano.

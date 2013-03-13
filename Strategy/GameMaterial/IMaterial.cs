@@ -5,7 +5,7 @@ using System.Text;
 using Strategy.GroupControl.Game_Objects.StaticGameObjectBox;
 
 namespace Strategy.GameMaterial {
-    interface IMaterial {
+    public interface IMaterial {
   
         double displayChangees();
         int getQuantityOfMaterial();

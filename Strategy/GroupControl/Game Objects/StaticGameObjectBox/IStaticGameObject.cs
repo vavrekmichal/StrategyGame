@@ -5,7 +5,7 @@ using System.Text;
 using Strategy.TeamControl;
 
 namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
-	interface IStaticGameObject {
+	public interface IStaticGameObject {
 		void rotate(float f);
         void nonActiveRotate(float f);
         void changeVisible(bool visible);

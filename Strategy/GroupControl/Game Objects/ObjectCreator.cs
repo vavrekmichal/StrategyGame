@@ -13,7 +13,7 @@ using Strategy.GameMaterial;
 
 namespace Strategy.GroupControl.Game_Objects {
 
-	enum isgoType { Planet, Sun}
+	enum IsgoType { StaticObject, Sun}
 
 	class ObjectCreator {
 

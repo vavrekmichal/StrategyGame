@@ -8,7 +8,7 @@ using Strategy.GroupControl.Game_Objects.MovableGameObjectBox;
 namespace Strategy.GroupControl {
     class SolarSystem {
 
-        protected Sun sun;
+        protected IStaticGameObject sun;
         protected List<IStaticGameObject> isgoObjects;
         protected List<IMovableGameObject> imgoObjects;
         protected bool active = false;
@@ -22,7 +22,7 @@ namespace Strategy.GroupControl {
             imgoObjects = new List<IMovableGameObject>();
         }
 
-        public void setSun(Sun sun) {
+        public void setSun(IStaticGameObject sun) {
             this.sun = sun;
         }
 
