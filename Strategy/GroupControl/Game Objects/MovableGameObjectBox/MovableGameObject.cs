@@ -18,6 +18,8 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
         protected Mogre.SceneManager manager;
         
         public abstract void move(float f);
+		public abstract void nonActiveMove(float f);
+
 
 		public abstract void shout();
 

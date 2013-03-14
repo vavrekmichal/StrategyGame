@@ -116,22 +116,11 @@ namespace Strategy.GroupControl.Game_Objects {
 			}
 		}
 
-		private IStaticGameObject createISGO(XmlNode gameObject, XmlNode gameObjectPath, IsgoType isgoType, int pointsOnCircle = 30) {
-			string team = gameObject.Attributes["team"].InnerText;
-			string name = gameObject.Attributes["name"].InnerText;
-			string mesh = gameObject.Attributes["mesh"].InnerText;
-			string type = gameObject.Attributes["type"].InnerText;
-			int radius = Int32.Parse(gameObject.Attributes["distance"].InnerText);
-			Vector3 center = parseInputToVector3(gameObject.Attributes["centerPossition"].InnerText);
 
+		private object createGameObject(XmlNode gameObjectPath, string type, object[] args) {
 			string fullPath = gameObjectPath.Attributes["path"].InnerText;
 			string fullName = gameObjectPath.Attributes["fullName"].InnerText;
 
-			if (!teams.ContainsKey(team)) {
-				teams.Add(team, new Team(team, materialList));
-			}
-
-			//start
 
 			if (!isCompiled.Contains(type)) {
 				isCompiled.Add(type);
@@ -150,21 +139,42 @@ namespace Strategy.GroupControl.Game_Objects {
 					}
 					throw new XmlLoadException("Class not found " + fullPath);
 				}
-			} 
-			
-
+			}
 			var o = moduleBuilder.GetType(fullName);
 
 			object helloObject;
+			helloObject = Activator.CreateInstance(o, args);
+			return helloObject;
+		}
 
+
+		private IMovableGameObject createIMGO(XmlNode gameObject, XmlNode gameObjectPath) {
+			return null;
+		}
+
+
+		private IStaticGameObject createISGO(XmlNode gameObject, XmlNode gameObjectPath, IsgoType isgoType, int pointsOnCircle = 30) {
+			IStaticGameObject isgo;
+			string type;
+			List<object> args = new List<object>();
+			args.Add(gameObject.Attributes["name"].InnerText);
+			args.Add(gameObject.Attributes["mesh"].InnerText);
 			if (isgoType == IsgoType.Sun) {
-				helloObject = Activator.CreateInstance(o, name, mesh, manager);
+				args.Add(manager);
+				type = IsgoType.Sun.ToString();
 			} else {
-				helloObject = Activator.CreateInstance(o, name, mesh, teams[team], manager, radius, center, pointsOnCircle);
+				string team = gameObject.Attributes["team"].InnerText;
+				type = IsgoType.StaticObject.ToString();
+				if (!teams.ContainsKey(team)) {
+					teams.Add(team, new Team(team, materialList));
+				}
+				args.Add(teams[team]);
+				args.Add(manager);
+				args.Add(Int32.Parse(gameObject.Attributes["distance"].InnerText));
+				args.Add(parseInputToVector3(gameObject.Attributes["centerPossition"].InnerText));
+				args.Add(pointsOnCircle);
 			}
-			IStaticGameObject isgo = (IStaticGameObject)helloObject;
-			//end
-
+			isgo = (IStaticGameObject)createGameObject(gameObjectPath, type, args.ToArray());
 			return isgo;
 		}
 
@@ -192,8 +202,6 @@ namespace Strategy.GroupControl.Game_Objects {
 			string[] splitted = input.Split(',');
 			return new Vector3(Int32.Parse(splitted[0]), Int32.Parse(splitted[1]), Int32.Parse(splitted[2]));
 		}
-
-
 
 		//testing loading classes
 		private void testingFunction() {
