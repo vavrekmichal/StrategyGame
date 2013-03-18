@@ -252,8 +252,8 @@ namespace Strategy.GameGUI {
 
 		public void showTargeted(GroupControl.GroupStatics group) {
 			//Just one object
-			statPanelName.Text = group[0].getName();
-			statPanelMesh.Text = group[0].getMesh();
+			statPanelName.Text = group[0].Name;
+			statPanelMesh.Text = group[0].Mesh;
 		}
 
         /// <summary>

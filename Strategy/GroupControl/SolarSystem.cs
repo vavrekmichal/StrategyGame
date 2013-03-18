@@ -87,9 +87,12 @@ namespace Strategy.GroupControl {
         public void update(float delay) {
             if (active) {
                 foreach (IStaticGameObject isgo in isgoObjects) {
-                    isgo.rotate(delay);
-                    
+                    isgo.rotate(delay);   
                 }
+				foreach (IMovableGameObject imgo in imgoObjects) {
+					//imgo.move(delay);
+					imgo.nonActiveMove(delay);
+				}
                 if (sun != null) {
                     sun.rotate(delay);
                 }
@@ -97,6 +100,9 @@ namespace Strategy.GroupControl {
                 foreach (IStaticGameObject isgo in isgoObjects) {
                     isgo.nonActiveRotate(delay);
                 }
+				foreach (IMovableGameObject imgo in imgoObjects) {
+					imgo.nonActiveMove(delay);
+				}
                 if (sun != null) {
                     sun.nonActiveRotate(delay);
                 }
@@ -104,8 +110,8 @@ namespace Strategy.GroupControl {
 
         }
 
-        public string getName() {
-            return name;
+        public string Name {
+			get { return name; }
         }
 
 		//public List<IStaticGameObject> getISGO() {

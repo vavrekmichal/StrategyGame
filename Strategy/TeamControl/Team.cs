@@ -60,8 +60,8 @@ namespace Strategy.TeamControl {
         }
 
         //others
-        public string getName() {
-            return name;
+        public string Name {
+			get { return name; }
         }
 
         public override string ToString() {
@@ -69,12 +69,12 @@ namespace Strategy.TeamControl {
             s.Append(name+"\n");
             s.Append("\t ISGO" + "\n");
             foreach (IStaticGameObject isgo in isgoObjects) {
-                s.Append("\t\t"+isgo.getName()+"\n");
+                s.Append("\t\t"+isgo.Name+"\n");
             }
 
             s.Append("\t IMGO" + "\n");
             foreach (IMovableGameObject imgo in imgoObjects) {
-                s.Append("\t\t" + imgo.getName() + "\n");
+				s.Append("\t\t" + imgo.Name + "\n");
             }
 
             return s.ToString();

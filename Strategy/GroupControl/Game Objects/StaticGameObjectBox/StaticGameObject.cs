@@ -43,9 +43,17 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
             ((Produce)gameActions["Produce"]).registerExecuter(this,specificType,value);
         }
 
+		/// <summary>
+		/// Rotating function 
+		/// </summary>
+		/// <param name="f">deley of frames</param>
+		public virtual void rotate(float f) {
+			sceneNode.Roll(new Mogre.Degree(50 * f));
+		}
 
-        public abstract void rotate(float f);
-        public abstract void nonActiveRotate(float f);
+		public virtual void nonActiveRotate(float f) {
+		}
+
         protected abstract void onDisplayed();
 
 
@@ -95,12 +103,12 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         }
 
 
-        public string getName() {
-            return name;
+        public string Name {
+            get {return name;}
         }
 
-		public string getMesh() {
-			return mesh;
+		public string Mesh {
+			get { return mesh; }
 		}
 	}
 }

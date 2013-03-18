@@ -96,18 +96,18 @@ namespace Strategy.GroupControl.Game_Objects {
 			foreach (SolarSystem ss in solarSystems) {
 				IStaticGameObject s =  ss.getSun();
 				if(s!= null){
-					objectIsMovable.Add(s.getName(), false);
-					isgoDict.Add(s.getName(), s);
+					objectIsMovable.Add(s.Name, false);
+					isgoDict.Add(s.Name, s);
 				}
 
 				foreach(IStaticGameObject isgo in ss.getISGOs()){
-					objectIsMovable.Add(isgo.getName(),false);
-					isgoDict.Add(isgo.getName(),isgo);
+					objectIsMovable.Add(isgo.Name, false);
+					isgoDict.Add(isgo.Name, isgo);
 				}
 
 				foreach (IMovableGameObject imgo in ss.getIMGOs()) {
-					objectIsMovable.Add(imgo.getName(), true);
-					imgoDict.Add(imgo.getName(), imgo);
+					objectIsMovable.Add(imgo.Name, true);
+					imgoDict.Add(imgo.Name, imgo);
 				}
 			}
 		}

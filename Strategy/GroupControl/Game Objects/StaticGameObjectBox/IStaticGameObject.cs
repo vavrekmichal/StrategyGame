@@ -9,8 +9,8 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 		void rotate(float f);
         void nonActiveRotate(float f);
         void changeVisible(bool visible);
-        string getName();
-		string getMesh();
+		string Name { get; }
+		string Mesh { get; }
         bool tryExecute(string executingAction);
 
         Team Team { get; set; }

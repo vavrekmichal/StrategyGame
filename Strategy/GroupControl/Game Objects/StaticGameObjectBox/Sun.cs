@@ -30,28 +30,17 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
             entity = manager.CreateEntity(name, mesh);
 		}
 
-        /// <summary>
-        /// Rotating function 
-        /// </summary>
-        /// <param name="f">deley of frames</param>
-		public void rotate(float f) {
-			sceneNode.Roll(new Mogre.Degree(50 *f));
+		/// <summary>
+		/// Rotating function 
+		/// </summary>
+		/// <param name="f">deley of frames</param>
+		public virtual void rotate(float f) {
+			sceneNode.Roll(new Mogre.Degree(50 * f));
 		}
 
-        public void nonActiveRotate(float f) {
-        }
+		public virtual void nonActiveRotate(float f) {
 
-        /// <summary>
-        /// It will be always 0.
-        /// </summary>
-        public Team Team {
-            get {
-                return sunTeam;
-            }
-            set {
-               
-            }
-        }
+		}
 
         /// <summary>
         /// Change visibility of sun
@@ -71,13 +60,24 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
             }
         }
 
+		/// <summary>
+		/// It will be always 0.
+		/// </summary>
+		public Team Team {
+			get {
+				return sunTeam;
+			}
+			set {
 
-        public string getName() {
-            return name;
+			}
+		}
+
+        public string Name{
+            get{return name;}
         }
 
-		public string getMesh() {
-			return mesh;
+		public string Mesh {
+			get { return mesh; }
 		}
 
         public Vector3 getPosition() {

@@ -24,9 +24,7 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 		public Planet() {
 
 		}
-		public Planet(string s) {
-			name = s;
-		}
+
 		//end
 
         public Planet(string name, string mesh, Team myTeam, Mogre.SceneManager manager, double distanceFromCenter, 

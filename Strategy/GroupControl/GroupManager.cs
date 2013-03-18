@@ -111,7 +111,7 @@ namespace Strategy.GroupControl {
         }
 
         public string getSolarSystemName(int numberOfSolarSystem) {
-            return solarSystemBetter[numberOfSolarSystem].getName();
+            return solarSystemBetter[numberOfSolarSystem].Name;
         }
 
         public Dictionary<string,Team> getTeams() {            

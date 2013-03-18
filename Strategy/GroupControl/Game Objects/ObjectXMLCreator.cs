@@ -70,12 +70,14 @@ namespace Strategy.GroupControl.Game_Objects {
 		}
 
 		public void load(string missionName) {
+			
 			bool hasSun = false;
 			IStaticGameObject sun = null;
 			XmlNode missionNode = root.SelectNodes("/mission[@name='" + missionName + "'][1]")[0];
 			XmlNode missionSolarSystems = missionNode.SelectNodes("solarSystems[1]")[0];
 			foreach (XmlNode solarSystem in missionSolarSystems) {
 				List<IStaticGameObject> isgos = new List<IStaticGameObject>();
+				List<IMovableGameObject> imgos = new List<IMovableGameObject>();
 				foreach (XmlNode gameObject in solarSystem.ChildNodes) {
 					switch (gameObject.Name) {
 						case "isgo":
@@ -91,6 +93,7 @@ namespace Strategy.GroupControl.Game_Objects {
 									missionNode.SelectNodes("usedObjects/isgos/sgo[@name='" + gameObjectType + "']")[0],
 									t
 									);
+								isgo.Team.addISGO(isgo);
 								isgos.Add(isgo);
 								//here register
 								readSGOActions(gameObject.SelectNodes("gameAction"), (StaticGameObject)isgo);
@@ -105,12 +108,19 @@ namespace Strategy.GroupControl.Game_Objects {
 							throw new XmlLoadException("Bad XML format. In SolarSystem cannot be node " + gameObject.Name);
 					}
 				}
+				//delete
+				if (solarSystem.Attributes["name"].InnerText == "This is my") {
+					var bla = new SpaceShip("name", "jupiter.mesh", teams["Player"], manager, new Vector3(0, 500, 0));
+					teams["Player"].addIMGO(bla);
+					imgos.Add(bla);
+				}
+				//delete
 				string solarSystemName = solarSystem.Attributes["name"].Value;
 				if (hasSun) {
-					this.solarSystems.Add(createSolarSystem(solarSystemName, isgos, new List<IMovableGameObject>(), sun));
+					this.solarSystems.Add(createSolarSystem(solarSystemName, isgos, imgos, sun));
 					hasSun = false;
 				} else {
-					this.solarSystems.Add(createSolarSystem(solarSystemName, isgos, new List<IMovableGameObject>()));
+					this.solarSystems.Add(createSolarSystem(solarSystemName, isgos, imgos));
 				}
 
 			}
@@ -149,7 +159,9 @@ namespace Strategy.GroupControl.Game_Objects {
 
 
 		private IMovableGameObject createIMGO(XmlNode gameObject, XmlNode gameObjectPath) {
-			return null;
+			IMovableGameObject imgo;
+			imgo = (IMovableGameObject)createGameObject(gameObjectPath, "", new object[1]);
+			return imgo;
 		}
 
 
