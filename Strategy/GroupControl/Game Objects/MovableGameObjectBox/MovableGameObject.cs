@@ -9,7 +9,7 @@ using Strategy.GroupControl.Game_Objects.MovableGameObjectBox;
 using Strategy.TeamControl;
 
 namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
-	abstract class MovableGameObject : IMovableGameObject{
+	public abstract class MovableGameObject : IMovableGameObject{
         protected string name;
 		protected Team movableObjectTeam;
 
@@ -28,14 +28,31 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 		protected Vector3 direction = Vector3.ZERO;   // The direction the object is moving
 		protected Vector3 destination = Vector3.ZERO; // The destination the object is moving towards
 
+		protected Vector3 modelDirection = Vector3.NEGATIVE_UNIT_Z;
+
 		public MovableGameObject() {
 			flyList = new LinkedList<Vector3>();
 			listOfAction = new List<IGameAction>();
 		}
 
-
+		protected abstract void onDisplayed();
 
 		#region virtual methods
+
+		public virtual void addNextLocation(Vector3 pointToGo) {
+			flyList.AddLast(pointToGo);
+		}
+
+		public virtual void addNextLocation(LinkedList<Vector3> positionList) {
+			foreach (var pointToGo in positionList) {
+				flyList.AddLast(pointToGo);
+			}
+		}
+
+		public virtual void setNextLocation(LinkedList<Vector3> positionList) {
+			flyList = positionList;
+			moving = false;
+		}
 
 		protected virtual bool nextLocation() {
 			if (flyList.Count == 0) {
@@ -48,14 +65,11 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 		public virtual void move(float f) {
 			if (!moving) {
 				if (nextLocation()) {
-					LinkedListNode<Vector3> tmp;
 					moving = true;
 
 					//Update the destination using the walklist.
 					destination = flyList.First.Value; //get the next destination.
-					tmp = flyList.First; //save the node that held it
 					flyList.RemoveFirst(); //remove that node from the front of the list
-					flyList.AddLast(tmp);  //add it to the back of the list.
 					//update the direction and the distance
 					direction = destination - sceneNode.Position;
 					distance = direction.Normalise();
@@ -96,12 +110,11 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 		}
 
 		public virtual void nonActiveMove(float f) {
-
+			
 		}
 
 		/// <summary>
-		/// The colision() control of Protector can move forward of if
-		/// it catch player (Ninja)
+		/// The colision() control if object can move forward 
 		/// </summary>
 		/// <returns>true -> Protector cannot move forward / false -> Protector can</returns>
 		public bool colision() {
@@ -135,16 +148,11 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
                 }
 
                 sceneNode = manager.RootSceneNode.CreateChildSceneNode(name + "Node", position);
-
-                sceneNode.Pitch(new Mogre.Degree(-90f));
                 sceneNode.AttachObject(entity);
             } else {
                 manager.DestroySceneNode(sceneNode);
             }
         }
-
-        
-
 
 
 		/// <summary>
@@ -154,8 +162,8 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 		/// <param name="q">Quaternion to transform</param>
 		/// <returns>Vector3 with direction</returns>
 		private Vector3 getDirection(Quaternion q) {
-			var v = new Vector3(1, 0, 0); //facing in +z
-			v = q * v;  //transform the vector by the objects rotation.
+			Vector3 v ; //facing in +z
+			v = q * modelDirection;  //transform the vector by the objects rotation.
 			return v;
 		}
 
@@ -177,6 +185,11 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 			set {
 				movableObjectTeam = Team;
 			}
+		}
+
+
+		public Vector3 Position {
+			get { return position; }
 		}
 	}
 }

@@ -248,6 +248,8 @@ namespace Strategy.GameGUI {
 
 		public void showTargeted(GroupControl.GroupMovables group) {
 			//statPanelName.Text = 
+			statPanelName.Text = group[0].Name;
+			statPanelMesh.Text = group.Count.ToString();
 		}
 
 		public void showTargeted(GroupControl.GroupStatics group) {

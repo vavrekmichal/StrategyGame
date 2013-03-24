@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exceptions\MissingMaterialException.cs" />
+    <Compile Include="Exceptions\PropertyMissingException.cs" />
     <Compile Include="Exceptions\XmlLoadException.cs" />
     <Compile Include="FightControl\FightManager.cs" />
     <Compile Include="FightControl\IFightManager.cs" />
@@ -85,7 +86,6 @@
     <Compile Include="GroupControl\Game Objects\GameActions\Produce.cs" />
     <Compile Include="GroupControl\Game Objects\GameObjectParameter\IGameObjectParameter.cs" />
     <Compile Include="GroupControl\Game Objects\MovableGameObjectBox\IMovableGameObject.cs" />
-    <Compile Include="GroupControl\Game Objects\MovableGameObjectBox\SpaceShip.cs" />
     <Compile Include="GroupControl\Game Objects\ObjectXMLCreator.cs" />
     <Compile Include="GroupControl\Game Objects\StaticGameObjectBox\IStaticGameObject.cs" />
     <Compile Include="GroupControl\Group.cs" />
@@ -93,6 +93,8 @@
     <Compile Include="GroupControl\Game Objects\StaticGameObjectBox\StaticGameObject.cs" />
     <Compile Include="GroupControl\Game Objects\ObjectCreator.cs" />
     <Compile Include="GroupControl\GroupManager.cs" />
+    <Compile Include="GroupControl\RuntimeProperty\Property.cs" />
+    <Compile Include="GroupControl\RuntimeProperty\PropertyManager.cs" />
     <Compile Include="GroupControl\SolarSystem.cs" />
     <Compile Include="MogreControl\MouseControl.cs" />
     <Compile Include="GameGUI\MyGUI.cs" />

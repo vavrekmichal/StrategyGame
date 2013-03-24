@@ -1,0 +1,4 @@
+<?xml version="1.0" ?>
+<runTimeProperty missionName="StartMission">
+  <property name="a" type="int" />
+</runTimeProperty>

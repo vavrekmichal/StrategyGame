@@ -6,16 +6,19 @@ using Strategy.FightControl;
 using Strategy.GroupControl.Game_Objects;
 using Strategy.GroupControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GroupControl.Game_Objects.StaticGameObjectBox;
+using Strategy.GroupControl.RuntimeProperty;
 using Strategy.MoveControl;
 using Strategy.GameMaterial;
 using Strategy.TeamControl;
 using Strategy.GameGUI;
 
+
 namespace Strategy.GroupControl {
     class GroupManager {
         protected ObjectCreator objectCreator;
 		protected GUIControler guiControler;
-        //TODO: complete IMGO
+		protected IMoveControler moveControler;
+		protected PropertyManager propertyManager;
 
         protected Dictionary<int, SolarSystem> solarSystemBetter;
         protected int lastSolarSystem = 0;
@@ -48,9 +51,10 @@ namespace Strategy.GroupControl {
         /// <param name="manager">Mogre SceneManager</param>
         private GroupManager(Mogre.SceneManager manager) {
 
-            objectCreator = ObjectCreator.getInstance(manager);
+			objectCreator = ObjectCreator.getInstance(manager);
             solarSystemBetter = new Dictionary<int, SolarSystem>();
-
+			moveControler = MoveControler.getInstance();
+			propertyManager = new PropertyManager("StartMission");
         }
         #endregion
 
@@ -104,9 +108,10 @@ namespace Strategy.GroupControl {
         /// <summary>
         /// inicializetion of world
         /// </summary>
-        public void inicializeWorld() { 
+        public void inicializeWorld(string missionName) { 
             //
-            objectCreator.initializeWorld("nameOfMission");
+			propertyManager.loadProperties(missionName);
+			objectCreator.initializeWorld(missionName);
             createSolarSystems();
         }
 
@@ -141,7 +146,8 @@ namespace Strategy.GroupControl {
 			GroupStatics groupS = new GroupStatics();
 			foreach (var mobleItem in movableList) {
 				if (objectCreator.isObjectMovable(mobleItem.Name)) {
-					activeMGroup = true;//TODO select all
+					groupM.insertMemeber(objectCreator.getIMGO(mobleItem.Name));
+					activeMGroup = true;
 					guiControler.showTargeted(groupM);
 					selectedGroupM = groupM;
 				} else {
@@ -151,7 +157,19 @@ namespace Strategy.GroupControl {
 					selectedGroupS = groupS;
 				}
 			}
-			
+		}
+
+		public void leftClick(List<Mogre.MovableObject> selectedObjects) {
+			selectGroup(selectedObjects);
+		}
+
+		public void rightClick(Mogre.Vector3 clickedPoint) {
+			if (activeMGroup) {
+				foreach (IMovableGameObject imgo in selectedGroupM) {
+					imgo.setNextLocation(moveControler.getTravel(imgo.Position,clickedPoint));
+						
+				}
+			}
 		}
     }
 

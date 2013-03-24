@@ -11,7 +11,6 @@ using MOIS;
 
 namespace Strategy.MogreControl {
 	class MouseControl {
-        //TODO: Rectangular select
 		protected static Mogre.TutorialFramework.CameraMan cameraMan ;
 		protected SceneManager sceneMgr;
         protected GroupManager groupManager;
@@ -115,12 +114,14 @@ namespace Strategy.MogreControl {
 					
 					Console.WriteLine(evt.state.X.abs + ", " + evt.state.Y.abs);
 					break;
-				case MouseButtonID.MB_Middle:
-					break;
+
 				case MouseButtonID.MB_Right:
-					groupManager.changeSolarSystem(changeMe);
-					guiControl.setSolarSystemName(groupManager.getSolarSystemName(changeMe));
-					changeMe = (changeMe + 1) % 2;
+					if (evt.state.ButtonDown(MouseButtonID.MB_Middle)) {
+						groupManager.changeSolarSystem(changeMe);
+						guiControl.setSolarSystemName(groupManager.getSolarSystemName(changeMe));
+						changeMe = (changeMe + 1) % 2;
+					}
+					
 					break;
 				default:
 					break;
@@ -137,7 +138,7 @@ namespace Strategy.MogreControl {
 		/// <returns>was released true</returns>
 		public bool OnMyMouseReleased(MouseEvent arg, MouseButtonID id) {
 			switch (id) {
-				case MOIS.MouseButtonID.MB_Left:
+				case MouseButtonID.MB_Left:
 					bSelecting = false;
 					if (isRectagularSelect) {
 						performSelection(mStart, mStop);
@@ -152,18 +153,29 @@ namespace Strategy.MogreControl {
 							raySceneQuery.Ray = mouseRay;
 							raySceneQuery.SetSortByDistance(true);
 
+							List<MovableObject> list = new List<MovableObject>();
 							using (Mogre.RaySceneQueryResult result = raySceneQuery.Execute()) {
-								List<MovableObject> list = new List<MovableObject>();
 								foreach (Mogre.RaySceneQueryResultEntry entry in result) {
-									if (entry.movable.Name != "GroundEntity") {
-										list.Add(entry.movable);
-										//groupManager.selectGroup(entry.movable);
-									}
+									list.Add(entry.movable);
+
 								}
-								groupManager.selectGroup(list);
 							}
+							groupManager.leftClick(list);
+
 						}
 					}
+					break;
+				case MouseButtonID.MB_Right:
+					Plane plane = new Plane( Mogre.Vector3.UNIT_Y, 0);
+					Mogre.Vector3 v;
+					using (Mogre.RaySceneQuery raySceneQuery = sceneMgr.CreateRayQuery(new Mogre.Ray())) {
+						float mouseX = (float)arg.state.X.abs / (float)arg.state.width;
+						float mouseY = (float)arg.state.Y.abs / (float)arg.state.height;
+
+						Mogre.Ray mouseRay = cameraMan.getCamera().GetCameraToViewportRay(mouseX, mouseY);
+						v = mouseRay.GetPoint(mouseRay.Intersects(plane).second);
+					}
+					groupManager.rightClick(v);
 					break;
 			}
 			return true;
@@ -184,7 +196,7 @@ namespace Strategy.MogreControl {
 
 				mRect.setCorners(mStart, mStop);
 			}
-			if (evt.state.ButtonDown(MOIS.MouseButtonID.MB_Middle)) {
+			if (evt.state.ButtonDown(MouseButtonID.MB_Middle)) {
 				cameraMan.MouseMovement(evt.state.X.rel, evt.state.Y.rel);
 			}
 			if (evt.state.Z.rel != 0) {

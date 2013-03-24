@@ -57,7 +57,7 @@ namespace Strategy.GroupControl.Game_Objects {
 			metadataRef.Add(new MetadataFileReference(typeof(Team).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(System.Linq.Enumerable).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(LinkedList<>).Assembly.Location));
-			metadataRef.Add(new MetadataFileReference(Path.GetFullPath((new Uri(t + "\\\\" + "Mogre.dll")).LocalPath)));
+			metadataRef.Add(new MetadataFileReference(Path.GetFullPath((new Uri(t + "\\\\Mogre.dll")).LocalPath)));
 			metadataRef.Add(new MetadataFileReference(typeof(GroupControl.Game_Objects.StaticGameObjectBox.IStaticGameObject).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(Strategy.Game).Assembly.Location));
 
@@ -78,11 +78,12 @@ namespace Strategy.GroupControl.Game_Objects {
 			foreach (XmlNode solarSystem in missionSolarSystems) {
 				List<IStaticGameObject> isgos = new List<IStaticGameObject>();
 				List<IMovableGameObject> imgos = new List<IMovableGameObject>();
+				string gameObjectType;
 				foreach (XmlNode gameObject in solarSystem.ChildNodes) {
 					switch (gameObject.Name) {
 						case "isgo":
 							IsgoType t;
-							string gameObjectType = gameObject.Attributes["type"].InnerText;
+							gameObjectType = gameObject.Attributes["type"].InnerText;
 							if (gameObjectType == "Sun") {
 								hasSun = true;
 								t = IsgoType.Sun;
@@ -102,19 +103,17 @@ namespace Strategy.GroupControl.Game_Objects {
 
 							break;
 						case "imgo":
-
+							gameObjectType = gameObject.Attributes["type"].InnerText;
+							IMovableGameObject imgo = createIMGO(gameObject,
+								missionNode.SelectNodes("usedObjects/imgos/mgo[@name='" + gameObjectType + "']")[0]);
+							imgo.Team.addIMGO(imgo);
+							imgos.Add(imgo);
 							break;
 						default:
 							throw new XmlLoadException("Bad XML format. In SolarSystem cannot be node " + gameObject.Name);
 					}
 				}
-				//delete
-				if (solarSystem.Attributes["name"].InnerText == "This is my") {
-					var bla = new SpaceShip("name", "jupiter.mesh", teams["Player"], manager, new Vector3(0, 500, 0));
-					teams["Player"].addIMGO(bla);
-					imgos.Add(bla);
-				}
-				//delete
+
 				string solarSystemName = solarSystem.Attributes["name"].Value;
 				if (hasSun) {
 					this.solarSystems.Add(createSolarSystem(solarSystemName, isgos, imgos, sun));
@@ -152,15 +151,30 @@ namespace Strategy.GroupControl.Game_Objects {
 			}
 			var o = moduleBuilder.GetType(fullName);
 
-			object helloObject;
-			helloObject = Activator.CreateInstance(o, args);
-			return helloObject;
+			object runTimeObject;
+			runTimeObject = Activator.CreateInstance(o, args);
+			return runTimeObject;
 		}
 
 
 		private IMovableGameObject createIMGO(XmlNode gameObject, XmlNode gameObjectPath) {
 			IMovableGameObject imgo;
-			imgo = (IMovableGameObject)createGameObject(gameObjectPath, "", new object[1]);
+			string type;
+			List<object> args = new List<object>();
+			args.Add(gameObject.Attributes["name"].InnerText);
+			args.Add(gameObject.Attributes["mesh"].InnerText);
+			
+			string team = gameObject.Attributes["team"].InnerText;
+			type = gameObject.Attributes["type"].InnerText;
+			if (!teams.ContainsKey(team)) {
+				teams.Add(team, new Team(team, materialList));
+			}
+			args.Add(teams[team]);
+			args.Add(manager);
+
+			args.Add(parseInputToVector3(gameObject.Attributes["position"].InnerText));
+			
+			imgo = (IMovableGameObject)createGameObject(gameObjectPath, type, args.ToArray());
 			return imgo;
 		}
 
@@ -176,14 +190,14 @@ namespace Strategy.GroupControl.Game_Objects {
 				type = IsgoType.Sun.ToString();
 			} else {
 				string team = gameObject.Attributes["team"].InnerText;
-				type = IsgoType.StaticObject.ToString();
+				type = gameObject.Attributes["type"].InnerText;
 				if (!teams.ContainsKey(team)) {
 					teams.Add(team, new Team(team, materialList));
 				}
 				args.Add(teams[team]);
 				args.Add(manager);
 				args.Add(Int32.Parse(gameObject.Attributes["distance"].InnerText));
-				args.Add(parseInputToVector3(gameObject.Attributes["centerPossition"].InnerText));
+				args.Add(parseInputToVector3(gameObject.Attributes["centerPosition"].InnerText));
 				args.Add(pointsOnCircle);
 			}
 			isgo = (IStaticGameObject)createGameObject(gameObjectPath, type, args.ToArray());

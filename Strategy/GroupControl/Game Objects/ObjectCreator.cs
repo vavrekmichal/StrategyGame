@@ -56,13 +56,12 @@ namespace Strategy.GroupControl.Game_Objects {
         /// inicialization of game World
         /// </summary>
         /// <param name="mission">name of mission</param>
-		public void initializeWorld(string mission){ //not implemented
-			//TODO: XML Reader on mission will be here                !!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+		public void initializeWorld(string mission){ 
             //visual part 
             createMaterials();
 
 			ObjectXMLCreator xml = new ObjectXMLCreator("../../Media/Mission/MyMission.xml", manager, teams, materialList, solarSystems);
-			xml.load("StartMission");
+			xml.load(mission);
 			createObjectMap(); //map for hittest
             solarSystems[0].showSolarSystem();
 

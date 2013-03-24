@@ -15,7 +15,6 @@ using Strategy.GameGUI;
 namespace Strategy {
     class Game {
         protected GroupManager groupManager;
-        protected IMoveControler moveControler;
         protected IFightManager fightManager;
         protected TeamManager teamManager;
         protected MouseControl mouseControl;
@@ -36,7 +35,6 @@ namespace Strategy {
         private Game(SceneManager sceneManager, CameraMan c, RenderWindow mWindow, Mouse mouse, Keyboard keyboard) {
            
             groupManager = GroupManager.getInstance(sceneManager);
-            moveControler = MoveControler.getInstance();
             fightManager = FightManager.getInstance();
             teamManager = TeamManager.getInstance();
             guiControler = GUIControler.getInstance(mWindow, mouse, keyboard);  
@@ -60,7 +58,7 @@ namespace Strategy {
 
         public void inicialization() {
 			groupManager.setGUI(guiControler);
-            groupManager.inicializeWorld();
+			groupManager.inicializeWorld("StartMission");
 			teamManager.setGUI(guiControler);
             teamManager.inicialization(groupManager.getTeams());
             guiControler.inicialization(teamManager.playerTeam.getMaterials());

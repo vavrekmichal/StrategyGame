@@ -65,6 +65,9 @@ namespace Strategy.GroupControl {
                 foreach (IStaticGameObject isgo in isgoObjects) {
                     isgo.changeVisible(false);
                 }
+				foreach (IMovableGameObject imgo in imgoObjects) {
+					imgo.changeVisible(false);
+				}
 				if (sun != null) {
 					sun.changeVisible(false);
 				}
@@ -77,6 +80,9 @@ namespace Strategy.GroupControl {
                 foreach (IStaticGameObject isgo in isgoObjects) {
                     isgo.changeVisible(true);
                 }
+				foreach (IMovableGameObject imgo in imgoObjects) {
+					imgo.changeVisible(true);
+				}
 				if (sun != null) {
 					sun.changeVisible(true);
 				}
@@ -91,7 +97,7 @@ namespace Strategy.GroupControl {
                 }
 				foreach (IMovableGameObject imgo in imgoObjects) {
 					//imgo.move(delay);
-					imgo.nonActiveMove(delay);
+					imgo.move(delay);
 				}
                 if (sun != null) {
                     sun.rotate(delay);

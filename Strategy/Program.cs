@@ -269,7 +269,15 @@ namespace Strategy {
 		/// The function to set the ground
 		/// </summary>
 		private void setGround() {
-
+			//Mogre.Plane plane = new Mogre.Plane(Mogre.Vector3.UNIT_Y, 0);
+			////Inicialized ground
+			////my nota - poslendi  dve jsou hustota 4-5 je 2D vektor na velikost
+			//Mogre.MeshManager.Singleton.CreatePlane("ground", Mogre.ResourceGroupManager.DEFAULT_RESOURCE_GROUP_NAME, plane, 
+			//	150000, 150000, 200, 200, true, 1, 500, 500, Mogre.Vector3.NEGATIVE_UNIT_Z);
+			//Mogre.Entity groundEnt = mSceneMgr.CreateEntity("GroundEntity", "ground");
+			////register under root
+			//mSceneMgr.RootSceneNode.CreateChildSceneNode().AttachObject(groundEnt);
+			//groundEnt.CastShadows = false;
 		}
 
 
