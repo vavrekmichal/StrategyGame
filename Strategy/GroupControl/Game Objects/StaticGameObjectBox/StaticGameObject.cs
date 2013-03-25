@@ -74,7 +74,7 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
                 return planetTeam;
             }
             set {
-                planetTeam = Team;
+				planetTeam = value;
             }
         }
 

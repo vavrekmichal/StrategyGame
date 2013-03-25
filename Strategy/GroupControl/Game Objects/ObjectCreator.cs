@@ -9,6 +9,7 @@ using Strategy.GroupControl.Game_Objects.StaticGameObjectBox;
 using Strategy.TeamControl;
 using Mogre;
 using Strategy.GameMaterial;
+using Strategy.GroupControl.RuntimeProperty;
 
 
 namespace Strategy.GroupControl.Game_Objects {
@@ -56,12 +57,12 @@ namespace Strategy.GroupControl.Game_Objects {
         /// inicialization of game World
         /// </summary>
         /// <param name="mission">name of mission</param>
-		public void initializeWorld(string mission){ 
+		public void initializeWorld(string mission, PropertyManager propMan){ 
             //visual part 
             createMaterials();
 
 			ObjectXMLCreator xml = new ObjectXMLCreator("../../Media/Mission/MyMission.xml", manager, teams, materialList, solarSystems);
-			xml.load(mission);
+			xml.load(mission, propMan);
 			createObjectMap(); //map for hittest
             solarSystems[0].showSolarSystem();
 

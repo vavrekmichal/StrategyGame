@@ -6,6 +6,7 @@ using Mogre;
 using Strategy.GroupControl.Game_Objects;
 using Strategy.GroupControl.Game_Objects.GameActions;
 using Strategy.GroupControl.Game_Objects.MovableGameObjectBox;
+using Strategy.GroupControl.RuntimeProperty;
 using Strategy.TeamControl;
 
 namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
@@ -21,7 +22,7 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
         protected Mogre.SceneManager manager;
 
 		protected bool moving;
-		protected float flySpeed = 80.0f;  // The speed at which the object is moving
+		protected Property<float> flySpeed;  // The speed at which the object is moving
 		protected List<IGameAction> listOfAction; //TODO not implemented
 		protected LinkedList<Vector3> flyList; //walking points in linked list
 		protected float distance = 0.0f;              //The distance the object has left to travel
@@ -86,7 +87,7 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 			} else { //Protector's in motion
 
 				if (!colision()) { //Protector's not in colision
-					float move = flySpeed * f;
+					float move = flySpeed.Value * f;
 					distance -= move;
 					if (distance <= .0f) { //reach destination
 						sceneNode.Position = destination;
@@ -173,7 +174,7 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 				return name;
 			}
 			set {
-				name = Name;
+				name = value;
 			}
 		}
 
@@ -183,7 +184,7 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 				return movableObjectTeam;
 			}
 			set {
-				movableObjectTeam = Team;
+				movableObjectTeam = value;
 			}
 		}
 

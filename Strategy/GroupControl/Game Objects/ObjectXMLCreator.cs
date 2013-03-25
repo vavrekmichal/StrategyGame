@@ -17,6 +17,7 @@ using Roslyn.Scripting.CSharp;
 using System.Reflection.Emit;
 using System.Linq.Expressions;
 using Roslyn.Scripting;
+using Strategy.GroupControl.RuntimeProperty;
 
 
 namespace Strategy.GroupControl.Game_Objects {
@@ -28,6 +29,9 @@ namespace Strategy.GroupControl.Game_Objects {
 		protected List<IMaterial> materialList;
 		protected List<SolarSystem> solarSystems;
 		protected XmlElement root;
+
+		//Property manager
+		private PropertyManager propMgr;
 
 		//assembly load
 		protected AssemblyBuilder assemblyBuilder;
@@ -45,7 +49,7 @@ namespace Strategy.GroupControl.Game_Objects {
 			xml = new XmlDocument();
 			xml.Load(path);
 			root = xml.DocumentElement;
-			//testingFunction(); //TODO remove
+
 
 			isCompiled = new List<string>();
 			var t = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
@@ -58,6 +62,7 @@ namespace Strategy.GroupControl.Game_Objects {
 			metadataRef.Add(new MetadataFileReference(typeof(System.Linq.Enumerable).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(LinkedList<>).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(Path.GetFullPath((new Uri(t + "\\\\Mogre.dll")).LocalPath)));
+			metadataRef.Add(new MetadataFileReference(typeof(PropertyManager).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(GroupControl.Game_Objects.StaticGameObjectBox.IStaticGameObject).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(Strategy.Game).Assembly.Location));
 
@@ -69,8 +74,9 @@ namespace Strategy.GroupControl.Game_Objects {
 			moduleBuilder = assemblyBuilder.DefineDynamicModule("DynamicModule");
 		}
 
-		public void load(string missionName) {
-			
+		public void load(string missionName, PropertyManager propMan) {
+			propMgr = propMan;
+			propMan.setPropertyPath(missionName);
 			bool hasSun = false;
 			IStaticGameObject sun = null;
 			XmlNode missionNode = root.SelectNodes("/mission[@name='" + missionName + "'][1]")[0];
@@ -173,7 +179,7 @@ namespace Strategy.GroupControl.Game_Objects {
 			args.Add(manager);
 
 			args.Add(parseInputToVector3(gameObject.Attributes["position"].InnerText));
-			
+			args.Add(propMgr);
 			imgo = (IMovableGameObject)createGameObject(gameObjectPath, type, args.ToArray());
 			return imgo;
 		}
@@ -198,7 +204,9 @@ namespace Strategy.GroupControl.Game_Objects {
 				args.Add(manager);
 				args.Add(Int32.Parse(gameObject.Attributes["distance"].InnerText));
 				args.Add(parseInputToVector3(gameObject.Attributes["centerPosition"].InnerText));
+				args.Add(propMgr);
 				args.Add(pointsOnCircle);
+
 			}
 			isgo = (IStaticGameObject)createGameObject(gameObjectPath, type, args.ToArray());
 			return isgo;

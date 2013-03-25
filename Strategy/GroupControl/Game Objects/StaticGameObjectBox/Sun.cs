@@ -35,7 +35,7 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 		/// </summary>
 		/// <param name="f">deley of frames</param>
 		public virtual void rotate(float f) {
-			sceneNode.Roll(new Mogre.Degree(50 * f));
+			sceneNode.Roll(new Mogre.Degree(5 * f));
 		}
 
 		public virtual void nonActiveRotate(float f) {

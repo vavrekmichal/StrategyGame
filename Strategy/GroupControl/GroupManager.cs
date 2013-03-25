@@ -109,9 +109,8 @@ namespace Strategy.GroupControl {
         /// inicializetion of world
         /// </summary>
         public void inicializeWorld(string missionName) { 
-            //
-			propertyManager.loadProperties(missionName);
-			objectCreator.initializeWorld(missionName);
+			
+			objectCreator.initializeWorld(missionName, propertyManager);
             createSolarSystems();
         }
 

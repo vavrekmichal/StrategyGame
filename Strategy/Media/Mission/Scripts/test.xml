@@ -1,4 +1,10 @@
 <?xml version="1.0" ?>
-<runTimeProperty missionName="StartMission">
-  <property name="a" type="int" />
-</runTimeProperty>
+<Properties>
+  <runTimeProperty missionName="StartMission">
+    <property name="a"/>
+    <property name="speed"/>
+    <property name="speed2"/>
+    <property name="speed3"/>
+    <property name="planetRotateSpeed"/>
+  </runTimeProperty>
+</Properties>
