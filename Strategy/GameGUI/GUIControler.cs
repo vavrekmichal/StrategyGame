@@ -15,26 +15,26 @@ namespace Strategy.GameGUI {
         protected RenderWindow window;
         protected Mouse mouse;
         protected Keyboard keyboard;
-        //protected List<IMaterial> materials; //maybe just number of it ...and names ...and make value list
+		protected GroupManager groupMgr;
 
         private static GUIControler instance;
 
-        public static GUIControler getInstance(RenderWindow mWindow, Mouse m, Keyboard k) {
+        public static GUIControler getInstance(RenderWindow mWindow, Mouse m, Keyboard k, GroupManager groupMgr) {
             if (instance==null) {
-                instance = new GUIControler(mWindow, m, k);
+                instance = new GUIControler(mWindow, m, k, groupMgr);
             }
             return instance;
         }
 
-        private GUIControler(RenderWindow mWindow, Mouse m, Keyboard k) {
+		private GUIControler(RenderWindow mWindow, Mouse m, Keyboard k, GroupManager groupMgr) {
             window = mWindow;
             mouse = m;
             keyboard = k;
-            //materials = listMaterial;
+			this.groupMgr = groupMgr;
 		}
 
         public void inicialization( Dictionary<string, IMaterial> listMaterial) {
-            myGUI = new MyGUI((int)window.Width, (int)window.Height, mouse, keyboard, listMaterial);
+            myGUI = new MyGUI((int)window.Width, (int)window.Height, mouse, keyboard, listMaterial, groupMgr);
         }
 
 		public void dispose() {

@@ -37,6 +37,7 @@ namespace Strategy {
 			sound = engine.Play2D(fileNames[0]);
 			sound.setSoundStopEventReceiver(this);
             nowPlaying(fileNames[actual]);
+			engine.SoundVolume = 0; //TODO: DELETE
 		}
 
 		/// <summary>

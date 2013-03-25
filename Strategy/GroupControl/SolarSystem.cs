@@ -96,7 +96,6 @@ namespace Strategy.GroupControl {
                     isgo.rotate(delay);   
                 }
 				foreach (IMovableGameObject imgo in imgoObjects) {
-					//imgo.move(delay);
 					imgo.move(delay);
 				}
                 if (sun != null) {

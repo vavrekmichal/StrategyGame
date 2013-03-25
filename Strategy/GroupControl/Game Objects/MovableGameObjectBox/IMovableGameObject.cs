@@ -16,6 +16,7 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 
         string Name{get;set;}
 		Team Team { get; set; }
+		Mogre.Vector3 Direction { get; }
 		Mogre.Vector3 Position {get;}
 	}
 }

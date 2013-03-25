@@ -22,11 +22,6 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 		}
 
 
-
-		public override void nonActiveMove(float f) {
-			//sceneNode.Roll(new Mogre.Degree(.1f));
-		}
-
 		protected override void onDisplayed() {
 			
 		}

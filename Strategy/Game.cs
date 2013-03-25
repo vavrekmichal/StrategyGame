@@ -37,7 +37,7 @@ namespace Strategy {
             groupManager = GroupManager.getInstance(sceneManager);
             fightManager = FightManager.getInstance();
             teamManager = TeamManager.getInstance();
-            guiControler = GUIControler.getInstance(mWindow, mouse, keyboard);  
+            guiControler = GUIControler.getInstance(mWindow, mouse, keyboard, groupManager);  
             mouseControl = MouseControl.getInstance(c, sceneManager, groupManager, guiControler);
 			gamePaused = false;
         }

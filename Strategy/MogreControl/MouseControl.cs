@@ -112,16 +112,10 @@ namespace Strategy.MogreControl {
 					mStop = mStart;
 					bSelecting = true;
 					
-					Console.WriteLine(evt.state.X.abs + ", " + evt.state.Y.abs);
+				//	Console.WriteLine(evt.state.X.abs + ", " + evt.state.Y.abs);
 					break;
 
-				case MouseButtonID.MB_Right:
-					if (evt.state.ButtonDown(MouseButtonID.MB_Middle)) {
-						groupManager.changeSolarSystem(changeMe);
-						guiControl.setSolarSystemName(groupManager.getSolarSystemName(changeMe));
-						changeMe = (changeMe + 1) % 2;
-					}
-					
+				case MouseButtonID.MB_Right:					
 					break;
 				default:
 					break;
@@ -192,8 +186,6 @@ namespace Strategy.MogreControl {
 				mStop.x = evt.state.X.abs / (float)evt.state.width;
 				mStop.y = evt.state.Y.abs / (float)evt.state.height;
 
-				Console.WriteLine( evt.state.X.abs + ", " + evt.state.Y.abs );
-
 				mRect.setCorners(mStart, mStop);
 			}
 			if (evt.state.ButtonDown(MouseButtonID.MB_Middle)) {
@@ -207,7 +199,7 @@ namespace Strategy.MogreControl {
 
 
 		private void performSelection(Vector2 first, Vector2 second) {
-			deselectObjects(); //delete
+			//deselectObjects(); //delete
 			float left = first.x, right = second.x,
 			top = first.y, bottom = second.y;
 
@@ -250,13 +242,13 @@ namespace Strategy.MogreControl {
 			mSelected.Add(obj);
 		}
 
-		void deselectObjects() {
-			foreach (var obj in mSelected) {
-				obj.ParentSceneNode.ShowBoundingBox = false;
-				Console.WriteLine(obj.Name);
-			}
-			mSelected.Clear();
-		}
+		//void deselectObjects() {
+		//	foreach (var obj in mSelected) {
+		//		obj.ParentSceneNode.ShowBoundingBox = false;
+		//		Console.WriteLine(obj.Name);
+		//	}
+		//	mSelected.Clear();
+		//}
 
 
 

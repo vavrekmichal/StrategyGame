@@ -10,16 +10,16 @@ using Strategy.GroupControl.RuntimeProperty;
 using Strategy.TeamControl;
 
 namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
-	public abstract class MovableGameObject : IMovableGameObject{
-        protected string name;
+	public abstract class MovableGameObject : IMovableGameObject {
+		protected string name;
 		protected Team movableObjectTeam;
 
-        protected Mogre.Entity entity;
-        protected Mogre.SceneNode sceneNode;
-        protected string mesh;
-        protected Mogre.Vector3 position;
-        protected string team;
-        protected Mogre.SceneManager manager;
+		protected Mogre.Entity entity;
+		protected Mogre.SceneNode sceneNode;
+		protected string mesh;
+		protected Mogre.Vector3 position;
+		protected string team;
+		protected Mogre.SceneManager manager;
 
 		protected bool moving;
 		protected Property<float> flySpeed;  // The speed at which the object is moving
@@ -70,7 +70,6 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 
 					//Update the destination using the walklist.
 					destination = flyList.First.Value; //get the next destination.
-					flyList.RemoveFirst(); //remove that node from the front of the list
 					//update the direction and the distance
 					direction = destination - sceneNode.Position;
 					distance = direction.Normalise();
@@ -78,14 +77,14 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 					if ((1.0f + src.DotProduct(direction)) < 0.0001f) {
 						sceneNode.Yaw(180.0f);
 					} else {
+						direction.y = 0; //rotation fix
 						Quaternion quat = src.GetRotationTo(direction);
 						sceneNode.Rotate(quat);
 					}
 				} else { //nothing to do so stay in position
-					
+
 				}
 			} else { //Protector's in motion
-
 				if (!colision()) { //Protector's not in colision
 					float move = flySpeed.Value * f;
 					distance -= move;
@@ -93,6 +92,7 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 						sceneNode.Position = destination;
 						direction = Vector3.ZERO;
 						moving = false;
+						flyList.RemoveFirst(); //remove that node from the front of the list
 					} else {
 						sceneNode.Translate(direction * move);
 						Vector3 src = getDirection(sceneNode.Orientation);
@@ -111,7 +111,30 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 		}
 
 		public virtual void nonActiveMove(float f) {
-			
+			if (!moving) {
+				if (nextLocation()) {
+					moving = true;
+					//Update the destination using the walklist.
+					destination = flyList.First.Value; //get the next destination.
+					flyList.RemoveFirst(); //remove that node from the front of the list
+					//update the direction and the distance
+					direction = destination - sceneNode.Position;
+					distance = direction.Normalise();
+				} else { //nothing to do so stay in position
+
+				}
+			} else { //Protector's in motion
+				float move = flySpeed.Value * f;
+				distance -= move;
+				if (distance <= .0f) { //reach destination
+					position = destination;
+					direction = Vector3.ZERO;
+					moving = false;
+				} else {
+					position = position + (direction * move);
+
+				}
+			}
 		}
 
 		/// <summary>
@@ -139,21 +162,22 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 
 		#endregion
 		/// <summary>
-        /// Called when object will be invisible
-        /// </summary>
-        public virtual void changeVisible(bool visible) {   //now creating
-            if (visible) {
+		/// Called when object will be invisible
+		/// </summary>
+		public virtual void changeVisible(bool visible) {   //now creating
+			if (visible) {
 
-                if (entity == null) { //control if the entity is inicialized
-                    entity = manager.CreateEntity(name, mesh);
-                }
+				if (entity == null) { //control if the entity is inicialized
+					entity = manager.CreateEntity(name, mesh);
+				}
 
-                sceneNode = manager.RootSceneNode.CreateChildSceneNode(name + "Node", position);
-                sceneNode.AttachObject(entity);
-            } else {
-                manager.DestroySceneNode(sceneNode);
-            }
-        }
+				sceneNode = manager.RootSceneNode.CreateChildSceneNode(name + "Node", position);
+				sceneNode.AttachObject(entity);
+			} else {
+				position = sceneNode.Position;
+				manager.DestroySceneNode(sceneNode);
+			}
+		}
 
 
 		/// <summary>
@@ -163,7 +187,7 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 		/// <param name="q">Quaternion to transform</param>
 		/// <returns>Vector3 with direction</returns>
 		private Vector3 getDirection(Quaternion q) {
-			Vector3 v ; //facing in +z
+			Vector3 v; //facing in +z
 			v = q * modelDirection;  //transform the vector by the objects rotation.
 			return v;
 		}
@@ -191,6 +215,10 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 
 		public Vector3 Position {
 			get { return position; }
+		}
+
+		public Vector3 Direction {
+			get { return direction; }
 		}
 	}
 }

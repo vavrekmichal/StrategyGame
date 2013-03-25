@@ -84,14 +84,13 @@ namespace Strategy.GroupControl {
         /// </summary>
         /// <param name="f">delay between frames</param>
         public void update(float f) {
-
             foreach (KeyValuePair<int, SolarSystem> solarSys in solarSystemBetter) {
                 solarSys.Value.update(f);
             }
         }
 
-
-        /// <summary>
+		#region solarSyst
+		/// <summary>
         /// Show given solar system and hide actual
         /// </summary>
         /// <param name="newSolarSystem">integer of showing solar system</param>
@@ -101,11 +100,24 @@ namespace Strategy.GroupControl {
             solarSystemBetter[newSolarSystem].showSolarSystem();
             //end of it
 
-            activeSolarSystem = newSolarSystem; //set new active solar system     
+            activeSolarSystem = newSolarSystem; //set new active solar system   
+			guiControler.setSolarSystemName(getSolarSystemName(activeSolarSystem));
         }
 
+		public List<string> getSolarSystemNames() {
+			var list = new List<string>();
+			foreach (var ss in solarSystemBetter) {
+				list.Add(ss.Value.Name);
+			}
+			return list;
+		}
 
-        /// <summary>
+		public string getSolarSystemName(int numberOfSolarSystem) {
+			return solarSystemBetter[numberOfSolarSystem].Name;
+		}
+		#endregion
+
+		/// <summary>
         /// inicializetion of world
         /// </summary>
         public void inicializeWorld(string missionName) { 
@@ -114,9 +126,7 @@ namespace Strategy.GroupControl {
             createSolarSystems();
         }
 
-        public string getSolarSystemName(int numberOfSolarSystem) {
-            return solarSystemBetter[numberOfSolarSystem].Name;
-        }
+
 
         public Dictionary<string,Team> getTeams() {            
             return objectCreator.getTeams();
@@ -166,7 +176,6 @@ namespace Strategy.GroupControl {
 			if (activeMGroup) {
 				foreach (IMovableGameObject imgo in selectedGroupM) {
 					imgo.setNextLocation(moveControler.getTravel(imgo.Position,clickedPoint));
-						
 				}
 			}
 		}
