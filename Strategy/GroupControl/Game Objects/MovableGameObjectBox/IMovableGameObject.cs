@@ -12,7 +12,9 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 		void shout();
 		void addNextLocation(Mogre.Vector3 placeToGo);
 		void addNextLocation(LinkedList<Mogre.Vector3> positionList);
+		void setNextLocation(Mogre.Vector3 placeToGo);
 		void setNextLocation(LinkedList<Mogre.Vector3> positionList);
+		void jumpNextLocation(Mogre.Vector3 placeToGo);
 
         string Name{get;set;}
 		Team Team { get; set; }

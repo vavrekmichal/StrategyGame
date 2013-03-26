@@ -259,6 +259,11 @@ namespace Strategy.GameGUI {
 
 		public void showTargeted(GroupControl.GroupStatics group) {
 			//Just one object
+			if (group.Count==0) {
+				statPanelName.Text = "Nothing selected";
+				statPanelMesh.Text = "Nothing selected";
+				return;
+			}
 			statPanelName.Text = group[0].Name;
 			statPanelMesh.Text = group[0].Mesh;
 		}

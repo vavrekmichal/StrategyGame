@@ -24,7 +24,6 @@ namespace Strategy.MogreControl {
 		//rect items
 		bool isRectagularSelect;
 		Vector2 mStart, mStop;
-		//PlaneBoundedVolumeListSceneQuery mVolQuery;
 		List<MovableObject> mSelected = new List<MovableObject>();
 		SelectionRectangle mRect;
 		bool bSelecting;
@@ -232,7 +231,7 @@ namespace Strategy.MogreControl {
 					list.Add(entry);
 				}
 			}
-			groupManager.selectGroup(list);
+			groupManager.leftClick(list);
 
 			sceneMgr.DestroyQuery(volQuery);
 		}

@@ -1,0 +1,22 @@
+
+material Bounds
+{
+	technique
+	{
+		pass
+		{
+			scene_blend one one_minus_dest_colour
+			cull_hardware none
+			cull_software none
+
+			texture_unit
+			{
+				texture Sun_Texture_Yellow.jpg
+				tex_coord_set 2
+				filtering linear linear none
+			}
+		}
+
+	}
+
+}

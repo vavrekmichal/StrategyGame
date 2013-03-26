@@ -50,9 +50,23 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 			}
 		}
 
+		public virtual void setNextLocation(Vector3 pointToGo) {
+			flyList = new LinkedList<Vector3>();
+			flyList.AddLast(pointToGo);
+			moving = false;
+		}
+
 		public virtual void setNextLocation(LinkedList<Vector3> positionList) {
 			flyList = positionList;
 			moving = false;
+		}
+
+		public virtual void jumpNextLocation(Vector3 pointToGo) {
+			if (sceneNode == null) {
+				position = pointToGo;
+			} else {
+				sceneNode.Position=pointToGo;
+			}
 		}
 
 		protected virtual bool nextLocation() {
@@ -84,7 +98,7 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 				} else { //nothing to do so stay in position
 
 				}
-			} else { //Protector's in motion
+			} else {
 				if (!colision()) { //Protector's not in colision
 					float move = flySpeed.Value * f;
 					distance -= move;
@@ -116,20 +130,20 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 					moving = true;
 					//Update the destination using the walklist.
 					destination = flyList.First.Value; //get the next destination.
-					flyList.RemoveFirst(); //remove that node from the front of the list
 					//update the direction and the distance
-					direction = destination - sceneNode.Position;
+					direction = destination - position;
 					distance = direction.Normalise();
 				} else { //nothing to do so stay in position
 
 				}
-			} else { //Protector's in motion
+			} else {
 				float move = flySpeed.Value * f;
 				distance -= move;
 				if (distance <= .0f) { //reach destination
 					position = destination;
 					direction = Vector3.ZERO;
 					moving = false;
+					flyList.RemoveFirst(); //remove that node from the front of the list
 				} else {
 					position = position + (direction * move);
 
@@ -214,7 +228,8 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 
 
 		public Vector3 Position {
-			get { return position; }
+			get { if (sceneNode == null) { return position; } else { return sceneNode.Position; }
+			}
 		}
 
 		public Vector3 Direction {

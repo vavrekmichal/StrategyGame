@@ -96,6 +96,7 @@ namespace Strategy.GroupControl {
         /// <param name="newSolarSystem">integer of showing solar system</param>
         public void changeSolarSystem(int newSolarSystem) {
             //better system
+			deselectGroup();
             solarSystemBetter[activeSolarSystem].hideSolarSystem();
             solarSystemBetter[newSolarSystem].showSolarSystem();
             //end of it
@@ -132,41 +133,41 @@ namespace Strategy.GroupControl {
             return objectCreator.getTeams();
         }
 
-
-		//TODO complete group check group select group...
-		public void selectGroup(Mogre.MovableObject m) {
-			//first check if is moveble or not
-			if (objectCreator.isObjectMovable(m.Name)) {
-				GroupMovables group = new GroupMovables();
-				activeMGroup = true;
-				guiControler.showTargeted(group);
-				selectedGroupM = group;
-			} else {
-				GroupStatics group = new GroupStatics();
-				group.insertMemeber(objectCreator.getISGO(m.Name));
-				activeMGroup = false;
-				guiControler.showTargeted(group);
-				selectedGroupS = group;
-			}
+		public void deselectGroup() {
+			GroupMovables groupM = new GroupMovables();
+			GroupStatics groupS = new GroupStatics();
+			activeMGroup = false;
+			guiControler.showTargeted(groupS);
+			
 		}
+
 		public void selectGroup(List<Mogre.MovableObject> movableList) {
 			//first check if is moveble or not
 			GroupMovables groupM = new GroupMovables();
 			GroupStatics groupS = new GroupStatics();
+			if (movableList.Count == 0) {
+				activeMGroup = false;
+				guiControler.showTargeted(groupS);
+				return;
+			}
 			foreach (var mobleItem in movableList) {
 				if (objectCreator.isObjectMovable(mobleItem.Name)) {
 					groupM.insertMemeber(objectCreator.getIMGO(mobleItem.Name));
-					activeMGroup = true;
-					guiControler.showTargeted(groupM);
-					selectedGroupM = groupM;
 				} else {
-					groupS.insertMemeber(objectCreator.getISGO(mobleItem.Name));
-					activeMGroup = false;
-					guiControler.showTargeted(groupS);
-					selectedGroupS = groupS;
+					groupS.insertMemeber(objectCreator.getISGO(mobleItem.Name));	
 				}
 			}
+			if (groupM.Count == 0) {
+				activeMGroup = false;
+				selectedGroupS = groupS;
+				guiControler.showTargeted(groupS);
+			} else {
+				activeMGroup = true;
+				guiControler.showTargeted(groupM);
+				selectedGroupM = groupM;
+			}
 		}
+
 
 		public void leftClick(List<Mogre.MovableObject> selectedObjects) {
 			selectGroup(selectedObjects);
@@ -174,9 +175,10 @@ namespace Strategy.GroupControl {
 
 		public void rightClick(Mogre.Vector3 clickedPoint) {
 			if (activeMGroup) {
-				foreach (IMovableGameObject imgo in selectedGroupM) {
-					imgo.setNextLocation(moveControler.getTravel(imgo.Position,clickedPoint));
-				}
+				//foreach (IMovableGameObject imgo in selectedGroupM) {
+				//	moveControler.goToLocation(imgo, clickedPoint);
+				//}
+				moveControler.goToLocation(selectedGroupM, clickedPoint);
 			}
 		}
     }

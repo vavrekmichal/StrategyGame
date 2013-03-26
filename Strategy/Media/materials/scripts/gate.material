@@ -1,0 +1,152 @@
+
+material BaseYellow
+{
+	receive_shadows off
+	technique
+	{
+		pass
+		{
+			ambient 1 1 0 1
+		}
+
+	}
+
+}
+
+material BaseBlue
+{
+	receive_shadows off
+	technique
+	{
+		pass
+		{
+			ambient 0 0 1 1
+		}
+
+	}
+
+}
+
+material SdkTrays/Frame/Over
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture sdk_frame.png
+				tex_address_mode clamp
+				filtering linear linear none
+			}
+
+			texture_unit
+			{
+				texture sdk_bands.png
+				colour_op_ex modulate_x2 src_current src_texture
+				colour_op_multipass_fallback dest_colour zero
+				scroll 0 0.936507
+				scroll_anim 0 0.5
+			}
+		}
+
+	}
+
+}
+
+material SdkTrays/Frame/Over
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture sdk_frame.png
+				tex_address_mode clamp
+				filtering linear linear none
+			}
+
+			texture_unit
+			{
+				texture sdk_bands.png
+				colour_op_ex modulate_x2 src_current src_texture
+				colour_op_multipass_fallback dest_colour zero
+				scroll 0 0.936507
+				scroll_anim 0 0.5
+			}
+		}
+
+	}
+
+}
+
+material SdkTrays/Frame/Over
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture sdk_frame.png
+				tex_address_mode clamp
+				filtering linear linear none
+			}
+
+			texture_unit
+			{
+				texture sdk_bands.png
+				colour_op_ex modulate_x2 src_current src_texture
+				colour_op_multipass_fallback dest_colour zero
+				scroll 0 0.936507
+				scroll_anim 0 0.5
+			}
+		}
+
+	}
+
+}
+
+material SdkTrays/Frame/Over
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture sdk_frame.png
+				tex_address_mode clamp
+				filtering linear linear none
+			}
+
+			texture_unit
+			{
+				texture sdk_bands.png
+				colour_op_ex modulate_x2 src_current src_texture
+				colour_op_multipass_fallback dest_colour zero
+				scroll 0 0.936507
+				scroll_anim 0 0.5
+			}
+		}
+
+	}
+
+}

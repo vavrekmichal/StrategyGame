@@ -35,6 +35,8 @@ namespace Strategy {
 
         protected Game myGame;
 
+		protected Strategy.GroupControl.Game_Objects.StaticGameObjectBox.Gate v;//TODO remove
+
 		public static void Main() {
 			new MyMogre().Go();
 
@@ -64,7 +66,7 @@ namespace Strategy {
 			//hudba<
 			songMaker = new SoundMaker("../../media/music", mWindow); //music player
 
-
+			v = new Strategy.GroupControl.Game_Objects.StaticGameObjectBox.Gate("bla", "gate.mesh", mSceneMgr, new Mogre.Vector3(500, 0, 500)); //TODO remove
 			
 		}
 
@@ -76,7 +78,8 @@ namespace Strategy {
 			mCamera = mSceneMgr.CreateCamera("myCam");
 			mCamera.Position = cameraStart;
 			mCamera.LookAt(Mogre.Vector3.ZERO);
-			mCamera.NearClipDistance = 50;
+			mCamera.NearClipDistance = 5;
+			mCamera.FarClipDistance = 30000;
 			mCameraMan = new Mogre.TutorialFramework.CameraMan(mCamera);
 			cameraMan = mCameraMan;
 		}
@@ -134,8 +137,7 @@ namespace Strategy {
 					exit = false;
 				}
 			}
-
-			//groupManager.update(evt.timeSinceLastEvent);
+			v.rotate(evt.timeSinceLastEvent);//TODO remove
 			songMaker.hideBox(f);
 
 		}

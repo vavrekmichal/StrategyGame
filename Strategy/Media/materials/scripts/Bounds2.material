@@ -1,0 +1,22 @@
+
+material Bounds2
+{
+	technique
+	{
+		pass
+		{
+			scene_blend one dest_alpha
+			cull_hardware none
+			cull_software none
+
+			texture_unit
+			{
+				texture egyptrockyfull.jpg
+				tex_coord_set 2
+				filtering linear linear none
+			}
+		}
+
+	}
+
+}
