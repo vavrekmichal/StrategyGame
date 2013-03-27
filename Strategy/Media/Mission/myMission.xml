@@ -4,7 +4,7 @@
     <isgos>
       <sgo name="Planet" path="StaticGameObjectBox/Planet.cs" fullName="Strategy.GroupControl.Game_Objects.StaticGameObjectBox.Planet"/>
       <sgo name="Sun" path="StaticGameObjectBox/Sun.cs" fullName="Strategy.GroupControl.Game_Objects.StaticGameObjectBox.Sun"/>
-
+      <sgo name="Gate" path="StaticGameObjectBox/Gate.cs" fullName="Strategy.GroupControl.Game_Objects.StaticGameObjectBox.Gate"/>
     </isgos>
     <imgos>
       <mgo name="SpaceShip" path="MovableGameObjectBox/SpaceShip.cs" fullName="Strategy.GroupControl.Game_Objects.MovableGameObjectBox.SpaceShip"/>
@@ -12,33 +12,37 @@
   </usedObjects>
   <solarSystems>
     <solarSystem name="This is my">
-      <isgo type="Sun" name="Sun" mesh="sun.mesh"  team="None" centerPosition="0,0,0" distance="0"/>
-      <isgo type="Planet" name="Mercury" mesh="mercury.mesh" team="Player" centerPosition="200,0,200" distance="500">
+      <isgo type="Gate" name="Gate1" mesh="gate.mesh" team="None" position="3000,0,3000" distance="0" />
+      <isgo type="Sun" name="Sun" mesh="sun.mesh"  team="None" position="0,0,0" distance="0"/>
+      <isgo type="Planet" name="Mercury" mesh="mercury.mesh" team="Player" position="200,0,200" distance="500">
         <gameAction name="Produce" value="Wolenium" />
       </isgo>
-      <isgo type="Planet" name="Venus" mesh="venus.mesh" team="Player" centerPosition="0,0,0" distance="1500">
+      <isgo type="Planet" name="Venus" mesh="venus.mesh" team="Player" position="0,0,0" distance="1500">
        <gameAction name="Produce" value="Wolenium"/>
       </isgo>
-      <isgo type="Planet" name="Earth" mesh="earth.mesh" team="Player" centerPosition="0,0,0" distance="2500">
+      <isgo type="Planet" name="Earth" mesh="earth.mesh" team="Player" position="0,0,0" distance="2500">
        <gameAction name="Produce" value="Wolenarium"/>
       </isgo>
-      <isgo type="Planet" name="Mars" mesh="mars.mesh" team="Player" centerPosition="0,0,0" distance="3500"/>
-      <isgo type="Planet" name="Jupiter" mesh="jupiter.mesh" team="Player" centerPosition="0,0,0" distance="6000"/>
-      <isgo type="Planet" name="Saturn" mesh="saturn.mesh" team="Player" centerPosition="0,0,0" distance="8000"/>
-      <isgo type="Planet" name="Uranus" mesh="uranus.mesh" team="Player" centerPosition="0,0,0" distance="10000"/>
-      <isgo type="Planet" name="Neptune" mesh="neptune.mesh" team="Player" centerPosition="0,0,0" distance="12000"/>
+
+      
+      <isgo type="Planet" name="Mars" mesh="mars.mesh" team="Player" position="0,0,0" distance="3500"/>
+      <isgo type="Planet" name="Jupiter" mesh="jupiter.mesh" team="Player" position="0,0,0" distance="6000"/>
+      <isgo type="Planet" name="Saturn" mesh="saturn.mesh" team="Player" position="0,0,0" distance="8000"/>
+      <isgo type="Planet" name="Uranus" mesh="uranus.mesh" team="Player" position="0,0,0" distance="10000"/>
+      <isgo type="Planet" name="Neptune" mesh="neptune.mesh" team="Player" position="0,0,0" distance="12000"/>
 
       <imgo type="SpaceShip" name="Mothership" mesh="SpaceShip1.mesh" team="Player" position="300,0,300"/>
       <imgo type="SpaceShip" name="Ship" mesh="SpaceShip2.mesh" team="Player" position="350,0,350"/>
       <imgo type="SpaceShip" name="Ship1" mesh="SpaceShip2.mesh" team="Player" position="400,0,400"/>
       <imgo type="SpaceShip" name="Ship2" mesh="SpaceShip2.mesh" team="Player" position="450,0,450"/>
       <imgo type="SpaceShip" name="Ship3" mesh="SpaceShip2.mesh" team="Player" position="450,0,500"/>
+      <imgo type="SpaceShip" name="ShipD" mesh="SpaceShip2.mesh" team="Devastator" position="600,0,600"/>
     </solarSystem>
     <solarSystem name="FunnySystem">
-      <isgo type="Sun" name="FunnyThings" mesh="jupiter.mesh"  team="None" centerPosition="0,0,0" distance="0"/>
-      <isgo type="Planet" name="FunnyThings1" mesh="mercury.mesh" team="Fun" centerPosition="0,0,0" distance="1000"/>
-      <isgo type="Planet" name="FunnyThings2" mesh="venus.mesh" team="Fun" centerPosition="0,0,0" distance="2000"/>
-      <isgo type="Planet" name="FunnyThings3" mesh="earth.mesh" team="Fun" centerPosition="0,0,0" distance="4000"/>
+      <isgo type="Sun" name="FunnyThings" mesh="jupiter.mesh"  team="None" position="0,0,0" distance="0"/>
+      <isgo type="Planet" name="FunnyThings1" mesh="mercury.mesh" team="Fun" position="0,0,0" distance="1000"/>
+      <isgo type="Planet" name="FunnyThings2" mesh="venus.mesh" team="Fun" position="0,0,0" distance="2000"/>
+      <isgo type="Planet" name="FunnyThings3" mesh="earth.mesh" team="Fun" position="0,0,0" distance="4000"/>
     </solarSystem>
   </solarSystems>
 </mission>

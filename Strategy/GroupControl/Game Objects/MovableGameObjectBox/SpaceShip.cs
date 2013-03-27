@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Mogre;
 using Strategy.TeamControl;
+using Strategy.GroupControl;
 using Strategy.GroupControl.RuntimeProperty;
 
 namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
@@ -21,6 +22,9 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 			entity = manager.CreateEntity(name, mesh);
 		}
 
+		public override ActionAnswer onMouseAction(ActionFlag reason, Vector3 point, object hitTestResult) {
+			return ActionAnswer.Move;
+		}
 
 		protected override void onDisplayed() {
 			

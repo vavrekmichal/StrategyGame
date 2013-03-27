@@ -70,5 +70,10 @@ namespace Strategy.MoveControl {
 			imgo.setNextLocation(a);
 		}
 
+
+
+		public void runAwayFrom(GroupMovables group, Mogre.Vector3 from) {
+			throw new NotImplementedException();
+		}
 	}
 }

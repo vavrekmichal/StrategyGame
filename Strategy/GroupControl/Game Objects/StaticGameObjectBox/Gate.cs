@@ -5,37 +5,38 @@ using System.Text;
 using System.Threading.Tasks;
 using Mogre;
 using Strategy.GroupControl.Game_Objects.GameActions;
+using Strategy.GroupControl.RuntimeProperty;
 using Strategy.TeamControl;
 
 namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
-	class Gate : IStaticGameObject {
+	public class Gate : StaticGameObject {
 
-		protected string name;
-		protected Mogre.Entity entity;
-		protected Mogre.SceneNode sceneNode;
-		protected string mesh;
-		protected Mogre.SceneManager manager;
 
 		private Vector3 position;
 		private AnimationState animationState; //The AnimationState the moving object
 
-		protected static Team gateTeam = new Team("Gates");
+		protected static Team gateTeam;
 
-		public Gate(string name, string mesh, SceneManager manager, Vector3 position) {
+		public Gate(string name, string mesh, Team myTeam, Mogre.SceneManager manager, double distanceFromCenter,
+			Vector3 position, PropertyManager propMgr, int circularNum)
+			: this(name, mesh, manager, position, myTeam) {
+			}
+
+
+		public Gate(string name, string mesh, SceneManager manager, Vector3 position, Team team) {
 			this.name = name;
 			this.mesh = mesh;
 			this.manager = manager;
 			this.position = position;
+			this.Team = team;
 			entity = manager.CreateEntity(name, mesh);
-			changeVisible(true);//TODO remove
 
 			animationState = entity.GetAnimationState("funcionando3_eani_Clip");
 			animationState.Loop = true;
 			animationState.Enabled = true;
 		}
 
-		public void rotate(float f) {
-			//sceneNode.Yaw(new Degree(5 * f));
+		public override void rotate(float f) {
 
 			//animationState = entity.GetAnimationState("abrirse_eani_Clip");
 			animationState = entity.GetAnimationState("funcionando3_eani_Clip");
@@ -44,9 +45,9 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 			animationState.AddTime(f/10);
 		}
 
-		public void nonActiveRotate(float f) {}
+		public override void nonActiveRotate(float f) { }
 
-		public void changeVisible(bool visible) {
+		public override void changeVisible(bool visible) {
 			if (visible) {
 				if (entity == null) {
 					entity = manager.CreateEntity(name, mesh);
@@ -60,25 +61,12 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 			}
 		}
 
-		public string Name {
-			get { return name; }
+		public override ActionAnswer onMouseAction(ActionFlag reason, Vector3 point, object hitTestResult) {
+			return ActionAnswer.None;
 		}
 
-		public string Mesh {
-			get { return mesh; }
-		}
-
-		public bool tryExecute(string executingAction) {
-			throw new NotImplementedException();
-		}
-
-		public TeamControl.Team Team {
-			get {
-				return gateTeam;
-			}
-			set {
-				gateTeam= value;
-			}
+		protected override void onDisplayed() {
+			
 		}
 	}
 }

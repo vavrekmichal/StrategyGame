@@ -20,7 +20,7 @@ namespace Strategy {
 	/// 
 	class MyMogre : Mogre.TutorialFramework.BaseApplication {
 
-		public static string playerName = "Player";
+		//public static string playerName = "Player";
 
 		protected MOIS.InputManager mInputMgr; //use for create control (mouse, keyborard) instance
 		protected float mTimer; //float as timer to determine of duration overlay 
@@ -35,7 +35,6 @@ namespace Strategy {
 
         protected Game myGame;
 
-		protected Strategy.GroupControl.Game_Objects.StaticGameObjectBox.Gate v;//TODO remove
 
 		public static void Main() {
 			new MyMogre().Go();
@@ -65,9 +64,7 @@ namespace Strategy {
 
 			//hudba<
 			songMaker = new SoundMaker("../../media/music", mWindow); //music player
-
-			v = new Strategy.GroupControl.Game_Objects.StaticGameObjectBox.Gate("bla", "gate.mesh", mSceneMgr, new Mogre.Vector3(500, 0, 500)); //TODO remove
-			
+	
 		}
 
 		/// <summary>
@@ -119,7 +116,6 @@ namespace Strategy {
 		#region Animation
 
 
-		//float barval = 0;
 		/// <summary>
 		/// This method is called in each time in game loop method update scene and call walk method of
 		/// movable objects
@@ -137,7 +133,6 @@ namespace Strategy {
 					exit = false;
 				}
 			}
-			v.rotate(evt.timeSinceLastEvent);//TODO remove
 			songMaker.hideBox(f);
 
 		}

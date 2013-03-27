@@ -4,17 +4,19 @@ using System.Linq;
 using Strategy.TeamControl;
 using Strategy.GroupControl.Game_Objects.GameActions;
 using Strategy.GameMaterial;
+using Mogre;
+using System.Reflection;
 
 namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
     public abstract class StaticGameObject : IStaticGameObject {
         protected string name;
-        protected Mogre.Entity entity;
-        protected Mogre.SceneNode sceneNode;
+        protected Entity entity;
+        protected SceneNode sceneNode;
         protected string mesh;
 
         protected LinkedList<Mogre.Vector3> circularPositions;
 
-        protected Mogre.Vector3 mDestination = Mogre.Vector3.ZERO; // The destination the object is moving towards
+        protected Vector3 mDestination = Vector3.ZERO; // The destination the object is moving towards
 
         protected Team planetTeam;
         protected Mogre.SceneManager manager;
@@ -26,7 +28,7 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         static StaticGameObject() {
             gameActionsPermitions = new Dictionary<string, List<IStaticGameObject>>();
             gameActions = new Dictionary<string, IGameAction>();
-            IGameAction o = (IGameAction)System.Reflection.Assembly.GetExecutingAssembly().CreateInstance("Strategy.GroupControl.Game_Objects.GameActions.Produce");
+            IGameAction o = (IGameAction)Assembly.GetExecutingAssembly().CreateInstance("Strategy.GroupControl.Game_Objects.GameActions.Produce");
 
             gameActions.Add(o.getName(), o);
             gameActionsPermitions.Add(o.getName(), new List<IStaticGameObject>());
@@ -51,7 +53,16 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 			sceneNode.Roll(new Mogre.Degree(50 * f));
 		}
 
+		/// <summary>
+		/// StaticGameObject doesn't move in non-active mode but child can override.
+		/// </summary>
+		/// <param name="f">deley of frames</param>
 		public virtual void nonActiveRotate(float f) {
+		}
+
+		//TODO implement answer
+		public virtual ActionAnswer onMouseAction(ActionFlag reason, Vector3 point, object hitTestResult) {
+			return ActionAnswer.None;
 		}
 
         protected abstract void onDisplayed();
@@ -94,7 +105,7 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 
                 sceneNode = manager.RootSceneNode.CreateChildSceneNode(name + "Node", mDestination);
 
-                sceneNode.Pitch(new Mogre.Degree(-90f));
+                sceneNode.Pitch(new Degree(-90f));
                 sceneNode.AttachObject(entity);
                 onDisplayed(); 
             } else {
@@ -110,5 +121,7 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 		public string Mesh {
 			get { return mesh; }
 		}
+
+
 	}
 }

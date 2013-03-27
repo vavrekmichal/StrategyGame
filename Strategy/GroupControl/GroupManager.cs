@@ -14,96 +14,96 @@ using Strategy.GameGUI;
 
 
 namespace Strategy.GroupControl {
-    class GroupManager {
-        protected ObjectCreator objectCreator;
+	class GroupManager {
+		protected ObjectCreator objectCreator;
 		protected GUIControler guiControler;
 		protected IMoveControler moveControler;
 		protected PropertyManager propertyManager;
 
-        protected Dictionary<int, SolarSystem> solarSystemBetter;
-        protected int lastSolarSystem = 0;
+		protected Dictionary<int, SolarSystem> solarSystemBetter;
+		protected int lastSolarSystem = 0;
 
 		public bool activeMGroup; //active is movable group
 
-        private GroupMovables selectedGroupM; //not implemented ...will be actual selected group - need rectangular select
+		private GroupMovables selectedGroupM; //not implemented ...will be actual selected group - need rectangular select
 		private GroupStatics selectedGroupS;
 
-        private int activeSolarSystem = 0; //now active solarSystem
-		
+		private int activeSolarSystem = 0; //now active solarSystem
 
-        #region singlton and constructor
-        private static GroupManager instance;
-        /// <summary>
-        /// Singleton constructor
-        /// </summary>
-        /// <param name="manager">Mogre SceneManager</param>
-        /// <returns>instance of GroupManager</returns>
-        public static GroupManager getInstance(Mogre.SceneManager manager) {
-            if (instance == null) {
-                instance = new GroupManager(manager);
-            }
-            return instance;
-        }
 
-        /// <summary>
-        /// Private constructor
-        /// </summary>
-        /// <param name="manager">Mogre SceneManager</param>
-        private GroupManager(Mogre.SceneManager manager) {
+		#region singlton and constructor
+		private static GroupManager instance;
+		/// <summary>
+		/// Singleton constructor
+		/// </summary>
+		/// <param name="manager">Mogre SceneManager</param>
+		/// <returns>instance of GroupManager</returns>
+		public static GroupManager getInstance(Mogre.SceneManager manager) {
+			if (instance == null) {
+				instance = new GroupManager(manager);
+			}
+			return instance;
+		}
+
+		/// <summary>
+		/// Private constructor
+		/// </summary>
+		/// <param name="manager">Mogre SceneManager</param>
+		private GroupManager(Mogre.SceneManager manager) {
 
 			objectCreator = ObjectCreator.getInstance(manager);
-            solarSystemBetter = new Dictionary<int, SolarSystem>();
+			solarSystemBetter = new Dictionary<int, SolarSystem>();
 			moveControler = MoveControler.getInstance();
 			propertyManager = new PropertyManager("StartMission");
-        }
-        #endregion
+		}
+		#endregion
 
 		public void setGUI(GUIControler gui) {
-            guiControler = gui;
-        }
+			guiControler = gui;
+		}
 
-        //grupy planet / lodi dle teamu rozdelit
-        private void createSolarSystems() {
-            //just one solar system and one group
-            //switch on team ISGO
-            //shout on IMGO
+		//grupy planet / lodi dle teamu rozdelit
+		private void createSolarSystems() {
+			//just one solar system and one group
+			//switch on team ISGO
+			//shout on IMGO
 
-            //inicialization
-            List<SolarSystem> sSyst;
+			//inicialization
+			List<SolarSystem> sSyst;
 
-            objectCreator.getInicializedObjects(out sSyst);
+			objectCreator.getInicializedObjects(out sSyst);
 
-            foreach(SolarSystem solarSyst in sSyst){
-                solarSystemBetter.Add(lastSolarSystem, solarSyst);
-                lastSolarSystem++;
-            }
-        }
+			foreach (SolarSystem solarSyst in sSyst) {
+				solarSystemBetter.Add(lastSolarSystem, solarSyst);
+				lastSolarSystem++;
+			}
+		}
 
-        /// <summary>
-        /// Called on frame update
-        /// </summary>
-        /// <param name="f">delay between frames</param>
-        public void update(float f) {
-            foreach (KeyValuePair<int, SolarSystem> solarSys in solarSystemBetter) {
-                solarSys.Value.update(f);
-            }
-        }
+		/// <summary>
+		/// Called on frame update
+		/// </summary>
+		/// <param name="f">delay between frames</param>
+		public void update(float f) {
+			foreach (KeyValuePair<int, SolarSystem> solarSys in solarSystemBetter) {
+				solarSys.Value.update(f);
+			}
+		}
 
 		#region solarSyst
 		/// <summary>
-        /// Show given solar system and hide actual
-        /// </summary>
-        /// <param name="newSolarSystem">integer of showing solar system</param>
-        public void changeSolarSystem(int newSolarSystem) {
-            //better system
+		/// Show given solar system and hide actual
+		/// </summary>
+		/// <param name="newSolarSystem">integer of showing solar system</param>
+		public void changeSolarSystem(int newSolarSystem) {
+			//better system
 			deselectGroup();
-            solarSystemBetter[activeSolarSystem].hideSolarSystem();
-            solarSystemBetter[newSolarSystem].showSolarSystem();
-            //end of it
+			solarSystemBetter[activeSolarSystem].hideSolarSystem();
+			solarSystemBetter[newSolarSystem].showSolarSystem();
+			//end of it
 
-            activeSolarSystem = newSolarSystem; //set new active solar system   
+			activeSolarSystem = newSolarSystem; //set new active solar system   
 			guiControler.setSolarSystemName(getSolarSystemName(activeSolarSystem));
-        }
+		}
 
 		public List<string> getSolarSystemNames() {
 			var list = new List<string>();
@@ -119,32 +119,34 @@ namespace Strategy.GroupControl {
 		#endregion
 
 		/// <summary>
-        /// inicializetion of world
-        /// </summary>
-        public void inicializeWorld(string missionName) { 
-			
+		/// inicializetion of world
+		/// </summary>
+		public void inicializeWorld(string missionName) {
+
 			objectCreator.initializeWorld(missionName, propertyManager);
-            createSolarSystems();
-        }
+			createSolarSystems();
+		}
 
 
 
-        public Dictionary<string,Team> getTeams() {            
-            return objectCreator.getTeams();
-        }
+		public Dictionary<string, Team> getTeams() {
+			return objectCreator.getTeams();
+		}
 
 		public void deselectGroup() {
 			GroupMovables groupM = new GroupMovables();
 			GroupStatics groupS = new GroupStatics();
 			activeMGroup = false;
 			guiControler.showTargeted(groupS);
-			
+
 		}
 
 		public void selectGroup(List<Mogre.MovableObject> movableList) {
 			//first check if is moveble or not
-			GroupMovables groupM = new GroupMovables();
+			GroupMovables groupM;
+			Dictionary<string, GroupMovables> selectedIMGOs = new Dictionary<string, GroupMovables>();
 			GroupStatics groupS = new GroupStatics();
+			string targetedTeam = "";
 			if (movableList.Count == 0) {
 				activeMGroup = false;
 				guiControler.showTargeted(groupS);
@@ -152,16 +154,29 @@ namespace Strategy.GroupControl {
 			}
 			foreach (var mobleItem in movableList) {
 				if (objectCreator.isObjectMovable(mobleItem.Name)) {
-					groupM.insertMemeber(objectCreator.getIMGO(mobleItem.Name));
+					IMovableGameObject imgo = objectCreator.getIMGO(mobleItem.Name);
+					if (selectedIMGOs.ContainsKey(imgo.Team.Name)) {
+						selectedIMGOs[imgo.Team.Name].insertMemeber(imgo);
+					} else {
+						var group = new GroupMovables(imgo.Team);
+						group.insertMemeber(imgo);
+						selectedIMGOs.Add(imgo.Team.Name, group);
+						targetedTeam = imgo.Team.Name;
+					}
 				} else {
-					groupS.insertMemeber(objectCreator.getISGO(mobleItem.Name));	
+					groupS.insertMemeber(objectCreator.getISGO(mobleItem.Name));
 				}
 			}
-			if (groupM.Count == 0) {
+			if (selectedIMGOs.Count == 0) {
 				activeMGroup = false;
 				selectedGroupS = groupS;
 				guiControler.showTargeted(groupS);
 			} else {
+				if (selectedIMGOs.ContainsKey(Game.playerName)) {
+					groupM = selectedIMGOs[Game.playerName];
+				} else {
+					groupM = selectedIMGOs[targetedTeam];
+				}
 				activeMGroup = true;
 				guiControler.showTargeted(groupM);
 				selectedGroupM = groupM;
@@ -175,13 +190,12 @@ namespace Strategy.GroupControl {
 
 		public void rightClick(Mogre.Vector3 clickedPoint) {
 			if (activeMGroup) {
-				//foreach (IMovableGameObject imgo in selectedGroupM) {
-				//	moveControler.goToLocation(imgo, clickedPoint);
-				//}
-				moveControler.goToLocation(selectedGroupM, clickedPoint);
+				if (selectedGroupM.Owner == Game.playerName) {
+					moveControler.goToLocation(selectedGroupM, clickedPoint);
+				}
 			}
 		}
-    }
+	}
 
 
 }

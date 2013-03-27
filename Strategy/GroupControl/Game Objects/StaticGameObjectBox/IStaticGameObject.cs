@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Mogre;
 using Strategy.TeamControl;
 
 namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
@@ -14,6 +15,8 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         bool tryExecute(string executingAction);
 
         Team Team { get; set; }
+
+		ActionAnswer onMouseAction(ActionFlag reason, Vector3 point, object hitTestResult);
 
 	}
 }

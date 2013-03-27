@@ -18,7 +18,9 @@ namespace Strategy {
         protected IFightManager fightManager;
         protected TeamManager teamManager;
         protected MouseControl mouseControl;
-		
+
+		public static string playerName = "Player";
+
 		private static bool gamePaused;
 
         protected GUIControler guiControler;

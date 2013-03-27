@@ -65,6 +65,8 @@ namespace Strategy.GroupControl.Game_Objects {
 			metadataRef.Add(new MetadataFileReference(typeof(PropertyManager).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(GroupControl.Game_Objects.StaticGameObjectBox.IStaticGameObject).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(Strategy.Game).Assembly.Location));
+			metadataRef.Add(new MetadataFileReference(typeof(ActionFlag).Assembly.Location));
+			metadataRef.Add(new MetadataFileReference(typeof(ActionAnswer).Assembly.Location));
 
 			comilationOption = new CompilationOptions(OutputKind.DynamicallyLinkedLibrary);
 
@@ -96,7 +98,7 @@ namespace Strategy.GroupControl.Game_Objects {
 								sun = createISGO(gameObject, missionNode.SelectNodes("usedObjects/isgos/sgo[@name='Sun']")[0], t);
 							} else {
 								t = IsgoType.StaticObject;
-								IStaticGameObject isgo = createISGO(gameObject, 
+								IStaticGameObject isgo = createISGO(gameObject,
 									missionNode.SelectNodes("usedObjects/isgos/sgo[@name='" + gameObjectType + "']")[0],
 									t
 									);
@@ -169,7 +171,7 @@ namespace Strategy.GroupControl.Game_Objects {
 			List<object> args = new List<object>();
 			args.Add(gameObject.Attributes["name"].InnerText);
 			args.Add(gameObject.Attributes["mesh"].InnerText);
-			
+
 			string team = gameObject.Attributes["team"].InnerText;
 			type = gameObject.Attributes["type"].InnerText;
 			if (!teams.ContainsKey(team)) {
@@ -191,19 +193,21 @@ namespace Strategy.GroupControl.Game_Objects {
 			List<object> args = new List<object>();
 			args.Add(gameObject.Attributes["name"].InnerText);
 			args.Add(gameObject.Attributes["mesh"].InnerText);
+			string team = gameObject.Attributes["team"].InnerText;
+			if (!teams.ContainsKey(team)) {
+				teams.Add(team, new Team(team, materialList));
+			}
 			if (isgoType == IsgoType.Sun) {
 				args.Add(manager);
 				type = IsgoType.Sun.ToString();
+				args.Add(teams[team]);
 			} else {
-				string team = gameObject.Attributes["team"].InnerText;
 				type = gameObject.Attributes["type"].InnerText;
-				if (!teams.ContainsKey(team)) {
-					teams.Add(team, new Team(team, materialList));
-				}
 				args.Add(teams[team]);
 				args.Add(manager);
-				args.Add(Int32.Parse(gameObject.Attributes["distance"].InnerText));
-				args.Add(parseInputToVector3(gameObject.Attributes["centerPosition"].InnerText));
+				string distance = gameObject.Attributes["distance"].InnerText;
+				args.Add(Int32.Parse(distance));
+				args.Add(parseInputToVector3(gameObject.Attributes["position"].InnerText));
 				args.Add(propMgr);
 				args.Add(pointsOnCircle);
 
@@ -239,7 +243,7 @@ namespace Strategy.GroupControl.Game_Objects {
 
 		//testing loading classes
 		private void testingFunction() {
-			
+
 			var syntaxTree = SyntaxTree.ParseFile("../../GroupControl/Game Objects/StaticGameObjectBox/Planet.cs");
 
 			var t = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
@@ -264,26 +268,25 @@ namespace Strategy.GroupControl.Game_Objects {
 															  AssemblyBuilderAccess.RunAndCollect);
 			var moduleBuilder = assemblyBuilder.DefineDynamicModule("DynamicModule");
 			var result = comp.Emit(moduleBuilder);
-			if (!result.Success)
-            {
-                foreach(var d in result.Diagnostics){
-                    Console.WriteLine(d);
-                }
+			if (!result.Success) {
+				foreach (var d in result.Diagnostics) {
+					Console.WriteLine(d);
+				}
 				throw new XmlLoadException("Class not found ");
-            }
-			
+			}
+
 			var o = moduleBuilder.GetType("Strategy.GroupControl.Game_Objects.StaticGameObjectBox.Planet");
 			if (!teams.ContainsKey("bla")) {
 				teams.Add("bla", new Team("bla", materialList));
 			}
-			
-			
+
+
 			MethodInfo mainMethod = o.GetMethod("rotate");
 			MethodInfo testMethod = o.GetMethod("registerExecuter");
 
 
 			object helloObject = Activator.CreateInstance(o, "name", "jupiter.mesh", teams["bla"], manager, 500, Mogre.Vector3.ZERO, 30);
-			
+
 			IStaticGameObject isgo = (IStaticGameObject)helloObject;
 		}
 

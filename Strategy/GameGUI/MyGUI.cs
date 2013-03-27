@@ -30,6 +30,7 @@ namespace Strategy.GameGUI {
 		//statPanel members
 		private Label statPanelName;
 		private Label statPanelMesh;
+		private Label statPanelTeam;
 
 		Dictionary<string, Skin> skinDict;
 		Dictionary<string, Font> fonts;
@@ -254,7 +255,9 @@ namespace Strategy.GameGUI {
 		public void showTargeted(GroupControl.GroupMovables group) {
 			//statPanelName.Text = 
 			statPanelName.Text = group[0].Name;
+			statPanelTeam.Text = group[0].Team.Name;
 			statPanelMesh.Text = group.Count.ToString();
+
 		}
 
 		public void showTargeted(GroupControl.GroupStatics group) {
@@ -262,8 +265,10 @@ namespace Strategy.GameGUI {
 			if (group.Count==0) {
 				statPanelName.Text = "Nothing selected";
 				statPanelMesh.Text = "Nothing selected";
+				statPanelTeam.Text = "Nothing selected";
 				return;
 			}
+			statPanelTeam.Text = group[0].Team.Name;
 			statPanelName.Text = group[0].Name;
 			statPanelMesh.Text = group[0].Mesh;
 		}
@@ -347,6 +352,10 @@ namespace Strategy.GameGUI {
 		}
 
 
+
+		/// <summary>
+		/// Creates top bar with info about current SolarSystem and players materials
+		/// </summary>
 		private void createSolarSystemPanel() {
 			var panel = new Panel() {
 				Width = screenWidth / 2,
@@ -384,15 +393,25 @@ namespace Strategy.GameGUI {
 			gui.Controls.Add(panel);
 		}
 
-		private SelectionLabel createSelectionLabel(int width, int height, string text, Point location, int position, Panel panelToClose) {
-			var selectLabel = new SelectionLabel(position, panelToClose) {
+		/// <summary>
+		/// create SelectionLabel - on click select positon and can close setted panel
+		/// </summary>
+		/// <param name="width">width</param>
+		/// <param name="height">height</param>
+		/// <param name="text">text in Label</param>
+		/// <param name="location">relative position in Panel</param>
+		/// <param name="order">number of choice</param>
+		/// <param name="panelToClose">Closing Panel</param>
+		/// <returns></returns>
+		private SelectionLabel createSelectionLabel(int width, int height, string text, Point location, int order, Panel panelToClose) {
+			var selectLabel = new SelectionLabel(order, panelToClose) {
 				Size = new Size(width, height),
 				Text = text,
 				Location = location
 			};
-			//selectLabel.
 			return selectLabel;
 		}
+
 
 		private Button createButton(int width, int height, string text, Point location) {
 			Button b = new Button() {
@@ -477,6 +496,23 @@ namespace Strategy.GameGUI {
 				Padding = new Thickness(5)
 			};
 			statPanel.Controls.Add(statPanelMesh);
+
+			//Team
+			statPanel.Controls.Add(new Label() {
+				Size = new Size(x1, y),
+				Location = new Point(0, 2*y),
+				Text = " Team: ",
+				Padding = new Thickness(5)
+
+			});
+
+			statPanelTeam = new Label() {
+				Size = new Size(x2, y),
+				Location = new Point(statPanel.Width * 2 / 8, 2 * y),
+				Text = " Jeste neni",
+				Padding = new Thickness(5)
+			};
+			statPanel.Controls.Add(statPanelTeam);
 			return statPanel;
 		}
 

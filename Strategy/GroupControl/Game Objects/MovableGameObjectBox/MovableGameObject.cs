@@ -40,6 +40,10 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 
 		#region virtual methods
 
+		public virtual ActionAnswer onMouseAction(ActionFlag reason, Vector3 point, object hitTestResult) {
+			return ActionAnswer.Move;
+		}
+
 		public virtual void addNextLocation(Vector3 pointToGo) {
 			flyList.AddLast(pointToGo);
 		}
@@ -235,5 +239,8 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 		public Vector3 Direction {
 			get { return direction; }
 		}
+
+
+		
 	}
 }

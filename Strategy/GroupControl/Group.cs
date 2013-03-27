@@ -7,13 +7,15 @@ using Strategy.GroupControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GroupControl.Game_Objects.StaticGameObjectBox;
 using System.Collections;
 
-namespace Strategy.GroupControl{
-	abstract class IGroup<T>: IEnumerable{
+namespace Strategy.GroupControl {
+	abstract class IGroup<T> : IEnumerable {
 		protected int number;
 		protected List<T> groupMembers;
+		protected string owner;
 
-		public IGroup() {
+		public IGroup(string own) {
 			groupMembers = new List<T>();
+			owner = own;
 		}
 
 		public void setNumberOfGroup(int i) {
@@ -25,7 +27,7 @@ namespace Strategy.GroupControl{
 		}
 
 		public int Count {
-			get { return groupMembers.Count;}
+			get { return groupMembers.Count; }
 		}
 
 		public void insertMemeber(T m) {
@@ -36,9 +38,9 @@ namespace Strategy.GroupControl{
 			groupMembers.Remove(m);
 		}
 
-        public IEnumerator GetEnumerator() {
-            return groupMembers.GetEnumerator();
-        }
+		public IEnumerator GetEnumerator() {
+			return groupMembers.GetEnumerator();
+		}
 
 		public T this[int i] {
 			get {
@@ -48,11 +50,19 @@ namespace Strategy.GroupControl{
 				groupMembers[i] = value;
 			}
 		}
+
+		public string Owner {
+			get { return owner; }
+		}
+
 	}
 
 
 
-	class GroupMovables :IGroup<IMovableGameObject>{
+	class GroupMovables : IGroup<IMovableGameObject> {
+
+		public GroupMovables() : base("") { }
+		public GroupMovables(TeamControl.Team own) : base(own.Name) { }
 
 		public void move(float f) {
 			foreach (IMovableGameObject obj in groupMembers) {
@@ -60,13 +70,14 @@ namespace Strategy.GroupControl{
 			}
 		}
 
-        public void nonVisibleMove(float f) {
-        }
+		public void nonVisibleMove(float f) {
+		}
 
 
 	}
 
 	class GroupStatics : IGroup<IStaticGameObject> {
-        
-    }
+		public GroupStatics(): base("") { }
+		public GroupStatics(TeamControl.Team own) : base(own.Name) { }
+	}
 }

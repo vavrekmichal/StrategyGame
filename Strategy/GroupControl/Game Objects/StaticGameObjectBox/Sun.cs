@@ -14,8 +14,8 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 		protected string mesh;
 		protected List<IGameAction> listOfAction = new List<IGameAction>();
         protected Mogre.SceneManager manager;
-        
-        protected static Team sunTeam = new Team("Suns");
+
+		protected static Team sunTeam;
         /// <summary>
         /// Public constructor. Detect active solar system (0)
         /// </summary>
@@ -23,10 +23,11 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         /// <param name="mesh">mesh of this sun</param>
         /// <param name="solarSystem">number of solar system</param>
         /// <param name="manager">Mogre SceneManager</param>
-		public Sun(string name, string mesh, Mogre.SceneManager manager) {
+		public Sun(string name, string mesh, Mogre.SceneManager manager, Team team) {
 			this.name = name;
 			this.mesh = mesh;
             this.manager = manager;
+			this.Team = team;
             entity = manager.CreateEntity(name, mesh);
 		}
 
@@ -40,6 +41,10 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 
 		public virtual void nonActiveRotate(float f) {
 
+		}
+
+		public virtual ActionAnswer onMouseAction(ActionFlag reason, Vector3 point, object hitTestResult) {
+			return ActionAnswer.None;
 		}
 
         /// <summary>
@@ -68,7 +73,7 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 				return sunTeam;
 			}
 			set {
-
+				sunTeam = value;
 			}
 		}
 
