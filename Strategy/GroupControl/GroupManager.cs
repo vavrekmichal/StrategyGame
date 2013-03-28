@@ -141,6 +141,12 @@ namespace Strategy.GroupControl {
 
 		}
 
+		/// <summary>
+		/// Select targeted object and check if is players or not. Objects are selected by type
+		/// (imgo/isgo) and teams. Movable object has bigger prioryty. Fuctions result is selected
+		/// movable or static group of object.
+		/// </summary>
+		/// <param name="movableList">targeted objects</param>
 		public void selectGroup(List<Mogre.MovableObject> movableList) {
 			//first check if is moveble or not
 			GroupMovables groupM;
@@ -188,10 +194,31 @@ namespace Strategy.GroupControl {
 			selectGroup(selectedObjects);
 		}
 
-		public void rightClick(Mogre.Vector3 clickedPoint) {
-			if (activeMGroup) {
+		public void rightClick(Mogre.Vector3 clickedPoint, List<Mogre.MovableObject> selectedObjects) {
+			if (activeMGroup) {//TODO rewrite (notebook)
 				if (selectedGroupM.Owner == Game.playerName) {
-					moveControler.goToLocation(selectedGroupM, clickedPoint);
+					foreach (IMovableGameObject imgo in selectedGroupM) {
+						ActionAnswer answer = imgo.onMouseAction(ActionFlag.onRightButtonClick, clickedPoint, selectedObjects);
+						switch (answer) {
+							case ActionAnswer.None:
+								break;
+							case ActionAnswer.Attack:
+								break;
+							case ActionAnswer.Move:
+								moveControler.goToLocation(imgo, clickedPoint);
+								break;
+							case ActionAnswer.RunAway:
+								break;
+							case ActionAnswer.Reply:
+								break;
+							default:
+								break;
+						}
+					}
+					//if (selectedObjects.Count==0) {
+					//	moveControler.goToLocation(selectedGroupM, clickedPoint);
+					//}
+					
 				}
 			}
 		}

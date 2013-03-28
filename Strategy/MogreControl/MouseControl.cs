@@ -138,24 +138,7 @@ namespace Strategy.MogreControl {
 						mRect.Visible = false;
 						isRectagularSelect = false;
 					} else {
-						using (Mogre.RaySceneQuery raySceneQuery = sceneMgr.CreateRayQuery(new Mogre.Ray())) {
-							float mouseX = (float)arg.state.X.abs / (float)arg.state.width;
-							float mouseY = (float)arg.state.Y.abs / (float)arg.state.height;
-
-							Mogre.Ray mouseRay = cameraMan.getCamera().GetCameraToViewportRay(mouseX, mouseY);
-							raySceneQuery.Ray = mouseRay;
-							raySceneQuery.SetSortByDistance(true);
-
-							List<MovableObject> list = new List<MovableObject>();
-							using (Mogre.RaySceneQueryResult result = raySceneQuery.Execute()) {
-								foreach (Mogre.RaySceneQueryResultEntry entry in result) {
-									list.Add(entry.movable);
-
-								}
-							}
-							groupManager.leftClick(list);
-
-						}
+						groupManager.leftClick(simpleClick(arg));
 					}
 					break;
 				case MouseButtonID.MB_Right:
@@ -168,7 +151,7 @@ namespace Strategy.MogreControl {
 						Mogre.Ray mouseRay = cameraMan.getCamera().GetCameraToViewportRay(mouseX, mouseY);
 						v = mouseRay.GetPoint(mouseRay.Intersects(plane).second);
 					}
-					groupManager.rightClick(v);
+					groupManager.rightClick(v,simpleClick(arg));
 					break;
 			}
 			return true;
@@ -194,6 +177,27 @@ namespace Strategy.MogreControl {
 				cameraMan.MouseZoom(evt.state.Z.rel / 4);
 			}
 			return true;
+		}
+
+		private List<MovableObject> simpleClick(MouseEvent arg) {
+			using (Mogre.RaySceneQuery raySceneQuery = sceneMgr.CreateRayQuery(new Mogre.Ray())) {
+				float mouseX = (float)arg.state.X.abs / (float)arg.state.width;
+				float mouseY = (float)arg.state.Y.abs / (float)arg.state.height;
+
+				Mogre.Ray mouseRay = cameraMan.getCamera().GetCameraToViewportRay(mouseX, mouseY);
+				raySceneQuery.Ray = mouseRay;
+				raySceneQuery.SetSortByDistance(true);
+
+				List<MovableObject> list = new List<MovableObject>();
+				using (Mogre.RaySceneQueryResult result = raySceneQuery.Execute()) {
+					foreach (Mogre.RaySceneQueryResultEntry entry in result) {
+						list.Add(entry.movable);
+
+					}
+				}
+				return list;
+
+			}
 		}
 
 

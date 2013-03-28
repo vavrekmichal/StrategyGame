@@ -139,8 +139,8 @@ namespace Strategy.GroupControl {
 			return imgoObjects;
 		}
 
+		private static Random r = new Random();
 		private Mogre.Vector3 randomizeVector(Mogre.Vector3 v) {
-			Random r = new Random();
 			int i = r.Next(4);
 			switch (i) {
 				case 0: v.x += randConst;
@@ -171,7 +171,7 @@ namespace Strategy.GroupControl {
 
 						}
 					}
-					collision[imgo.Position].jumpNextLocation(addVect);
+					imgo.jumpNextLocation(addVect);
 				} else {
 					collision.Add(imgo.Position, imgo);
 				}
