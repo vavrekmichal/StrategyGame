@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace Strategy.GroupControl {
 	public enum ActionAnswer {
-		None, Attack, Move, RunAway, Reply
+		None = 1,
+		Attack = 5, 
+		Move = 2, 
+		RunAway = 3
 	}
 
-	[Flags]
-	public enum ActionFlag {
+	public enum ActionReason {
 		Friendly, Enemy, onRightButtonClick
 	}
 }

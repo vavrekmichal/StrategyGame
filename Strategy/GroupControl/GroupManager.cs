@@ -197,28 +197,27 @@ namespace Strategy.GroupControl {
 		public void rightClick(Mogre.Vector3 clickedPoint, List<Mogre.MovableObject> selectedObjects) {
 			if (activeMGroup) {//TODO rewrite (notebook)
 				if (selectedGroupM.Owner == Game.playerName) {
-					foreach (IMovableGameObject imgo in selectedGroupM) {
-						ActionAnswer answer = imgo.onMouseAction(ActionFlag.onRightButtonClick, clickedPoint, selectedObjects);
-						switch (answer) {
-							case ActionAnswer.None:
-								break;
-							case ActionAnswer.Attack:
-								break;
-							case ActionAnswer.Move:
-								moveControler.goToLocation(imgo, clickedPoint);
-								break;
-							case ActionAnswer.RunAway:
-								break;
-							case ActionAnswer.Reply:
-								break;
-							default:
-								break;
-						}
+					object hitTestResult;
+					if (selectedObjects.Count == 0) {
+						hitTestResult = null;
+					} else {
+						hitTestResult = selectedObjects[0];
 					}
-					//if (selectedObjects.Count==0) {
-					//	moveControler.goToLocation(selectedGroupM, clickedPoint);
-					//}
-					
+					var answer = selectedGroupM.onMouseAction(ActionReason.onRightButtonClick, clickedPoint, hitTestResult);
+					switch (answer) {
+						case ActionAnswer.None:
+							break;
+						case ActionAnswer.Attack:
+							break;
+						case ActionAnswer.Move:
+							moveControler.goToLocation(selectedGroupM, clickedPoint);
+							break;
+						case ActionAnswer.RunAway:
+							break;
+						default:
+							break;
+					}
+
 				}
 			}
 		}

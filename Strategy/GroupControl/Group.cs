@@ -6,6 +6,7 @@ using Strategy.Game_Objects;
 using Strategy.GroupControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GroupControl.Game_Objects.StaticGameObjectBox;
 using System.Collections;
+using Mogre;
 
 namespace Strategy.GroupControl {
 	abstract class IGroup<T> : IEnumerable {
@@ -71,6 +72,17 @@ namespace Strategy.GroupControl {
 		}
 
 		public void nonVisibleMove(float f) {
+		}
+
+		public ActionAnswer onMouseAction(ActionReason reason, Vector3 point, object hitTestResult) {
+			ActionAnswer groupAnswer = ActionAnswer.None;
+			foreach (IMovableGameObject imgo  in groupMembers) {
+				ActionAnswer answer = imgo.onMouseAction(reason, point, hitTestResult);//TODO Team Control
+				if (answer>groupAnswer) {
+					groupAnswer = answer;
+				}
+			}
+			return groupAnswer;
 		}
 
 

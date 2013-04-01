@@ -22,6 +22,6 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 		Mogre.Vector3 Direction { get; }
 		Mogre.Vector3 Position {get;}
 
-		ActionAnswer onMouseAction(ActionFlag reason, Vector3 point, object hitTestResult);
+		ActionAnswer onMouseAction(ActionReason reason, Vector3 point, object hitTestResult);
 	}
 }

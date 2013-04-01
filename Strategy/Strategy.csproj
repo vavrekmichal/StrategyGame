@@ -84,7 +84,7 @@
     <Compile Include="GameMaterial\Wolenium.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GroupControl\ActionFlag.cs" />
+    <Compile Include="GroupControl\Action.cs" />
     <Compile Include="GroupControl\Game Objects\GameActions\IGameAction.cs" />
     <Compile Include="GroupControl\Game Objects\GameActions\Produce.cs" />
     <Compile Include="GroupControl\Game Objects\GameObjectParameter\IGameObjectParameter.cs" />

@@ -65,7 +65,7 @@ namespace Strategy.GroupControl.Game_Objects {
 			metadataRef.Add(new MetadataFileReference(typeof(PropertyManager).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(GroupControl.Game_Objects.StaticGameObjectBox.IStaticGameObject).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(Strategy.Game).Assembly.Location));
-			metadataRef.Add(new MetadataFileReference(typeof(ActionFlag).Assembly.Location));
+			metadataRef.Add(new MetadataFileReference(typeof(ActionReason).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(ActionAnswer).Assembly.Location));
 
 			comilationOption = new CompilationOptions(OutputKind.DynamicallyLinkedLibrary);

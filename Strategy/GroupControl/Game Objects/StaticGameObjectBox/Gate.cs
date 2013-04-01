@@ -61,7 +61,7 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 			}
 		}
 
-		public override ActionAnswer onMouseAction(ActionFlag reason, Vector3 point, object hitTestResult) {
+		public override ActionAnswer onMouseAction(ActionReason reason, Vector3 point, object hitTestResult) {
 			return ActionAnswer.None;
 		}
 

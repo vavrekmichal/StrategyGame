@@ -16,7 +16,7 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 
         Team Team { get; set; }
 
-		ActionAnswer onMouseAction(ActionFlag reason, Vector3 point, object hitTestResult);
+		ActionAnswer onMouseAction(ActionReason reason, Vector3 point, object hitTestResult);
 
 	}
 }
