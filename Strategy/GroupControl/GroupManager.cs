@@ -19,6 +19,7 @@ namespace Strategy.GroupControl {
 		protected GUIControler guiControler;
 		protected IMoveControler moveControler;
 		protected PropertyManager propertyManager;
+		protected HitTest hitTest;
 
 		protected Dictionary<int, SolarSystem> solarSystemBetter;
 		protected int lastSolarSystem = 0;
@@ -55,6 +56,7 @@ namespace Strategy.GroupControl {
 			solarSystemBetter = new Dictionary<int, SolarSystem>();
 			moveControler = MoveControler.getInstance();
 			propertyManager = new PropertyManager("StartMission");
+			hitTest = new HitTest();
 		}
 		#endregion
 
@@ -62,21 +64,19 @@ namespace Strategy.GroupControl {
 			guiControler = gui;
 		}
 
-		//grupy planet / lodi dle teamu rozdelit
+		/// <summary>
+		/// Get SolarSystem from ObjectCreator as List and creates Dictionary. 
+		/// Also initializes HitTest
+		/// </summary>
 		private void createSolarSystems() {
-			//just one solar system and one group
-			//switch on team ISGO
-			//shout on IMGO
-
 			//inicialization
-			List<SolarSystem> sSyst;
-
-			objectCreator.getInicializedObjects(out sSyst);
+			List<SolarSystem> sSyst = objectCreator.getInicializedSolarSystems();
 
 			foreach (SolarSystem solarSyst in sSyst) {
 				solarSystemBetter.Add(lastSolarSystem, solarSyst);
 				lastSolarSystem++;
 			}
+			hitTest.createHitTestMap(sSyst);
 		}
 
 		/// <summary>
@@ -90,6 +90,8 @@ namespace Strategy.GroupControl {
 		}
 
 		#region solarSyst
+
+
 		/// <summary>
 		/// Show given solar system and hide actual
 		/// </summary>
@@ -159,8 +161,8 @@ namespace Strategy.GroupControl {
 				return;
 			}
 			foreach (var mobleItem in movableList) {
-				if (objectCreator.isObjectMovable(mobleItem.Name)) {
-					IMovableGameObject imgo = objectCreator.getIMGO(mobleItem.Name);
+				if (hitTest.isObjectMovable(mobleItem.Name)) {
+					IMovableGameObject imgo = hitTest.getIMGO(mobleItem.Name);
 					if (selectedIMGOs.ContainsKey(imgo.Team.Name)) {
 						selectedIMGOs[imgo.Team.Name].insertMemeber(imgo);
 					} else {
@@ -170,7 +172,7 @@ namespace Strategy.GroupControl {
 						targetedTeam = imgo.Team.Name;
 					}
 				} else {
-					groupS.insertMemeber(objectCreator.getISGO(mobleItem.Name));
+					groupS.insertMemeber(hitTest.getISGO(mobleItem.Name));
 				}
 			}
 			if (selectedIMGOs.Count == 0) {

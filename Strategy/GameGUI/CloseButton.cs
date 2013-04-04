@@ -16,5 +16,6 @@ namespace Strategy.GameGUI {
 		public Panel PanelToClose {
 			get { return panelToClose; }
 		}
+
 	}
 }

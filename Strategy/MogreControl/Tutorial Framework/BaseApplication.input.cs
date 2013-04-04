@@ -15,6 +15,8 @@ namespace Mogre.TutorialFramework
         {
             LogManager.Singleton.LogMessage("*** Initializing OIS ***");
 
+			mRenderWindow = mWindow;
+
             int windowHnd;
             mWindow.GetCustomAttribute("WINDOW", out windowHnd);
             inputMgr = MOIS.InputManager.CreateInputSystem((uint)windowHnd);

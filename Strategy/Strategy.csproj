@@ -73,6 +73,7 @@
     <Compile Include="Game.cs" />
     <Compile Include="GameGUI\CloseButton.cs" />
     <Compile Include="GameGUI\MaterialPair.cs" />
+    <Compile Include="GameGUI\PropertyLabel.cs" />
     <Compile Include="GameGUI\SelectionLabel.cs" />
     <Compile Include="GameMaterial\Class1.cs" />
     <Compile Include="GameMaterial\IMaterial.cs">
@@ -88,6 +89,7 @@
     <Compile Include="GroupControl\Game Objects\GameActions\IGameAction.cs" />
     <Compile Include="GroupControl\Game Objects\GameActions\Produce.cs" />
     <Compile Include="GroupControl\Game Objects\GameObjectParameter\IGameObjectParameter.cs" />
+    <Compile Include="GroupControl\Game Objects\HitTest.cs" />
     <Compile Include="GroupControl\Game Objects\MovableGameObjectBox\IMovableGameObject.cs" />
     <Compile Include="GroupControl\Game Objects\ObjectXMLCreator.cs" />
     <Compile Include="GroupControl\Game Objects\StaticGameObjectBox\Gate.cs" />

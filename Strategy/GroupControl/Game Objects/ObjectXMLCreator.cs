@@ -97,16 +97,22 @@ namespace Strategy.GroupControl.Game_Objects {
 								t = IsgoType.Sun;
 								sun = createISGO(gameObject, missionNode.SelectNodes("usedObjects/isgos/sgo[@name='Sun']")[0], t);
 							} else {
-								t = IsgoType.StaticObject;
-								IStaticGameObject isgo = createISGO(gameObject,
-									missionNode.SelectNodes("usedObjects/isgos/sgo[@name='" + gameObjectType + "']")[0],
-									t
-									);
-								isgo.Team.addISGO(isgo);
-								isgos.Add(isgo);
-								//here register
-								readSGOActions(gameObject.SelectNodes("gameAction"), (StaticGameObject)isgo);
-								break;
+								if (gameObjectType == "Gate") {
+									//TODO: create gate
+									var gate = createGate(gameObject);
+									isgos.Add(gate);
+								} else {
+									t = IsgoType.StaticObject;
+									IStaticGameObject isgo = createISGO(gameObject,
+										missionNode.SelectNodes("usedObjects/isgos/sgo[@name='" + gameObjectType + "']")[0],
+										t
+										);
+									isgo.Team.addISGO(isgo);
+									isgos.Add(isgo);
+									//here register
+									readSGOActions(gameObject.SelectNodes("gameAction"), (StaticGameObject)isgo);
+									break;
+								}
 							}
 
 							break;
@@ -214,6 +220,21 @@ namespace Strategy.GroupControl.Game_Objects {
 			}
 			isgo = (IStaticGameObject)createGameObject(gameObjectPath, type, args.ToArray());
 			return isgo;
+		}
+
+	
+		private Gate createGate(XmlNode gameObject) {
+			string team = gameObject.Attributes["team"].InnerText;
+			if (!teams.ContainsKey(team)) {
+				teams.Add(team, new Team(team, materialList));
+			}	
+			var gate = new Gate(gameObject.Attributes["name"].InnerText,
+				gameObject.Attributes["mesh"].InnerText,
+				manager,
+				parseInputToVector3(gameObject.Attributes["position"].InnerText),
+				teams[team]);
+			gate.Team.addISGO(gate);
+			return gate;
 		}
 
 		private SolarSystem createSolarSystem(string name, List<IStaticGameObject> isgoObjects, List<IMovableGameObject> imgoObjects,

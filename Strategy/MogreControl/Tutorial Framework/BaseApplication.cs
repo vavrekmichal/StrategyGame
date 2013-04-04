@@ -17,7 +17,7 @@ namespace Mogre.TutorialFramework {
         protected int mRenderMode = 0;
         // protected DebugOverlay mDebugOverlay;
 
-
+		private static RenderWindow mRenderWindow;
 
         public void Go() {
             try {
@@ -71,8 +71,7 @@ namespace Mogre.TutorialFramework {
             CreateFrameListeners();
 
 
-            //mDebugOverlay = new DebugOverlay(mWindow);
-            // mDebugOverlay.AdditionalInfo = "Bilinear";
+       
 
             return true;
         }
@@ -139,24 +138,20 @@ namespace Mogre.TutorialFramework {
             switch (mTextureMode) {
                 case 0:
                     MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_BILINEAR);
-                    //mDebugOverlay.AdditionalInfo = "BiLinear";
                     break;
 
                 case 1:
                     MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_TRILINEAR);
-                    //mDebugOverlay.AdditionalInfo = "TriLinear";
                     break;
 
                 case 2:
                     MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_ANISOTROPIC);
                     MaterialManager.Singleton.DefaultAnisotropy = 8;
-                    //mDebugOverlay.AdditionalInfo = "Anisotropic";
                     break;
 
                 case 3:
                     MaterialManager.Singleton.SetDefaultTextureFiltering(TextureFilterOptions.TFO_NONE);
                     MaterialManager.Singleton.DefaultAnisotropy = 1;
-                    //mDebugOverlay.AdditionalInfo = "None";
                     break;
             }
         }
@@ -200,8 +195,6 @@ namespace Mogre.TutorialFramework {
 
                 mCameraMan.UpdateCamera(evt.timeSinceLastFrame);
 
-                //mDebugOverlay.Update(evt.timeSinceLastFrame);
-
                 return true;
             } catch (ShutdownException) {
                 mShutDown = true;
@@ -221,5 +214,10 @@ namespace Mogre.TutorialFramework {
 
         protected virtual void DestroyScene() {
         }
+
+		//added my fuction
+		public static RenderWindow getRenderWindow(){
+			return mRenderWindow;
+		}
     }
 }

@@ -14,27 +14,23 @@ using Strategy.GroupControl.RuntimeProperty;
 
 namespace Strategy.GroupControl.Game_Objects {
 
-	enum IsgoType { StaticObject, Sun}
+	enum IsgoType { StaticObject, Sun }
 
 	class ObjectCreator {
 
-        protected List<IMaterial> materialList;
-        protected List<SolarSystem> solarSystems;
+		protected List<IMaterial> materialList;
+		protected List<SolarSystem> solarSystems;
 		protected Mogre.SceneManager manager;
-        protected Dictionary<string,Team> teams;
+		protected Dictionary<string, Team> teams;
 
-		protected Dictionary<string, bool> objectIsMovable;
-		protected Dictionary<string, IStaticGameObject> isgoDict;
-		protected Dictionary<string, IMovableGameObject> imgoDict;
+		#region singleton and constructor
+		private static ObjectCreator instance;
 
-        #region singleton and constructor
-        private static ObjectCreator instance;
-
-        /// <summary>
-        /// Singleton instance
-        /// </summary>
-        /// <param name="manager">Mogre SceneManager</param>
-        /// <returns>returning singleton instance</returns>
+		/// <summary>
+		/// Singleton instance
+		/// </summary>
+		/// <param name="manager">Mogre SceneManager</param>
+		/// <returns>returning singleton instance</returns>
 		public static ObjectCreator getInstance(Mogre.SceneManager manager) {
 			if (instance == null) {
 				instance = new ObjectCreator(manager);
@@ -42,34 +38,34 @@ namespace Strategy.GroupControl.Game_Objects {
 			return instance;
 		}
 
-        /// <summary>
-        /// private constructor
-        /// </summary>
-        /// <param name="manager">Mogre SceneManager</param>
+		/// <summary>
+		/// private constructor
+		/// </summary>
+		/// <param name="manager">Mogre SceneManager</param>
 		private ObjectCreator(Mogre.SceneManager manager) {
 			this.manager = manager;
-            teams = new Dictionary<string,Team>();
-            solarSystems = new List<SolarSystem>();
+			teams = new Dictionary<string, Team>();
+			solarSystems = new List<SolarSystem>();
 		}
-        #endregion
+		#endregion
 
-        /// <summary>
-        /// inicialization of game World
-        /// </summary>
-        /// <param name="mission">name of mission</param>
-		public void initializeWorld(string mission, PropertyManager propMan){ 
-            //visual part 
-            createMaterials();
+		/// <summary>
+		/// inicialization of game World
+		/// </summary>
+		/// <param name="mission">name of mission</param>
+		public void initializeWorld(string mission, PropertyManager propMan) {
+			//visual part 
+			createMaterials();
 
 			ObjectXMLCreator xml = new ObjectXMLCreator("../../Media/Mission/MyMission.xml", manager, teams, materialList, solarSystems);
 			xml.load(mission, propMan);
-			createObjectMap(); //map for hittest
-            solarSystems[0].showSolarSystem();
+			//createObjectMap(); //map for hittest
+			solarSystems[0].showSolarSystem();
 
 		}
 
-		public void getInicializedObjects(out List<SolarSystem> s){
-			s= solarSystems;
+		public List<SolarSystem> getInicializedSolarSystems() {
+			return solarSystems;
 		}
 
 		public Dictionary<string, Team> getTeams() {
@@ -77,40 +73,30 @@ namespace Strategy.GroupControl.Game_Objects {
 		}
 
 
-		public bool isObjectMovable(string name) {
-			return objectIsMovable[name];
-		}
+		
 
-		public IMovableGameObject getIMGO(string name){
-			return imgoDict[name];
-		}
+		//private void createObjectMap() {
+		//	objectIsMovable = new Dictionary<string, bool>();
+		//	isgoDict = new Dictionary<string, IStaticGameObject>();
+		//	imgoDict = new Dictionary<string, IMovableGameObject>();
+		//	foreach (SolarSystem ss in solarSystems) {
+		//		IStaticGameObject s = ss.getSun();
+		//		if (s != null) {
+		//			objectIsMovable.Add(s.Name, false);
+		//			isgoDict.Add(s.Name, s);
+		//		}
 
-		public IStaticGameObject getISGO(string name) {
-			return isgoDict[name];
-		}
+		//		foreach (IStaticGameObject isgo in ss.getISGOs()) {
+		//			objectIsMovable.Add(isgo.Name, false);
+		//			isgoDict.Add(isgo.Name, isgo);
+		//		}
 
-		private void createObjectMap() {
-			objectIsMovable = new Dictionary<string, bool>();
-			isgoDict = new Dictionary<string, IStaticGameObject>();
-			imgoDict = new Dictionary<string, IMovableGameObject>();
-			foreach (SolarSystem ss in solarSystems) {
-				IStaticGameObject s =  ss.getSun();
-				if(s!= null){
-					objectIsMovable.Add(s.Name, false);
-					isgoDict.Add(s.Name, s);
-				}
-
-				foreach(IStaticGameObject isgo in ss.getISGOs()){
-					objectIsMovable.Add(isgo.Name, false);
-					isgoDict.Add(isgo.Name, isgo);
-				}
-
-				foreach (IMovableGameObject imgo in ss.getIMGOs()) {
-					objectIsMovable.Add(imgo.Name, true);
-					imgoDict.Add(imgo.Name, imgo);
-				}
-			}
-		}
+		//		foreach (IMovableGameObject imgo in ss.getIMGOs()) {
+		//			objectIsMovable.Add(imgo.Name, true);
+		//			imgoDict.Add(imgo.Name, imgo);
+		//		}
+		//	}
+		//}
 
 		//DELETE VSE DOLU
 		/*
@@ -149,9 +135,9 @@ namespace Strategy.GroupControl.Game_Objects {
         
 
 		//TOTO TU NESMI ZUSTAT*/
-        private void createMaterials() {
-            materialList = new List<IMaterial>() { new Wolenium(), new Wolenarium(), new Class1() };
-        }
+		private void createMaterials() {
+			materialList = new List<IMaterial>() { new Wolenium(), new Wolenarium(), new Class1() };
+		}
 		/*
 	}
 	//delete

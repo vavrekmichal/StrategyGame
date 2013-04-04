@@ -71,7 +71,6 @@ namespace Strategy {
 		/// This method inicializes camere and cameraMan
 		/// </summary>
 		protected override void CreateCamera() {
-
 			mCamera = mSceneMgr.CreateCamera("myCam");
 			mCamera.Position = cameraStart;
 			mCamera.LookAt(Mogre.Vector3.ZERO);

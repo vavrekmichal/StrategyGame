@@ -15,13 +15,9 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 		private Vector3 position;
 		private AnimationState animationState; //The AnimationState the moving object
 
+		private static Dictionary<string, Property<DateTime>> travelers = new Dictionary<string,Property<DateTime>>();
+
 		protected static Team gateTeam;
-
-		public Gate(string name, string mesh, Team myTeam, Mogre.SceneManager manager, double distanceFromCenter,
-			Vector3 position, PropertyManager propMgr, int circularNum)
-			: this(name, mesh, manager, position, myTeam) {
-			}
-
 
 		public Gate(string name, string mesh, SceneManager manager, Vector3 position, Team team) {
 			this.name = name;
@@ -37,7 +33,6 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 		}
 
 		public override void rotate(float f) {
-
 			//animationState = entity.GetAnimationState("abrirse_eani_Clip");
 			animationState = entity.GetAnimationState("funcionando3_eani_Clip");
 			animationState.Loop = true;

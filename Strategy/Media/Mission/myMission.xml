@@ -4,7 +4,6 @@
     <isgos>
       <sgo name="Planet" path="StaticGameObjectBox/Planet.cs" fullName="Strategy.GroupControl.Game_Objects.StaticGameObjectBox.Planet"/>
       <sgo name="Sun" path="StaticGameObjectBox/Sun.cs" fullName="Strategy.GroupControl.Game_Objects.StaticGameObjectBox.Sun"/>
-      <sgo name="Gate" path="StaticGameObjectBox/Gate.cs" fullName="Strategy.GroupControl.Game_Objects.StaticGameObjectBox.Gate"/>
     </isgos>
     <imgos>
       <mgo name="SpaceShip" path="MovableGameObjectBox/SpaceShip.cs" fullName="Strategy.GroupControl.Game_Objects.MovableGameObjectBox.SpaceShip"/>
@@ -44,6 +43,30 @@
       <isgo type="Planet" name="FunnyThings1" mesh="mercury.mesh" team="Fun" position="0,0,0" distance="1000"/>
       <isgo type="Planet" name="FunnyThings2" mesh="venus.mesh" team="Fun" position="0,0,0" distance="2000"/>
       <isgo type="Planet" name="FunnyThings3" mesh="earth.mesh" team="Fun" position="0,0,0" distance="4000"/>
+    </solarSystem>
+    <solarSystem name="s1">
+      <isgo type="Sun" name="s10" mesh="jupiter.mesh"  team="None" position="0,0,0" distance="0"/>
+    </solarSystem>
+    <solarSystem name="s2">
+      <isgo type="Sun" name="s11" mesh="mars.mesh"  team="None" position="0,0,0" distance="0"/>
+    </solarSystem>
+    <solarSystem name="s3">
+      <isgo type="Sun" name="s12" mesh="SpaceShip2.mesh"  team="None" position="0,0,0" distance="0"/>
+    </solarSystem>
+    <solarSystem name="s4">
+      <isgo type="Sun" name="s13" mesh="SpaceShip1.mesh"  team="None" position="0,0,0" distance="0"/>
+    </solarSystem>
+    <solarSystem name="ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss5">
+      <isgo type="Sun" name="s14" mesh="earth.mesh"  team="None" position="0,0,0" distance="0"/>
+    </solarSystem>
+    <solarSystem name="s6">
+      <isgo type="Sun" name="s15" mesh="neptune.mesh"  team="None" position="0,0,0" distance="0"/>
+    </solarSystem>
+    <solarSystem name="s7">
+      <isgo type="Sun" name="s16" mesh="uranus.mesh"  team="None" position="0,0,0" distance="0"/>
+    </solarSystem>
+    <solarSystem name="s8">
+      <isgo type="Sun" name="s17" mesh="gate.mesh"  team="None" position="0,0,0" distance="0"/>
     </solarSystem>
   </solarSystems>
 </mission>

@@ -11,17 +11,18 @@ using MOIS;
 
 namespace Strategy.MogreControl {
 	class MouseControl {
-		protected static Mogre.TutorialFramework.CameraMan cameraMan ;
+		protected static Mogre.TutorialFramework.CameraMan cameraMan;
 		protected SceneManager sceneMgr;
-        protected GroupManager groupManager;
-        protected GUIControler guiControl; //TODO:mys nebude mit guicko
+		protected GroupManager groupManager;
+		protected GUIControler guiControl; //TODO:mys nebude mit guicko
 
-        protected int changeMe = 1;
+		protected int changeMe = 1;
 
-        private static MouseControl instance;
+		private static MouseControl instance;
 
+		private static float mouseBoundY = BaseApplication.getRenderWindow().Height * 8 / 10;
 
-		//rect items
+		//rectangular select items
 		bool isRectagularSelect;
 		Vector2 mStart, mStop;
 		List<MovableObject> mSelected = new List<MovableObject>();
@@ -29,18 +30,18 @@ namespace Strategy.MogreControl {
 		bool bSelecting;
 		//end rect
 
-        public static MouseControl getInstance(CameraMan c, SceneManager m, GroupManager groupManager, GUIControler guiControl) {
-            if (instance==null) {
-                instance = new MouseControl(c, m, groupManager, guiControl);
-            }
-            return instance;
-        }
+		public static MouseControl getInstance(CameraMan c, SceneManager m, GroupManager groupManager, GUIControler guiControl) {
+			if (instance == null) {
+				instance = new MouseControl(c, m, groupManager, guiControl);
+			}
+			return instance;
+		}
 
-        private MouseControl(CameraMan c, SceneManager m, GroupManager groupManager, GUIControler guiControl) {
+		private MouseControl(CameraMan c, SceneManager m, GroupManager groupManager, GUIControler guiControl) {
 			cameraMan = c;
 			sceneMgr = m;
-            this.groupManager = groupManager;
-            this.guiControl = guiControl;
+			this.groupManager = groupManager;
+			this.guiControl = guiControl;
 			mRect = new SelectionRectangle("RectangularSelect");
 			sceneMgr.RootSceneNode.CreateChildSceneNode().AttachObject(mRect);
 		}
@@ -52,47 +53,10 @@ namespace Strategy.MogreControl {
 		/// <param name="arg">argument of press</param>
 		/// <param name="id">which button was pressed</param>
 		/// <returns>was pressed true</returns>
-		public bool OnMyMousePressed(MouseEvent evt, MouseButtonID id) {
-			#region old
-			//if (id == MouseButtonID.MB_Left) {
-			//	using (Mogre.RaySceneQuery raySceneQuery = sceneMgr.CreateRayQuery(new Mogre.Ray())) {
-			//		float mouseX = (float)evt.state.X.abs / (float)evt.state.width;
-			//		float mouseY = (float)evt.state.Y.abs / (float)evt.state.height;
-
-			//		Mogre.Ray mouseRay = cameraMan.getCamera().GetCameraToViewportRay(mouseX, mouseY);
-			//		raySceneQuery.Ray = mouseRay;
-			//		raySceneQuery.SetSortByDistance(true);
-
-			//		using (Mogre.RaySceneQueryResult result = raySceneQuery.Execute()) {
-			//			foreach (Mogre.RaySceneQueryResultEntry entry in result) {
-			//				if (entry.movable.Name != "GroundEntity") {
-			//					groupManager.selectGroup(entry.movable);
-			//				}
-			//			}
-			//		}
-			//	}
-
-			//} else {
-			//	if (id == MouseButtonID.MB_Right) {
-			//		groupManager.changeSolarSystem(changeMe);
-			//		guiControl.setSolarSystemName(groupManager.getSolarSystemName(changeMe));
-			//		changeMe = (changeMe + 1) % 2;
-			//	} else {
-			//		if (id == MouseButtonID.MB_Middle) {
-			//			//rectangular select
-			//			mStart.x = (float)evt.state.X.abs / (float)evt.state.width;
-			//			mStart.y = (float)evt.state.Y.abs / (float)evt.state.height;
-			//			mStop = mStart;
-
-			//			bSelecting = true;
-			//			mRect.Clear();
-			//			mRect.Visible = true;
-
-			//			Console.WriteLine(evt.state.X.abs + ", " + evt.state.Y.abs);
-			//		}
-			//	}
-			//}
-			#endregion
+		public bool OnMyMousePressed(MouseEvent arg, MouseButtonID id) {
+			if (arg.state.Y.abs > mouseBoundY) {
+				return true;
+			}
 			switch (id) {
 				case MouseButtonID.MB_Button3:
 					break;
@@ -106,8 +70,8 @@ namespace Strategy.MogreControl {
 					break;
 				case MouseButtonID.MB_Left:
 					//rectangular select
-					mStart.x = (float)evt.state.X.abs / (float)evt.state.width;
-					mStart.y = (float)evt.state.Y.abs / (float)evt.state.height;
+					mStart.x = (float)arg.state.X.abs / (float)arg.state.width;
+					mStart.y = (float)arg.state.Y.abs / (float)arg.state.height;
 					mStop = mStart;
 					bSelecting = true;
 					
@@ -130,6 +94,9 @@ namespace Strategy.MogreControl {
 		/// <param name="id">which button was released</param>
 		/// <returns>was released true</returns>
 		public bool OnMyMouseReleased(MouseEvent arg, MouseButtonID id) {
+			if (arg.state.Y.abs > mouseBoundY) {
+				return true;
+			}
 			switch (id) {
 				case MouseButtonID.MB_Left:
 					bSelecting = false;
@@ -142,7 +109,7 @@ namespace Strategy.MogreControl {
 					}
 					break;
 				case MouseButtonID.MB_Right:
-					Plane plane = new Plane( Mogre.Vector3.UNIT_Y, 0);
+					Plane plane = new Plane(Mogre.Vector3.UNIT_Y, 0);
 					Mogre.Vector3 v;
 					using (Mogre.RaySceneQuery raySceneQuery = sceneMgr.CreateRayQuery(new Mogre.Ray())) {
 						float mouseX = (float)arg.state.X.abs / (float)arg.state.width;
@@ -151,30 +118,33 @@ namespace Strategy.MogreControl {
 						Mogre.Ray mouseRay = cameraMan.getCamera().GetCameraToViewportRay(mouseX, mouseY);
 						v = mouseRay.GetPoint(mouseRay.Intersects(plane).second);
 					}
-					groupManager.rightClick(v,simpleClick(arg));
+					groupManager.rightClick(v, simpleClick(arg));
 					break;
 			}
 			return true;
 		}
 
 
-		public bool OnMyMouseMoved(MouseEvent evt) {
+		public bool OnMyMouseMoved(MouseEvent arg) {
+			if (arg.state.Y.abs > mouseBoundY) {
+				return true;
+			}
 			if (bSelecting) {
 				if (!isRectagularSelect) {
 					mRect.Clear();
 					mRect.Visible = true;
 					isRectagularSelect = true;
 				}
-				mStop.x = evt.state.X.abs / (float)evt.state.width;
-				mStop.y = evt.state.Y.abs / (float)evt.state.height;
+				mStop.x = arg.state.X.abs / (float)arg.state.width;
+				mStop.y = arg.state.Y.abs / (float)arg.state.height;
 
 				mRect.setCorners(mStart, mStop);
 			}
-			if (evt.state.ButtonDown(MouseButtonID.MB_Middle)) {
-				cameraMan.MouseMovement(evt.state.X.rel, evt.state.Y.rel);
+			if (arg.state.ButtonDown(MouseButtonID.MB_Middle)) {
+				cameraMan.MouseMovement(arg.state.X.rel, arg.state.Y.rel);
 			}
-			if (evt.state.Z.rel != 0) {
-				cameraMan.MouseZoom(evt.state.Z.rel / 4);
+			if (arg.state.Z.rel != 0) {
+				cameraMan.MouseZoom(arg.state.Z.rel / 4);
 			}
 			return true;
 		}
@@ -378,7 +348,7 @@ namespace Strategy.MogreControl {
 		}
 
 		public void setCorners(Vector2 topLeft, Vector2 bottomRight) {
-			
+
 			setCorners(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
 		}
 	}
