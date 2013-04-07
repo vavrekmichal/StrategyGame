@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 namespace Strategy.GroupControl {
 	public enum ActionAnswer {
 		None = 1,
-		Attack = 5, 
 		Move = 2, 
-		RunAway = 3
+		RunAway = 3,
+		MoveTo = 4,
+		Attack = 5, 
 	}
 
 	public enum ActionReason {

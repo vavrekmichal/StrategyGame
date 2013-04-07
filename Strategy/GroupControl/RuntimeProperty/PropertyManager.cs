@@ -33,7 +33,7 @@ namespace Strategy.GroupControl.RuntimeProperty {
 
 			watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName;
 			// Only watch text files.
-			watcher.Filter = "Testing.csx";
+			watcher.Filter = "Properties.csx";
 			watcher.Changed += new FileSystemEventHandler(OnChanged);
 			// Begin watching.
 			watcher.EnableRaisingEvents = true;
@@ -50,14 +50,17 @@ namespace Strategy.GroupControl.RuntimeProperty {
 
 		}
 
-		//File change
+		/// <summary>
+		/// Function called when file "Properties.csx" is changed. This function controls delay between
+		/// changes (delay must be longer then 5s when is less so properties are not reloaded) 
+		/// </summary>
+		/// <param name="source">Source</param>
+		/// <param name="e">Changed file</param>
 		private static void OnChanged(object source, FileSystemEventArgs e) {
-			// Specify what is done when a file is changed, created, or deleted.
-			DateTime lastWriteTime = File.GetLastWriteTime(e.FullPath);
+			DateTime lastWriteTime = File.GetLastWriteTime(e.FullPath); //Bug fix - function is called twice
 			DateTime now = DateTime.Now;
 			TimeSpan ts = new TimeSpan(0, 0, 5);
-			if (lastWriteTime != lastRead && (now-lastRead)>ts) {
-				//Console.WriteLine("File: " + e.FullPath + " " + e.ChangeType);
+			if (lastWriteTime != lastRead && (now-lastRead)>ts) {       //reload is called once
 				lastRead = lastWriteTime;
 				session.ExecuteFile(e.FullPath);
 				instance.loadProperties();
@@ -88,13 +91,22 @@ namespace Strategy.GroupControl.RuntimeProperty {
 			}
 		}
 
-
-		public void setPropertyPath(string missionName) {
-			session.ExecuteFile("../../Media/Mission/Scripts/Testing.csx");
+		/// <summary>
+		/// A function loads properties for given mission from Property file
+		/// </summary>
+		/// <param name="missionName">mission name</param>
+		public void loadPropertyToMission(string missionName) {
+			session.ExecuteFile("../../Media/Mission/Scripts/Properties.csx");
 			missionPropertyNode = root.SelectNodes("runTimeProperty[@missionName='" + missionName + "'][1]")[0];
 			loadProperties();
 		}
 
+		/// <summary>
+		/// A function returns a generic property Property<T>
+		/// </summary>
+		/// <typeparam name="T">type of property</typeparam>
+		/// <param name="key">property name</param>
+		/// <returns>generic instance of Property found by key </returns>
 		public Property<T> getProperty<T>(string key) {
 			Type type = typeof(T);
 			Dictionary<string, Property<T>> subDict;
@@ -107,26 +119,25 @@ namespace Strategy.GroupControl.RuntimeProperty {
 			throw new PropertyMissingException("Missing property " + key);
 		}
 
+		/// <summary>
+		/// A function loads all properties in executing file and save them in generic Property by name(key)
+		/// </summary>
 		public void loadProperties() {
-
-			MethodInfo method = typeof(PropertyManager).GetMethod("add", BindingFlags.NonPublic | BindingFlags.Instance);
+			//reflection is used because here is needed runtime generic 
+			MethodInfo method = typeof(PropertyManager).GetMethod("add", BindingFlags.NonPublic | BindingFlags.Instance); //add is private function
 			foreach (XmlNode property in missionPropertyNode.ChildNodes) {
 				string propertyName = property.Attributes["name"].InnerText;
-				object d = session.Execute(propertyName);
+				object d = session.Execute(propertyName);					//property from a script (int,float...)
 				Type type = d.GetType();
 
-				MethodInfo generic = method.MakeGenericMethod(type);
+				MethodInfo generic = method.MakeGenericMethod(type);		
 				List<object> args = new List<object>();
 				args.Add(propertyName);
 				args.Add(d);
-				generic.Invoke(this, args.ToArray());
+				generic.Invoke(this, args.ToArray());						//calls add with type of property from script
 
 			}
 		}
-
-
-
-
 
 	}
 }

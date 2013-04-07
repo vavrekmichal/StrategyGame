@@ -122,6 +122,19 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 			get { return mesh; }
 		}
 
+		public virtual float PickUpDistance {
+			get { return 0; }
+		}
 
+
+		public Vector3 Position {
+			get {
+				if (sceneNode == null) {
+					return circularPositions.Last();
+				} else {
+					return sceneNode.Position;
+				}
+			}
+		}
 	}
 }

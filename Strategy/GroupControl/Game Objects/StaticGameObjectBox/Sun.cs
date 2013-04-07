@@ -89,6 +89,15 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
             return Vector3.ZERO;
         }
 
+		public float PickUpDistance {
+			get { return 0; }
+		}
+
+		public Vector3 Position {
+			get {
+				return Vector3.ZERO;
+			}
+		}
 
         public bool tryExecute(string executingAction) {
             throw new NotImplementedException();

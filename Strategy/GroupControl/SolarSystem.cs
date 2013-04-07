@@ -6,20 +6,22 @@ using Strategy.GroupControl.Game_Objects.StaticGameObjectBox;
 using Strategy.GroupControl.Game_Objects.MovableGameObjectBox;
 
 namespace Strategy.GroupControl {
-	class SolarSystem {
+	public class SolarSystem {
 
 		protected IStaticGameObject sun;
-		protected List<IStaticGameObject> isgoObjects;
-		protected List<IMovableGameObject> imgoObjects;
+		protected List<IStaticGameObject> isgoObjectList;
+		protected List<IMovableGameObject> imgoObjectList;
 		protected bool active = false;
+		protected Mogre.Vector3 position;
+
 
 		private string name;
 		private const int randConst = 40;
 
-		public SolarSystem(string name) {
+		public SolarSystem(string name, Mogre.Vector3 position) {
 			this.name = name;
-			isgoObjects = new List<IStaticGameObject>();
-			imgoObjects = new List<IMovableGameObject>();
+			isgoObjectList = new List<IStaticGameObject>();
+			imgoObjectList = new List<IMovableGameObject>();
 		}
 
 		public void setSun(IStaticGameObject sun) {
@@ -31,8 +33,8 @@ namespace Strategy.GroupControl {
 		}
 
 		public void addISGO(IStaticGameObject isgo) {
-			if (!isgoObjects.Contains(isgo)) {
-				isgoObjects.Add(isgo);
+			if (!isgoObjectList.Contains(isgo)) {
+				isgoObjectList.Add(isgo);
 			}
 		}
 
@@ -43,8 +45,8 @@ namespace Strategy.GroupControl {
 		}
 
 		public void addIMGO(IMovableGameObject imgo) {
-			if (!imgoObjects.Contains(imgo)) {
-				imgoObjects.Add(imgo);
+			if (!imgoObjectList.Contains(imgo)) {
+				imgoObjectList.Add(imgo);
 			}
 		}
 
@@ -55,17 +57,17 @@ namespace Strategy.GroupControl {
 		}
 
 		public void removeIMGO(IMovableGameObject imgo) {
-			if (imgoObjects.Contains(imgo)) {
-				imgoObjects.Remove(imgo);
+			if (imgoObjectList.Contains(imgo)) {
+				imgoObjectList.Remove(imgo);
 			}
 		}
 
 		public void hideSolarSystem() {
 			if (active) {
-				foreach (IStaticGameObject isgo in isgoObjects) {
+				foreach (IStaticGameObject isgo in isgoObjectList) {
 					isgo.changeVisible(false);
 				}
-				foreach (IMovableGameObject imgo in imgoObjects) {
+				foreach (IMovableGameObject imgo in imgoObjectList) {
 					imgo.changeVisible(false);
 				}
 				if (sun != null) {
@@ -78,14 +80,14 @@ namespace Strategy.GroupControl {
 		public void showSolarSystem() {
 			if (!active) {
 				
-				foreach (IStaticGameObject isgo in isgoObjects) {
+				foreach (IStaticGameObject isgo in isgoObjectList) {
 					isgo.changeVisible(true);
 				}
-				foreach (IMovableGameObject imgo in imgoObjects) {
+				foreach (IMovableGameObject imgo in imgoObjectList) {
 					imgo.changeVisible(true);
 					
 				}//check nonActive collisions
-				repairHidenCollision(imgoObjects);
+				repairHidenCollision(imgoObjectList);
 				if (sun != null) {
 					sun.changeVisible(true);
 				}
@@ -96,20 +98,20 @@ namespace Strategy.GroupControl {
 
 		public void update(float delay) {
 			if (active) {
-				foreach (IStaticGameObject isgo in isgoObjects) {
+				foreach (IStaticGameObject isgo in isgoObjectList) {
 					isgo.rotate(delay);
 				}
-				foreach (IMovableGameObject imgo in imgoObjects) {
+				foreach (IMovableGameObject imgo in imgoObjectList) {
 					imgo.move(delay);
 				}
 				if (sun != null) {
 					sun.rotate(delay);
 				}
 			} else {
-				foreach (IStaticGameObject isgo in isgoObjects) {
+				foreach (IStaticGameObject isgo in isgoObjectList) {
 					isgo.nonActiveRotate(delay);
 				}
-				foreach (IMovableGameObject imgo in imgoObjects) {
+				foreach (IMovableGameObject imgo in imgoObjectList) {
 					imgo.nonActiveMove(delay);
 				}
 				if (sun != null) {
@@ -123,12 +125,16 @@ namespace Strategy.GroupControl {
 			get { return name; }
 		}
 
+		public Mogre.Vector3 Position {
+			get { return position; }
+		}
+
 		//public List<IStaticGameObject> getISGO() {
 		//	return isgoObjects;
 		//}
 
 		public List<IStaticGameObject> getISGOs() {
-			return isgoObjects;
+			return isgoObjectList;
 		}
 
 		//public List<IMovableGameObject> getIMGO() {
@@ -136,7 +142,7 @@ namespace Strategy.GroupControl {
 		//}
 
 		public List<IMovableGameObject> getIMGOs() {
-			return imgoObjects;
+			return imgoObjectList;
 		}
 
 		private static Random r = new Random();

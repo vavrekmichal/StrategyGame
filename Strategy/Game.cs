@@ -13,70 +13,70 @@ using MOIS;
 using Strategy.GameGUI;
 
 namespace Strategy {
-    class Game {
-        protected GroupManager groupManager;
-        protected IFightManager fightManager;
-        protected TeamManager teamManager;
-        protected MouseControl mouseControl;
+	class Game {
+		protected GroupManager groupManager;
+		protected IFightManager fightManager;
+		//  protected TeamManager teamManager;
+		protected MouseControl mouseControl;
 
 		public static string playerName = "Player";
 
 		private static bool gamePaused;
 
-        protected GUIControler guiControler;
-        #region Singleton and constructor
-        private static Game instance;
+		protected GUIControler guiControler;
+		#region Singleton and constructor
+		private static Game instance;
 
-        public static Game getInstance(SceneManager sceneManager, CameraMan c, RenderWindow mWindow, Mouse mouse, Keyboard keyboard) {
-            if (instance==null) {
-                instance = new Game(sceneManager, c, mWindow, mouse, keyboard);
-            }
-            return instance;
-        }
-
-        private Game(SceneManager sceneManager, CameraMan c, RenderWindow mWindow, Mouse mouse, Keyboard keyboard) {
-           
-            groupManager = GroupManager.getInstance(sceneManager);
-            fightManager = FightManager.getInstance();
-            teamManager = TeamManager.getInstance();
-            guiControler = GUIControler.getInstance(mWindow, mouse, keyboard, groupManager);  
-            mouseControl = MouseControl.getInstance(c, sceneManager, groupManager, guiControler);
-			gamePaused = false;
-        }
-        #endregion
-
-        public void update(float delay) {
-            guiControler.update();
-			if(!gamePaused){
-				groupManager.update(delay);
-				teamManager.update();
+		public static Game getInstance(SceneManager sceneManager, CameraMan c, RenderWindow mWindow, Mouse mouse, Keyboard keyboard) {
+			if (instance == null) {
+				instance = new Game(sceneManager, c, mWindow, mouse, keyboard);
 			}
-            //production of Materials
-        }
+			return instance;
+		}
 
-        public GroupManager getGroupManager() {
-            return groupManager;
-        }
+		private Game(SceneManager sceneManager, CameraMan c, RenderWindow mWindow, Mouse mouse, Keyboard keyboard) {
 
-        public void inicialization() {
+			groupManager = GroupManager.getInstance(sceneManager);
+			fightManager = FightManager.getInstance();
+			// teamManager = TeamManager.getInstance();
+			guiControler = GUIControler.getInstance(mWindow, mouse, keyboard, groupManager);
+			mouseControl = MouseControl.getInstance(c, sceneManager, groupManager, guiControler);
+			gamePaused = false;
+		}
+		#endregion
+
+		public void update(float delay) {
+			guiControler.update();
+			if (!gamePaused) {
+				groupManager.update(delay);
+				//teamManager.update();
+			}
+			//production of Materials
+		}
+
+		public GroupManager getGroupManager() {
+			return groupManager;
+		}
+
+		public void inicialization() {
 			groupManager.setGUI(guiControler);
 			groupManager.inicializeWorld("StartMission");
-			teamManager.setGUI(guiControler);
-            teamManager.inicialization(groupManager.getTeams());
-            guiControler.inicialization(teamManager.playerTeam.getMaterials());
-            guiControler.setSolarSystemName(groupManager.getSolarSystemName(0));
-            
-        }
+			//teamManager.setGUI(guiControler);
+			//teamManager.inicialization(groupManager.getTeams());
+			//guiControler.inicialization(teamManager.playerTeam.getMaterials());
+			guiControler.setSolarSystemName(groupManager.getSolarSystemName(0));
 
-        //GET
-        public MouseControl getMouseControl() {
-            return mouseControl;
-        }
+		}
 
-        //QUIT
-        public void quit() {
-            guiControler.dispose();
-        }
+		//GET
+		public MouseControl getMouseControl() {
+			return mouseControl;
+		}
+
+		//QUIT
+		public void quit() {
+			guiControler.dispose();
+		}
 
 		//PAUSE
 		public static void pause(bool paused) {
@@ -86,5 +86,5 @@ namespace Strategy {
 		public static bool gameStatus() {
 			return gamePaused;
 		}
-    }
+	}
 }

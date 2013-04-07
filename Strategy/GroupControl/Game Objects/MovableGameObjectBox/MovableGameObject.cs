@@ -7,6 +7,7 @@ using Strategy.GroupControl.Game_Objects;
 using Strategy.GroupControl.Game_Objects.GameActions;
 using Strategy.GroupControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GroupControl.RuntimeProperty;
+using Strategy.MoveControl;
 using Strategy.TeamControl;
 
 namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
@@ -29,6 +30,9 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 		protected Vector3 direction = Vector3.ZERO;   // The direction the object is moving
 		protected Vector3 destination = Vector3.ZERO; // The destination the object is moving towards
 
+		protected IMoveControler interuptionReciever;	//calls when object must go to another position (no to the target)
+		protected bool isMovingToTarget = false;			//target move indicator
+
 		protected Vector3 modelDirection = Vector3.NEGATIVE_UNIT_Z;
 
 		public MovableGameObject() {
@@ -36,35 +40,72 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 			listOfAction = new List<IGameAction>();
 		}
 
+		/// <summary>
+		/// Calls when object is showed by SolarSystem
+		/// </summary>
 		protected abstract void onDisplayed();
+
+		/// <summary>
+		/// Checks if object go to target when is position changed
+		/// </summary>
+		protected void positionToMoveChanged(){
+			if (isMovingToTarget) {
+				interuptionReciever.interuptMove(this);
+				isMovingToTarget = false;
+			}
+		}
 
 		#region virtual methods
 
-		public virtual ActionAnswer onMouseAction(ActionReason reason, Vector3 point, object hitTestResult) {
+
+		public virtual ActionAnswer onMouseAction(ActionReason reason, Vector3 point, MovableObject hitObject, bool isFriendly) {
 			return ActionAnswer.Move;
 		}
 
+		/// <summary>
+		/// Add new position to flyList (on First place)
+		/// </summary>
+		/// <param name="pointToGo">position</param>
 		public virtual void addNextLocation(Vector3 pointToGo) {
-			flyList.AddLast(pointToGo);
+			flyList.AddFirst(pointToGo);
 		}
 
+		/// <summary>
+		/// Add all positions from given LinkedList to flyList
+		/// </summary>
+		/// <param name="positionList">LinkedList with positions</param>
 		public virtual void addNextLocation(LinkedList<Vector3> positionList) {
+			positionToMoveChanged();
 			foreach (var pointToGo in positionList) {
 				flyList.AddLast(pointToGo);
 			}
 		}
 
+		/// <summary>
+		/// Creates new LinkedList and set one position to go.
+		/// </summary>
+		/// <param name="pointToGo">position</param>
 		public virtual void setNextLocation(Vector3 pointToGo) {
+			positionToMoveChanged();
 			flyList = new LinkedList<Vector3>();
 			flyList.AddLast(pointToGo);
 			moving = false;
 		}
 
+		/// <summary>
+		/// Set given LinkedList as flyList
+		/// </summary>
+		/// <param name="positionList">LinkedList with positions</param>
 		public virtual void setNextLocation(LinkedList<Vector3> positionList) {
+			positionToMoveChanged();
 			flyList = positionList;
 			moving = false;
 		}
 
+		/// <summary>
+		/// Gives MovableGameObject to given position
+		/// </summary>
+		/// <param name="pointToGo">position</param>
 		public virtual void jumpNextLocation(Vector3 pointToGo) {
 			if (sceneNode == null) {
 				position = pointToGo;
@@ -73,6 +114,10 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 			}
 		}
 
+		/// <summary>
+		/// Function check if exist next position to go.
+		/// </summary>
+		/// <returns>exist = true</returns>
 		protected virtual bool nextLocation() {
 			if (flyList.Count == 0) {
 				return false;
@@ -81,7 +126,13 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 			}
 		}
 
-		public virtual void move(float f) {
+		/// <summary>
+		/// Function moves with SceneNode. It is called in active mode it means MovableGameObject
+		/// is in acitve SolarSystem (SceneNode is setted). Function controls distance from destination,
+		/// collisions, etc.
+		/// </summary>
+		/// <param name="delay">delay between frames</param>
+		public virtual void move(float delay) {
 			if (!moving) {
 				if (nextLocation()) {
 					moving = true;
@@ -103,8 +154,8 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 
 				}
 			} else {
-				if (!colision()) { //Protector's not in colision
-					float move = flySpeed.Value * f;
+				if (!colision()) { //Object's not in colision
+					float move = flySpeed.Value * delay;
 					distance -= move;
 					if (distance <= .0f) { //reach destination
 						sceneNode.Position = destination;
@@ -128,6 +179,12 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 			}
 		}
 
+		/// <summary>
+		/// Function moves with SceneNode. It is called in non-active mode it means MovableGameObject
+		/// is in hidden SolarSystem (SceneNode is null). Function controls distance from destination,
+		/// collisions, etc.
+		/// </summary>
+		/// <param name="delay">delay between frames</param>
 		public virtual void nonActiveMove(float f) {
 			if (!moving) {
 				if (nextLocation()) {
@@ -240,7 +297,40 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 			get { return direction; }
 		}
 
+		/// <summary>
+		/// Sets flyList and move interupt reciever.
+		/// </summary>
+		/// <param name="positionList">new LinkedList with positions</param>
+		/// <param name="moveCntr">move interupt reciever</param>
+		public void goToTarget(LinkedList<Vector3> positionList, IMoveControler moveCntr) {
+			positionToMoveChanged();
+			flyList = positionList;
+			moving = false;
+			isMovingToTarget = true;
+			interuptionReciever = moveCntr;
+		}
 
-		
+		/// <summary>
+		/// Sets new LinkedList with one new position to go. And move interupt reciever is setted.
+		/// </summary>
+		/// <param name="placeToGo">position</param>
+		/// <param name="moveCntr">move interupt reciever</param>
+		public void goToTarget(Vector3 placeToGo, IMoveControler moveCntr) {
+			positionToMoveChanged();
+			flyList = new LinkedList<Vector3>();
+			flyList.AddLast(placeToGo);
+			moving = false;
+			isMovingToTarget = true;
+			interuptionReciever = moveCntr;
+		}
+
+		/// <summary>
+		/// Stops object's moving
+		/// </summary>
+		public void stop() {
+			positionToMoveChanged();
+			flyList = new LinkedList<Vector3>();
+			moving = false;
+		}
 	}
 }

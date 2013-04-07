@@ -7,19 +7,20 @@ using Strategy.GroupControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GroupControl.Game_Objects.StaticGameObjectBox;
 using System.Collections;
 using Mogre;
+using Strategy.TeamControl;
 
 namespace Strategy.GroupControl {
-	abstract class IGroup<T> : IEnumerable {
+	public abstract class IGroup<T> : IEnumerable {
 		protected int number;
 		protected List<T> groupMembers;
-		protected string owner;
+		protected Team owner;
 
-		public IGroup(string own) {
+		public IGroup(Team own) {
 			groupMembers = new List<T>();
 			owner = own;
 		}
 
-		public void setNumberOfGroup(int i) {
+		public void setNumberOfGroup(int i) { //not Count
 			number = i;
 		}
 
@@ -52,7 +53,7 @@ namespace Strategy.GroupControl {
 			}
 		}
 
-		public string Owner {
+		public Team OwnerTeam {
 			get { return owner; }
 		}
 
@@ -60,10 +61,10 @@ namespace Strategy.GroupControl {
 
 
 
-	class GroupMovables : IGroup<IMovableGameObject> {
+	public class GroupMovables : IGroup<IMovableGameObject> {
 
-		public GroupMovables() : base("") { }
-		public GroupMovables(TeamControl.Team own) : base(own.Name) { }
+		public GroupMovables() : base(new Team("None")) { }
+		public GroupMovables(TeamControl.Team own) : base(own) { }
 
 		public void move(float f) {
 			foreach (IMovableGameObject obj in groupMembers) {
@@ -74,10 +75,10 @@ namespace Strategy.GroupControl {
 		public void nonVisibleMove(float f) {
 		}
 
-		public ActionAnswer onMouseAction(ActionReason reason, Vector3 point, object hitTestResult) {
+		public ActionAnswer onMouseAction(ActionReason reason, Vector3 point, MovableObject hitObject, bool isFriendly) {
 			ActionAnswer groupAnswer = ActionAnswer.None;
 			foreach (IMovableGameObject imgo  in groupMembers) {
-				ActionAnswer answer = imgo.onMouseAction(reason, point, hitTestResult);//TODO Team Control
+				ActionAnswer answer = imgo.onMouseAction(reason, point, hitObject, isFriendly);//TODO Team Control
 				if (answer>groupAnswer) {
 					groupAnswer = answer;
 				}
@@ -89,7 +90,7 @@ namespace Strategy.GroupControl {
 	}
 
 	class GroupStatics : IGroup<IStaticGameObject> {
-		public GroupStatics(): base("") { }
-		public GroupStatics(TeamControl.Team own) : base(own.Name) { }
+		public GroupStatics(): base(new Team("None")) { }
+		public GroupStatics(TeamControl.Team own) : base(own) { }
 	}
 }

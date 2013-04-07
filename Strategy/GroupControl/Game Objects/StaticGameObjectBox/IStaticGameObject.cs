@@ -15,6 +15,8 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
         bool tryExecute(string executingAction);
 
         Team Team { get; set; }
+		float PickUpDistance { get; }
+		Vector3 Position { get; }
 
 		ActionAnswer onMouseAction(ActionReason reason, Vector3 point, object hitTestResult);
 

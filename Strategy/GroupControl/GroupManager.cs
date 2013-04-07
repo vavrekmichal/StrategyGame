@@ -18,7 +18,8 @@ namespace Strategy.GroupControl {
 		protected ObjectCreator objectCreator;
 		protected GUIControler guiControler;
 		protected IMoveControler moveControler;
-		protected PropertyManager propertyManager;
+		protected PropertyManager propertyMgr;
+		protected TeamManager teamMgr;
 		protected HitTest hitTest;
 
 		protected Dictionary<int, SolarSystem> solarSystemBetter;
@@ -51,11 +52,11 @@ namespace Strategy.GroupControl {
 		/// </summary>
 		/// <param name="manager">Mogre SceneManager</param>
 		private GroupManager(Mogre.SceneManager manager) {
-
+			teamMgr = TeamManager.getInstance();
 			objectCreator = ObjectCreator.getInstance(manager);
 			solarSystemBetter = new Dictionary<int, SolarSystem>();
 			moveControler = MoveControler.getInstance();
-			propertyManager = new PropertyManager("StartMission");
+			propertyMgr = new PropertyManager("StartMission");
 			hitTest = new HitTest();
 		}
 		#endregion
@@ -82,11 +83,14 @@ namespace Strategy.GroupControl {
 		/// <summary>
 		/// Called on frame update
 		/// </summary>
-		/// <param name="f">delay between frames</param>
-		public void update(float f) {
+		/// <param name="delay">delay between frames</param>
+		public void update(float delay) {
 			foreach (KeyValuePair<int, SolarSystem> solarSys in solarSystemBetter) {
-				solarSys.Value.update(f);
+				solarSys.Value.update(delay);
 			}
+			Gate.updateTravelers(delay);
+			//teamManager.update();
+			moveControler.update(delay);
 		}
 
 		#region solarSyst
@@ -115,6 +119,7 @@ namespace Strategy.GroupControl {
 			return list;
 		}
 
+
 		public string getSolarSystemName(int numberOfSolarSystem) {
 			return solarSystemBetter[numberOfSolarSystem].Name;
 		}
@@ -124,17 +129,17 @@ namespace Strategy.GroupControl {
 		/// inicializetion of world
 		/// </summary>
 		public void inicializeWorld(string missionName) {
-
-			objectCreator.initializeWorld(missionName, propertyManager);
+			objectCreator.initializeWorld(missionName, propertyMgr);
 			createSolarSystems();
+			teamMgr.setGUI(guiControler);
+			teamMgr.inicialization(objectCreator.getTeams(), objectCreator.getTeamsRelations());
+			guiControler.inicialization(teamMgr.playerTeam.getMaterials());
 		}
 
 
-
-		public Dictionary<string, Team> getTeams() {
-			return objectCreator.getTeams();
-		}
-
+		/// <summary>
+		/// Set all select group as new empty
+		/// </summary>
 		public void deselectGroup() {
 			GroupMovables groupM = new GroupMovables();
 			GroupStatics groupS = new GroupStatics();
@@ -191,21 +196,39 @@ namespace Strategy.GroupControl {
 			}
 		}
 
-
+		/// <summary>
+		/// Called from GUI when a left mouse button click or a rectangular select in game area 
+		/// </summary>
+		/// <param name="selectedObjects">objects in clicked area</param>
 		public void leftClick(List<Mogre.MovableObject> selectedObjects) {
 			selectGroup(selectedObjects);
 		}
 
+		/// <summary>
+		/// Called from GUI when right mouse button click in game area
+		/// </summary>
+		/// <param name="clickedPoint">mouse position</param>
+		/// <param name="selectedObjects">objects in clicked area</param>
 		public void rightClick(Mogre.Vector3 clickedPoint, List<Mogre.MovableObject> selectedObjects) {
 			if (activeMGroup) {//TODO rewrite (notebook)
-				if (selectedGroupM.Owner == Game.playerName) {
-					object hitTestResult;
+				if (selectedGroupM.OwnerTeam.Name == Game.playerName) {
+					Mogre.MovableObject hitObject;
+					bool isFriendly = true;
 					if (selectedObjects.Count == 0) {
-						hitTestResult = null;
+						hitObject = null;
 					} else {
-						hitTestResult = selectedObjects[0];
+						hitObject = selectedObjects[0];
+						Team targetTeam;
+						if (hitTest.isObjectMovable(hitObject.Name)) {
+							targetTeam = hitTest.getIMGO(hitObject.Name).Team;
+							
+						} else {
+							targetTeam = hitTest.getISGO(hitObject.Name).Team;
+						}
+						isFriendly = teamMgr.areFriendly(selectedGroupM.OwnerTeam, targetTeam);
+						
 					}
-					var answer = selectedGroupM.onMouseAction(ActionReason.onRightButtonClick, clickedPoint, hitTestResult);
+					var answer = selectedGroupM.onMouseAction(ActionReason.onRightButtonClick, clickedPoint, hitObject, isFriendly);
 					switch (answer) {
 						case ActionAnswer.None:
 							break;
@@ -213,6 +236,9 @@ namespace Strategy.GroupControl {
 							break;
 						case ActionAnswer.Move:
 							moveControler.goToLocation(selectedGroupM, clickedPoint);
+							break;
+						case ActionAnswer.MoveTo:
+							moveControler.goToTarget(selectedGroupM, hitTest.getISGO(hitObject.Name));
 							break;
 						case ActionAnswer.RunAway:
 							break;

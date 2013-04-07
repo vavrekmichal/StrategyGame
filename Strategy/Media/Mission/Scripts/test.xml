@@ -6,5 +6,6 @@
     <property name="speed2"/>
     <property name="speed3"/>
     <property name="planetRotateSpeed"/>
+    <property name="planetPickUpDistance"/>
   </runTimeProperty>
 </Properties>

@@ -16,8 +16,10 @@ namespace Strategy.TeamControl {
 
         protected GUIControler guiControler;
 
-        protected Dictionary<string, Team> teams; //implementation in mybook think about delete. MUST delete from team and group
-        
+        protected Dictionary<string, Team> teamDict; //implementation in mybook think about delete. MUST delete from team and group
+
+		protected Dictionary<Team, List<Team>> friendlyTeamDict;
+
         public Team playerTeam;
 
         #region singleton and constructor
@@ -31,17 +33,18 @@ namespace Strategy.TeamControl {
         }
 
         private TeamManager() {
-            
+            friendlyTeamDict= new Dictionary<Team,List<Team>>();
         }
         #endregion
 
         //public
         
-        public void inicialization(Dictionary<string,Team> settingTeam) {
-            teams = settingTeam;
-            playerTeam = teams[Game.playerName];
+        public void inicialization(Dictionary<string,Team> settingTeam, Dictionary<Team, List<Team>> friendlyDict) {
+			friendlyTeamDict = friendlyDict;
+            teamDict = settingTeam;
+            playerTeam = teamDict[Game.playerName];
             Console.WriteLine("Team print at Start of the Game:");
-            foreach(KeyValuePair<string,Team> team in teams){
+            foreach(KeyValuePair<string,Team> team in teamDict){
                 //team.Value.setMaterials(materials);
                 Console.WriteLine(team.Value.ToString());
             }
@@ -58,6 +61,13 @@ namespace Strategy.TeamControl {
             }
         }
 
+		public bool areFriendly(Team t1, Team t2) {
+			if (friendlyTeamDict[t1].Contains(t2)) {
+				return true;
+			} else {
+				return false;
+			}
+		}
         //private
     }
 }

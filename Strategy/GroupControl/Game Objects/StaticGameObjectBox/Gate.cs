@@ -15,7 +15,7 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 		private Vector3 position;
 		private AnimationState animationState; //The AnimationState the moving object
 
-		private static Dictionary<string, Property<DateTime>> travelers = new Dictionary<string,Property<DateTime>>();
+		protected static List<Traveler> travelerList = new List<Traveler>();
 
 		protected static Team gateTeam;
 
@@ -62,6 +62,16 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 
 		protected override void onDisplayed() {
 			
+		}
+
+		public static void updateTravelers(float delay){
+			foreach (var traveler in travelerList) {
+				traveler.update(delay);
+			}
+		}
+
+		public static List<Traveler> getTravelers() {
+			return travelerList;
 		}
 	}
 }

@@ -1,5 +1,17 @@
 <?xml version="1.0" ?>
 <mission name="StartMission">
+  <teams>
+    <friendlyTeams>
+      <team name="Player"/>
+      <team name="Devastator"/>
+    </friendlyTeams>
+    <friendlyTeams>
+      <team name="None"/>
+    </friendlyTeams>
+    <friendlyTeams>
+      <team name="Fun"/>
+    </friendlyTeams>
+  </teams>
   <usedObjects>
     <isgos>
       <sgo name="Planet" path="StaticGameObjectBox/Planet.cs" fullName="Strategy.GroupControl.Game_Objects.StaticGameObjectBox.Planet"/>
@@ -10,9 +22,9 @@
       <mgo name="SpaceShip2" path="MovableGameObjectBox/SpaceShip2.cs" fullName="Strategy.GroupControl.Game_Objects.MovableGameObjectBox.SpaceShip2"/>
     </imgos>
   </usedObjects>
-  <solarSystems>
-    <solarSystem name="This is my">
-      <isgo type="Gate" name="Gate1" mesh="gate.mesh" team="None" position="3000,0,3000" distance="0" />
+  <solarSystems >
+    <solarSystem name="This is my" position="3000,0,3000" gate="true">
+   
       <isgo type="Sun" name="Sun" mesh="sun.mesh"  team="None" position="0,0,0" distance="0"/>
       <isgo type="Planet" name="Mercury" mesh="mercury.mesh" team="Player" position="200,0,200" distance="500">
         <gameAction name="Produce" value="Wolenium" />
@@ -37,35 +49,36 @@
       <imgo type="SpaceShip" name="Ship2" mesh="SpaceShip2.mesh" team="Player" position="450,0,450"/>
       <imgo type="SpaceShip2" name="Ship3" mesh="SpaceShip2.mesh" team="Player" position="450,0,500"/>
       <imgo type="SpaceShip" name="ShipD" mesh="SpaceShip2.mesh" team="Devastator" position="600,0,600"/>
+      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,600"/>
     </solarSystem>
-    <solarSystem name="FunnySystem">
+    <solarSystem name="FunnySystem" position="300,500,3000">
       <isgo type="Sun" name="FunnyThings" mesh="jupiter.mesh"  team="None" position="0,0,0" distance="0"/>
       <isgo type="Planet" name="FunnyThings1" mesh="mercury.mesh" team="Fun" position="0,0,0" distance="1000"/>
       <isgo type="Planet" name="FunnyThings2" mesh="venus.mesh" team="Fun" position="0,0,0" distance="2000"/>
       <isgo type="Planet" name="FunnyThings3" mesh="earth.mesh" team="Fun" position="0,0,0" distance="4000"/>
     </solarSystem>
-    <solarSystem name="s1">
+    <solarSystem name="s1" position="30,0,100">
       <isgo type="Sun" name="s10" mesh="jupiter.mesh"  team="None" position="0,0,0" distance="0"/>
     </solarSystem>
-    <solarSystem name="s2">
+    <solarSystem name="s2" position="300,0,3000">
       <isgo type="Sun" name="s11" mesh="mars.mesh"  team="None" position="0,0,0" distance="0"/>
     </solarSystem>
-    <solarSystem name="s3">
+    <solarSystem name="s3" position="3600,0,3000">
       <isgo type="Sun" name="s12" mesh="SpaceShip2.mesh"  team="None" position="0,0,0" distance="0"/>
     </solarSystem>
-    <solarSystem name="s4">
+    <solarSystem name="s4" position="3000,0,0">
       <isgo type="Sun" name="s13" mesh="SpaceShip1.mesh"  team="None" position="0,0,0" distance="0"/>
     </solarSystem>
-    <solarSystem name="ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss5">
+    <solarSystem name="ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss5" position="20,0,3000">
       <isgo type="Sun" name="s14" mesh="earth.mesh"  team="None" position="0,0,0" distance="0"/>
     </solarSystem>
-    <solarSystem name="s6">
+    <solarSystem name="s6" position="3000,0,600">
       <isgo type="Sun" name="s15" mesh="neptune.mesh"  team="None" position="0,0,0" distance="0"/>
     </solarSystem>
-    <solarSystem name="s7">
+    <solarSystem name="s7" position="3000,5,1000">
       <isgo type="Sun" name="s16" mesh="uranus.mesh"  team="None" position="0,0,0" distance="0"/>
     </solarSystem>
-    <solarSystem name="s8">
+    <solarSystem name="s8" position="3000,0,250">
       <isgo type="Sun" name="s17" mesh="gate.mesh"  team="None" position="0,0,0" distance="0"/>
     </solarSystem>
   </solarSystems>

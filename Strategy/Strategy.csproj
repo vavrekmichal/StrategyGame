@@ -94,6 +94,7 @@
     <Compile Include="GroupControl\Game Objects\ObjectXMLCreator.cs" />
     <Compile Include="GroupControl\Game Objects\StaticGameObjectBox\Gate.cs" />
     <Compile Include="GroupControl\Game Objects\StaticGameObjectBox\IStaticGameObject.cs" />
+    <Compile Include="GroupControl\Game Objects\StaticGameObjectBox\Traveler.cs" />
     <Compile Include="GroupControl\Group.cs" />
     <Compile Include="GroupControl\Game Objects\MovableGameObjectBox\MovableGameObject.cs" />
     <Compile Include="GroupControl\Game Objects\StaticGameObjectBox\StaticGameObject.cs" />
