@@ -14,6 +14,7 @@ namespace Strategy.GroupControl {
 	}
 
 	public enum ActionReason {
-		Friendly, Enemy, onRightButtonClick
+		targetInDistance,
+		onRightButtonClick
 	}
 }

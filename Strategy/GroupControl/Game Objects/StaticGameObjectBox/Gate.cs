@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Mogre;
 using Strategy.GroupControl.Game_Objects.GameActions;
+using Strategy.GroupControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GroupControl.RuntimeProperty;
 using Strategy.TeamControl;
 
@@ -56,7 +57,8 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 			}
 		}
 
-		public override ActionAnswer onMouseAction(ActionReason reason, Vector3 point, object hitTestResult) {
+		public override ActionAnswer reactToInitiative(ActionReason reason, Vector3 point, IMovableGameObject target) {
+			Console.WriteLine("P5enesu te do zeme nezeme");
 			return ActionAnswer.None;
 		}
 

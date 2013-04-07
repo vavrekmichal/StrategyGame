@@ -6,9 +6,6 @@
       <team name="Devastator"/>
     </friendlyTeams>
     <friendlyTeams>
-      <team name="None"/>
-    </friendlyTeams>
-    <friendlyTeams>
       <team name="Fun"/>
     </friendlyTeams>
   </teams>
@@ -24,7 +21,7 @@
   </usedObjects>
   <solarSystems >
     <solarSystem name="This is my" position="3000,0,3000" gate="true">
-   
+
       <isgo type="Sun" name="Sun" mesh="sun.mesh"  team="None" position="0,0,0" distance="0"/>
       <isgo type="Planet" name="Mercury" mesh="mercury.mesh" team="Player" position="200,0,200" distance="500">
         <gameAction name="Produce" value="Wolenium" />

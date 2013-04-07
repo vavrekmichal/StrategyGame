@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Mogre;
+using Strategy.GroupControl.Game_Objects.MovableGameObjectBox;
 using Strategy.TeamControl;
 
 namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
@@ -18,7 +19,7 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 		float PickUpDistance { get; }
 		Vector3 Position { get; }
 
-		ActionAnswer onMouseAction(ActionReason reason, Vector3 point, object hitTestResult);
+		ActionAnswer reactToInitiative(ActionReason reason, Vector3 point, IMovableGameObject target);
 
 	}
 }

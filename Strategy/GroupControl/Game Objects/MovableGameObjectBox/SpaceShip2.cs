@@ -16,13 +16,13 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 			this.movableObjectTeam = myTeam;
 			this.manager = manager;
 			this.position = position;
-			this.flySpeed = propMgr.getProperty<float>("speed3");
+			this.flySpeed = propMgr.getProperty<float>("speed2");
 
 			//Mogre inicialization of object
 			entity = manager.CreateEntity(name, mesh);
 		}
 
-		public override ActionAnswer onMouseAction(ActionReason reason, Vector3 point, MovableObject hitTarget, bool isFriendly) {
+		public override ActionAnswer onMouseAction(ActionReason reason, Vector3 point, MovableObject hitTarget, bool isFriendly, bool isMovableGameObject) {
 			return ActionAnswer.None;
 		}
 

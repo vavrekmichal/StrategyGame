@@ -7,5 +7,7 @@
     <property name="speed3"/>
     <property name="planetRotateSpeed"/>
     <property name="planetPickUpDistance"/>
+    <property name="basicAttack"/>
+    <property name="basicDeff"/>
   </runTimeProperty>
 </Properties>

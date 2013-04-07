@@ -58,12 +58,12 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 		#region virtual methods
 
 
-		public virtual ActionAnswer onMouseAction(ActionReason reason, Vector3 point, MovableObject hitObject, bool isFriendly) {
+		public virtual ActionAnswer onMouseAction(ActionReason reason, Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject) {
 			return ActionAnswer.Move;
 		}
 
 		/// <summary>
-		/// Add new position to flyList (on First place)
+		/// Add new position to flyList (on first place)
 		/// </summary>
 		/// <param name="pointToGo">position</param>
 		public virtual void addNextLocation(Vector3 pointToGo) {
@@ -331,6 +331,15 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 			positionToMoveChanged();
 			flyList = new LinkedList<Vector3>();
 			moving = false;
+		}
+
+
+		public virtual int AttackPower {
+			get { return 0; }
+		}
+
+		public virtual int DeffPower {
+			get { return 0; }
 		}
 	}
 }

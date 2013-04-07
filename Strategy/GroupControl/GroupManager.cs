@@ -214,6 +214,7 @@ namespace Strategy.GroupControl {
 				if (selectedGroupM.OwnerTeam.Name == Game.playerName) {
 					Mogre.MovableObject hitObject;
 					bool isFriendly = true;
+					bool isIMGO = true;
 					if (selectedObjects.Count == 0) {
 						hitObject = null;
 					} else {
@@ -224,11 +225,12 @@ namespace Strategy.GroupControl {
 							
 						} else {
 							targetTeam = hitTest.getISGO(hitObject.Name).Team;
+							isIMGO = false;
 						}
 						isFriendly = teamMgr.areFriendly(selectedGroupM.OwnerTeam, targetTeam);
 						
 					}
-					var answer = selectedGroupM.onMouseAction(ActionReason.onRightButtonClick, clickedPoint, hitObject, isFriendly);
+					var answer = selectedGroupM.onMouseAction(ActionReason.onRightButtonClick, clickedPoint, hitObject, isFriendly, isIMGO);
 					switch (answer) {
 						case ActionAnswer.None:
 							break;

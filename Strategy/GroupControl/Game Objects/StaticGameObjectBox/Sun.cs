@@ -5,6 +5,7 @@ using System.Text;
 using Mogre;
 using Strategy.TeamControl;
 using Strategy.GroupControl.Game_Objects.GameActions;
+using Strategy.GroupControl.Game_Objects.MovableGameObjectBox;
 
 namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 	class Sun : IStaticGameObject {
@@ -43,7 +44,7 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 
 		}
 
-		public virtual ActionAnswer onMouseAction(ActionReason reason, Vector3 point, object hitTestResult) {
+		public virtual ActionAnswer reactToInitiative(ActionReason reason, Vector3 point, IMovableGameObject target) {
 			return ActionAnswer.None;
 		}
 

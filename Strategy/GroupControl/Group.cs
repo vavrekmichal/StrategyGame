@@ -14,6 +14,7 @@ namespace Strategy.GroupControl {
 		protected int number;
 		protected List<T> groupMembers;
 		protected Team owner;
+		
 
 		public IGroup(Team own) {
 			groupMembers = new List<T>();
@@ -75,10 +76,10 @@ namespace Strategy.GroupControl {
 		public void nonVisibleMove(float f) {
 		}
 
-		public ActionAnswer onMouseAction(ActionReason reason, Vector3 point, MovableObject hitObject, bool isFriendly) {
+		public ActionAnswer onMouseAction(ActionReason reason, Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject) {
 			ActionAnswer groupAnswer = ActionAnswer.None;
 			foreach (IMovableGameObject imgo  in groupMembers) {
-				ActionAnswer answer = imgo.onMouseAction(reason, point, hitObject, isFriendly);//TODO Team Control
+				ActionAnswer answer = imgo.onMouseAction(reason, point, hitObject, isFriendly, isMovableGameObject);//TODO Team Control
 				if (answer>groupAnswer) {
 					groupAnswer = answer;
 				}

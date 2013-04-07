@@ -30,6 +30,9 @@ namespace Strategy.GroupControl.Game_Objects.MovableGameObjectBox {
 		Mogre.Vector3 Direction { get; }
 		Mogre.Vector3 Position {get;}
 
-		ActionAnswer onMouseAction(ActionReason reason, Vector3 point, MovableObject hitObject, bool isFriendly);
+		int AttackPower { get; }
+		int DeffPower { get; }
+
+		ActionAnswer onMouseAction(ActionReason reason, Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject);
 	}
 }

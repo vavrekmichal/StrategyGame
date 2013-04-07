@@ -156,21 +156,26 @@ namespace Strategy.GroupControl.Game_Objects {
 		/// </summary>
 		/// <param name="teamsNode">XML node with teams and frienships</param>
 		private void loadTeams(XmlNode teamsNode) {
-			Dictionary<string, List<string>> teamStringRealationDict = new Dictionary<string, List<string>>();
+			var t = new Team("None", materialList);		//add None team for suns and gates
+			teamDict.Add(t.Name, t);
 			foreach (XmlNode node in teamsNode.ChildNodes) {
 				List<Team> friends = new List<Team>();
 				foreach (XmlNode teamName in node.ChildNodes) {
 					foreach (XmlNode att in teamName.Attributes) {
 						if (att.Name == "name") {
 
-							var t = new Team(att.Value, materialList);
+							t = new Team(att.Value, materialList);
+							teamDict.Add(t.Name, t);
 							friends.Add(t);
 						}
 					}
 				}
+				//friends.Add(teamDict["None"]);
+				var listWithNone = new List<Team>(friends);
+				listWithNone.Add(teamDict["None"]);
 				foreach (var team in friends) {
-					teamDict.Add(team.Name, team);
-					teamRealationDict.Add(team, friends);
+
+					teamRealationDict.Add(team, listWithNone);
 				}
 
 			}

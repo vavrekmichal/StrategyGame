@@ -6,6 +6,7 @@ using Strategy.GroupControl.Game_Objects.GameActions;
 using Strategy.GameMaterial;
 using Mogre;
 using System.Reflection;
+using Strategy.GroupControl.Game_Objects.MovableGameObjectBox;
 
 namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
     public abstract class StaticGameObject : IStaticGameObject {
@@ -61,7 +62,7 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 		}
 
 		//TODO implement answer
-		public virtual ActionAnswer onMouseAction(ActionReason reason, Vector3 point, object hitTestResult) {
+		public virtual ActionAnswer reactToInitiative(ActionReason reason, Vector3 point, IMovableGameObject target) {
 			return ActionAnswer.None;
 		}
 
@@ -123,7 +124,7 @@ namespace Strategy.GroupControl.Game_Objects.StaticGameObjectBox {
 		}
 
 		public virtual float PickUpDistance {
-			get { return 0; }
+			get { return 150; }
 		}
 
 

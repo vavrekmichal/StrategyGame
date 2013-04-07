@@ -68,6 +68,7 @@ namespace Strategy.MoveControl {
 		private void reachedDestiantion(IMovableGameObject imgo, IStaticGameObject isgo) { //TODO implemenyt
 			Console.WriteLine("REACHED");
 			imgo.stop();
+			isgo.reactToInitiative(ActionReason.targetInDistance, imgo.Position, imgo);
 
 		}
 
@@ -134,23 +135,18 @@ namespace Strategy.MoveControl {
 				}
 			}
 			foreach (IMovableGameObject imgo in toRemove) {
-				//moveControledDict.Remove(imgo);
-
-				reachedDestiantion(imgo, moveControledDict[imgo]);//trev.Key,trev.Value
+				reachedDestiantion(imgo, moveControledDict[imgo]);
 			}
 		}
 
 		public void goToTarget(GroupMovables group, IStaticGameObject target) {
 			List<Mogre.Vector3> destinations = preparePositions(group.Count, target.Position); 
 			foreach (IMovableGameObject imgo in group) {
-				//if (moveControledDict.ContainsKey(imgo)) {
-				//	moveControledDict.Remove(imgo);
-				//}
 				imgo.goToTarget(destinations[0], this);
 				destinations.RemoveAt(0);
 				moveControledDict.Add(imgo, target);
 			}
-			//goToLocation(group, target.Position);
+
 		}
 
 
