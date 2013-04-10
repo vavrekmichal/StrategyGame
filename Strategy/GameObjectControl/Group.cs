@@ -14,7 +14,7 @@ namespace Strategy.GameObjectControl {
 	public abstract class IGroup<T> : IEnumerable {
 		protected int number;
 		protected List<T> groupMembers;
-		protected Team owner;	
+		protected Team owner;
 
 		public IGroup(Team own) {
 			groupMembers = new List<T>();
@@ -64,12 +64,12 @@ namespace Strategy.GameObjectControl {
 
 	public class GroupMovables : IGroup<IMovableGameObject> {
 
-		private static Dictionary<string, object> baseTemplateBonusDict;		//static template for creating new Group with setted basic bonuses
+		public static Dictionary<string, object> baseTemplateBonusDict;		//static template for creating new Group with setted basic bonuses
 
 		/// <summary>
 		/// Static constructor setted baseTemp.. dictionary with basic stats
 		/// </summary>
-		static GroupMovables() {	
+		static GroupMovables() {
 			baseTemplateBonusDict = new Dictionary<string, object>();
 			baseTemplateBonusDict.Add("attack", new Property<int>(1));
 			baseTemplateBonusDict.Add("deffence", new Property<int>(1));
@@ -78,9 +78,16 @@ namespace Strategy.GameObjectControl {
 
 		private Dictionary<string, object> groupBonuses;
 
-		public GroupMovables(): this(new Team("")){ }
-		public GroupMovables(TeamControl.Team own) : base(own) {
-			groupBonuses = new Dictionary<string, object>(baseTemplateBonusDict);
+		public GroupMovables() : this(new Team("")) { }
+		public GroupMovables(TeamControl.Team own)
+			: base(own) {
+			groupBonuses = new Dictionary<string, object>();
+
+			groupBonuses.Add("attack", new Property<int>(1));
+			groupBonuses.Add("deffence", new Property<int>(1));
+			groupBonuses.Add("speed", new Property<int>(1));
+
+
 
 		}
 
@@ -95,6 +102,7 @@ namespace Strategy.GameObjectControl {
 
 		public void select() {		//called when group is changed from informative to selected
 			//Need colect bonuses from count and from members
+			((Property<int>)groupBonuses["attack"]).Value += 1;
 			foreach (IMovableGameObject imgo in groupMembers) {
 				imgo.setGroupBonuses(groupBonuses);
 			}
@@ -102,9 +110,9 @@ namespace Strategy.GameObjectControl {
 
 		public ActionAnswer onMouseAction(ActionReason reason, Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject) {
 			ActionAnswer groupAnswer = ActionAnswer.None;
-			foreach (IMovableGameObject imgo  in groupMembers) {
+			foreach (IMovableGameObject imgo in groupMembers) {
 				ActionAnswer answer = imgo.onMouseAction(reason, point, hitObject, isFriendly, isMovableGameObject);//TODO Team Control
-				if (answer>groupAnswer) {
+				if (answer > groupAnswer) {
 					groupAnswer = answer;
 				}
 			}
@@ -115,7 +123,7 @@ namespace Strategy.GameObjectControl {
 	}
 
 	class GroupStatics : IGroup<IStaticGameObject> {
-		public GroupStatics(): base(new Team("None")) { }
+		public GroupStatics() : base(new Team("None")) { }
 		public GroupStatics(TeamControl.Team own) : base(own) { }
 	}
 }

@@ -26,8 +26,10 @@ namespace Strategy.MoveMgr {
 			moveMgrControledDict = new Dictionary<IMovableGameObject, IStaticGameObject>();
 		}
 
+
+		private static Random r = new Random();
 		private Mogre.Vector3 randomizeVector(Mogre.Vector3 v) {
-			Random r = new Random();
+			
 			int i = r.Next(4);
 			switch (i) {
 				case 0: v.x += randConst;

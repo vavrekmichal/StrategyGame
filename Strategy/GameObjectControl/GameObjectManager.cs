@@ -147,9 +147,9 @@ namespace Strategy.GameObjectControl {
 				case ActionAnswer.MoveTo:
 					moveMgr.goToTarget(groupMgr.getActiveMovableGroup(), hitTest.getISGO(hitObject.Name));
 					break;
-				//}
 
 			}
+			groupMgr.showSelectedInfoGroup(); //TODO delete volano jen jako gui update pro kontrolu
 
 		}
 

@@ -216,6 +216,8 @@ namespace Strategy.GameObjectControl {
 		public ActionAnswer onRightMouseClick(Mogre.Vector3 clickedPoint, MovableObject hitObject, bool isFriendly, bool isImgo) {
 
 			if (isMovableGroupActive && selectedGroupM.OwnerTeam.Name == Game.playerName) {
+				groupMList.Add(selectedGroupM);
+				selectedGroupM.select();
 				return selectedGroupM.onMouseAction(ActionReason.onRightButtonClick, clickedPoint, hitObject, isFriendly, isImgo);
 			} else {
 				return ActionAnswer.None;

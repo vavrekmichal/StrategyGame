@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Strategy.GameObjectControl.RuntimeProperty {
-	public class Property<T> {
+	public class Property<T> : ICloneable{
 		private T value;
 
 		public Property(T value) {
@@ -17,6 +17,8 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 			get { return this.value; }
 		}
 
-
+		public object Clone() {
+			return this.MemberwiseClone();
+		}
 	}
 }

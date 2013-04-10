@@ -53,7 +53,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		}
 
 		public override int AttackPower {
-			get { return getProperty<int>("attack").Value; }
+			get { return getProperty<int>("attack").Value * getPropertyValueFromBonusDict<int>("attack"); }
 		}
 
 		public override int DeffPower {

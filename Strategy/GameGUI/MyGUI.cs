@@ -265,7 +265,7 @@ namespace Strategy.GameGUI {
 		public void showTargeted(GameObjectControl.GroupMovables group) {
 			statPanelName.Text = group[0].Name;
 			statPanelTeam.Text = group[0].Team.Name;
-			statPanelMesh.Text = group.Count.ToString();
+			statPanelMesh.Text = group[0].AttackPower.ToString();
 
 		}
 

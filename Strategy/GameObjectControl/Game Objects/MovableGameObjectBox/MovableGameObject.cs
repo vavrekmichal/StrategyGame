@@ -47,6 +47,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			flyList = new LinkedList<Vector3>();
 			listOfAction = new List<IGameAction>();
 			propertyDict = new Dictionary<string, object>();
+			propertyBonusDict = GroupMovables.baseTemplateBonusDict;
 		}
 
 		/// <summary>
@@ -321,13 +322,15 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			}
 		}
 
-		protected T getPropertyValueFromDict<T>(string name, Dictionary<string, object> propDict) {
-			if (!propDict.ContainsKey(name)) {
+		protected T getPropertyValueFromBonusDict<T>(string name) {
+			if (!propertyBonusDict.ContainsKey(name)) {
 				return default(T);
 			}
-			var prop = ((Property<T>)propertyDict[name]).Value;
+			var prop = ((Property<T>)propertyBonusDict[name]).Value;
 			return prop;
 		}
+
+
 
 		public string Name {
 			get {
