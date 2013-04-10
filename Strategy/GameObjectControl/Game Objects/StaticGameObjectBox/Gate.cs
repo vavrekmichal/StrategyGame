@@ -1,0 +1,113 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Mogre;
+using Strategy.GameObjectControl.Game_Objects.GameActions;
+using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
+using Strategy.GameObjectControl.RuntimeProperty;
+using Strategy.TeamControl;
+
+namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
+	public class Gate : StaticGameObject {
+
+
+		private Vector3 position;
+		private AnimationState animationState; //The AnimationState the moving object
+
+		protected static List<Traveler> travelerList = new List<Traveler>();
+
+		protected static Team gateTeam;
+
+		public Gate(string name, string mesh, SceneManager manager, Vector3 position, Team team) {
+			this.name = name;
+			this.mesh = mesh;
+			this.manager = manager;
+			this.position = position;
+			this.Team = team;
+			entity = manager.CreateEntity(name, mesh);
+
+			animationState = entity.GetAnimationState("funcionando3_eani_Clip");
+			animationState.Loop = true;
+			animationState.Enabled = true;
+		}
+
+		public override void rotate(float f) {
+			//animationState = entity.GetAnimationState("abrirse_eani_Clip");
+			animationState = entity.GetAnimationState("funcionando3_eani_Clip");
+			animationState.Loop = true;
+			animationState.Enabled = true;
+			animationState.AddTime(f / 10);
+		}
+
+		public override void nonActiveRotate(float f) { }
+
+		public override void changeVisible(bool visible) {
+			if (visible) {
+				if (sceneNode == null) {
+					if (entity == null) {
+						entity = manager.CreateEntity(name, mesh);
+					}
+					sceneNode = manager.RootSceneNode.CreateChildSceneNode(name + "Node", position);
+
+					sceneNode.Pitch(new Degree(-90f));
+					sceneNode.AttachObject(entity);
+				}
+			} else {
+				if (sceneNode != null) {
+					manager.DestroySceneNode(sceneNode);
+					sceneNode = null;
+				}
+			}
+		}
+
+		public override ActionReaction reactToInitiative(ActionReason reason, IMovableGameObject target) {
+			showTravelDestinations(target);
+			return ActionReaction.None;
+		}
+
+		protected override void onDisplayed() {
+
+		}
+
+		public void showTravelDestinations(IMovableGameObject imgo) {
+			var gui = GameGUI.GUIControler.getInstance();
+			var groupMgr = GroupManager.getInstance();
+			gui.showSolarSystSelectionPanel(groupMgr.getAllSolarSystemNames(), "Choose where you'll travel", imgo);
+		}
+
+		public override float PickUpDistance {
+			get {
+				return 200;
+			}
+		}
+
+		public static void updateTravelers(float delay) {
+			List<Traveler> toRemove = new List<Traveler>();
+			foreach (var traveler in travelerList) {
+				if (traveler.isDone) {
+					toRemove.Add(traveler);
+				} else {
+					traveler.update(delay);
+				}
+			}
+			foreach (var traveler in toRemove) {
+				travelerList.Remove(traveler);
+			}
+		}
+
+		public static List<Traveler> getTravelers() {
+			return travelerList;
+		}
+
+		public static void createTraveler(SolarSystem from, SolarSystem to, object gameObject) {
+			if (gameObject is IMovableGameObject) {
+				if (from != to) {
+					IMovableGameObject imgo = (IMovableGameObject)gameObject;
+					travelerList.Add(new Traveler(from, to, (IMovableGameObject)imgo));
+				}
+			}
+		}
+	}
+}

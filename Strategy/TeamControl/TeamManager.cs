@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Strategy.MoveControl;
-using Strategy.FightControl;
+using Strategy.MoveMgr;
+using Strategy.FightMgr;
 using Strategy.GameMaterial;
-using Strategy.GroupControl;
+using Strategy.GameObjectControl;
 using Mogre;
 using Strategy.GameGUI;
 

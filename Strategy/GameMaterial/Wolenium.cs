@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Strategy.GroupControl.Game_Objects.StaticGameObjectBox;
+using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 
 namespace Strategy.GameMaterial {
     class Wolenium :IMaterial{

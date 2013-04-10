@@ -4,20 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Miyagi.UI.Controls;
-using Strategy.GroupControl.RuntimeProperty;
+using Strategy.GameObjectControl.RuntimeProperty;
 
 namespace Strategy.GameGUI {
 	class PropertyLabel<T> : Label {
 
 		protected Property<T> property;
+		protected string text;
 
-		public PropertyLabel(Property<T> property)
+		public PropertyLabel(Property<T> property, string text)
 			: base() {
+			this.text = text + " ";
 			this.property = property;
 		}
 
 		protected override void UpdateCore() {
-			Text = property.Value.ToString();
+			Text = text + property.Value.ToString();
 			base.UpdateCore();
 		}
 

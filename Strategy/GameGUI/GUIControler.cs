@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Strategy.GameMaterial;
 using Strategy.GameGUI;
-using Strategy.GroupControl;
+using Strategy.GameObjectControl;
 using Strategy.TeamControl;
 using Mogre;
 using MOIS;
@@ -15,27 +15,34 @@ namespace Strategy.GameGUI {
         protected RenderWindow window;
         protected Mouse mouse;
         protected Keyboard keyboard;
-		protected GroupManager groupMgr;
 
         private static GUIControler instance;
 
-        public static GUIControler getInstance(RenderWindow mWindow, Mouse m, Keyboard k, GroupManager groupMgr) {
+        public static GUIControler getInstance(RenderWindow mWindow, Mouse m, Keyboard k) {
             if (instance==null) {
-                instance = new GUIControler(mWindow, m, k, groupMgr);
+                instance = new GUIControler(mWindow, m, k);
             }
             return instance;
         }
 
-		private GUIControler(RenderWindow mWindow, Mouse m, Keyboard k, GroupManager groupMgr) {
+		public static GUIControler getInstance() {
+			if (instance==null) {
+				throw new NullReferenceException("GUIControler is not initialized.");
+			}
+			return instance;
+		}
+
+		private GUIControler(RenderWindow mWindow, Mouse m, Keyboard k) {
             window = mWindow;
             mouse = m;
             keyboard = k;
-			this.groupMgr = groupMgr;
 		}
 
+		///
         public void inicialization( Dictionary<string, IMaterial> listMaterial) {
-            myGUI = new MyGUI((int)window.Width, (int)window.Height, mouse, keyboard, listMaterial, groupMgr);
+            myGUI = new MyGUI((int)window.Width, (int)window.Height, mouse, keyboard, listMaterial);
         }
+
 
 		public void dispose() {
 			myGUI.dispose();
@@ -45,11 +52,11 @@ namespace Strategy.GameGUI {
 			myGUI.update();
 		}
 
-		public void showTargeted(GroupControl.GroupStatics group) {
+		public void showTargeted(GameObjectControl.GroupStatics group) {
 			myGUI.showTargeted(group);
 		}
 
-		public void showTargeted(GroupControl.GroupMovables group) {
+		public void showTargeted(GameObjectControl.GroupMovables group) {
 			myGUI.showTargeted(group);
 		}
 
@@ -60,6 +67,10 @@ namespace Strategy.GameGUI {
         public void setMaterialState(string material, int inc) {
             myGUI.setMaterialState(material, inc);
         }
+
+		public void showSolarSystSelectionPanel(List<string> possibilities, string topic, object gameObject) {
+			myGUI.showSolarSystSelectionPanel(possibilities, topic, gameObject);
+		}
 	}
 
 }

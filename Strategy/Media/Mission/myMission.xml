@@ -11,12 +11,12 @@
   </teams>
   <usedObjects>
     <isgos>
-      <sgo name="Planet" path="StaticGameObjectBox/Planet.cs" fullName="Strategy.GroupControl.Game_Objects.StaticGameObjectBox.Planet"/>
-      <sgo name="Sun" path="StaticGameObjectBox/Sun.cs" fullName="Strategy.GroupControl.Game_Objects.StaticGameObjectBox.Sun"/>
+      <sgo name="Planet" path="StaticGameObjectBox/Planet.cs" fullName="Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox.Planet"/>
+      <sgo name="Sun" path="StaticGameObjectBox/Sun.cs" fullName="Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox.Sun"/>
     </isgos>
     <imgos>
-      <mgo name="SpaceShip" path="MovableGameObjectBox/SpaceShip.cs" fullName="Strategy.GroupControl.Game_Objects.MovableGameObjectBox.SpaceShip"/>
-      <mgo name="SpaceShip2" path="MovableGameObjectBox/SpaceShip2.cs" fullName="Strategy.GroupControl.Game_Objects.MovableGameObjectBox.SpaceShip2"/>
+      <mgo name="SpaceShip" path="MovableGameObjectBox/SpaceShip.cs" fullName="Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox.SpaceShip"/>
+      <mgo name="SpaceShip2" path="MovableGameObjectBox/SpaceShip2.cs" fullName="Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox.SpaceShip2"/>
     </imgos>
   </usedObjects>
   <solarSystems >
@@ -66,7 +66,7 @@
     <solarSystem name="s4" position="3000,0,0">
       <isgo type="Sun" name="s13" mesh="SpaceShip1.mesh"  team="None" position="0,0,0" distance="0"/>
     </solarSystem>
-    <solarSystem name="ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss5" position="20,0,3000">
+    <solarSystem name="Dalsi z mnoha" position="20,0,3000">
       <isgo type="Sun" name="s14" mesh="earth.mesh"  team="None" position="0,0,0" distance="0"/>
     </solarSystem>
     <solarSystem name="s6" position="3000,0,600">

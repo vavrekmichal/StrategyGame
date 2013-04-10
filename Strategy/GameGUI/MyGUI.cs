@@ -11,8 +11,8 @@ using Miyagi.UI.Controls;
 using Miyagi;
 using Strategy.GameMaterial;
 using Miyagi.UI.Controls.Styles;
-using Strategy.GroupControl;
-using Strategy.GroupControl.RuntimeProperty;
+using Strategy.GameObjectControl;
+using Strategy.GameObjectControl.RuntimeProperty;
 
 namespace Strategy.GameGUI {
 	class MyGUI {
@@ -37,7 +37,6 @@ namespace Strategy.GameGUI {
 		Dictionary<string, Font> fonts;
 		MiyagiSystem system;
 		GUI gui;
-		GroupManager groupMgr;
 
 		protected Dictionary<string, MaterialGUIPair> materialList;
 
@@ -51,8 +50,8 @@ namespace Strategy.GameGUI {
 		/// <param name="keyboard">Mogre keyboard input</param>
 		/// <param name="materials">names and values of user materials</param>
 		/// <param name="groupMgr">GroupManager instance</param>
-		public MyGUI(int width, int height, MOIS.Mouse mouse, MOIS.Keyboard keyboard, Dictionary<string, IMaterial> materials, GroupManager groupMgr) {
-			this.groupMgr = groupMgr;
+		public MyGUI(int width, int height, MOIS.Mouse mouse, MOIS.Keyboard keyboard, Dictionary<string, IMaterial> materials) {
+
 			materialList = new Dictionary<string, MaterialGUIPair>();
 			screenHeight = height;
 			screenWidth = width;
@@ -263,14 +262,14 @@ namespace Strategy.GameGUI {
 			nameOfSolarSystem.Text = name;
 		}
 
-		public void showTargeted(GroupControl.GroupMovables group) {
+		public void showTargeted(GameObjectControl.GroupMovables group) {
 			statPanelName.Text = group[0].Name;
 			statPanelTeam.Text = group[0].Team.Name;
 			statPanelMesh.Text = group.Count.ToString();
 
 		}
 
-		public void showTargeted(GroupControl.GroupStatics group) {
+		public void showTargeted(GameObjectControl.GroupStatics group) {
 			//Just one object
 			if (group.Count == 0) {
 				statPanelName.Text = "Nothing selected";
@@ -311,8 +310,16 @@ namespace Strategy.GameGUI {
 		#region Button Actions
 		private void selectSolarSystem(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
 			if (sender.GetType() == typeof(SelectionLabel)) {
-				groupMgr.changeSolarSystem(((SelectionLabel)sender).NumberOfItem);
+				GroupManager.getInstance().changeSolarSystem(((SelectionLabel)sender).NumberOfItem);
 				((SelectionLabel)sender).PanelToClose.Dispose();
+			}
+		}
+
+		private void travel(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
+			if (sender.GetType() == typeof(SelectionLabel)) {
+				var selLabel = (SelectionLabel)sender;
+				GroupManager.getInstance().createTraveler(selLabel.NumberOfItem, selLabel.StoredObject);
+				selLabel.PanelToClose.Dispose();
 			}
 		}
 
@@ -368,13 +375,7 @@ namespace Strategy.GameGUI {
 		/// </summary>
 		private void createSolarSystemPanel() {
 
-			var panel = new Panel() {								//background panel
-				Width = screenWidth / 2,
-				Height = screenHeight * 4 / 7,
-				Location = new Point(screenWidth / 4, screenHeight / 5),
-				Skin = skinDict["PanelR"],
-				ResizeMode = ResizeModes.None
-			};
+			var panel = createPopUpPanel();
 
 			int marginTop = 10;
 			var label = new Label() {								//Title label
@@ -387,7 +388,7 @@ namespace Strategy.GameGUI {
 			};
 			panel.Controls.Add(label);
 
-			List<string> solarSystList = groupMgr.getSolarSystemNames();
+			List<string> solarSystList = GroupManager.getInstance().getAllSolarSystemNames();
 
 			marginTop += 5 + label.Height;
 			var innerScrollablePanel = createInnerScrollablePanel(marginTop, panel.Width * 30 / 31, panel.Height / 3);
@@ -399,13 +400,13 @@ namespace Strategy.GameGUI {
 			int selectionLabelWidth = innerScrollablePanel.Width;
 
 			for (int i = 0; i < solarSystList.Count; i++) {					//labels with name of solar systems
-				SelectionLabel selectionLabel = createSelectionLabel(
+				var selectionLabel = createSelectionLabel(
 					selectionLabelWidth, 25, solarSystList[i],
 					new Point(selectionLabelMarginLeft, i * selectionLabelMarginTop), i, panel
 					);
 
 				innerScrollablePanel.Controls.Add(selectionLabel);
-				selectionLabel.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(selectSolarSystem); ;
+				selectionLabel.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(selectSolarSystem);
 			}
 
 
@@ -425,12 +426,16 @@ namespace Strategy.GameGUI {
 			innerScrollablePanel = createInnerScrollablePanel(marginTop, panel.Width * 30 / 31, panel.Height / 4);
 			panel.Controls.Add(innerScrollablePanel);
 
-			//testButton = new PropertyLabel<int>(new Property<int>(5)) {
-			//	Location = new Point(10, innerScrollablePanel.Height + 5),
-			//	Size = new Size(panel.Width * 30 / 31, panel.Height / 3)
-			//};
-			//panel.Controls.Add(testButton);
+			var travList = GroupManager.getInstance().getTravelers();
 
+
+
+			for (int i = 0; i < travList.Count; i++) {
+				//labels with name of solar systems
+				var testButton = createPropertyLabel<TimeSpan>(selectionLabelWidth, 25, travList[i].ToString(),
+					new Point(selectionLabelMarginLeft, i * selectionLabelMarginTop), travList[i].TimeProperty);
+				innerScrollablePanel.Controls.Add(testButton);
+			}
 
 
 			var closeButton = createCloseButton(panel.Width / 2,
@@ -442,8 +447,6 @@ namespace Strategy.GameGUI {
 			panel.Controls.Add(closeButton);
 			gui.Controls.Add(panel);
 		}
-		//TODO delete
-		private PropertyLabel<int> testButton;
 
 		/// <summary>
 		/// Create panel width scroll bars, setted margin-left = 10 and border thickness = 2
@@ -489,8 +492,8 @@ namespace Strategy.GameGUI {
 		/// <param name="order">number of choice</param>
 		/// <param name="panelToClose">Closing Panel</param>
 		/// <returns></returns>
-		private SelectionLabel createSelectionLabel(int width, int height, string text, Point location, int order, Panel panelToClose) {
-			var selectLabel = new SelectionLabel(order, panelToClose) {
+		private SelectionLabel createSelectionLabel(int width, int height, string text, Point location, int order, Panel panelToClose, object objectRef = null) {
+			var selectLabel = new SelectionLabel(order, objectRef, panelToClose) {
 				Size = new Size(width, height),
 				Text = text,
 				Location = location
@@ -499,7 +502,24 @@ namespace Strategy.GameGUI {
 			return selectLabel;
 		}
 
+		private PropertyLabel<T> createPropertyLabel<T>(int width, int height, string text, Point location, Property<T> timeProperty) {
 
+			var selectLabel = new PropertyLabel<T>(timeProperty, text) {
+				Size = new Size(width, height),
+				Location = location
+
+			};
+			return selectLabel;
+		}
+
+		/// <summary>
+		/// Create classic Miyagi button
+		/// </summary>
+		/// <param name="width"></param>
+		/// <param name="height"></param>
+		/// <param name="text"></param>
+		/// <param name="location">relative position</param>
+		/// <returns>Miyagi Button</returns>
 		private Button createButton(int width, int height, string text, Point location) {
 			Button b = new Button() {
 				Size = new Size(width, height),
@@ -508,6 +528,17 @@ namespace Strategy.GameGUI {
 				Text = text
 			};
 			return b;
+		}
+
+		private Panel createPopUpPanel() {
+			var panel = new Panel() {								//background panel
+				Width = screenWidth / 2,
+				Height = screenHeight * 4 / 7,
+				Location = new Point(screenWidth / 4, screenHeight / 5),
+				Skin = skinDict["PanelR"],
+				ResizeMode = ResizeModes.None
+			};
+			return panel;
 		}
 
 		private CloseButton createCloseButton(int width, int height, string text, Point location, Panel panelToClose) {
@@ -633,6 +664,51 @@ namespace Strategy.GameGUI {
 			system.Update();
 		}
 
+
+		public void showSolarSystSelectionPanel(List<string> possibilities, string topic, object gameObject) {
+			var panel = createPopUpPanel();
+			gui.Controls.Add(panel);
+
+			int marginTop = 10;
+			var label = new Label() {								//Title label
+				Size = new Size(panel.Width / 2, panel.Height / 10),
+				Text = " " + topic,
+				Location = new Point(panel.Width / 4, marginTop),
+				TextStyle = {
+					Alignment = Miyagi.Common.Alignment.TopCenter
+				}
+			};
+			panel.Controls.Add(label);
+
+			marginTop += label.Height;
+
+			var innerScrollablePanel = createInnerScrollablePanel(marginTop, panel.Width * 30 / 31, panel.Height - (marginTop * 2));
+
+			panel.Controls.Add(innerScrollablePanel);
+
+			int selectionLabelMarginTop = 26;
+			int selectionLabelMarginLeft = innerScrollablePanel.Width / 8;
+			int selectionLabelWidth = innerScrollablePanel.Width;
+
+			for (int i = 0; i < possibilities.Count; i++) {
+				SelectionLabel selectionLabel = createSelectionLabel(
+					selectionLabelWidth, 25, possibilities[i],
+					new Point(selectionLabelMarginLeft, i * selectionLabelMarginTop), i, panel, gameObject
+					);
+
+				innerScrollablePanel.Controls.Add(selectionLabel);
+				selectionLabel.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(travel);
+			}
+
+			var closeButton = createCloseButton(panel.Width / 2,
+				panel.Height / 12,
+				"	Cancel",
+				new Point(panel.Width / 2, panel.Height * 9 / 10),
+					panel);
+			closeButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(disposePanel);
+			panel.Controls.Add(closeButton);
+
+		}
 
 		///
 		///

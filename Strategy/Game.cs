@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Strategy.GroupControl;
-using Strategy.MoveControl;
-using Strategy.FightControl;
+using Strategy.GameObjectControl;
+using Strategy.MoveMgr;
+using Strategy.FightMgr;
 using Mogre;
 using Strategy.TeamControl;
 using Strategy.MogreControl;
@@ -14,10 +14,11 @@ using Strategy.GameGUI;
 
 namespace Strategy {
 	class Game {
-		protected GroupManager groupManager;
-		protected IFightManager fightManager;
-		//  protected TeamManager teamManager;
+		//protected GroupManager groupManager;
+		//protected IFightManager fightMgr;
+		////  protected TeamManager teamManager;
 		protected MouseControl mouseControl;
+		protected GameObjectManager gameObjectMgr;
 
 		public static string playerName = "Player";
 
@@ -36,11 +37,10 @@ namespace Strategy {
 
 		private Game(SceneManager sceneManager, CameraMan c, RenderWindow mWindow, Mouse mouse, Keyboard keyboard) {
 
-			groupManager = GroupManager.getInstance(sceneManager);
-			fightManager = FightManager.getInstance();
-			// teamManager = TeamManager.getInstance();
-			guiControler = GUIControler.getInstance(mWindow, mouse, keyboard, groupManager);
-			mouseControl = MouseControl.getInstance(c, sceneManager, groupManager, guiControler);
+			gameObjectMgr = GameObjectManager.getInstance(sceneManager);
+			//fightMgr = FightManager.getInstance();
+			guiControler = GUIControler.getInstance(mWindow, mouse, keyboard);
+			mouseControl = MouseControl.getInstance(c, sceneManager, guiControler);
 			gamePaused = false;
 		}
 		#endregion
@@ -48,23 +48,16 @@ namespace Strategy {
 		public void update(float delay) {
 			guiControler.update();
 			if (!gamePaused) {
-				groupManager.update(delay);
-				//teamManager.update();
+				gameObjectMgr.update(delay);
 			}
 			//production of Materials
 		}
 
-		public GroupManager getGroupManager() {
-			return groupManager;
-		}
 
 		public void inicialization() {
-			groupManager.setGUI(guiControler);
-			groupManager.inicializeWorld("StartMission");
-			//teamManager.setGUI(guiControler);
-			//teamManager.inicialization(groupManager.getTeams());
-			//guiControler.inicialization(teamManager.playerTeam.getMaterials());
-			guiControler.setSolarSystemName(groupManager.getSolarSystemName(0));
+			gameObjectMgr.setGUI(guiControler);
+			gameObjectMgr.inicialization("StartMission");
+			guiControler.setSolarSystemName(GroupManager.getInstance().getSolarSystemName(0));
 
 		}
 

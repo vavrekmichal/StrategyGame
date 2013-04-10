@@ -9,11 +9,17 @@ namespace Strategy.GameGUI {
 	class SelectionLabel : Label {
 		protected int numberOfItem;
 		protected Panel panelToClose;
+		protected object storedObject;
 
 		public SelectionLabel(int position, Panel panel)
 			: base() {
 			numberOfItem = position;
 			panelToClose = panel;
+		}
+
+		public SelectionLabel(int position, object objectRef, Panel panel)
+			: this(position, panel) {
+			storedObject = objectRef;
 		}
 
 		public int NumberOfItem {
@@ -22,6 +28,10 @@ namespace Strategy.GameGUI {
 
 		public Panel PanelToClose {
 			get { return panelToClose; }
+		}
+
+		public object StoredObject {
+			get { return storedObject; }
 		}
 	}
 }

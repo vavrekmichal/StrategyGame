@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using IrrKlang;
 using Strategy.Game_Objects;
-using Strategy.GroupControl;
+using Strategy.GameObjectControl;
 using Strategy.MogreControl;
 using Strategy.Sound;
 using Strategy.TeamControl;

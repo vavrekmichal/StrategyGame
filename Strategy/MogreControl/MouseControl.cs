@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Strategy.GroupControl;
+using Strategy.GameObjectControl;
 using Mogre;
 using Strategy.TeamControl;
 using Mogre.TutorialFramework;
@@ -13,7 +13,6 @@ namespace Strategy.MogreControl {
 	class MouseControl {
 		protected static Mogre.TutorialFramework.CameraMan cameraMan;
 		protected SceneManager sceneMgr;
-		protected GroupManager groupManager;
 		protected GUIControler guiControl; //TODO:mys nebude mit guicko
 
 		protected int changeMe = 1;
@@ -30,17 +29,16 @@ namespace Strategy.MogreControl {
 		bool bSelecting;
 		//end rect
 
-		public static MouseControl getInstance(CameraMan c, SceneManager m, GroupManager groupManager, GUIControler guiControl) {
+		public static MouseControl getInstance(CameraMan c, SceneManager m, GUIControler guiControl) {
 			if (instance == null) {
-				instance = new MouseControl(c, m, groupManager, guiControl);
+				instance = new MouseControl(c, m, guiControl);
 			}
 			return instance;
 		}
 
-		private MouseControl(CameraMan c, SceneManager m, GroupManager groupManager, GUIControler guiControl) {
+		private MouseControl(CameraMan c, SceneManager m, GUIControler guiControl) {
 			cameraMan = c;
 			sceneMgr = m;
-			this.groupManager = groupManager;
 			this.guiControl = guiControl;
 			mRect = new SelectionRectangle("RectangularSelect");
 			sceneMgr.RootSceneNode.CreateChildSceneNode().AttachObject(mRect);
@@ -105,7 +103,7 @@ namespace Strategy.MogreControl {
 						mRect.Visible = false;
 						isRectagularSelect = false;
 					} else {
-						groupManager.leftClick(simpleClick(arg));
+						GameObjectManager.getInstance().leftClick(simpleClick(arg));
 					}
 					break;
 				case MouseButtonID.MB_Right:
@@ -118,7 +116,7 @@ namespace Strategy.MogreControl {
 						Mogre.Ray mouseRay = cameraMan.getCamera().GetCameraToViewportRay(mouseX, mouseY);
 						v = mouseRay.GetPoint(mouseRay.Intersects(plane).second);
 					}
-					groupManager.rightClick(v, simpleClick(arg));
+					GameObjectManager.getInstance().rightClick(v, simpleClick(arg));
 					break;
 			}
 			return true;
@@ -172,7 +170,6 @@ namespace Strategy.MogreControl {
 
 
 		private void performSelection(Vector2 first, Vector2 second) {
-			//deselectObjects(); //delete
 			float left = first.x, right = second.x,
 			top = first.y, bottom = second.y;
 
@@ -205,25 +202,10 @@ namespace Strategy.MogreControl {
 					list.Add(entry);
 				}
 			}
-			groupManager.leftClick(list);
+			GameObjectManager.getInstance().leftClick(list);
 
 			sceneMgr.DestroyQuery(volQuery);
 		}
-
-		void selectObject(MovableObject obj) {
-			obj.ParentSceneNode.ShowBoundingBox = true;
-			mSelected.Add(obj);
-		}
-
-		//void deselectObjects() {
-		//	foreach (var obj in mSelected) {
-		//		obj.ParentSceneNode.ShowBoundingBox = false;
-		//		Console.WriteLine(obj.Name);
-		//	}
-		//	mSelected.Clear();
-		//}
-
-
 
 		//static method tests
 
