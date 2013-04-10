@@ -12,6 +12,9 @@ using Strategy.TeamControl;
 namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 	public class Gate : StaticGameObject {
 
+		private bool isPorting;
+		private const float portTime = 3.4483f;
+		private float portTimeDuration;
 
 		private Vector3 position;
 		private AnimationState animationState; //The AnimationState the moving object
@@ -34,8 +37,16 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		}
 
 		public override void rotate(float f) {
-			//animationState = entity.GetAnimationState("abrirse_eani_Clip");
-			animationState = entity.GetAnimationState("funcionando3_eani_Clip");
+			if (isPorting) {
+				animationState = entity.GetAnimationState("abrirse_eani_Clip");
+				f *= 5;
+				portTimeDuration -= f / 10;
+				if (portTimeDuration < 0) {
+					isPorting = false;
+				}
+			} else {
+				animationState = entity.GetAnimationState("funcionando3_eani_Clip");
+			}
 			animationState.Loop = true;
 			animationState.Enabled = true;
 			animationState.AddTime(f / 10);
@@ -75,6 +86,9 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			var gui = GameGUI.GUIControler.getInstance();
 			var groupMgr = GroupManager.getInstance();
 			gui.showSolarSystSelectionPanel(groupMgr.getAllSolarSystemNames(), "Choose where you'll travel", imgo);
+
+			isPorting = true;
+			portTimeDuration = portTime;
 		}
 
 		public override float PickUpDistance {
@@ -84,17 +98,16 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		}
 
 		public static void updateTravelers(float delay) {
-			List<Traveler> toRemove = new List<Traveler>();
-			foreach (var traveler in travelerList) {
+			List<Traveler> copy = new List<Traveler>(travelerList);
+			foreach (var traveler in copy) {
 				if (traveler.isDone) {
-					toRemove.Add(traveler);
+					travelerList.Remove(traveler);
+
 				} else {
 					traveler.update(delay);
 				}
 			}
-			foreach (var traveler in toRemove) {
-				travelerList.Remove(traveler);
-			}
+
 		}
 
 		public static List<Traveler> getTravelers() {

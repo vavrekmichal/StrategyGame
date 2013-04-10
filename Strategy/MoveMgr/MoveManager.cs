@@ -135,16 +135,14 @@ namespace Strategy.MoveMgr {
 		}
 
 		public void update(float delay) {
-			List<IMovableGameObject> toRemove = new List<IMovableGameObject>();
-			foreach (var trev in moveMgrControledDict) {
+			var copy = new Dictionary<IMovableGameObject, IStaticGameObject>(moveMgrControledDict);
+			foreach (KeyValuePair<IMovableGameObject,IStaticGameObject> trev in copy) {
 				double sqPickUpDist = trev.Value.PickUpDistance * trev.Value.PickUpDistance;
 				if (checkDistance(trev.Key.Position, trev.Value.Position, sqPickUpDist)) {
-					toRemove.Add(trev.Key);
+					reachedDestiantion(trev.Key, trev.Value);
 				}
 			}
-			foreach (IMovableGameObject imgo in toRemove) {
-				reachedDestiantion(imgo, moveMgrControledDict[imgo]);
-			}
+
 		}
 
 		public void goToTarget(GroupMovables group, IStaticGameObject target) {

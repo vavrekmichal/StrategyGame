@@ -5,7 +5,7 @@ float speed = 160;
 float speed2 = speed * 1.5f;
 float speed3 = 5f;
 float planetRotateSpeed = .1f;
-float planetPickUpDistance = 150f;
+float planetPickUpDistance = 90f;
 
 int basicAttack = 1;
 int basicDeff = 1;

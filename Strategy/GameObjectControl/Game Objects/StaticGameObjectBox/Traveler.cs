@@ -46,9 +46,8 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 				} else {
 					timeToGo.Value = zeroSpan;
 					to.addIMGO(traveler);
+					arrived = true;
 				}
-			} else {
-				arrived = true;
 			}
 		}
 
