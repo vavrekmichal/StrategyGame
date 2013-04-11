@@ -76,6 +76,10 @@ namespace Strategy.GameObjectControl {
 			moveMgr.update(delay);
 		}
 
+		/// <summary>
+		/// inicialization of managers, hittest...
+		/// </summary>
+		/// <param name="missionName">Name of choosen mission</param>
 		public void inicialization(string missionName) {
 			objectCreator.initializeWorld(missionName, propertyMgr);
 			groupMgr.createSolarSystems(objectCreator.getInicializedSolarSystems());
@@ -83,6 +87,7 @@ namespace Strategy.GameObjectControl {
 			teamMgr.setGUI(guiControler);
 			teamMgr.inicialization(objectCreator.getTeams(), objectCreator.getTeamsRelations());
 			guiControler.inicialization(teamMgr.playerTeam.getMaterials());
+			groupMgr.deselectGroup();
 		}
 
 		/// <summary>

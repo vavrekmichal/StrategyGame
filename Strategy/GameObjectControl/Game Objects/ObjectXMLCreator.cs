@@ -152,6 +152,9 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// <param name="teamsNode">XML node with teams and frienships</param>
 		private void loadTeams(XmlNode teamsNode) {
 			var t = new Team("None", materialList);		//add None team for suns and gates
+			var noneList = new List<Team>();
+			noneList.Add(t);
+			teamRealationDict.Add(t, noneList);
 			teamDict.Add(t.Name, t);
 			foreach (XmlNode node in teamsNode.ChildNodes) {
 				List<Team> friends = new List<Team>();

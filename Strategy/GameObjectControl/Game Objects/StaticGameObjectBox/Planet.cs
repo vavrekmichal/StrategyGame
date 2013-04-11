@@ -14,11 +14,12 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		protected Mogre.Vector3 mDirection = Mogre.Vector3.ZERO;   // The direction the object is moving
 
 		protected bool mFlying = false; //bool to detect if object walking or stay
-		protected Property<float> flySpeed; //speed of planet
-		protected Property<float> rotateSpeed;
+
 
 		protected double travelledInvisible;
-		private Property<float> pickUpDistance;
+
+
+		protected LinkedList<Mogre.Vector3> circularPositions;
 
 		private static Random random = new Random();
 
@@ -29,9 +30,9 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			this.mesh = mesh;
 			planetTeam = myTeam;
 			this.manager = manager;
-			flySpeed = propMgr.getProperty<float>("speed3");
-			rotateSpeed = propMgr.getProperty<float>("planetRotateSpeed");
-			pickUpDistance = propMgr.getProperty<float>("planetPickUpDistance");
+			base.setProperty("Speed", propMgr.getProperty<float>("speed3"));
+			base.setProperty("Rotate", propMgr.getProperty<float>("planetRotateSpeed"));
+			base.setProperty("PickUp", propMgr.getProperty<float>("planetPickUpDistance"));
 
 			//prepare list of positions
 			circularPositions = calculatePositions(circularNum, distanceFromCenter, center);
@@ -48,7 +49,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// <param name="f">delay between frames</param>
 		public override void rotate(float f) {
 			tryExecute("Produce");
-			sceneNode.Roll(new Mogre.Degree((float)(flySpeed.Value * rotateSpeed.Value * f)));
+			sceneNode.Roll(new Mogre.Degree((float)(getProperty<float>("Speed").Value * getProperty<float>("Rotate").Value * f)));
 			//position in LinkedList now moving
 			if (!mFlying) {
 				if (nextLocation()) {
@@ -61,7 +62,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 				} else {
 				}//nothing to do so stay in position    
 			} else {
-				double move = flySpeed.Value * f;
+				double move = getProperty<float>("Speed").Value * f;
 				mDistance -= move;
 				if (mDistance <= .0f) { //reach destination
 					travelledInvisible = 0;
@@ -89,7 +90,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 				} else {
 				}
 			} else {
-				double move = flySpeed.Value * f;
+				double move = getProperty<float>("Speed").Value * f;
 				mDistance -= move;
 				if (mDistance <= .0f) { //reach destination
 					travelledInvisible = 0;
@@ -147,6 +148,35 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 
 
 		/// <summary>
+		/// Called when object will be invisible
+		/// </summary>
+		public override void changeVisible(bool visible) {   //now creating
+			if (visible) {
+				if (sceneNode == null) {
+					if (entity == null) { //control if the entity is inicialized
+						entity = manager.CreateEntity(name, mesh);
+					}
+
+					if (mDestination == null) { //control inicialization
+						mDestination = circularPositions.Last();
+					}
+
+					sceneNode = manager.RootSceneNode.CreateChildSceneNode(name + "Node", mDestination);
+
+					sceneNode.Pitch(new Degree(-90f));
+					sceneNode.AttachObject(entity);
+					onDisplayed();
+				}
+			} else {
+				if (sceneNode != null) {
+					manager.DestroySceneNode(sceneNode);
+					sceneNode = null;
+				}
+			}
+		}
+
+
+		/// <summary>
 		/// The NextLocation() check if exist next location to move
 		/// </summary>
 		/// <returns>true ->exist / false -> not exist</returns>
@@ -156,6 +186,12 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			}
 			return true;
 		}
+
+		public override Dictionary<string, object> getPropertyToDisplay() {
+			var propToDisp = new Dictionary<string, object>(propertyDict);
+			return propToDisp;
+		}
+
 
 		/// <summary>
 		/// Called when object is displayed (invisible to visible)
@@ -169,7 +205,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// PickUpDistance is setted by runtime property
 		/// </summary>
 		public override float PickUpDistance {
-			get { return pickUpDistance.Value; }
+			get { return getProperty<float>("PickUp").Value; ; }
 		}
 
 	}

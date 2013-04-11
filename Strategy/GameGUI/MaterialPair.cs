@@ -34,8 +34,5 @@ namespace Strategy.GameGUI {
             };
         }
 
-        public void update(int i) {
-            value.Text = i.ToString();
-        }
     }
 }

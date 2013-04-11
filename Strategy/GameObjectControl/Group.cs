@@ -12,21 +12,13 @@ using Strategy.GameObjectControl.RuntimeProperty;
 
 namespace Strategy.GameObjectControl {
 	public abstract class IGroup<T> : IEnumerable {
-		protected int number;
+
 		protected List<T> groupMembers;
-		protected Team owner;
+		protected Property<Team> owner;
 
 		public IGroup(Team own) {
 			groupMembers = new List<T>();
-			owner = own;
-		}
-
-		public void setNumberOfGroup(int i) { //not Count
-			number = i;
-		}
-
-		public int getNumberOfGroup() {
-			return number;
+			owner = new Property<Team>(own);
 		}
 
 		public int Count {
@@ -45,6 +37,10 @@ namespace Strategy.GameObjectControl {
 			return groupMembers.GetEnumerator();
 		}
 
+		public virtual Dictionary<string, object> getPropertyToDisplay() {
+			return new Dictionary<string, object>();
+		}
+
 		public T this[int i] {
 			get {
 				return groupMembers[i];
@@ -55,7 +51,7 @@ namespace Strategy.GameObjectControl {
 		}
 
 		public Team OwnerTeam {
-			get { return owner; }
+			get { return owner.Value; }
 		}
 
 	}
@@ -83,9 +79,9 @@ namespace Strategy.GameObjectControl {
 			: base(own) {
 			groupBonuses = new Dictionary<string, object>();
 
-			groupBonuses.Add("attack", new Property<int>(1));
-			groupBonuses.Add("deffence", new Property<int>(1));
-			groupBonuses.Add("speed", new Property<int>(1));
+			groupBonuses.Add("Attack", new Property<int>(1));
+			groupBonuses.Add("Deffence", new Property<int>(1));
+			groupBonuses.Add("Speed", new Property<int>(1));
 
 
 
@@ -100,10 +96,14 @@ namespace Strategy.GameObjectControl {
 		public void nonVisibleMove(float f) {
 		}
 
+
 		public void select() {		//called when group is changed from informative to selected
 			//Need colect bonuses from count and from members
-			((Property<int>)groupBonuses["attack"]).Value += 1;
+			var countBonus = (int)(groupMembers.Count / 10);
+			((Property<int>)groupBonuses["Attack"]).Value = 1 + countBonus;
+			((Property<int>)groupBonuses["Deffence"]).Value = 1 + countBonus;
 			foreach (IMovableGameObject imgo in groupMembers) {
+				//somehow collect bonuses
 				imgo.setGroupBonuses(groupBonuses);
 			}
 		}
@@ -125,5 +125,18 @@ namespace Strategy.GameObjectControl {
 	class GroupStatics : IGroup<IStaticGameObject> {
 		public GroupStatics() : base(new Team("None")) { }
 		public GroupStatics(TeamControl.Team own) : base(own) { }
+
+		public override Dictionary<string, object> getPropertyToDisplay() {
+			Dictionary<string,object> propDict;
+			if (groupMembers.Count == 1) {
+				propDict = new Dictionary<string, object>(groupMembers[0].getPropertyToDisplay());
+			} else {
+				propDict = new Dictionary<string, object>();
+			}
+			propDict.Add("Team", owner);
+			//pokusDict.Add("HOasno", null); 
+
+			return propDict;
+		}
 	}
 }

@@ -45,8 +45,7 @@ namespace Strategy.TeamControl {
             playerTeam = teamDict[Game.playerName];
             Console.WriteLine("Team print at Start of the Game:");
             foreach(KeyValuePair<string,Team> team in teamDict){
-                //team.Value.setMaterials(materials);
-                Console.WriteLine(team.Value.ToString());
+                Console.WriteLine(team.Value.print());
             }
         }
 

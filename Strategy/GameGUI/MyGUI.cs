@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Miyagi.UI.Controls.Layout;
 using Miyagi.Common.Data;
 using Miyagi.Common.Resources;
 using Miyagi.Common;
 using Miyagi.UI;
 using Miyagi.UI.Controls;
-using Miyagi;
-using Strategy.GameMaterial;
 using Miyagi.UI.Controls.Styles;
+using Strategy.GameMaterial;
 using Strategy.GameObjectControl;
 using Strategy.GameObjectControl.RuntimeProperty;
+using System.Reflection;
 
 namespace Strategy.GameGUI {
 	class MyGUI {
@@ -30,8 +27,8 @@ namespace Strategy.GameGUI {
 
 		//statPanel members
 		private Label statPanelName;
-		private Label statPanelMesh;
-		private Label statPanelTeam;
+		private Panel propertyPanel;
+		//private Label statPanelTeam;
 
 		Dictionary<string, Skin> skinDict;
 		Dictionary<string, Font> fonts;
@@ -61,7 +58,7 @@ namespace Strategy.GameGUI {
 			system.GUIManager.GUIs.Add(gui);
 			system.PluginManager.LoadPlugin(@"Miyagi.Plugin.Input.Mois.dll", mouse, keyboard);
 
-			fonts = new Dictionary<string, Font>();
+			fonts = new Dictionary<string, Font>();										//font loading
 			foreach (Font font in TrueTypeFont.CreateFromXml("../../Media/TrueTypeFonts.xml", system))
 				fonts.Add(font.Name, font);
 			Font.Default = fonts["BlueHighway"];
@@ -73,6 +70,11 @@ namespace Strategy.GameGUI {
 				skinDict.Add(skin.Name, skin);
 			}
 
+			// Cursor
+			Skin cursorSkin = Skin.CreateFromXml("../../Media/cursorSkin.xml")[0];
+			Cursor cursor = new Cursor(cursorSkin, new Size(30, 30), new Point(0, 0), true);
+
+			system.GUIManager.Cursor = cursor;
 
 			createMainMenu();
 			createTopMenu(materials);
@@ -158,12 +160,101 @@ namespace Strategy.GameGUI {
 		}
 
 
+
+		/// <summary>
+		/// Change printed solar system name
+		/// </summary>
+		/// <param name="name">new printed name</param>
+		public void setSolarSystemName(string name) {
+			nameOfSolarSystem.Text = name;
+		}
+
+		public void showTargeted(GameObjectControl.GroupMovables group) {
+			clearStatPanelProp();
+			statPanelName.Text = group[0].Name;
+
+
+		}
+
+		public void showTargeted(GameObjectControl.GroupStatics group) {
+			//Just one object
+			clearStatPanelProp();
+			if (group == null || group.Count == 0) {
+				statPanelName.Text = "Nothing selected";
+				propertyPanel.Controls.Add(new Label() {
+					Text = "	Nothing selected",
+					Location = new Point(0, 0),
+					Size = new Size(propertyPanel.Width, propertyPanel.Height)
+				});
+				return;
+			}
+			if (group.Count == 1) {
+				int marginLeft = propertyPanel.Width / 2;
+				int marginTop = 26;
+				var isgo = group[0];
+				statPanelName.Text = isgo.Name;
+
+				var propDict = group.getPropertyToDisplay();
+
+				int i = 0;
+				foreach (var property in propDict) {				//info will be showed (regardless team)
+					propertyPanel.Controls.Add(createLabel(marginTop * i, marginLeft, 26, property.Key));
+
+					propertyPanel.Controls.Add((Label)createPropertyLabelAsObject(marginLeft,marginTop*i,property.Value));
+					++i;
+				}
+
+				if (group.OwnerTeam.Name == Game.playerName) {// player's planet -> display actions
+
+				}	//is not player's just print info
+
+
+			} else {// player's planets (only way when is selected more than 1 IStaticGameObjects -> display actions
+				statPanelName.Text = "Count: "+ group.Count;
+				int marginLeft = propertyPanel.Width / 2;
+				int marginTop = 26;
+
+				var propDict = group.getPropertyToDisplay();
+
+				int i = 0;
+				foreach (var property in propDict) {				//info will be showed (regardless team)
+					propertyPanel.Controls.Add(createLabel(marginTop * i, marginLeft, 26, property.Key));
+
+					propertyPanel.Controls.Add((Label)createPropertyLabelAsObject(marginLeft, marginTop * i, property.Value));
+					++i;
+				}
+			}
+
+		}
+
+		/// <summary>
+		/// Creeates generic PropertyLabel with runtime setted type
+		/// </summary>
+		/// <param name="marginLeft">left indent</param>
+		/// <param name="marginTop">top indent</param>
+		/// <param name="property">Property </param>
+		/// <returns>PropertyLabel as object</returns>
+		private object createPropertyLabelAsObject(int marginLeft, int marginTop, object property) {
+			MethodInfo method = typeof(MyGUI).GetMethod("createPropertyLabelAsLabel", BindingFlags.NonPublic | BindingFlags.Instance); //createPropertyLabelAsLabel is private function
+			var type = property.GetType().GetGenericArguments()[0];
+			MethodInfo generic = method.MakeGenericMethod(type);
+			List<object> args = new List<object>();
+			args.Add(marginLeft);
+			args.Add(marginTop);
+			args.Add(marginLeft);
+			args.Add(26);
+			args.Add(property);
+			var o = generic.Invoke(this, args.ToArray());
+			return o;
+		}
+
+		#region top panel
 		/// <summary>
 		/// Creates top bar
 		/// </summary>
 		/// <param name="materials">Players materials</param>
 		private void createTopMenu(Dictionary<string, IMaterial> materials) {
-			upperMenu = new FlowLayoutPanel() {
+			upperMenu = new FlowLayoutPanel() {				//create top panel (empty blue box)
 				Size = new Size(screenWidth * 18 / 20, screenHeight * 2 / 30),
 				Location = new Point(screenWidth / 20, 0),
 				Skin = skinDict["Panel"],
@@ -171,7 +262,7 @@ namespace Strategy.GameGUI {
 			};
 			gui.Controls.Add(upperMenu);
 
-			Label label1 = new Label() {
+			Label label1 = new Label() {					//Left Label with text "Current solar system:"
 				Name = "nameOfSolarSystem",
 				Size = new Size(upperMenu.Width / 6, upperMenu.Height * 4 / 5),
 				Text = "Current solar system: ",
@@ -183,7 +274,7 @@ namespace Strategy.GameGUI {
 			};
 			upperMenu.Controls.Add(label1);
 
-			nameOfSolarSystem = new Label() {
+			nameOfSolarSystem = new Label() {				//Label to show actual solar system name
 				Name = "nameOfSolarSystem",
 				Size = new Size(upperMenu.Width / 5, upperMenu.Height * 4 / 5),
 				Text = "Booted system ",
@@ -195,7 +286,7 @@ namespace Strategy.GameGUI {
 			};
 			upperMenu.Controls.Add(nameOfSolarSystem);
 
-			Label materialIntro = new Label() {
+			Label materialIntro = new Label() {				//Right Label with text "Material State:"
 				Name = "MaterialState",
 				Size = new Size(upperMenu.Width / 6, upperMenu.Height * 4 / 5),
 				Text = "Material State: ",
@@ -207,7 +298,7 @@ namespace Strategy.GameGUI {
 			};
 			upperMenu.Controls.Add(materialIntro);
 
-			//Material load
+			//Material load - create one line with name of IMaterial and value
 			var materialBox = new Panel() {
 				Size = new Size(upperMenu.Width / 3, upperMenu.Height),
 				ResizeMode = ResizeModes.None,
@@ -220,6 +311,7 @@ namespace Strategy.GameGUI {
 				BorderStyle = new BorderStyle { Thickness = new Thickness(2) },
 				HScrollBarStyle = new ScrollBarStyle() {
 					Extent = 16,
+					ShowButtons = true,
 					ThumbStyle = {
 						BorderStyle = {
 							Thickness = new Thickness(2, 2, 2, 2)
@@ -228,7 +320,6 @@ namespace Strategy.GameGUI {
 				},
 				VScrollBarStyle = new ScrollBarStyle {
 					Extent = 12,
-					ShowButtons = true,
 					ThumbStyle = {
 						BorderStyle = {
 							Thickness = new Thickness(2, 2, 2, 2)
@@ -239,13 +330,13 @@ namespace Strategy.GameGUI {
 			};
 
 			int row = 0;
-			foreach (KeyValuePair<string, IMaterial> k in materials) {
+			foreach (KeyValuePair<string, IMaterial> k in materials) {			//creates pair name - value
 				materialList.Add(k.Key, new MaterialGUIPair(k.Key, k.Value.state, materialBox.Width, row));
 				row++;
 			}
 
 			row = 0;
-			foreach (KeyValuePair<string, MaterialGUIPair> valuePair in materialList) {
+			foreach (KeyValuePair<string, MaterialGUIPair> valuePair in materialList) {		//set pairs into GUI
 				materialBox.Controls.Add(valuePair.Value.name);
 				materialBox.Controls.Add(valuePair.Value.value);
 				row++;
@@ -254,33 +345,8 @@ namespace Strategy.GameGUI {
 			upperMenu.Controls.Add(materialBox);
 		}
 
-		/// <summary>
-		/// Change printed solar system name
-		/// </summary>
-		/// <param name="name">new printed name</param>
-		public void setSolarSystemName(string name) {
-			nameOfSolarSystem.Text = name;
-		}
-
-		public void showTargeted(GameObjectControl.GroupMovables group) {
-			statPanelName.Text = group[0].Name;
-			statPanelTeam.Text = group[0].Team.Name;
-			statPanelMesh.Text = group[0].AttackPower.ToString();
-
-		}
-
-		public void showTargeted(GameObjectControl.GroupStatics group) {
-			//Just one object
-			if (group.Count == 0) {
-				statPanelName.Text = "Nothing selected";
-				statPanelMesh.Text = "Nothing selected";
-				statPanelTeam.Text = "Nothing selected";
-				return;
-			}
-			statPanelTeam.Text = group[0].Team.Name;
-			statPanelName.Text = group[0].Name;
-			statPanelMesh.Text = group[0].Mesh;
-		}
+		#endregion
+		#region main panel
 
 		/// <summary>
 		/// Creates main bar
@@ -298,15 +364,87 @@ namespace Strategy.GameGUI {
 			mainMenu.Controls.Add(createStatPanel());
 			mainMenu.Controls.Add(createActionPanel());
 
-			// Cursor
-			Skin cursorSkin = Skin.CreateFromXml("../../Media/cursorSkin.xml")[0];
-			Cursor cursor = new Cursor(cursorSkin, new Size(30, 30), new Point(0, 0), true);
-
-			//cursor.
-			system.GUIManager.Cursor = cursor;
 		}
 
-		//Button Actions
+		/// <summary>
+		/// Create first panel in main panel. (Control buttons)
+		/// </summary>
+		/// <returns>Miyagi Panel</returns>
+		private Panel createButtonPanel() {
+			buttonsPanel = createMainmenuSubpanel();
+			int buttonMarginLeft = buttonsPanel.Width / 4;
+			int buttonMarginTop = buttonsPanel.Height * 6 / 25;
+			int row = buttonsPanel.Height / 5 + 5;
+			Button b = createButton(buttonsPanel.Width / 2, buttonsPanel.Height / 5, "  Pause BUTTON", new Point(buttonMarginLeft, 0));
+			buttonsPanel.Controls.Add(b);
+			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(pause);
+			b = createButton(buttonsPanel.Width / 2, buttonsPanel.Height / 5, "  Solar systems", new Point(buttonMarginLeft, buttonMarginTop));
+			buttonsPanel.Controls.Add(b);
+			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(showSolarSystems);
+
+			b = createButton(buttonsPanel.Width / 2, buttonsPanel.Height / 5, "  Exit BUTTON", new Point(buttonMarginLeft, buttonMarginTop * 2));
+			buttonsPanel.Controls.Add(b);
+			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(quitOnClick);
+
+
+			return buttonsPanel;
+		}
+
+		/// <summary>
+		/// Create second panel in main panel
+		/// </summary>
+		/// <returns>Miyagi Panel</returns>
+		private Panel createStatPanel() {
+			statPanel = createMainmenuSubpanel();
+			int x1 = statPanel.Width / 3;
+			int y = 40;
+			//Name
+			statPanel.Controls.Add(new Label() {
+				Size = new Size(x1, y),
+				Text = " Selected: ",
+				Padding = new Thickness(5)
+
+			});
+			int x2 = statPanel.Width * 2 / 3;
+			statPanelName = new Label() {
+				Size = new Size(x2, y),
+				Location = new Point(statPanel.Width * 2 / 8, 0),
+				Padding = new Thickness(5)
+			};
+			statPanel.Controls.Add(statPanelName);
+
+			propertyPanel = createInnerScrollablePanel(y, statPanel.Width - 30, statPanel.Height - (y+10)); //minus 30 is padding correction (2*5 panel padding + 2*10 scrollablePanel padding)
+			statPanel.Controls.Add(propertyPanel);
+
+			return statPanel;
+
+		}
+
+		/// <summary>
+		/// Clear panel with descriptions
+		/// </summary>
+		private void clearStatPanelProp() {
+			propertyPanel.Controls.Clear();
+		}
+
+		/// <summary>
+		/// Create third panel in main panel
+		/// </summary>
+		/// <returns>Miyagi Panel</returns>
+		private Panel createActionPanel() {
+			actionPanel = createMainmenuSubpanel();
+			actionPanel.Controls.Add(new Label() {
+				Size = new Size(140, 50),
+				Text = " Developing",
+				Padding = new Thickness(5)
+
+			});
+			return actionPanel;
+		}
+
+
+		#endregion
+
 		#region Button Actions
 		private void selectSolarSystem(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
 			if (sender.GetType() == typeof(SelectionLabel)) {
@@ -409,8 +547,6 @@ namespace Strategy.GameGUI {
 				selectionLabel.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(selectSolarSystem);
 			}
 
-
-			//TODO: Travelers
 			marginTop = panel.Height / 2;
 			label = new Label() {											//Title label
 				Size = new Size(panel.Width / 2, panel.Height / 10),
@@ -472,6 +608,7 @@ namespace Strategy.GameGUI {
 				},
 				VScrollBarStyle = new ScrollBarStyle {
 					Extent = 12,
+					AlwaysVisible = true,
 					ShowButtons = true,
 					ThumbStyle = {
 						BorderStyle = {
@@ -502,14 +639,32 @@ namespace Strategy.GameGUI {
 			return selectLabel;
 		}
 
-		private PropertyLabel<T> createPropertyLabel<T>(int width, int height, string text, Point location, Property<T> timeProperty) {
+		/// <summary>
+		/// Strange name for runtime generic calling (unique name)
+		/// </summary>
+		/// <typeparam name="T">generic type</typeparam>
+		/// <param name="marginLeft">left indent </param>
+		/// <param name="marginTop">top indent</param>
+		/// <param name="width"></param>
+		/// <param name="height"></param>
+		/// <param name="property">Property</param>
+		/// <returns> PropertyLabel as Label </returns>
+		private Label createPropertyLabelAsLabel<T>(int marginLeft, int marginTop, int width, int height, Property<T> property) {
 
-			var selectLabel = new PropertyLabel<T>(timeProperty, text) {
+			var propLabel = new PropertyLabel<T>(property, "") {
+				Size = new Size(width, height),
+				Location = new Point(marginLeft, marginTop)
+			};
+			return propLabel;
+		}
+
+		private PropertyLabel<T> createPropertyLabel<T>(int width, int height, string text, Point location, Property<T> timeProperty) {
+			var propLabel = new PropertyLabel<T>(timeProperty, text) {
 				Size = new Size(width, height),
 				Location = location
 
 			};
-			return selectLabel;
+			return propLabel;
 		}
 
 		/// <summary>
@@ -528,6 +683,19 @@ namespace Strategy.GameGUI {
 				Text = text
 			};
 			return b;
+		}
+
+		private Label createLabel(int marginTop, int width, int height, string text) {
+			return createLabel(10, marginTop, width, height, text);
+		}
+
+		private Label createLabel(int marginLeft, int marginTop, int width, int height, string text) {
+			var label = new Label() {
+				Text = text,
+				Size = new Size(width, height),
+				Location = new Point(marginLeft, marginTop)
+			};
+			return label;
 		}
 
 		private Panel createPopUpPanel() {
@@ -549,105 +717,6 @@ namespace Strategy.GameGUI {
 				Text = text
 			};
 			return b;
-		}
-
-		/// <summary>
-		/// Create first panel in main panel. (Control buttons)
-		/// </summary>
-		/// <returns>Miyagi Panel</returns>
-		private Panel createButtonPanel() {
-			buttonsPanel = createMainmenuSubpanel();
-			int buttonMarginLeft = buttonsPanel.Width / 4;
-			int buttonMarginTop = buttonsPanel.Height * 6 / 25;
-			int row = buttonsPanel.Height / 5 + 5;
-			Button b = createButton(buttonsPanel.Width / 2, buttonsPanel.Height / 5, "  Pause BUTTON", new Point(buttonMarginLeft, 0));
-			buttonsPanel.Controls.Add(b);
-			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(pause);
-			b = createButton(buttonsPanel.Width / 2, buttonsPanel.Height / 5, "  Solar systems", new Point(buttonMarginLeft, buttonMarginTop));
-			buttonsPanel.Controls.Add(b);
-			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(showSolarSystems);
-
-			b = createButton(buttonsPanel.Width / 2, buttonsPanel.Height / 5, "  Exit BUTTON", new Point(buttonMarginLeft, buttonMarginTop * 2));
-			buttonsPanel.Controls.Add(b);
-			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(quitOnClick);
-
-
-			return buttonsPanel;
-		}
-
-		/// <summary>
-		/// Create second panel in main panel
-		/// </summary>
-		/// <returns>Miyagi Panel</returns>
-		private Panel createStatPanel() {
-			statPanel = createMainmenuSubpanel();
-			int x1 = statPanel.Width / 3;
-			int y = 50;
-			//Name
-			statPanel.Controls.Add(new Label() {
-				Size = new Size(x1, y),
-				Text = " Name: ",
-				Padding = new Thickness(5)
-
-			});
-			int x2 = statPanel.Width * 2 / 3;
-			statPanelName = new Label() {
-				Size = new Size(x2, y),
-				Location = new Point(statPanel.Width * 2 / 8, 0),
-				Text = " Jeste neni",
-				Padding = new Thickness(5)
-			};
-			statPanel.Controls.Add(statPanelName);
-
-			//Mesh
-			statPanel.Controls.Add(new Label() {
-				Size = new Size(x1, y),
-				Location = new Point(0, y),
-				Text = " Mesh: ",
-				Padding = new Thickness(5)
-
-			});
-
-			statPanelMesh = new Label() {
-				Size = new Size(x2, y),
-				Location = new Point(statPanel.Width * 2 / 8, y),
-				Text = " Jeste neni",
-				Padding = new Thickness(5)
-			};
-			statPanel.Controls.Add(statPanelMesh);
-
-			//Team
-			statPanel.Controls.Add(new Label() {
-				Size = new Size(x1, y),
-				Location = new Point(0, 2 * y),
-				Text = " Team: ",
-				Padding = new Thickness(5)
-
-			});
-
-			statPanelTeam = new Label() {
-				Size = new Size(x2, y),
-				Location = new Point(statPanel.Width * 2 / 8, 2 * y),
-				Text = " Jeste neni",
-				Padding = new Thickness(5)
-			};
-			statPanel.Controls.Add(statPanelTeam);
-			return statPanel;
-		}
-
-		/// <summary>
-		/// Create third panel in main panel
-		/// </summary>
-		/// <returns>Miyagi Panel</returns>
-		private Panel createActionPanel() {
-			actionPanel = createMainmenuSubpanel();
-			actionPanel.Controls.Add(new Label() {
-				Size = new Size(140, 50),
-				Text = " Developing",
-				Padding = new Thickness(5)
-
-			});
-			return actionPanel;
 		}
 
 		/// <summary>

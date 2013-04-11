@@ -66,6 +66,11 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
             }
         }
 
+		public Dictionary<string, object> getPropertyToDisplay() {
+			var propToDisp = new Dictionary<string, object>();
+			return propToDisp;
+		}
+
 		/// <summary>
 		/// It will be always 0.
 		/// </summary>
@@ -91,7 +96,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
         }
 
 		public float PickUpDistance {
-			get { return 300; }
+			get { return 250; }
 		}
 
 		public Vector3 Position {

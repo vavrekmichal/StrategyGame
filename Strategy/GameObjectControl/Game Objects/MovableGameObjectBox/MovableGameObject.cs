@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Mogre;
 using Strategy.Exceptions;
-using Strategy.GameObjectControl.Game_Objects;
 using Strategy.GameObjectControl.Game_Objects.GameActions;
-using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.MoveMgr;
 using Strategy.TeamControl;
@@ -41,6 +37,8 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		private int collisionCount = 0;
 		private bool detourReached = false;
 		private int colliisionConst = 100;
+		private int hp = 100;
+
 
 		public MovableGameObject() {
 			isVisible = false;
@@ -282,6 +280,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 				if (this.isVisible) {
 				position = sceneNode.Position;
 				manager.DestroySceneNode(sceneNode);
+				sceneNode = null;
 				this.isVisible = false;
 				}
 			}
@@ -289,6 +288,11 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 		public virtual void setGroupBonuses(Dictionary<string, object> bonusDict) {
 			propertyBonusDict = bonusDict;
+		}
+
+
+		public virtual Dictionary<string, object> onGroupAdd() {
+			return new Dictionary<string, object>();
 		}
 
 		/// <summary>
@@ -330,34 +334,6 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			return prop;
 		}
 
-
-
-		public string Name {
-			get {
-				return name;
-			}
-		}
-
-
-		public Team Team {
-			get {
-				return movableObjectTeam;
-			}
-			set {
-				movableObjectTeam = value;
-			}
-		}
-
-
-		public Vector3 Position {
-			get {
-				if (sceneNode == null) { return position; } else { return sceneNode.Position; }
-			}
-		}
-
-		public Vector3 Direction {
-			get { return direction; }
-		}
 
 		/// <summary>
 		/// Sets flyList and move interupt reciever.
@@ -409,5 +385,41 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			get { return isVisible; }
 		}
 
+
+		public string Name {
+			get {
+				return name;
+			}
+		}
+
+
+		public Team Team {
+			get {
+				return movableObjectTeam;
+			}
+			set {
+				movableObjectTeam = value;
+			}
+		}
+
+
+		public Vector3 Position {
+			get {
+				if (sceneNode == null) {
+					return position; 
+				} else { 
+					return sceneNode.Position; 
+				}
+			}
+		}
+
+		public Vector3 Direction {
+			get { return direction; }
+		}
+
+
+		public int Hp {
+			get { return hp; }
+		}
 	}
 }

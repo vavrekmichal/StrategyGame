@@ -9,6 +9,7 @@ using Strategy.TeamControl;
 
 namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 	public interface IMovableGameObject {
+
 		void move(float f);
 		void stop();
 
@@ -30,15 +31,17 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 		void setGroupBonuses(Dictionary<string, object> bonusDict);
 
-        string Name{get;}
+		string Name { get; }
 		Team Team { get; set; }
 		bool Visible { get; }
 		Mogre.Vector3 Direction { get; }
-		Mogre.Vector3 Position {get;}
+		Mogre.Vector3 Position { get; }
 
 		int AttackPower { get; }
 		int DeffPower { get; }
+		int Hp { get; }
 
 		ActionAnswer onMouseAction(ActionReason reason, Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject);
+		Dictionary<string, object> onGroupAdd();
 	}
 }

@@ -64,7 +64,7 @@ namespace Strategy.TeamControl {
 			get { return name; }
         }
 
-        public override string ToString() {
+        public string print() {
             StringBuilder s = new StringBuilder();
             s.Append(name+"\n");
             s.Append("\t ISGO" + "\n");
@@ -79,6 +79,10 @@ namespace Strategy.TeamControl {
 
             return s.ToString();
         }
+
+		public override string ToString() {
+			return Name;
+		}
 
         public void setMaterials(List<IMaterial> materials) {
             foreach (IMaterial mat in materials) {

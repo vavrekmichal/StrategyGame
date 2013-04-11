@@ -71,6 +71,7 @@ namespace Strategy.GameObjectControl {
 			Gate.createTraveler(getActiveSolarSystem(), getSolarSystem(solarSystemNumberTo), imgo);
 		}
 
+
 		public List<Traveler> getTravelers() {
 			return Gate.getTravelers();
 		}
@@ -88,7 +89,6 @@ namespace Strategy.GameObjectControl {
 				solarSystemBetter.Add(lastSolarSystem, solarSyst);
 				lastSolarSystem++;
 			}
-			//hitTest.createHitTestMap(solSystList);
 		}
 
 		/// <summary>
@@ -97,13 +97,13 @@ namespace Strategy.GameObjectControl {
 		/// <param name="newSolarSystem">integer of showing solar system</param>
 		public void changeSolarSystem(int newSolarSystem) {
 			//better system
-			deselectGroup();
+			
 			solarSystemBetter[activeSolarSystem].hideSolarSystem();
 			solarSystemBetter[newSolarSystem].showSolarSystem();
 			//end of it
 
 			activeSolarSystem = newSolarSystem; //set new active solar system  
-
+			deselectGroup();
 			GUIControler.getInstance().setSolarSystemName(getSolarSystemName(activeSolarSystem)); //TODO to tu asi nechchi
 		}
 

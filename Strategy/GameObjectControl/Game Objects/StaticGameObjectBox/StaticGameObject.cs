@@ -7,6 +7,8 @@ using Strategy.GameMaterial;
 using Mogre;
 using System.Reflection;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
+using Strategy.GameObjectControl.RuntimeProperty;
+using Strategy.Exceptions;
 
 namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 	public abstract class StaticGameObject : IStaticGameObject {
@@ -15,15 +17,16 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		protected SceneNode sceneNode;
 		protected string mesh;
 
-		protected LinkedList<Mogre.Vector3> circularPositions;
 
-		protected Vector3 mDestination = Vector3.ZERO; // The destination the object is moving towards
+		protected Vector3 mDestination = Vector3.ZERO; // The position
 
 		protected Team planetTeam;
 		protected Mogre.SceneManager manager;
 
 		protected static Dictionary<string, IGameAction> gameActions;
 		protected static Dictionary<string, List<IStaticGameObject>> gameActionsPermitions;
+
+		protected Dictionary<string, object> propertyDict = new Dictionary<string,object>();
 
 		//Look here create file load file
 		static StaticGameObject() {
@@ -46,6 +49,25 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			((Produce)gameActions["Produce"]).registerExecuter(this, specificType, value);
 		}
 
+		public Property<T> getProperty<T>(string propertyName) {
+			if (!propertyDict.ContainsKey(propertyName)) {
+				throw new PropertyMissingException("Object " + Name + " doesn't have property " + propertyName + ".");
+			}
+			var prop = (Property<T>)propertyDict[propertyName];
+			return prop;
+		}
+
+		protected void setProperty(string name, object prop) {
+			if (!(prop.GetType().GetGenericTypeDefinition() == typeof(Property<>))) {
+				throw new ArgumentException("Given object is not Property<T>, it is " + prop.GetType());
+			}
+			if (propertyDict.ContainsKey(name)) {
+				propertyDict[name] = prop;
+			} else {
+				propertyDict.Add(name, prop);
+			}
+		}
+
 		/// <summary>
 		/// Rotating function 
 		/// </summary>
@@ -59,6 +81,11 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// </summary>
 		/// <param name="f">deley of frames</param>
 		public virtual void nonActiveRotate(float f) {
+		}
+
+		public virtual Dictionary<string, object> getPropertyToDisplay() {
+			var propToDisp = new Dictionary<string, object>();
+			return propToDisp;
 		}
 
 		//TODO implement answer
@@ -100,10 +127,6 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 						entity = manager.CreateEntity(name, mesh);
 					}
 
-					if (mDestination == null) { //control inicialization
-						mDestination = circularPositions.Last();
-					}
-
 					sceneNode = manager.RootSceneNode.CreateChildSceneNode(name + "Node", mDestination);
 
 					sceneNode.Pitch(new Degree(-90f));
@@ -112,6 +135,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 				}
 			} else {
 				if (sceneNode != null) {
+					mDestination = sceneNode.Position;
 					manager.DestroySceneNode(sceneNode);
 					sceneNode = null;
 				}
@@ -135,11 +159,15 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		public Vector3 Position {
 			get {
 				if (sceneNode == null) {
-					return circularPositions.Last();
+					//return circularPositions.Last();
+					return mDestination;
 				} else {
 					return sceneNode.Position;
 				}
 			}
 		}
+
+
+		
 	}
 }

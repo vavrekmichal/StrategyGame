@@ -20,6 +20,6 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		Vector3 Position { get; }
 
 		ActionReaction reactToInitiative(ActionReason reason, IMovableGameObject target);
-
+		Dictionary<string, object> getPropertyToDisplay();
 	}
 }
