@@ -41,6 +41,29 @@ namespace Strategy.GameObjectControl {
 			return new Dictionary<string, object>();
 		}
 
+		protected void addObjectPropertyToDict(Dictionary<string, object> isgoPropDict, Dictionary<object, int> summaryDict) {
+			foreach (KeyValuePair<string, object> property in isgoPropDict) {		//object is real Property<T>
+				if (summaryDict.ContainsKey(property.Value)) {
+					summaryDict[property.Value]++;
+				} else {
+					summaryDict.Add(property.Value, 1);
+				}
+			}
+		}
+
+		protected Dictionary<string, object> createCommonPropDict(Dictionary<object, int> summaryDict, Dictionary<string, object> isgoPropDict) {
+			int groupCount = groupMembers.Count;
+			var result = new Dictionary<string, object>();
+			foreach (KeyValuePair<object, int> propPair in summaryDict) {
+				if (groupCount == propPair.Value) {
+					string name = isgoPropDict.FirstOrDefault(x => x.Value == propPair.Key).Key; //gets string name searched by object
+					result.Add(name, propPair.Key);
+				}
+			}
+
+			return result;
+		}
+
 		public T this[int i] {
 			get {
 				return groupMembers[i];
@@ -56,7 +79,7 @@ namespace Strategy.GameObjectControl {
 
 	}
 
-
+	#region GroupMovables
 
 	public class GroupMovables : IGroup<IMovableGameObject> {
 
@@ -82,9 +105,6 @@ namespace Strategy.GameObjectControl {
 			groupBonuses.Add("Attack", new Property<int>(1));
 			groupBonuses.Add("Deffence", new Property<int>(1));
 			groupBonuses.Add("Speed", new Property<int>(1));
-
-
-
 		}
 
 		public void move(float f) {
@@ -99,15 +119,24 @@ namespace Strategy.GameObjectControl {
 
 		public void select() {		//called when group is changed from informative to selected
 			//Need colect bonuses from count and from members
-			var countBonus = (int)(groupMembers.Count / 10);
+			var countBonus = (int)(groupMembers.Count / 3);
 			((Property<int>)groupBonuses["Attack"]).Value = 1 + countBonus;
 			((Property<int>)groupBonuses["Deffence"]).Value = 1 + countBonus;
 			foreach (IMovableGameObject imgo in groupMembers) {
 				//somehow collect bonuses
-				imgo.setGroupBonuses(groupBonuses);
+				
 			}
 		}
 
+		/// <summary>
+		/// Function colects all answers and returns with the highest priority 
+		/// </summary>
+		/// <param name="reason">Reason of calling function</param>
+		/// <param name="point">position of mouse when was clicked</param>
+		/// <param name="hitObject">result of hit test</param>
+		/// <param name="isFriendly">when was clicked on object - team test</param>
+		/// <param name="isMovableGameObject">>when was clicked on object - movable test</param>
+		/// <returns>answers with the highest priority</returns>
 		public ActionAnswer onMouseAction(ActionReason reason, Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject) {
 			ActionAnswer groupAnswer = ActionAnswer.None;
 			foreach (IMovableGameObject imgo in groupMembers) {
@@ -120,23 +149,67 @@ namespace Strategy.GameObjectControl {
 		}
 
 
+		public override Dictionary<string, object> getPropertyToDisplay() {
+			var propDict = new Dictionary<string, object>();
+			propDict.Add("Team", owner);
+			var bonusesCopy = new Dictionary<string, Object>(groupBonuses);
+
+			foreach (KeyValuePair<string, object> bonusPair in groupBonuses) {	//group bonuses
+				string newKey = bonusPair.Key + "Bonus";
+				object value = bonusPair.Value;
+				propDict.Add(newKey, value);
+			}
+
+			if (groupMembers.Count == 1) {
+				foreach (var pair in groupMembers[0].getPropertyToDisplay()) {//Just copy - don't want original (team add,...)
+					propDict.Add(pair.Key, pair.Value);
+				}
+			} else {
+				var summaryDict = new Dictionary<object, int>();
+				foreach (IMovableGameObject imgo in groupMembers) {
+					addObjectPropertyToDict(imgo.getPropertyToDisplay(), summaryDict);
+				}
+				foreach (var pair in createCommonPropDict(summaryDict, groupMembers[0].getPropertyToDisplay())) {
+					propDict.Add(pair.Key, pair.Value);
+				}
+			}
+
+
+			return propDict;
+		}
+
 	}
+	#endregion
+
+	#region GroupStatic
 
 	class GroupStatics : IGroup<IStaticGameObject> {
 		public GroupStatics() : base(new Team("None")) { }
 		public GroupStatics(TeamControl.Team own) : base(own) { }
 
 		public override Dictionary<string, object> getPropertyToDisplay() {
-			Dictionary<string,object> propDict;
-			if (groupMembers.Count == 1) {
-				propDict = new Dictionary<string, object>(groupMembers[0].getPropertyToDisplay());
-			} else {
-				propDict = new Dictionary<string, object>();
-			}
+			var propDict = new Dictionary<string,object>();
 			propDict.Add("Team", owner);
-			//pokusDict.Add("HOasno", null); 
-
+			if (groupMembers.Count == 1) {
+				foreach (var pair in groupMembers[0].getPropertyToDisplay()) {//Just copy - don't want original (team add,...)
+					propDict.Add(pair.Key, pair.Value);
+				}
+			} else {
+				var summaryDict = new Dictionary<object, int>();
+				foreach (IStaticGameObject isgo in groupMembers) {
+					addObjectPropertyToDict(isgo.getPropertyToDisplay(), summaryDict);
+				}
+				foreach (var pair in createCommonPropDict(summaryDict, groupMembers[0].getPropertyToDisplay())) {
+					propDict.Add(pair.Key,pair.Value);
+				}
+			}
+			
 			return propDict;
 		}
+
+
 	}
+
 }
+	#endregion
+

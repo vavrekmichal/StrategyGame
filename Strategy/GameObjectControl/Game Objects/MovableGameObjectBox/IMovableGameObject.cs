@@ -43,5 +43,6 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 		ActionAnswer onMouseAction(ActionReason reason, Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject);
 		Dictionary<string, object> onGroupAdd();
+		Dictionary<string, object> getPropertyToDisplay();
 	}
 }

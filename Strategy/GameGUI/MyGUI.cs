@@ -169,10 +169,29 @@ namespace Strategy.GameGUI {
 			nameOfSolarSystem.Text = name;
 		}
 
+		private void showGroupProperties(Dictionary<string, object> propertiesDict) {
+			var propDict = propertiesDict;
+			int marginLeft = propertyPanel.Width / 2;
+			int marginTop = 26;
+			int i = 0;
+
+			foreach (var property in propDict) {				//info will be showed (regardless team)
+				propertyPanel.Controls.Add(createLabel(marginTop * i, marginLeft, 26, property.Key));
+
+				propertyPanel.Controls.Add((Label)createPropertyLabelAsObject(marginLeft, marginTop * i, property.Value));
+				++i;
+			}
+		}
+
 		public void showTargeted(GameObjectControl.GroupMovables group) {
 			clearStatPanelProp();
-			statPanelName.Text = group[0].Name;
-
+			
+			if (group.Count == 1) {
+				statPanelName.Text = group[0].Name;
+			} else {
+				statPanelName.Text = "Count: " + group.Count;
+			}
+			showGroupProperties(group.getPropertyToDisplay());
 
 		}
 
@@ -188,41 +207,20 @@ namespace Strategy.GameGUI {
 				});
 				return;
 			}
+
+			showGroupProperties(group.getPropertyToDisplay());
+
 			if (group.Count == 1) {
-				int marginLeft = propertyPanel.Width / 2;
-				int marginTop = 26;
 				var isgo = group[0];
 				statPanelName.Text = isgo.Name;
-
-				var propDict = group.getPropertyToDisplay();
-
-				int i = 0;
-				foreach (var property in propDict) {				//info will be showed (regardless team)
-					propertyPanel.Controls.Add(createLabel(marginTop * i, marginLeft, 26, property.Key));
-
-					propertyPanel.Controls.Add((Label)createPropertyLabelAsObject(marginLeft,marginTop*i,property.Value));
-					++i;
-				}
-
-				if (group.OwnerTeam.Name == Game.playerName) {// player's planet -> display actions
-
-				}	//is not player's just print info
 
 
 			} else {// player's planets (only way when is selected more than 1 IStaticGameObjects -> display actions
 				statPanelName.Text = "Count: "+ group.Count;
-				int marginLeft = propertyPanel.Width / 2;
-				int marginTop = 26;
 
-				var propDict = group.getPropertyToDisplay();
 
-				int i = 0;
-				foreach (var property in propDict) {				//info will be showed (regardless team)
-					propertyPanel.Controls.Add(createLabel(marginTop * i, marginLeft, 26, property.Key));
 
-					propertyPanel.Controls.Add((Label)createPropertyLabelAsObject(marginLeft, marginTop * i, property.Value));
-					++i;
-				}
+
 			}
 
 		}

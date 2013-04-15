@@ -292,7 +292,12 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 
 		public virtual Dictionary<string, object> onGroupAdd() {
-			return new Dictionary<string, object>();
+			return new Dictionary<string, object>();//TODO todle je upna blbost
+		}
+
+
+		public Dictionary<string, object> getPropertyToDisplay() {
+			return propertyDict;
 		}
 
 		/// <summary>
@@ -421,5 +426,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		public int Hp {
 			get { return hp; }
 		}
+
+
 	}
 }
