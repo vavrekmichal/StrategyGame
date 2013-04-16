@@ -53,7 +53,7 @@ namespace Strategy.GameObjectControl {
 			moveMgr = MoveManager.getInstance();
 			groupMgr = GroupManager.getInstance();
 			propertyMgr = new PropertyManager("StartMission");
-			hitTest = new HitTest();
+			hitTest = HitTest.getInstance();
 		}
 		#endregion
 

@@ -37,7 +37,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		private int collisionCount = 0;
 		private bool detourReached = false;
 		private int colliisionConst = 100;
-		private int hp = 100;
+
 
 
 		public MovableGameObject() {
@@ -45,6 +45,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			flyList = new LinkedList<Vector3>();
 			listOfAction = new List<IGameAction>();
 			propertyDict = new Dictionary<string, object>();
+			propertyDict.Add("Hp", new Property<int>(100));
 			propertyBonusDict = GroupMovables.baseTemplateBonusDict;
 		}
 
@@ -165,7 +166,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			} else {
 				if (!colision()) { //Object's not in colision
 
-					float move = getProperty<float>("speed").Value * delay;
+					float move = getProperty<float>("Speed").Value * delay;
 					distance -= move;
 					if (distance <= .0f) { //reach destination
 						sceneNode.Position = destination;
@@ -225,7 +226,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 				}
 			} else {
-				float move = getProperty<float>("speed").Value * f;
+				float move = getProperty<float>("Speed").Value * f;
 				distance -= move;
 				if (distance <= .0f) { //reach destination
 					position = destination;
@@ -424,7 +425,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 
 		public int Hp {
-			get { return hp; }
+			get { return ((Property<int>)propertyDict["Hp"]).Value; }
 		}
 
 

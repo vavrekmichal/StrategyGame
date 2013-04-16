@@ -91,7 +91,7 @@
     <Compile Include="GameObjectControl\Game Objects\GameObjectParameter\IGameObjectParameter.cs" />
     <Compile Include="GameObjectControl\Game Objects\HitTest.cs" />
     <Compile Include="GameObjectControl\Game Objects\MovableGameObjectBox\IMovableGameObject.cs" />
-    <Compile Include="GameObjectControl\Game Objects\ObjectXMLCreator.cs" />
+    <Compile Include="GameObjectControl\Game Objects\ObjectLoader.cs" />
     <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\Gate.cs" />
     <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\IStaticGameObject.cs" />
     <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\Traveler.cs" />

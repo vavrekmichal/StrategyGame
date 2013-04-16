@@ -13,7 +13,16 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		protected Dictionary<string, IStaticGameObject> isgoDict;
 		protected Dictionary<string, IMovableGameObject> imgoDict;
 
-		public HitTest() {
+		private static HitTest instance;
+
+		public static HitTest getInstance() {
+			if (instance==null) {
+				instance = new HitTest();
+			}
+			return instance;
+		}
+
+		private HitTest() {
 			objectIsMovable = new Dictionary<string, bool>();
 			isgoDict = new Dictionary<string, IStaticGameObject>();
 			imgoDict = new Dictionary<string, IMovableGameObject>();
@@ -31,6 +40,10 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			return isgoDict[name];
 		}
 
+		/// <summary>
+		/// Initialization of HitTest. Sort game objects to ISGO and IMGO Dictionaries
+		/// </summary>
+		/// <param name="solarSystems">List with all solarSystems</param>
 		public void createHitTestMap(List<SolarSystem> solarSystems) {
 			objectIsMovable = new Dictionary<string, bool>();
 			isgoDict = new Dictionary<string, IStaticGameObject>();
@@ -52,6 +65,16 @@ namespace Strategy.GameObjectControl.Game_Objects {
 					imgoDict.Add(imgo.Name, imgo);
 				}
 			}
+		}
+
+		public void registerISGO(IStaticGameObject isgo) {
+			objectIsMovable.Add(isgo.Name, false);
+			isgoDict.Add(isgo.Name, isgo);
+		}
+
+		public void registerIMGO(IMovableGameObject imgo) {
+			objectIsMovable.Add(imgo.Name, true);
+			imgoDict.Add(imgo.Name, imgo);
 		}
 	}
 }

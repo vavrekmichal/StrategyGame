@@ -17,9 +17,9 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			this.movableObjectTeam = myTeam;
 			this.manager = manager;
 			this.position = position;
-			base.setProperty("speed", propMgr.getProperty<float>("speed"));
-			base.setProperty("attack", propMgr.getProperty<int>("basicAttack"));
-			base.setProperty("deffence", propMgr.getProperty<int>("basicDeff"));
+			base.setProperty("Speed", propMgr.getProperty<float>("speed"));
+			base.setProperty("Attack", propMgr.getProperty<int>("basicAttack"));
+			base.setProperty("Deffence", propMgr.getProperty<int>("basicDeff"));
 			//Mogre inicialization of object
 			entity = manager.CreateEntity(name, mesh);
 		}
@@ -53,11 +53,11 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		}
 
 		public override int AttackPower {
-			get { return getProperty<int>("attack").Value * getPropertyValueFromBonusDict<int>("attack"); }
+			get { return getProperty<int>("Attack").Value * getPropertyValueFromBonusDict<int>("Attack"); }
 		}
 
 		public override int DeffPower {
-			get { return getProperty<int>("deffence").Value; }
+			get { return getProperty<int>("Deffence").Value; }
 		}
 	}
 }

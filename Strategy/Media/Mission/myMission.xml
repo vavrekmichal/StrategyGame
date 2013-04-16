@@ -11,12 +11,12 @@
   </teams>
   <usedObjects>
     <isgos>
-      <sgo name="Planet" path="StaticGameObjectBox/Planet.cs" fullName="Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox.Planet"/>
-      <sgo name="Sun" path="StaticGameObjectBox/Sun.cs" fullName="Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox.Sun"/>
+      <gameObject name="Planet" path="StaticGameObjectBox/Planet.cs" fullName="Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox.Planet"/>
+      <gameObject name="Sun" path="StaticGameObjectBox/Sun.cs" fullName="Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox.Sun"/>
     </isgos>
     <imgos>
-      <mgo name="SpaceShip" path="MovableGameObjectBox/SpaceShip.cs" fullName="Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox.SpaceShip"/>
-      <mgo name="SpaceShip2" path="MovableGameObjectBox/SpaceShip2.cs" fullName="Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox.SpaceShip2"/>
+      <gameObject name="SpaceShip" path="MovableGameObjectBox/SpaceShip.cs" fullName="Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox.SpaceShip"/>
+      <gameObject name="SpaceShip2" path="MovableGameObjectBox/SpaceShip2.cs" fullName="Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox.SpaceShip2"/>
     </imgos>
   </usedObjects>
   <solarSystems >
@@ -42,9 +42,9 @@
 
       <imgo type="SpaceShip" name="Mothership" mesh="SpaceShip1.mesh" team="Player" position="300,0,300"/>
       <imgo type="SpaceShip" name="Ship" mesh="SpaceShip2.mesh" team="Player" position="350,0,350"/>
-      <imgo type="SpaceShip" name="Ship1" mesh="SpaceShip2.mesh" team="Player" position="400,0,400"/>
-      <imgo type="SpaceShip" name="Ship2" mesh="SpaceShip2.mesh" team="Player" position="450,0,450"/>
-      <imgo type="SpaceShip2" name="Ship3" mesh="SpaceShip2.mesh" team="Player" position="450,0,500"/>
+      <imgo type="SpaceShip" name="Ship" mesh="SpaceShip2.mesh" team="Player" position="400,0,400"/>
+      <imgo type="SpaceShip" name="Ship" mesh="SpaceShip2.mesh" team="Player" position="450,0,450"/>
+      <imgo type="SpaceShip2" name="Ship" mesh="SpaceShip2.mesh" team="Player" position="450,0,500"/>
       <imgo type="SpaceShip" name="ShipD" mesh="SpaceShip2.mesh" team="Devastator" position="600,0,600"/>
       <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,600"/>
     </solarSystem>

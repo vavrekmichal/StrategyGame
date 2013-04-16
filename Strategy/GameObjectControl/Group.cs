@@ -154,7 +154,7 @@ namespace Strategy.GameObjectControl {
 			propDict.Add("Team", owner);
 			var bonusesCopy = new Dictionary<string, Object>(groupBonuses);
 
-			foreach (KeyValuePair<string, object> bonusPair in groupBonuses) {	//group bonuses
+			foreach (KeyValuePair<string, object> bonusPair in groupBonuses) {	//group bonuses - add "Bonus" for distinguish bonus and ability
 				string newKey = bonusPair.Key + "Bonus";
 				object value = bonusPair.Value;
 				propDict.Add(newKey, value);

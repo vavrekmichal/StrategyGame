@@ -16,29 +16,33 @@ using Strategy.GameObjectControl.RuntimeProperty;
 
 
 namespace Strategy.GameObjectControl.Game_Objects {
-	class ObjectXMLCreator {
+	class ObjectLoader {
 
-		protected XmlDocument xml;
-		protected Mogre.SceneManager manager;
-		protected Dictionary<string, Team> teamDict;
-		protected List<IMaterial> materialList;
-		protected List<SolarSystem> solarSystemList;
-		protected Dictionary<Team, List<Team>> teamRealationDict;
-		protected XmlElement root;
+		private Dictionary<string, int> usedNameDict;
+
+		private XmlDocument xml;
+		private Mogre.SceneManager manager;
+		private Dictionary<string, Team> teamDict;
+		private List<IMaterial> materialList;
+		private List<SolarSystem> solarSystemList;
+		private Dictionary<Team, List<Team>> teamRealationDict;
+		private XmlElement root;
+		XmlNode missionNode; //selected mission
 
 		//Property manager
 		private PropertyManager propMgr;
 
 		//assembly load
-		protected AssemblyBuilder assemblyBuilder;
-		protected ModuleBuilder moduleBuilder;
-		List<MetadataReference> metadataRef;
-		CompilationOptions comilationOption;
-		List<string> isCompiled;
+		private AssemblyBuilder assemblyBuilder;
+		private ModuleBuilder moduleBuilder;
+		private List<MetadataReference> metadataRef;
+		private CompilationOptions comilationOption;
+		private List<string> isCompiled;
 
-		public ObjectXMLCreator(string path, Mogre.SceneManager manager, Dictionary<string, Team> teams,
+		public ObjectLoader(string path, Mogre.SceneManager manager, Dictionary<string, Team> teams,
 			List<IMaterial> materialList, List<SolarSystem> solarSystems) {
 			teamRealationDict = new Dictionary<Team, List<Team>>();
+			usedNameDict = new Dictionary<string, int>();
 
 			this.manager = manager;
 			this.teamDict = teams;
@@ -79,9 +83,12 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			propMan.loadPropertyToMission(missionName);
 			bool hasSun = false;
 			IStaticGameObject sun = null;
-			XmlNode missionNode = root.SelectNodes("/mission[@name='" + missionName + "'][1]")[0]; //load mission (first of given name)
+			missionNode = root.SelectNodes("/mission[@name='" + missionName + "'][1]")[0]; //load mission (first of given name)
 
 			loadTeams(root.SelectNodes("teams[1]")[0]);
+
+			//pokus
+			getTypeNode("Planet");
 
 			XmlNode missionSolarSystemNode = missionNode.SelectNodes("solarSystems[1]")[0];
 			foreach (XmlNode solarSystem in missionSolarSystemNode) {
@@ -109,14 +116,11 @@ namespace Strategy.GameObjectControl.Game_Objects {
 							if (gameObjectType == "Sun") {
 								hasSun = true;
 								t = IsgoType.Sun;
-								sun = createISGO(gameObject, missionNode.SelectNodes("usedObjects/isgos/sgo[@name='Sun']")[0], t);
+								sun = createISGO(gameObject, t);
 
 							} else {
 								t = IsgoType.StaticObject;
-								IStaticGameObject isgo = createISGO(gameObject,
-									missionNode.SelectNodes("usedObjects/isgos/sgo[@name='" + gameObjectType + "']")[0],
-									t
-									);
+								IStaticGameObject isgo = createISGO(gameObject, t);
 								isgo.Team.addISGO(isgo);
 								isgos.Add(isgo);
 								//here register
@@ -126,8 +130,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 							break;
 						case "imgo":
 							gameObjectType = gameObject.Attributes["type"].InnerText;
-							IMovableGameObject imgo = createIMGO(gameObject,
-								missionNode.SelectNodes("usedObjects/imgos/mgo[@name='" + gameObjectType + "']")[0]);
+							IMovableGameObject imgo = createIMGO(gameObject);
 							imgo.Team.addIMGO(imgo);
 							imgos.Add(imgo);
 							break;
@@ -168,7 +171,6 @@ namespace Strategy.GameObjectControl.Game_Objects {
 						}
 					}
 				}
-				//friends.Add(teamDict["None"]);
 				var listWithNone = new List<Team>(friends);
 				listWithNone.Add(teamDict["None"]);
 				foreach (var team in friends) {
@@ -193,7 +195,8 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// <param name="type">class type in string (check if is compiled)</param>
 		/// <param name="args">class arguments for constructor</param>
 		/// <returns></returns>
-		private object createGameObject(XmlNode gameObjectPath, string type, object[] args) {
+		private object createGameObject(string type, object[] args) {
+			XmlNode gameObjectPath = getTypeNode(type);
 			string fullPath = gameObjectPath.Attributes["path"].InnerText;
 			string fullName = gameObjectPath.Attributes["fullName"].InnerText;
 
@@ -229,15 +232,14 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// <param name="gameObject">XmlNode with parameters for the instance</param>
 		/// <param name="gameObjectPath">XmlNode with class path and name</param>
 		/// <returns>instance implmements IMovableGameObject (specific in gameObjectPath)</returns>
-		private IMovableGameObject createIMGO(XmlNode gameObject, XmlNode gameObjectPath) {
-			IMovableGameObject imgo;
-			string type;
+		private IMovableGameObject createIMGO(XmlNode gameObject) {
+
 			List<object> args = new List<object>();
-			args.Add(gameObject.Attributes["name"].InnerText);
+			args.Add(getUnusedName(gameObject.Attributes["name"].InnerText));
 			args.Add(gameObject.Attributes["mesh"].InnerText);
 
 			string team = gameObject.Attributes["team"].InnerText;
-			type = gameObject.Attributes["type"].InnerText;
+			string type = gameObject.Attributes["type"].InnerText;
 			if (!teamDict.ContainsKey(team)) {
 				throw new XmlException("Undefined Team " + team + " .");
 			}
@@ -246,24 +248,35 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 			args.Add(parseStringToVector3(gameObject.Attributes["position"].InnerText));
 			args.Add(propMgr);
-			imgo = (IMovableGameObject)createGameObject(gameObjectPath, type, args.ToArray());
+
+			return createIMGO(type, args.ToArray());
+		}
+
+		/// <summary>
+		/// Function creates IMovableGameObject from given arguments and string with specific type of IMovableGameObject.
+		/// </summary>
+		/// <param name="type">specific type of IMovableGameObject in string</param>
+		/// <param name="args">arguments for object constructor</param>
+		/// <returns>instance of IMovableGameObject (specific in type)</returns>
+		public IMovableGameObject createIMGO(string type, object[] args) {
+			IMovableGameObject imgo = (IMovableGameObject)createGameObject(type, args);
 			return imgo;
 		}
 
 
 		/// <summary>
-		/// Function creates IStaticGameObject from XML nodes. 
+		/// Function creates IStaticGameObject from XML nodes. It gets arguments from XmlNode and calls createISGO(string type, object[] args) 
+		/// to get created instance of IStaticGameObject.
 		/// </summary>
 		/// <param name="gameObject">XmlNode with parameters for the instance</param>
 		/// <param name="gameObjectPath">XmlNode with class path and name</param>
 		/// <param name="isgoType">Type of creating instance for check special type Sun</param>
 		/// <param name="pointsOnCircle">number of positions on imaginary circle</param>
 		/// <returns>instance implmements IStaticGameObject (specific in gameObjectPath)</returns>
-		private IStaticGameObject createISGO(XmlNode gameObject, XmlNode gameObjectPath, IsgoType isgoType, int pointsOnCircle = 30) {
-			IStaticGameObject isgo;
+		private IStaticGameObject createISGO(XmlNode gameObject, IsgoType isgoType, int pointsOnCircle = 30) {
 			string type;
 			List<object> args = new List<object>();
-			args.Add(gameObject.Attributes["name"].InnerText);
+			args.Add(getUnusedName(gameObject.Attributes["name"].InnerText));
 			args.Add(gameObject.Attributes["mesh"].InnerText);
 			string team = gameObject.Attributes["team"].InnerText;
 			if (!teamDict.ContainsKey(team)) {
@@ -284,9 +297,20 @@ namespace Strategy.GameObjectControl.Game_Objects {
 				args.Add(pointsOnCircle);
 
 			}
-			isgo = (IStaticGameObject)createGameObject(gameObjectPath, type, args.ToArray());
+			return createISGO(type, args.ToArray());
+		}
+
+		/// <summary>
+		/// Function creates IStaticGameObject from given arguments and string with specific type of IStaticGameObject.
+		/// </summary>
+		/// <param name="type">specific type of IStaticGameObject in string</param>
+		/// <param name="args">arguments for object constructor</param>
+		/// <returns>instance of IStaticGameObject (specific in type)</returns>
+		public IStaticGameObject createISGO(string type, object[] args) {
+			IStaticGameObject isgo = (IStaticGameObject)createGameObject(type, args);
 			return isgo;
 		}
+
 
 		/// <summary>
 		/// Creates special type Gate (is not runtime compiled). 
@@ -326,6 +350,12 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			return sSys;
 		}
 
+		private XmlNode getTypeNode(string typeName) {
+			var node = missionNode.SelectNodes("usedObjects//gameObject[@name='" + typeName + "']")[0];
+			return node;
+		}
+
+
 		private void registerSGOaction(StaticGameObject sgo, string action, string value) {
 			sgo.registerExecuter(action, sgo.Team.getMaterials(), value);
 		}
@@ -347,9 +377,19 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			try {
 				v = new Vector3(Int32.Parse(splitted[0]), Int32.Parse(splitted[1]), Int32.Parse(splitted[2]));
 			} catch (Exception) {
-				throw new FormatException("Cannot parse string "+ input+ " to Mogre.Vector3. Given string was in a bad format (right format: \"x,y,z\")");
+				throw new FormatException("Cannot parse string " + input + " to Mogre.Vector3. Given string was in a bad format (right format: \"x,y,z\")");
 			}
 			return v;
+		}
+
+		private string getUnusedName(string name) {
+			if (usedNameDict.ContainsKey(name)) {
+				usedNameDict[name]++;
+				return name + usedNameDict[name];
+			} else {
+				usedNameDict.Add(name, 0);
+				return name;
+			}
 		}
 
 	}

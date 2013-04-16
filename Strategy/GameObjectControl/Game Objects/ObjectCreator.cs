@@ -23,7 +23,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		protected Mogre.SceneManager manager;
 		protected Dictionary<string, Team> teams;
 
-		protected ObjectXMLCreator xmlWorker;
+		protected ObjectLoader loader;
 
 		#region singleton and constructor
 		private static ObjectCreator instance;
@@ -59,13 +59,27 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			//visual part 
 			createMaterials();
 
-			xmlWorker = new ObjectXMLCreator("../../Media/Mission/MyMission.xml", manager, teams, materialList, solarSystems);
-			xmlWorker.load(mission, propMan);
+			loader = new ObjectLoader("../../Media/Mission/MyMission.xml", manager, teams, materialList, solarSystems);
+			loader.load(mission, propMan);
 			//createObjectMap(); //map for hittest
 			solarSystems[0].showSolarSystem();
 
 		}
 
+
+		public IStaticGameObject createIsgo(string typeName, object[] args) {	//prepared...never used
+			var isgo =  loader.createISGO(typeName, args);
+			HitTest.getInstance().registerISGO(isgo);
+			return isgo;
+		}
+
+		public IMovableGameObject createImgo(string typeName, object[] args) {	//prepared...never used
+			var imgo = loader.createIMGO(typeName, args);
+			HitTest.getInstance().registerIMGO(imgo);
+			return imgo;
+		}
+
+		
 		public List<SolarSystem> getInicializedSolarSystems() {
 			return solarSystems;
 		}
@@ -75,9 +89,9 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 		public Dictionary<Team, List<Team>> getTeamsRelations() {
-			return xmlWorker.getTeamsRelations();
+			return loader.getTeamsRelations();
 		}
-        
+
 
 		//TODO TOTO TU NESMI ZUSTAT*/
 		private void createMaterials() {
