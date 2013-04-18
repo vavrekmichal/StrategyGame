@@ -16,7 +16,7 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 
 		private static PropertyManager instance;
 
-		//static - file change
+		// Static - file change
 		private static Session session;
 		private static DateTime lastRead;
 
@@ -38,12 +38,13 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 			// Begin watching.
 			watcher.EnableRaisingEvents = true;
 
-			//create scriptEngine
+			// Create scriptEngine
 			var scriptEngine = new ScriptEngine();
 			session = scriptEngine.CreateSession();
 			session.AddReference("System");
 			session.AddReference("System.Core");
-			//create start properties - load XML file with used ones
+
+			// Create start properties - load XML file with used ones
 			XmlDocument xml = new XmlDocument();
 			xml.Load("../../Media/Mission/Scripts/test.xml");
 			root = xml.DocumentElement;
@@ -57,23 +58,30 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 		/// <param name="source">Source</param>
 		/// <param name="e">Changed file</param>
 		private static void OnChanged(object source, FileSystemEventArgs e) {
-			DateTime lastWriteTime = File.GetLastWriteTime(e.FullPath); //Bug fix - function is called twice
+			DateTime lastWriteTime = File.GetLastWriteTime(e.FullPath); // Bug fix - function is called twice
 			DateTime now = DateTime.Now;
 			TimeSpan ts = new TimeSpan(0, 0, 5);
-			if (lastWriteTime != lastRead && (now-lastRead)>ts) {       //reload is called once
+			if (lastWriteTime != lastRead && (now-lastRead)>ts) {       // Reload is called once
 				lastRead = lastWriteTime;
-				session.ExecuteFile(e.FullPath);
+				try {
+					session.ExecuteFile(e.FullPath);
+				} catch (Exception exception) {
+					Console.WriteLine("Script must be without errors.");
+					Console.WriteLine(exception);
+					return;
+				}
+				
 				instance.loadProperties();
 
 			}
 		}
 
 		/// <summary>
-		/// add generic property into baseDict (or modify)
+		/// Add generic property into baseDict (or modify)
 		/// </summary>
-		/// <typeparam name="T">type of property</typeparam>
-		/// <param name="key">name of property</param>
-		/// <param name="value">value of property</param>
+		/// <typeparam name="T">Type of property</typeparam>
+		/// <param name="key">Name of property</param>
+		/// <param name="value">Value of property</param>
 		private void add<T>(string key, T value) {
 			Type type = typeof(T);
 			Dictionary<string, Property<T>> subDict;
@@ -94,7 +102,7 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 		/// <summary>
 		/// A function loads properties for given mission from Property file
 		/// </summary>
-		/// <param name="missionName">mission name</param>
+		/// <param name="missionName">Mission name</param>
 		public void loadPropertyToMission(string missionName) {
 			session.ExecuteFile("../../Media/Mission/Scripts/Properties.csx");
 			missionPropertyNode = root.SelectNodes("runTimeProperty[@missionName='" + missionName + "'][1]")[0];
@@ -104,9 +112,9 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 		/// <summary>
 		/// A function returns a generic property Property<T>
 		/// </summary>
-		/// <typeparam name="T">type of property</typeparam>
-		/// <param name="key">property name</param>
-		/// <returns>generic instance of Property found by key </returns>
+		/// <typeparam name="T">Type of property</typeparam>
+		/// <param name="key">Property name</param>
+		/// <returns>Generic instance of Property found by key </returns>
 		public Property<T> getProperty<T>(string key) {
 			Type type = typeof(T);
 			Dictionary<string, Property<T>> subDict;
@@ -123,11 +131,14 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 		/// A function loads all properties in executing file and save them in generic Property by name(key)
 		/// </summary>
 		public void loadProperties() {
-			//reflection is used because here is needed runtime generic 
-			MethodInfo method = typeof(PropertyManager).GetMethod("add", BindingFlags.NonPublic | BindingFlags.Instance); //add is private function
+
+			// Reflection is used because here is needed runtime generic add is private function
+			MethodInfo method = typeof(PropertyManager).GetMethod("add", BindingFlags.NonPublic | BindingFlags.Instance);
 			foreach (XmlNode property in missionPropertyNode.ChildNodes) {
 				string propertyName = property.Attributes["name"].InnerText;
-				object d = session.Execute(propertyName);					//property from a script (int,float...)
+
+				// Property from a script (int,float...)
+				object d = session.Execute(propertyName);					
 				Type type = d.GetType();
 
 				MethodInfo generic = method.MakeGenericMethod(type);		

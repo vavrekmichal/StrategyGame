@@ -38,7 +38,10 @@ namespace Strategy.GameGUI {
             keyboard = k;
 		}
 
-		///
+		/// <summary>
+		/// GUI inicialization			
+		/// </summary>
+		/// <param name="listMaterial">List with player's materials</param>
         public void inicialization( Dictionary<string, IMaterial> listMaterial) {
             myGUI = new MyGUI((int)window.Width, (int)window.Height, mouse, keyboard, listMaterial);
         }

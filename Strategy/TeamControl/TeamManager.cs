@@ -12,11 +12,11 @@ using Strategy.GameGUI;
 namespace Strategy.TeamControl {
     class TeamManager {
         //TODO: ProduceManager
-        //protected List<IMaterial> materials; //will be singleton and shared with this and GUI to show state
+        // Protected List<IMaterial> materials; //will be singleton and shared with this and GUI to show state
 
         protected GUIControler guiControler;
 
-        protected Dictionary<string, Team> teamDict; //implementation in mybook think about delete. MUST delete from team and group
+        protected Dictionary<string, Team> teamDict; // Implementation in mybook think about delete. MUST delete from team and group
 
 		protected Dictionary<Team, List<Team>> friendlyTeamDict;
 
@@ -37,7 +37,7 @@ namespace Strategy.TeamControl {
         }
         #endregion
 
-        //public
+        // Public
         
         public void inicialization(Dictionary<string,Team> settingTeam, Dictionary<Team, List<Team>> friendlyDict) {
 			friendlyTeamDict = friendlyDict;
@@ -67,6 +67,6 @@ namespace Strategy.TeamControl {
 				return false;
 			}
 		}
-        //private
+        // Private
     }
 }

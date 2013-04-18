@@ -17,7 +17,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		private float portTimeDuration;
 
 		private Vector3 position;
-		private AnimationState animationState; //The AnimationState the moving object
+		private AnimationState animationState; // The AnimationState the moving object
 
 		protected static List<Traveler> travelerList = new List<Traveler>();
 

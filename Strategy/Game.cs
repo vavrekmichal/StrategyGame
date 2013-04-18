@@ -14,9 +14,7 @@ using Strategy.GameGUI;
 
 namespace Strategy {
 	class Game {
-		//protected GroupManager groupManager;
-		//protected IFightManager fightMgr;
-		////  protected TeamManager teamManager;
+
 		protected MouseControl mouseControl;
 		protected GameObjectManager gameObjectMgr;
 
@@ -50,7 +48,6 @@ namespace Strategy {
 			if (!gamePaused) {
 				gameObjectMgr.update(delay);
 			}
-			//production of Materials
 		}
 
 
@@ -61,23 +58,23 @@ namespace Strategy {
 
 		}
 
-		//GET
+		// Get
 		public MouseControl getMouseControl() {
 			return mouseControl;
 		}
 
-		//QUIT
+		// Quit
 		public void quit() {
 			guiControler.dispose();
 		}
 
-		//PAUSE
+		// Pause
 		public static void pause(bool paused) {
 			gamePaused = paused;
 		}
 
-		public static bool gameStatus() {
-			return gamePaused;
+		public static bool GameStatus {
+			get { return gamePaused; }
 		}
 	}
 }

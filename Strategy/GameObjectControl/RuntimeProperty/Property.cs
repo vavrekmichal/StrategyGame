@@ -19,6 +19,7 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 
 		public object Clone() {
 			return this.MemberwiseClone();
+
 		}
 	}
 }

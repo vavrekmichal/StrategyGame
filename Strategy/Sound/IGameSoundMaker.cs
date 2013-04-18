@@ -10,11 +10,11 @@ namespace Strategy.Sound {
 		void nowPlaying(string s);
 		void stopActualSong();
 		void pause();
-		//volume 
+		// Volume 
 		void volumeUp();
 		void volumeDown();
 
-		//overlay
+		// Overlay
 		void hideBox(float f);
 	}
 }

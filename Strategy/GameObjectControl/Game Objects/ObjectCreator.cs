@@ -41,7 +41,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 		/// <summary>
-		/// private constructor
+		/// Private constructor
 		/// </summary>
 		/// <param name="manager">Mogre SceneManager</param>
 		private ObjectCreator(Mogre.SceneManager manager) {
@@ -52,28 +52,28 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		#endregion
 
 		/// <summary>
-		/// inicialization of game World
+		/// Inicialization of game World
 		/// </summary>
-		/// <param name="mission">name of mission</param>
+		/// <param name="mission">Name of mission</param>
 		public void initializeWorld(string mission, PropertyManager propMan) {
-			//visual part 
+
 			createMaterials();
 
 			loader = new ObjectLoader("../../Media/Mission/MyMission.xml", manager, teams, materialList, solarSystems);
 			loader.load(mission, propMan);
-			//createObjectMap(); //map for hittest
+
 			solarSystems[0].showSolarSystem();
 
 		}
 
 
-		public IStaticGameObject createIsgo(string typeName, object[] args) {	//prepared...never used
+		public IStaticGameObject createIsgo(string typeName, object[] args) {	// prepared...never used
 			var isgo =  loader.createISGO(typeName, args);
 			HitTest.getInstance().registerISGO(isgo);
 			return isgo;
 		}
 
-		public IMovableGameObject createImgo(string typeName, object[] args) {	//prepared...never used
+		public IMovableGameObject createImgo(string typeName, object[] args) {	// prepared...never used
 			var imgo = loader.createIMGO(typeName, args);
 			HitTest.getInstance().registerIMGO(imgo);
 			return imgo;

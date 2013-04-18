@@ -117,14 +117,21 @@ namespace Strategy.GameObjectControl {
 		}
 
 
-		public void select() {		//called when group is changed from informative to selected
-			//Need colect bonuses from count and from members
+		public void select() {		// Called when group is changed from informative to selected
+			// Need colect bonuses from count and from members
 			var countBonus = (int)(groupMembers.Count / 3);
 			((Property<int>)groupBonuses["Attack"]).Value = 1 + countBonus;
 			((Property<int>)groupBonuses["Deffence"]).Value = 1 + countBonus;
 			foreach (IMovableGameObject imgo in groupMembers) {
-				//somehow collect bonuses
-				
+				// Collect bonuses
+				var imgoBonus = imgo.onGroupAdd();
+				foreach (var bonusPair in imgoBonus) {
+					if (groupBonuses.ContainsKey(bonusPair.Key)){ //todo
+						// Add find type and add value
+					} else {
+						groupBonuses.Add(bonusPair.Key, bonusPair.Value);
+					}
+				}
 			}
 		}
 
@@ -132,11 +139,11 @@ namespace Strategy.GameObjectControl {
 		/// Function colects all answers and returns with the highest priority 
 		/// </summary>
 		/// <param name="reason">Reason of calling function</param>
-		/// <param name="point">position of mouse when was clicked</param>
-		/// <param name="hitObject">result of hit test</param>
-		/// <param name="isFriendly">when was clicked on object - team test</param>
-		/// <param name="isMovableGameObject">>when was clicked on object - movable test</param>
-		/// <returns>answers with the highest priority</returns>
+		/// <param name="point">Position of mouse when was clicked</param>
+		/// <param name="hitObject">Result of hit test</param>
+		/// <param name="isFriendly">When was clicked on object - team test</param>
+		/// <param name="isMovableGameObject">When was clicked on object - movable test</param>
+		/// <returns>Answers with the highest priority</returns>
 		public ActionAnswer onMouseAction(ActionReason reason, Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject) {
 			ActionAnswer groupAnswer = ActionAnswer.None;
 			foreach (IMovableGameObject imgo in groupMembers) {
@@ -154,14 +161,14 @@ namespace Strategy.GameObjectControl {
 			propDict.Add("Team", owner);
 			var bonusesCopy = new Dictionary<string, Object>(groupBonuses);
 
-			foreach (KeyValuePair<string, object> bonusPair in groupBonuses) {	//group bonuses - add "Bonus" for distinguish bonus and ability
+			foreach (KeyValuePair<string, object> bonusPair in groupBonuses) {	// Group bonuses - add "Bonus" for distinguish bonus and ability
 				string newKey = bonusPair.Key + "Bonus";
 				object value = bonusPair.Value;
 				propDict.Add(newKey, value);
 			}
 
 			if (groupMembers.Count == 1) {
-				foreach (var pair in groupMembers[0].getPropertyToDisplay()) {//Just copy - don't want original (team add,...)
+				foreach (var pair in groupMembers[0].getPropertyToDisplay()) {// Just copy - don't want original (team add,...)
 					propDict.Add(pair.Key, pair.Value);
 				}
 			} else {
@@ -191,7 +198,7 @@ namespace Strategy.GameObjectControl {
 			var propDict = new Dictionary<string,object>();
 			propDict.Add("Team", owner);
 			if (groupMembers.Count == 1) {
-				foreach (var pair in groupMembers[0].getPropertyToDisplay()) {//Just copy - don't want original (team add,...)
+				foreach (var pair in groupMembers[0].getPropertyToDisplay()) {// Just copy - don't want original (team add,...)
 					propDict.Add(pair.Key, pair.Value);
 				}
 			} else {

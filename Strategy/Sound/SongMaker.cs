@@ -11,22 +11,22 @@ namespace Strategy {
 	/// </summary>
 	class SoundMaker :ISoundStopEventReceiver , IGameSoundMaker {
 		
-		protected ISoundEngine engine; //main thing of this music player
-		protected string path; //path to folder witch songs (sounds) --mp3,ogg,wav
-		protected bool paused = false; //state of music player
-		protected int actual = 0; //number of actual song (sound)
-		protected float volumeJump = 0.1f; // difference to volume up/down
-		protected string[] fileNames; //names of each song (sound) from given folder
-		protected ISound sound; //actual playing song (sound)
-		protected Mogre.RenderWindow mWindow; //RenderWindow instance for making overlays
-		protected float mTimer; //float as timer to determine of duration overlay
-		protected Random r; //makes random number to select song (sound)
+		protected ISoundEngine engine; // Main thing of this music player
+		protected string path; // Path to folder witch songs (sounds) --mp3,ogg,wav
+		protected bool paused = false; // State of music player
+		protected int actual = 0; // Number of actual song (sound)
+		protected float volumeJump = 0.1f; // Difference to volume up/down
+		protected string[] fileNames; // Names of each song (sound) from given folder
+		protected ISound sound; // Actual playing song (sound)
+		protected Mogre.RenderWindow mWindow; // RenderWindow instance for making overlays
+		protected float mTimer; // Float as timer to determine of duration overlay
+		protected Random r; // Makes random number to select song (sound)
 
 		/// <summary>
 		/// A constructor inicializes music player and random. After that play first song
 		/// (sound) and set event receiver
 		/// </summary>
-		/// <param name="path">path to folder with music</param>
+		/// <param name="path">Path to folder with music</param>
 		/// <param name="w">RenderWindow instance for making overlays</param>
 		public SoundMaker(string path, Mogre.RenderWindow mWindow) {
 			this.path = path;
@@ -64,7 +64,7 @@ namespace Strategy {
 		/// <summary>
 		/// The method shows MusicBox overlay with actual playing song
 		/// </summary>
-		/// <param name="s">name of playing song</param>
+		/// <param name="s">Name of playing song</param>
 		public void nowPlaying(string s) {
 
 			var messageBox = Mogre.OverlayManager.Singleton.GetOverlayElement("MusicBox/MessageBox");
@@ -81,7 +81,7 @@ namespace Strategy {
 		/// This method control mTimer (bigger 1 => MusicBox is showed) and if
 		/// mTimer is lower 0 => hide overlay MusicBox
 		/// </summary>
-		/// <param name="f">delay between last frames</param>
+		/// <param name="f">Delay between last frames</param>
 		public void hideBox(float f){
 			if (mTimer > 0) {
 				mTimer -= f;
@@ -142,8 +142,8 @@ namespace Strategy {
 		/// <summary>
 		/// The method control music player volume.
 		/// </summary>
-		/// <param name="f">value to in(de)crease volume</param>
-		/// <returns>new value of volume (1 is max, 0 is min)</returns>
+		/// <param name="f">Value to in(de)crease volume</param>
+		/// <returns>New value of volume (1 is max, 0 is min)</returns>
 		private float changeVolume(float f){
 			float help = engine.SoundVolume + f;
 			if (help<=0) {
@@ -158,9 +158,9 @@ namespace Strategy {
 		/// <summary>
 		/// This method is called when the song stops.
 		/// </summary>
-		/// <param name="sound">sound which has been stopped</param>
-		/// <param name="reason">the reason why the sound stop event was fired</param>
-		/// <param name="userData">userData pointer set by the user when registering the interface</param>
+		/// <param name="sound">Sound which has been stopped</param>
+		/// <param name="reason">The reason why the sound stop event was fired</param>
+		/// <param name="userData">UserData pointer set by the user when registering the interface</param>
 		public void OnSoundStopped(ISound sound, StopEventCause reason, object userData) {
 			playMusic();
 		}

@@ -10,7 +10,7 @@ namespace Strategy.TeamControl {
     public class Team {
 
         //TODO: Production 
-        //Ideas List<IMateria> Netreba jen jmeno...v sesite popsano.
+        // Ideas List<IMateria> Netreba jen jmeno...v sesite popsano.
         protected Dictionary<string, IMaterial> materialsStates;
 
         protected List<IMovableGameObject> imgoObjects;
@@ -33,7 +33,7 @@ namespace Strategy.TeamControl {
             setMaterials(materialList);
         }
 
-        //isgo
+        // Isgo
         public void addISGO(IStaticGameObject isgo) {
             if (!isgoObjects.Contains(isgo)) {
                 isgoObjects.Add(isgo);   
@@ -46,7 +46,7 @@ namespace Strategy.TeamControl {
             }   
         }
 
-        //imgo
+        // Imgo
         public void addIMGO(IMovableGameObject imgo) {
             if (!imgoObjects.Contains(imgo)) {
                 imgoObjects.Add(imgo);
@@ -59,7 +59,7 @@ namespace Strategy.TeamControl {
             }
         }
 
-        //others
+        // Others
         public string Name {
 			get { return name; }
         }

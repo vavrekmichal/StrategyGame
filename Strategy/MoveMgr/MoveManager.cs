@@ -47,10 +47,10 @@ namespace Strategy.MoveMgr {
 		/// <summary>
 		/// Returns true when distance between given points is lower then given squaredDistance
 		/// </summary>
-		/// <param name="point1">first point</param>
-		/// <param name="point2">second point</param>
-		/// <param name="squaredDistance">squared distance (no root needed)</param>
-		/// <returns>distance is lower (true) or not</returns>
+		/// <param name="point1">First point</param>
+		/// <param name="point2">Second point</param>
+		/// <param name="squaredDistance">Squared distance (no root needed)</param>
+		/// <returns>Distance is lower (true) or not</returns>
 		private bool checkDistance(Mogre.Vector3 point1, Mogre.Vector3 point2, double squaredDistance) {
 			double xd = point2.x - point1.x;
 			double yd = point2.z - point1.z;
@@ -65,8 +65,8 @@ namespace Strategy.MoveMgr {
 		/// <summary>
 		/// Called by MoveMgr when destiantion is reached
 		/// </summary>
-		/// <param name="imgo">object which reached destination</param>
-		/// <param name="isgo">target of move</param>
+		/// <param name="imgo">Object which reached destination</param>
+		/// <param name="isgo">Target of move</param>
 		private void reachedDestiantion(IMovableGameObject imgo, IStaticGameObject isgo) { //TODO implemenyt
 			if (imgo.Visible) {
 
@@ -83,8 +83,8 @@ namespace Strategy.MoveMgr {
 		/// <summary>
 		/// Create List of positions around given point.
 		/// </summary>
-		/// <param name="count">number of positions</param>
-		/// <param name="position">center position</param>
+		/// <param name="count">Number of positions</param>
+		/// <param name="position">Center position</param>
 		/// <returns>List with positions around given position</returns>
 		private List<Mogre.Vector3> preparePositions(int count, Mogre.Vector3 position) {
 

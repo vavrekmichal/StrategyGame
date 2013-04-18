@@ -91,7 +91,7 @@ namespace Strategy.GameObjectControl {
 				foreach (IMovableGameObject imgo in imgoObjectList) {
 					imgo.changeVisible(true);
 					
-				}//check nonActive collisions
+				}// Check nonActive collisions
 				repairHidenCollision(imgoObjectList);
 				if (sun != null) {
 					sun.changeVisible(true);

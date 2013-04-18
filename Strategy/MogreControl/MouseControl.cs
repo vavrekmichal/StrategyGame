@@ -21,13 +21,13 @@ namespace Strategy.MogreControl {
 
 		private static float mouseBoundY = BaseApplication.getRenderWindow().Height * 8 / 10;
 
-		//rectangular select items
+		// Rectangular select items
 		bool isRectagularSelect;
 		Vector2 mStart, mStop;
 		List<MovableObject> mSelected = new List<MovableObject>();
 		SelectionRectangle mRect;
 		bool bSelecting;
-		//end rect
+
 
 		public static MouseControl getInstance(CameraMan c, SceneManager m, GUIControler guiControl) {
 			if (instance == null) {
@@ -48,9 +48,9 @@ namespace Strategy.MogreControl {
 		/// <summary>
 		/// This special function is called when any mouse button is pressed
 		/// </summary>
-		/// <param name="arg">argument of press</param>
-		/// <param name="id">which button was pressed</param>
-		/// <returns>was pressed true</returns>
+		/// <param name="arg">Argument of press</param>
+		/// <param name="id">Pressed button</param>
+		/// <returns>True</returns>
 		public bool OnMyMousePressed(MouseEvent arg, MouseButtonID id) {
 			if (arg.state.Y.abs > mouseBoundY) {
 				return true;
@@ -67,13 +67,12 @@ namespace Strategy.MogreControl {
 				case MouseButtonID.MB_Button7:
 					break;
 				case MouseButtonID.MB_Left:
-					//rectangular select
+					// Rectangular select
 					mStart.x = (float)arg.state.X.abs / (float)arg.state.width;
 					mStart.y = (float)arg.state.Y.abs / (float)arg.state.height;
 					mStop = mStart;
 					bSelecting = true;
 					
-				//	Console.WriteLine(evt.state.X.abs + ", " + evt.state.Y.abs);
 					break;
 
 				case MouseButtonID.MB_Right:					
@@ -88,9 +87,9 @@ namespace Strategy.MogreControl {
 		/// <summary>
 		/// This special function is called when any mouse button is released
 		/// </summary>
-		/// <param name="arg">argument of release</param>
-		/// <param name="id">which button was released</param>
-		/// <returns>was released true</returns>
+		/// <param name="arg">Argument of release</param>
+		/// <param name="id">Released button</param>
+		/// <returns>True</returns>
 		public bool OnMyMouseReleased(MouseEvent arg, MouseButtonID id) {
 			if (arg.state.Y.abs > mouseBoundY) {
 				return true;
@@ -185,11 +184,11 @@ namespace Strategy.MogreControl {
 			Ray bottomRight = c.GetCameraToViewportRay(right, bottom);
 
 			PlaneBoundedVolume vol = new PlaneBoundedVolume();
-			vol.planes.Add(new Plane(topLeft.GetPoint(3), topRight.GetPoint(3), bottomRight.GetPoint(3)));    // front plane
-			vol.planes.Add(new Plane(topLeft.Origin, topLeft.GetPoint(100), topRight.GetPoint(100)));         // top plane
-			vol.planes.Add(new Plane(topLeft.Origin, bottomLeft.GetPoint(100), topLeft.GetPoint(100)));       // left plane
-			vol.planes.Add(new Plane(bottomLeft.Origin, bottomRight.GetPoint(100), bottomLeft.GetPoint(100)));// bottom plane
-			vol.planes.Add(new Plane(topRight.Origin, topRight.GetPoint(100), bottomRight.GetPoint(100)));    // right plane
+			vol.planes.Add(new Plane(topLeft.GetPoint(3), topRight.GetPoint(3), bottomRight.GetPoint(3)));    // Front plane
+			vol.planes.Add(new Plane(topLeft.Origin, topLeft.GetPoint(100), topRight.GetPoint(100)));         // Top plane
+			vol.planes.Add(new Plane(topLeft.Origin, bottomLeft.GetPoint(100), topLeft.GetPoint(100)));       // Left plane
+			vol.planes.Add(new Plane(bottomLeft.Origin, bottomRight.GetPoint(100), bottomLeft.GetPoint(100)));// Bottom plane
+			vol.planes.Add(new Plane(topRight.Origin, topRight.GetPoint(100), bottomRight.GetPoint(100)));    // Right plane
 
 			PlaneBoundedVolumeList volList = new PlaneBoundedVolumeList();
 			volList.Add(vol);
@@ -207,7 +206,7 @@ namespace Strategy.MogreControl {
 			sceneMgr.DestroyQuery(volQuery);
 		}
 
-		//static method tests
+		// Static method tests
 
 		static void swap(ref float x, ref float y) {
 			float tmp = x;

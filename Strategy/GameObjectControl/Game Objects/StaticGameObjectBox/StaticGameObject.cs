@@ -71,7 +71,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// <summary>
 		/// Rotating function 
 		/// </summary>
-		/// <param name="f">deley of frames</param>
+		/// <param name="f">Deley of frames</param>
 		public virtual void rotate(float f) {
 			sceneNode.Roll(new Mogre.Degree(50 * f));
 		}
@@ -79,7 +79,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// <summary>
 		/// StaticGameObject doesn't move in non-active mode but child can override.
 		/// </summary>
-		/// <param name="f">deley of frames</param>
+		/// <param name="f">Deley of frames</param>
 		public virtual void nonActiveRotate(float f) {
 		}
 
@@ -88,7 +88,6 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			return propToDisp;
 		}
 
-		//TODO implement answer
 		public virtual ActionReaction reactToInitiative(ActionReason reason, IMovableGameObject target) {
 			return ActionReaction.None;
 		}
@@ -104,10 +103,6 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			return false;
 		}
 
-
-		/// <summary>
-		/// int of planets owner
-		/// </summary>
 		public Team Team {
 			get {
 				return planetTeam;
@@ -120,10 +115,10 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// <summary>
 		/// Called when object will be invisible
 		/// </summary>
-		public virtual void changeVisible(bool visible) {   //now creating
+		public virtual void changeVisible(bool visible) {  
 			if (visible) {
 				if (sceneNode == null) {
-					if (entity == null) { //control if the entity is inicialized
+					if (entity == null) { // Control if the entity is inicialized
 						entity = manager.CreateEntity(name, mesh);
 					}
 
@@ -159,7 +154,6 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		public Vector3 Position {
 			get {
 				if (sceneNode == null) {
-					//return circularPositions.Last();
 					return mDestination;
 				} else {
 					return sceneNode.Position;

@@ -29,7 +29,7 @@ namespace Strategy.GameObjectControl {
 		/// <summary>
 		/// Singleton instance
 		/// </summary>
-		/// <returns>returning singleton instance</returns>
+		/// <returns>Returning singleton instance</returns>
 		public static GameObjectManager getInstance(SceneManager sceneMgr) {
 			if (instance == null) {
 				instance = new GameObjectManager(sceneMgr);
@@ -45,7 +45,7 @@ namespace Strategy.GameObjectControl {
 		}
 
 		/// <summary>
-		/// private constructor
+		/// Private constructor
 		/// </summary>
 		private GameObjectManager(SceneManager sceneMgr) {
 			teamMgr = TeamManager.getInstance();
@@ -65,7 +65,7 @@ namespace Strategy.GameObjectControl {
 
 
 		#region public
-		//SETHITTEST
+
 		public void setGUI(GUIControler gui) {
 			guiControler = gui;
 		}
@@ -77,7 +77,7 @@ namespace Strategy.GameObjectControl {
 		}
 
 		/// <summary>
-		/// inicialization of managers, hittest...
+		/// Inicialization of managers, hittest...
 		/// </summary>
 		/// <param name="missionName">Name of choosen mission</param>
 		public void inicialization(string missionName) {
@@ -93,7 +93,7 @@ namespace Strategy.GameObjectControl {
 		/// <summary>
 		/// Called from GUI when a left mouse button click or a rectangular select in game area 
 		/// </summary>
-		/// <param name="selectedObjects">objects in clicked area</param>
+		/// <param name="selectedObjects">Objects in clicked area</param>
 		public void leftClick(List<Mogre.MovableObject> selectedObjects) {
 			bool isMovableSelected = false;
 			List<IMovableGameObject> imgoList = new List<IMovableGameObject>();
@@ -121,13 +121,15 @@ namespace Strategy.GameObjectControl {
 		/// <summary>
 		/// Called from GUI when right mouse button click in game area
 		/// </summary>
-		/// <param name="clickedPoint">mouse position</param>
-		/// <param name="selectedObjects">objects in clicked area</param>
+		/// <param name="clickedPoint">Mouse position</param>
+		/// <param name="selectedObjects">Objects in clicked area</param>
 		public void rightClick(Mogre.Vector3 clickedPoint, List<Mogre.MovableObject> selectedObjects) {
 
 			Mogre.MovableObject hitObject;
 			bool isFriendly = true;
 			bool isIMGO = true;
+
+			// 
 			if (selectedObjects.Count == 0) {
 				hitObject = null;
 			} else {
@@ -145,6 +147,7 @@ namespace Strategy.GameObjectControl {
 			}
 			var answer = groupMgr.onRightMouseClick(clickedPoint, hitObject, isFriendly, isIMGO);
 
+			// 
 			switch (answer) {
 				case ActionAnswer.Move:
 					moveMgr.goToLocation(groupMgr.getActiveMovableGroup(), clickedPoint);

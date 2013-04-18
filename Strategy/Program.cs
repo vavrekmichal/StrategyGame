@@ -20,18 +20,16 @@ namespace Strategy {
 	/// 
 	class MyMogre : Mogre.TutorialFramework.BaseApplication {
 
-		//public static string playerName = "Player";
-
-		protected MOIS.InputManager mInputMgr; //use for create control (mouse, keyborard) instance
-		protected float mTimer; //float as timer to determine of duration overlay 
-		protected bool exit = false; //controlor if player is alive
+		protected MOIS.InputManager mInputMgr; // Use for create control (mouse, keyborard) instance
+		protected float mTimer; // Float as timer to determine of duration overlay 
+		protected bool exit = false; // Controlor if player is alive
 		
-		protected Mogre.ColourValue fadeColour = new Mogre.ColourValue(0.05f, 0.05f, 0.05f); //color of fog and shadow
+		protected Mogre.ColourValue fadeColour = new Mogre.ColourValue(0.05f, 0.05f, 0.05f); // Color of fog and shadow
 		protected static readonly Mogre.Vector3 cameraStart = new Mogre.Vector3(0, 1000, 1000);
 		
 		protected CameraMan cameraMan;
 
-        protected IGameSoundMaker songMaker; //to make background music
+        protected IGameSoundMaker songMaker; // To make background music
 
         protected Game myGame;
 
@@ -107,7 +105,7 @@ namespace Strategy {
 		}
 
 		/// <summary>
-		/// antibug
+		/// Antibug
 		/// </summary>
 		private void loadFont(){
 			Mogre.FontManager.Singleton.Load("BlueHighway", Mogre.ResourceGroupManager.DEFAULT_RESOURCE_GROUP_NAME);
@@ -161,8 +159,8 @@ namespace Strategy {
 		/// <summary>
 		/// This function is called when any key is pressed
 		/// </summary>
-		/// <param name="evt">which button was pressed</param>
-		/// <returns>key was pressed -> true</returns>
+		/// <param name="evt">Wwhich button was pressed</param>
+		/// <returns>kKey was pressed -> true</returns>
 		protected override bool OnKeyPressed(MOIS.KeyEvent evt) {
 			base.OnKeyPressed(evt);
 			switch (evt.key) {
@@ -187,7 +185,7 @@ namespace Strategy {
 						exit = true;
 					}
 					break;
-				//Music section
+				// Music section
 				case MOIS.KeyCode.KC_NUMPAD9:
 					songMaker.volumeUp();
 					break;
@@ -203,7 +201,7 @@ namespace Strategy {
 				case MOIS.KeyCode.KC_B:
 					songMaker.actualPlaying();
 					break;
-				//End of music section
+				// End of music section
 				case MOIS.KeyCode.KC_R:
 					restartCamera();
 					break;
@@ -229,18 +227,11 @@ namespace Strategy {
 			mCamera.LookAt(Mogre.Vector3.ZERO);
 		}
 
-		#region Mouse control
-
-		
-
-		
-
-		#endregion
 
 		/// <summary>
 		/// This override function set basic setting to RenderSystem (Setup RenderSystem by code)
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>True</returns>
 		protected override bool Configure() {
 			Mogre.RenderSystem rs = mRoot.GetRenderSystemByName("OpenGL Rendering Subsystem");
 			rs.SetConfigOption("Full Screen", "No");

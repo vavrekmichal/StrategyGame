@@ -27,12 +27,12 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		private List<SolarSystem> solarSystemList;
 		private Dictionary<Team, List<Team>> teamRealationDict;
 		private XmlElement root;
-		XmlNode missionNode; //selected mission
+		XmlNode missionNode; // Selected mission
 
-		//Property manager
+		// Property manager
 		private PropertyManager propMgr;
 
-		//assembly load
+		// Assembly load
 		private AssemblyBuilder assemblyBuilder;
 		private ModuleBuilder moduleBuilder;
 		private List<MetadataReference> metadataRef;
@@ -52,7 +52,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			xml.Load(path);
 			root = xml.DocumentElement;
 
-
+			// Set reference to runtime compiling
 			isCompiled = new List<string>();
 			var t = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().GetName().CodeBase);
 			metadataRef = new List<MetadataReference>();
@@ -83,13 +83,14 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			propMan.loadPropertyToMission(missionName);
 			bool hasSun = false;
 			IStaticGameObject sun = null;
-			missionNode = root.SelectNodes("/mission[@name='" + missionName + "'][1]")[0]; //load mission (first of given name)
+
+			// Load mission (first of given name)
+			missionNode = root.SelectNodes("/mission[@name='" + missionName + "'][1]")[0]; 
 
 			loadTeams(root.SelectNodes("teams[1]")[0]);
 
-			//pokus
-			getTypeNode("Planet");
 
+			// Load every GameObject
 			XmlNode missionSolarSystemNode = missionNode.SelectNodes("solarSystems[1]")[0];
 			foreach (XmlNode solarSystem in missionSolarSystemNode) {
 				List<IStaticGameObject> isgos = new List<IStaticGameObject>();
@@ -140,10 +141,12 @@ namespace Strategy.GameObjectControl.Game_Objects {
 				}
 
 				if (hasSun) {
-					this.solarSystemList.Add(createSolarSystem(solarSystemName, parseStringToVector3(solarSystem.Attributes["position"].Value), isgos, imgos, sun));
+					this.solarSystemList.Add(createSolarSystem(solarSystemName, 
+						parseStringToVector3(solarSystem.Attributes["position"].Value), isgos, imgos, sun));
 					hasSun = false;
 				} else {
-					this.solarSystemList.Add(createSolarSystem(solarSystemName, parseStringToVector3(solarSystem.Attributes["position"].Value), isgos, imgos));
+					this.solarSystemList.Add(createSolarSystem(solarSystemName, 
+						parseStringToVector3(solarSystem.Attributes["position"].Value), isgos, imgos));
 				}
 
 			}
@@ -154,7 +157,9 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// </summary>
 		/// <param name="teamsNode">XML node with teams and frienships</param>
 		private void loadTeams(XmlNode teamsNode) {
-			var t = new Team("None", materialList);		//add None team for suns and gates
+
+			// Add None team for suns and gates
+			var t = new Team("None", materialList);		
 			var noneList = new List<Team>();
 			noneList.Add(t);
 			teamRealationDict.Add(t, noneList);
@@ -192,8 +197,8 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// compile it.
 		/// </summary>
 		/// <param name="gameObjectPath">XML node with object parameters</param>
-		/// <param name="type">class type in string (check if is compiled)</param>
-		/// <param name="args">class arguments for constructor</param>
+		/// <param name="type">Class type in string (check if is compiled)</param>
+		/// <param name="args">Class arguments for constructor</param>
 		/// <returns></returns>
 		private object createGameObject(string type, object[] args) {
 			XmlNode gameObjectPath = getTypeNode(type);
@@ -211,7 +216,8 @@ namespace Strategy.GameObjectControl.Game_Objects {
 					, options: comilationOption
 					);
 
-				var result = comp.Emit(moduleBuilder);				//runtime compilation and check errors
+				// Runtime compilation and check errors
+				var result = comp.Emit(moduleBuilder);				
 				if (!result.Success) {
 					foreach (var d in result.Diagnostics) {
 						Console.WriteLine(d);
@@ -231,7 +237,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// </summary>
 		/// <param name="gameObject">XmlNode with parameters for the instance</param>
 		/// <param name="gameObjectPath">XmlNode with class path and name</param>
-		/// <returns>instance implmements IMovableGameObject (specific in gameObjectPath)</returns>
+		/// <returns>Instance implmements IMovableGameObject (specific in gameObjectPath)</returns>
 		private IMovableGameObject createIMGO(XmlNode gameObject) {
 
 			List<object> args = new List<object>();
@@ -257,7 +263,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// </summary>
 		/// <param name="type">specific type of IMovableGameObject in string</param>
 		/// <param name="args">arguments for object constructor</param>
-		/// <returns>instance of IMovableGameObject (specific in type)</returns>
+		/// <returns>Instance of IMovableGameObject (specific in type)</returns>
 		public IMovableGameObject createIMGO(string type, object[] args) {
 			IMovableGameObject imgo = (IMovableGameObject)createGameObject(type, args);
 			return imgo;
@@ -271,8 +277,8 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// <param name="gameObject">XmlNode with parameters for the instance</param>
 		/// <param name="gameObjectPath">XmlNode with class path and name</param>
 		/// <param name="isgoType">Type of creating instance for check special type Sun</param>
-		/// <param name="pointsOnCircle">number of positions on imaginary circle</param>
-		/// <returns>instance implmements IStaticGameObject (specific in gameObjectPath)</returns>
+		/// <param name="pointsOnCircle">Number of positions on imaginary circle</param>
+		/// <returns>Instance implmements IStaticGameObject (specific in gameObjectPath)</returns>
 		private IStaticGameObject createISGO(XmlNode gameObject, IsgoType isgoType, int pointsOnCircle = 30) {
 			string type;
 			List<object> args = new List<object>();
@@ -305,7 +311,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// </summary>
 		/// <param name="type">specific type of IStaticGameObject in string</param>
 		/// <param name="args">arguments for object constructor</param>
-		/// <returns>instance of IStaticGameObject (specific in type)</returns>
+		/// <returns>Instance of IStaticGameObject (specific in type)</returns>
 		public IStaticGameObject createISGO(string type, object[] args) {
 			IStaticGameObject isgo = (IStaticGameObject)createGameObject(type, args);
 			return isgo;
@@ -316,7 +322,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// Creates special type Gate (is not runtime compiled). 
 		/// </summary>
 		/// <param name="solarSystName">Name of SolarSystem where will be</param>
-		/// <returns>instance of Gate</returns>
+		/// <returns>Instance of Gate</returns>
 		private Gate createGate(string solarSystName) {
 			string team = "None";
 			if (!teamDict.ContainsKey(team)) {
@@ -339,7 +345,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// <param name="isgoObjects">All IStaticGameObjects in this SolarSystem</param>
 		/// <param name="imgoObjects">All IMovableGameObjects in this SolarSystem</param>
 		/// <param name="sun">SolarSystem's Sun - can be null</param>
-		/// <returns>instance of SolarSystem</returns>
+		/// <returns>Instance of SolarSystem</returns>
 		private SolarSystem createSolarSystem(string name, Vector3 position, List<IStaticGameObject> isgoObjects, List<IMovableGameObject> imgoObjects,
 			IStaticGameObject sun = null) {
 
@@ -369,7 +375,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// <summary>
 		/// Parse Mogre.Vector3 from string
 		/// </summary>
-		/// <param name="input">string with vector</param>
+		/// <param name="input">String with vector</param>
 		/// <returns>Mogre.Vector3 parsed from given string</returns>
 		private Mogre.Vector3 parseStringToVector3(string input) {
 			string[] splitted = input.Split(',');
