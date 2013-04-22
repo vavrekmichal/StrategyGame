@@ -188,7 +188,7 @@ namespace Strategy.GameGUI {
 		/// Function shows every given Property from in propertisDict in propertyPanel
 		/// </summary>
 		/// <param name="propertiesDict">Dictionary with properties (key - name, value - Property)</param>
-		private void showGroupProperties(Dictionary<PropertyEnum, object> propertiesDict) {
+		private void showGroupProperties(Dictionary<string, object> propertiesDict) {
 			var propDict = propertiesDict;
 			int marginLeft = propertyPanel.Width / 2;
 			int marginTop = 26;
@@ -196,7 +196,7 @@ namespace Strategy.GameGUI {
 
 			// Add each property int propertyPanel name and value in one row
 			foreach (var property in propDict) {				
-				propertyPanel.Controls.Add(createLabel(marginTop * i, marginLeft, 26, property.Key.ToString()));
+				propertyPanel.Controls.Add(createLabel(marginTop * i, marginLeft, 26, property.Key));
 
 				propertyPanel.Controls.Add((Label)createPropertyLabelAsObject(marginLeft, marginTop * i, property.Value));
 				++i;

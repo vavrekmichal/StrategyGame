@@ -28,6 +28,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		protected static Dictionary<string, List<IStaticGameObject>> gameActionsPermitions;
 
 		protected Dictionary<PropertyEnum, object> propertyDict = new Dictionary<PropertyEnum, object>();
+		protected Dictionary<string, object> propertyDictUserDefined = new Dictionary<string, object>();
 
 		//Look here create file load file
 		static StaticGameObject() {
@@ -58,6 +59,14 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			return prop;
 		}
 
+		public Property<T> getProperty<T>(string propertyName) {
+			if (!propertyDictUserDefined.ContainsKey(propertyName)) {
+				throw new PropertyMissingException("Object " + Name + " doesn't have property " + propertyName + ".");
+			}
+			var prop = (Property<T>)propertyDictUserDefined[propertyName];
+			return prop;
+		}
+
 		protected void setProperty(PropertyEnum name, object prop) {
 			if (!(prop.GetType().GetGenericTypeDefinition() == typeof(Property<>))) {
 				throw new ArgumentException("Given object is not Property<T>, it is " + prop.GetType());
@@ -66,6 +75,17 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 				propertyDict[name] = prop;
 			} else {
 				propertyDict.Add(name, prop);
+			}
+		}
+
+		protected void setProperty(string name, object prop) {
+			if (!(prop.GetType().GetGenericTypeDefinition() == typeof(Property<>))) {
+				throw new ArgumentException("Given object is not Property<T>, it is " + prop.GetType());
+			}
+			if (propertyDictUserDefined.ContainsKey(name)) {
+				propertyDictUserDefined[name] = prop;
+			} else {
+				propertyDictUserDefined.Add(name, prop);
 			}
 		}
 
@@ -84,9 +104,12 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		public virtual void nonActiveRotate(float f) {
 		}
 
-		public virtual Dictionary<PropertyEnum, object> getPropertyToDisplay() {
-			var propToDisp = new Dictionary<PropertyEnum, object>();
-			return propToDisp;
+		public virtual Dictionary<string, object> getPropertyToDisplay() {
+			var result = new Dictionary<string, object>(propertyDictUserDefined);
+			foreach (var property in propertyDict) {
+				result.Add(property.Key.ToString(), property.Value);
+			}
+			return result;
 		}
 
 		public virtual ActionReaction reactToInitiative(ActionReason reason, IMovableGameObject target) {

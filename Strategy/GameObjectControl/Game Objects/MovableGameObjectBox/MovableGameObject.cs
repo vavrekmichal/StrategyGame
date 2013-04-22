@@ -22,6 +22,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 		protected bool moving;
 		protected Dictionary<PropertyEnum, object> propertyDict;
+		protected Dictionary<string, object> propertyDictUserDefined;
 		protected Dictionary<PropertyEnum, object> propertyBonusDict;
 		protected List<IGameAction> listOfAction; //TODO not implemented
 		protected LinkedList<Vector3> flyList; // Walking points in linked list
@@ -46,6 +47,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			flyList = new LinkedList<Vector3>();
 			listOfAction = new List<IGameAction>();
 			propertyDict = new Dictionary<PropertyEnum, object>();
+			propertyDictUserDefined = new Dictionary<string, object>();
 			propertyDict.Add(PropertyEnum.Hp, new Property<int>(100));
 			propertyBonusDict = GroupMovables.baseTemplateBonusDict;
 		}
@@ -294,14 +296,18 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		}
 
 
-		public virtual Dictionary<PropertyEnum, object> onGroupAdd() {
+		public virtual Dictionary<string, object> onGroupAdd() {
 			// Empty dictionary = no bonuses for other members of group
-			return new Dictionary<PropertyEnum, object>();
+			return new Dictionary<string, object>();
 		}
 
 
-		public Dictionary<PropertyEnum, object> getPropertyToDisplay() {
-			return propertyDict;
+		public Dictionary<string, object> getPropertyToDisplay() {
+			var result = new Dictionary<string, object>(propertyDictUserDefined);
+			foreach (var property in propertyDict) {
+				result.Add(property.Key.ToString(), property.Value);
+			}
+			return result;
 		}
 
 		/// <summary>
@@ -324,6 +330,14 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			return prop;
 		}
 
+		public Property<T> getProperty<T>(string propertyName) {
+			if (!propertyDictUserDefined.ContainsKey(propertyName)) {
+				throw new PropertyMissingException("Object " + Name + " doesn't have property " + propertyName + ".");
+			}
+			var prop = (Property<T>)propertyDictUserDefined[propertyName];
+			return prop;
+		}
+
 		protected void setProperty(PropertyEnum name, object prop) {
 			if (!(prop.GetType().GetGenericTypeDefinition()==typeof(Property<>))) {
 				throw new ArgumentException("Given object is not Property<T>, it is " + prop.GetType());
@@ -335,7 +349,18 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			}
 		}
 
-		protected T getPropertyValueFromBonusDict<T>(PropertyEnum name) {
+		protected void setProperty(string name, object prop) {
+			if (!(prop.GetType().GetGenericTypeDefinition() == typeof(Property<>))) {
+				throw new ArgumentException("Given object is not Property<T>, it is " + prop.GetType());
+			}
+			if (propertyDictUserDefined.ContainsKey(name)) {
+				propertyDictUserDefined[name] = prop;
+			} else {
+				propertyDictUserDefined.Add(name, prop);
+			}
+		}
+
+		protected T getBonusPropertyValue<T>(PropertyEnum name) {
 			if (!propertyBonusDict.ContainsKey(name)) {
 				return default(T);
 			}
@@ -430,7 +455,6 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		public int Hp {
 			get { return ((Property<int>)propertyDict[PropertyEnum.Hp]).Value; }
 		}
-
 
 	}
 }

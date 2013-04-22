@@ -15,22 +15,22 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		protected Mogre.SceneNode sceneNode;
 		protected string mesh;
 		protected List<IGameAction> listOfAction = new List<IGameAction>();
-        protected Mogre.SceneManager manager;
+		protected Mogre.SceneManager manager;
 
 		protected static Team sunTeam;
-        /// <summary>
-        /// Public constructor. Detect active solar system (0)
-        /// </summary>
-        /// <param name="name">Unique name</param>
-        /// <param name="mesh">mesh of this sun</param>
-        /// <param name="solarSystem">number of solar system</param>
-        /// <param name="manager">Mogre SceneManager</param>
+		/// <summary>
+		/// Public constructor. Detect active solar system (0)
+		/// </summary>
+		/// <param name="name">Unique name</param>
+		/// <param name="mesh">mesh of this sun</param>
+		/// <param name="solarSystem">number of solar system</param>
+		/// <param name="manager">Mogre SceneManager</param>
 		public Sun(string name, string mesh, Mogre.SceneManager manager, Team team) {
 			this.name = name;
 			this.mesh = mesh;
-            this.manager = manager;
+			this.manager = manager;
 			this.Team = team;
-            entity = manager.CreateEntity(name, mesh);
+			entity = manager.CreateEntity(name, mesh);
 		}
 
 		/// <summary>
@@ -49,26 +49,26 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			return ActionReaction.None;
 		}
 
-        /// <summary>
-        /// Change visibility of sun
-        /// </summary>
-        /// <param name="visible">boolean value if the sun is visible or not</param>
-        public void changeVisible(bool visible) {   //now creating
-            if (visible) {
-                if (entity == null) {
-                    entity = manager.CreateEntity(name, mesh);
-                }
-                sceneNode = manager.RootSceneNode.CreateChildSceneNode(name + "Node", Mogre.Vector3.ZERO);
+		/// <summary>
+		/// Change visibility of sun
+		/// </summary>
+		/// <param name="visible">boolean value if the sun is visible or not</param>
+		public void changeVisible(bool visible) {   //now creating
+			if (visible) {
+				if (entity == null) {
+					entity = manager.CreateEntity(name, mesh);
+				}
+				sceneNode = manager.RootSceneNode.CreateChildSceneNode(name + "Node", Mogre.Vector3.ZERO);
 
-                sceneNode.Pitch(new Mogre.Degree(-90f));
-                sceneNode.AttachObject(entity);
-            } else {
-                manager.DestroySceneNode(sceneNode);
-            }
-        }
+				sceneNode.Pitch(new Mogre.Degree(-90f));
+				sceneNode.AttachObject(entity);
+			} else {
+				manager.DestroySceneNode(sceneNode);
+			}
+		}
 
-		public Dictionary<PropertyEnum, object> getPropertyToDisplay() {
-			var propToDisp = new Dictionary<PropertyEnum, object>();
+		public Dictionary<string, object> getPropertyToDisplay() {
+			var propToDisp = new Dictionary<string, object>();
 			return propToDisp;
 		}
 
@@ -84,17 +84,17 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			}
 		}
 
-        public string Name{
-            get{return name;}
-        }
+		public string Name {
+			get { return name; }
+		}
 
 		public string Mesh {
 			get { return mesh; }
 		}
 
-        public Vector3 getPosition() {
-            return Vector3.ZERO;
-        }
+		public Vector3 getPosition() {
+			return Vector3.ZERO;
+		}
 
 		public float PickUpDistance {
 			get { return 250; }
@@ -106,8 +106,8 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			}
 		}
 
-        public bool tryExecute(string executingAction) {
-            throw new NotImplementedException();
-        }
-    }
+		public bool tryExecute(string executingAction) {
+			throw new NotImplementedException();
+		}
+	}
 }

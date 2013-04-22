@@ -82,12 +82,20 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		void goToTarget(Vector3 placeToGo, IMoveManager moveMgr);
 
 		/// <summary>
-		/// Returns Property with given name
+		/// Returns Property with given name (base properties)
 		/// </summary>
-		/// <typeparam name="T"></typeparam>
-		/// <param name="propertyName"></param>
-		/// <returns></returns>
+		/// <typeparam name="T">Type</typeparam>
+		/// <param name="propertyName">Name of property from Enum (base properties)</param>
+		/// <returns>Instance of Property</returns>
 		Property<T> getProperty<T>(PropertyEnum propertyName);
+
+		/// <summary>
+		/// Returns Property with given name (user defined properties)
+		/// </summary>
+		/// <typeparam name="T">Type</typeparam>
+		/// <param name="propertyName">Name of property (user defined properties)</param>
+		/// <returns>Instance of Property</returns>
+		Property<T> getProperty<T>(string propertyName);
 
 		/// <summary>
 		/// BunusDict contains bonuses from group and members of group. Object can use them to count his properties.
@@ -120,12 +128,12 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// Returns bonuses for other members of group.
 		/// </summary>
 		/// <returns>Dictionary with Property as object (runtime generic)</returns>
-		Dictionary<PropertyEnum, object> onGroupAdd();
+		Dictionary<string, object> onGroupAdd();
 
 		/// <summary>
 		/// Return Dictionary with all object Property(ies).
 		/// </summary>
 		/// <returns>Dictionary with Property as object (runtime generic)</returns>
-		Dictionary<PropertyEnum, object> getPropertyToDisplay();
+		Dictionary<string, object> getPropertyToDisplay();
 	}
 }

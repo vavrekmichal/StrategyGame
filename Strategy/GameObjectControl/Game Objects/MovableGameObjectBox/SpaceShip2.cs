@@ -20,6 +20,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			setProperty(PropertyEnum.Speed, propMgr.getProperty<float>("speed2"));
 			setProperty(PropertyEnum.Attack, propMgr.getProperty<int>("basicAttack"));
 			setProperty(PropertyEnum.Deffence, propMgr.getProperty<int>("basicDeff"));
+			setProperty("Hovno", new Property<string>("Toto je hovno"));
 
 			//Mogre inicialization of object
 			entity = manager.CreateEntity(name, mesh);

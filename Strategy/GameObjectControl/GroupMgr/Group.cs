@@ -37,33 +37,32 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			return groupMembers.GetEnumerator();
 		}
 
-		public virtual Dictionary<PropertyEnum, object> getPropertyToDisplay() {
-			return new Dictionary<PropertyEnum, object>();
+		public virtual Dictionary<string, object> getPropertyToDisplay() {
+			return new Dictionary<string, object>();
 		}
 
-		protected void addObjectPropertyToDict(Dictionary<PropertyEnum, object> isgoPropDict, Dictionary<object, EditablePair<PropertyEnum, int>> summaryDict) {
-			foreach (KeyValuePair<PropertyEnum, object> property in isgoPropDict) {		//object is real Property<T>	
+		protected void addObjectPropertyToDict(Dictionary<string, object> isgoPropDict, Dictionary<object, EditablePair<string, int>> summaryDict) {
+			foreach (KeyValuePair<string, object> property in isgoPropDict) {		//object is real Property<T>	
 				if (summaryDict.ContainsKey(property.Value)) {
-					EditablePair<PropertyEnum, int> pair = summaryDict[property.Value];
-					summaryDict[property.Value].Item2 ++;
+					EditablePair<string, int> pair = summaryDict[property.Value];
+					summaryDict[property.Value].Item2++;
 				} else {
-					summaryDict.Add(property.Value, new EditablePair<PropertyEnum, int>(property.Key, 1));
+					summaryDict.Add(property.Value, new EditablePair<string, int>(property.Key, 1));
 				}
 			}
 		}
 
-		protected Dictionary<PropertyEnum, object> createCommonPropDict(Dictionary<object, EditablePair<PropertyEnum, int>> summaryDict, Dictionary<PropertyEnum, object> isgoPropDict) {
+		protected Dictionary<string, object> createCommonPropDict(Dictionary<object, EditablePair<string, int>> summaryDict, Dictionary<string, object> isgoPropDict) {
 			int groupCount = groupMembers.Count;
-			var result = new Dictionary<PropertyEnum, object>();
-			var notEveryone = new List<PropertyEnum>();
-			foreach (KeyValuePair<object, EditablePair<PropertyEnum, int>> propPair in summaryDict) {
+			var result = new Dictionary<string, object>();
+			var notEveryone = new List<string>();
+			foreach (KeyValuePair<object, EditablePair<string, int>> propPair in summaryDict) {
 				//PropertyEnum name = isgoPropDict.FirstOrDefault(x => x.Value == propPair.Key).Key; //gets string name searched by object
-				PropertyEnum name = propPair.Value.Item1;
+				string name = propPair.Value.Item1;
 				if (groupCount == propPair.Value.Item2) {
 					result.Add(name, propPair.Key);
 				} else {
 					if (!notEveryone.Contains(name)) {
-
 						result.Add(name, new Property<char>('?'));
 						notEveryone.Add(name);
 					}
@@ -104,16 +103,16 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			baseTemplateBonusDict.Add(PropertyEnum.Speed, new Property<int>(1));
 		}
 
-		private Dictionary<PropertyEnum, object> groupBonuses;
+		private Dictionary<string, object> groupBonuses;
 
 		public GroupMovables() : this(new Team("")) { }
 		public GroupMovables(TeamControl.Team own)
 			: base(own) {
-			groupBonuses = new Dictionary<PropertyEnum, object>();
+			groupBonuses = new Dictionary<string, object>();
 
-			groupBonuses.Add(PropertyEnum.Attack, new Property<int>(1));
-			groupBonuses.Add(PropertyEnum.Deffence, new Property<int>(1));
-			groupBonuses.Add(PropertyEnum.Speed, new Property<int>(1));
+			groupBonuses.Add(PropertyEnum.Attack.ToString(), new Property<int>(1));
+			groupBonuses.Add(PropertyEnum.Deffence.ToString(), new Property<int>(1));
+			groupBonuses.Add(PropertyEnum.Speed.ToString(), new Property<int>(1));
 		}
 
 		public void move(float f) {
@@ -129,8 +128,8 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		public void select() {		// Called when group is changed from informative to selected
 			// Need colect bonuses from count and from members
 			var countBonus = (int)(groupMembers.Count / 3);
-			((Property<int>)groupBonuses[PropertyEnum.Attack]).Value = 1 + countBonus;
-			((Property<int>)groupBonuses[PropertyEnum.Deffence]).Value = 1 + countBonus;
+			((Property<int>)groupBonuses[PropertyEnum.Attack.ToString()]).Value = 1 + countBonus;
+			((Property<int>)groupBonuses[PropertyEnum.Deffence.ToString()]).Value = 1 + countBonus;
 			foreach (IMovableGameObject imgo in groupMembers) {
 				// Collect bonuses
 				var imgoBonus = imgo.onGroupAdd();
@@ -165,13 +164,13 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		}
 
 
-		public override Dictionary<PropertyEnum, object> getPropertyToDisplay() {
-			var propDict = new Dictionary<PropertyEnum, object>();
-			propDict.Add(PropertyEnum.Team, owner);
-			var bonusesCopy = new Dictionary<PropertyEnum, object>(groupBonuses);
+		public override Dictionary<string, object> getPropertyToDisplay() {
+			var propDict = new Dictionary<string, object>();
+			propDict.Add(PropertyEnum.Team.ToString(), owner);
+			var bonusesCopy = new Dictionary<string, object>(groupBonuses);
 
-			foreach (KeyValuePair<PropertyEnum, object> bonusPair in groupBonuses) {	// Group bonuses - add "Bonus" for distinguish bonus and ability
-				PropertyEnum newKey = bonusPair.Key + 50;
+			foreach (KeyValuePair<string, object> bonusPair in groupBonuses) {	// Group bonuses - add "Bonus" for distinguish bonus and ability
+				string newKey = bonusPair.Key + 50;
 				object value = bonusPair.Value;
 				propDict.Add(newKey, value);
 			}
@@ -181,7 +180,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 					propDict.Add(pair.Key, pair.Value);
 				}
 			} else {
-				var summaryDict = new Dictionary<object, EditablePair<PropertyEnum, int>>();
+				var summaryDict = new Dictionary<object, EditablePair<string, int>>();
 				foreach (IMovableGameObject imgo in groupMembers) {
 					addObjectPropertyToDict(imgo.getPropertyToDisplay(), summaryDict);
 				}
@@ -203,15 +202,15 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		public GroupStatics() : base(new Team("None")) { }
 		public GroupStatics(TeamControl.Team own) : base(own) { }
 
-		public override Dictionary<PropertyEnum, object> getPropertyToDisplay() {
-			var propDict = new Dictionary<PropertyEnum, object>();
-			propDict.Add(PropertyEnum.Team, owner);
+		public override Dictionary<string, object> getPropertyToDisplay() {
+			var propDict = new Dictionary<string, object>();
+			propDict.Add(PropertyEnum.Team.ToString(), owner);
 			if (groupMembers.Count == 1) {
 				foreach (var pair in groupMembers[0].getPropertyToDisplay()) {// Just copy - don't want original (team add,...)
 					propDict.Add(pair.Key, pair.Value);
 				}
 			} else {
-				var summaryDict = new Dictionary<object, EditablePair<PropertyEnum, int>>();
+				var summaryDict = new Dictionary<object, EditablePair<string, int>>();
 				foreach (IStaticGameObject isgo in groupMembers) {
 					addObjectPropertyToDict(isgo.getPropertyToDisplay(), summaryDict);
 				}

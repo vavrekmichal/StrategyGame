@@ -5,8 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Strategy.GameObjectControl.RuntimeProperty {
-	public class EditablePair<T1, T2> 
-		where T1 : struct 
+	public class EditablePair<T1, T2>  
 		where T2 : struct {
 
 		T1 item1;
