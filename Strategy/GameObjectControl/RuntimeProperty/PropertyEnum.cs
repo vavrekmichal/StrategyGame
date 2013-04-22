@@ -12,9 +12,6 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 		Speed,
 		Rotate,
 		PickUp,
-		Team,
-		AttackBonus = Attack + 50,
-		DeffenceBonus = Deffence + 50,
-		SpeedBonus = Speed + 50
+		Team
 	}
 }

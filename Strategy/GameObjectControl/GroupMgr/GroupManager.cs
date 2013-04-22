@@ -18,7 +18,7 @@ using Mogre;
 namespace Strategy.GameObjectControl.GroupMgr {
 	class GroupManager {
 
-		protected List<GroupMovables> groupMovList;
+		protected Dictionary<IMovableGameObject, GroupMovables> groupMovList;
 
 		protected Dictionary<int, SolarSystem> solarSystemDict;
 		protected int lastSolarSystem = 0;
@@ -50,7 +50,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		/// </summary>
 		private GroupManager() {
 			solarSystemDict = new Dictionary<int, SolarSystem>();
-			groupMovList = new List<GroupMovables>();
+			groupMovList = new Dictionary<IMovableGameObject, GroupMovables>();
 		}
 		#endregion
 
@@ -94,7 +94,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		/// </summary>
 		/// <param name="newSolarSystem">Integer of showing solar system</param>
 		public void changeSolarSystem(int newSolarSystem) {
-			
+
 			solarSystemDict[activeSolarSystem].hideSolarSystem();
 			solarSystemDict[newSolarSystem].showSolarSystem();
 
@@ -212,8 +212,20 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		public ActionAnswer onRightMouseClick(Mogre.Vector3 clickedPoint, MovableObject hitObject, bool isFriendly, bool isImgo) {
 
 			if (isMovableGroupActive && selectedGroupM.OwnerTeam.Name == Game.playerName) {
-				groupMovList.Add(selectedGroupM);
-				selectedGroupM.select();
+				if (!(groupMovList.ContainsKey(selectedGroupM[0]) && selectedGroupM == groupMovList[selectedGroupM[0]])) {
+					var toRecount = new List<GroupMovables>();
+					foreach (IMovableGameObject imgo in selectedGroupM) {
+						if (groupMovList.ContainsKey(imgo)) {
+							// Odeber ze stavajici a prepocti ji.
+							groupMovList[imgo] = selectedGroupM;
+						} else {
+							groupMovList.Add(imgo, selectedGroupM);
+						}
+					}
+
+					selectedGroupM.select();
+				}
+				
 				return selectedGroupM.onMouseAction(ActionReason.onRightButtonClick, clickedPoint, hitObject, isFriendly, isImgo);
 			} else {
 				return ActionAnswer.None;
@@ -225,7 +237,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		public GroupMovables getActiveMovableGroup() {
 			return selectedGroupM;
 		}
-		
+
 	}
 
 

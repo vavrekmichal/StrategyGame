@@ -33,5 +33,11 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		protected override void onDisplayed() {
 
 		}
+
+		public override Dictionary<string, object> onGroupAdd() {
+			var dict = new Dictionary<string, object>();
+			dict.Add(PropertyEnum.Speed.ToString(), new Property<float>(200));
+			return dict;
+		}
 	}
 }

@@ -101,7 +101,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// BunusDict contains bonuses from group and members of group. Object can use them to count his properties.
 		/// </summary>
 		/// <param name="bonusDict">Dictionary with Property as object (runtime generic)</param>
-		void setGroupBonuses(Dictionary<PropertyEnum, object> bonusDict);
+		void setGroupBonuses(Dictionary<string, object> bonusDict);
 
 		string Name { get; }
 		Team Team { get; set; }

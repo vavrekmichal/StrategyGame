@@ -23,7 +23,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		protected bool moving;
 		protected Dictionary<PropertyEnum, object> propertyDict;
 		protected Dictionary<string, object> propertyDictUserDefined;
-		protected Dictionary<PropertyEnum, object> propertyBonusDict;
+		protected Dictionary<string, object> propertyBonusDict;
 		protected List<IGameAction> listOfAction; //TODO not implemented
 		protected LinkedList<Vector3> flyList; // Walking points in linked list
 		protected float distance = 0.0f;              // The distance the object has left to travel
@@ -49,7 +49,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			propertyDict = new Dictionary<PropertyEnum, object>();
 			propertyDictUserDefined = new Dictionary<string, object>();
 			propertyDict.Add(PropertyEnum.Hp, new Property<int>(100));
-			propertyBonusDict = GroupMovables.baseTemplateBonusDict;
+			propertyBonusDict = new Dictionary<string, object>();
 		}
 
 		/// <summary>
@@ -168,7 +168,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			} else {
 				if (!colision()) { // Object's not in colision
 
-					float move = getProperty<float>(PropertyEnum.Speed).Value * delay;
+					float move = getPropertyValue<float>(PropertyEnum.Speed) * delay;
 					distance -= move;
 					if (distance <= .0f) { // Reach destination
 						sceneNode.Position = destination;
@@ -189,7 +189,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 					}
 				} else {
 					// Collision solver
-					if (collisionCount>colliisionConst) {
+					if (collisionCount > colliisionConst) {
 						stop();
 					}
 					moving = false;
@@ -197,11 +197,11 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 						flyList.RemoveFirst();
 					}
 					var r = new Random().Next(2);
-					if (r==0) {
+					if (r == 0) {
 						r = -1;
 					}
 					collisionCount++;
-					Vector3 orto = new Vector3(direction.z*r, 0, -direction.x*r) * collisionCount*3 + sceneNode.Position;
+					Vector3 orto = new Vector3(direction.z * r, 0, -direction.x * r) * collisionCount * 3 + sceneNode.Position;
 					orto.y = 0;
 					detourReached = false;
 					addNextLocation(orto);
@@ -229,7 +229,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 				}
 			} else {
-				float move = getProperty<float>(PropertyEnum.Speed).Value * delay;
+				float move = getPropertyValue<float>(PropertyEnum.Speed) * delay;
 				distance -= move;
 				if (distance <= .0f) { // Reach destination
 					position = destination;
@@ -270,8 +270,8 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// <summary>
 		/// Called when object will be invisible
 		/// </summary>
-		public virtual void changeVisible(bool visible) { 
-			if (visible&& !this.isVisible) {
+		public virtual void changeVisible(bool visible) {
+			if (visible && !this.isVisible) {
 
 				// Control if the entity is inicialized
 				if (entity == null) {
@@ -283,15 +283,15 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 				this.isVisible = true;
 			} else {
 				if (this.isVisible) {
-				position = sceneNode.Position;
-				manager.DestroySceneNode(sceneNode);
-				sceneNode = null;
-				this.isVisible = false;
+					position = sceneNode.Position;
+					manager.DestroySceneNode(sceneNode);
+					sceneNode = null;
+					this.isVisible = false;
 				}
 			}
 		}
 
-		public virtual void setGroupBonuses(Dictionary<PropertyEnum, object> bonusDict) {
+		public virtual void setGroupBonuses(Dictionary<string, object> bonusDict) {
 			propertyBonusDict = bonusDict;
 		}
 
@@ -324,7 +324,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 		public Property<T> getProperty<T>(PropertyEnum propertyName) {
 			if (!propertyDict.ContainsKey(propertyName)) {
-				throw new PropertyMissingException("Object "+ Name+" doesn't have property "+ propertyName+".");
+				throw new PropertyMissingException("Object " + Name + " doesn't have property " + propertyName + ".");
 			}
 			var prop = (Property<T>)propertyDict[propertyName];
 			return prop;
@@ -339,11 +339,11 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		}
 
 		protected void setProperty(PropertyEnum name, object prop) {
-			if (!(prop.GetType().GetGenericTypeDefinition()==typeof(Property<>))) {
+			if (!(prop.GetType().GetGenericTypeDefinition() == typeof(Property<>))) {
 				throw new ArgumentException("Given object is not Property<T>, it is " + prop.GetType());
 			}
 			if (propertyDict.ContainsKey(name)) {
-				propertyDict[name]= prop;
+				propertyDict[name] = prop;
 			} else {
 				propertyDict.Add(name, prop);
 			}
@@ -360,15 +360,38 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			}
 		}
 
-		protected T getBonusPropertyValue<T>(PropertyEnum name) {
-			if (!propertyBonusDict.ContainsKey(name)) {
-				return default(T);
+
+		protected T getPropertyValue<T>(PropertyEnum name) {
+			Property<T> bonus;
+			if (!propertyBonusDict.ContainsKey(name.ToString())) {
+				bonus = new Property<T>(default(T));
+			} else {
+				bonus = ((Property<T>)propertyBonusDict[name.ToString()]);
 			}
-			var prop = ((Property<T>)propertyBonusDict[name]).Value;
-			return prop;
+
+			// Base Dictionary
+			Property<T> property = getProperty<T>(name);
+			var v = Property<T>.Operator.Plus;
+			return bonus.simpleMath<T>(v, property).Value;
 		}
 
+		protected T getPropertyValue<T>(string name) {
+			Property<T> bonus;
+			if (!propertyBonusDict.ContainsKey(name)) {
+				bonus = new Property<T>(default(T));
+			} else {
+				bonus = ((Property<T>)propertyBonusDict[name]);
+			}
 
+			// UserDefined Dictionary
+			Property<T> property = getProperty<T>(name);
+			var v = Property<T>.Operator.Plus;
+			return bonus.simpleMath<T>(v, property).Value;
+		}
+
+		//protected T getPropertyValue<T>(string name) {
+
+		//}
 		/// <summary>
 		/// Sets flyList and move interupt reciever.
 		/// </summary>
@@ -440,9 +463,9 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		public Vector3 Position {
 			get {
 				if (sceneNode == null) {
-					return position; 
-				} else { 
-					return sceneNode.Position; 
+					return position;
+				} else {
+					return sceneNode.Position;
 				}
 			}
 		}

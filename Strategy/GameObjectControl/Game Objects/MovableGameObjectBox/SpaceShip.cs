@@ -54,11 +54,11 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		}
 
 		public override int AttackPower {
-			get { return getProperty<int>(PropertyEnum.Attack).Value * getBonusPropertyValue<int>(PropertyEnum.Attack); }
+			get { return getPropertyValue<int>(PropertyEnum.Attack); }
 		}
 
 		public override int DeffPower {
-			get { return getProperty<int>(PropertyEnum.Deffence).Value * getBonusPropertyValue<int>(PropertyEnum.Deffence); }
+			get { return getPropertyValue<int>(PropertyEnum.Deffence); }
 		}
 	}
 }

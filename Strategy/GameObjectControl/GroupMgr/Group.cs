@@ -9,6 +9,7 @@ using System.Collections;
 using Mogre;
 using Strategy.TeamControl;
 using Strategy.GameObjectControl.RuntimeProperty;
+using System.Reflection;
 
 namespace Strategy.GameObjectControl.GroupMgr {
 	public abstract class IGroup<T> : IEnumerable {
@@ -91,19 +92,21 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 	public class GroupMovables : IGroup<IMovableGameObject> {
 
-		public static Dictionary<PropertyEnum, object> baseTemplateBonusDict;		//static template for creating new Group with setted basic bonuses
+		//public static Dictionary<PropertyEnum, object> baseTemplateBonusDict;		//static template for creating new Group with setted basic bonuses
 
-		/// <summary>
-		/// Static constructor setted baseTemp.. dictionary with basic stats
-		/// </summary>
-		static GroupMovables() {
-			baseTemplateBonusDict = new Dictionary<PropertyEnum, object>();
-			baseTemplateBonusDict.Add(PropertyEnum.Attack, new Property<int>(1));
-			baseTemplateBonusDict.Add(PropertyEnum.Deffence, new Property<int>(1));
-			baseTemplateBonusDict.Add(PropertyEnum.Speed, new Property<int>(1));
-		}
+		///// <summary>
+		///// Static constructor setted baseTemp.. dictionary with basic stats
+		///// </summary>
+		//static GroupMovables() {
+		//	baseTemplateBonusDict = new Dictionary<PropertyEnum, object>();
+		//	baseTemplateBonusDict.Add(PropertyEnum.Attack, new Property<int>(1));
+		//	baseTemplateBonusDict.Add(PropertyEnum.Deffence, new Property<int>(1));
+		//	baseTemplateBonusDict.Add(PropertyEnum.Speed, new Property<int>(1));
+		//}
 
 		private Dictionary<string, object> groupBonuses;
+
+		private bool isSelected;
 
 		public GroupMovables() : this(new Team("")) { }
 		public GroupMovables(TeamControl.Team own)
@@ -112,7 +115,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 			groupBonuses.Add(PropertyEnum.Attack.ToString(), new Property<int>(1));
 			groupBonuses.Add(PropertyEnum.Deffence.ToString(), new Property<int>(1));
-			groupBonuses.Add(PropertyEnum.Speed.ToString(), new Property<int>(1));
+			groupBonuses.Add(PropertyEnum.Speed.ToString(), new Property<float>(1));
 		}
 
 		public void move(float f) {
@@ -126,6 +129,11 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 
 		public void select() {		// Called when group is changed from informative to selected
+			if (isSelected) {
+				return;
+			}
+
+			isSelected = true;
 			// Need colect bonuses from count and from members
 			var countBonus = (int)(groupMembers.Count / 3);
 			((Property<int>)groupBonuses[PropertyEnum.Attack.ToString()]).Value = 1 + countBonus;
@@ -136,10 +144,23 @@ namespace Strategy.GameObjectControl.GroupMgr {
 				foreach (var bonusPair in imgoBonus) {
 					if (groupBonuses.ContainsKey(bonusPair.Key)) { //todo
 						// Add find type and add value
+						if (bonusPair.Value.GetType().GetGenericTypeDefinition() == typeof(Property<>)) {
+							var type = bonusPair.Value.GetType().GetGenericArguments()[0];
+							var savedProp = groupBonuses[bonusPair.Key];
+							// createPropertyLabelAsLabel is private function
+							MethodInfo method = savedProp.GetType().GetMethod("simpleMath");
+							MethodInfo generic = method.MakeGenericMethod(type);
+							List<object> args = new List<object>();
+							args.Add(Property<string>.Operator.Plus);
+							args.Add(bonusPair.Value);
+							var o = generic.Invoke(savedProp, args.ToArray());
+							groupBonuses[bonusPair.Key] = o;
+						}
 					} else {
 						groupBonuses.Add(bonusPair.Key, bonusPair.Value);
 					}
 				}
+				imgo.setGroupBonuses(groupBonuses);
 			}
 		}
 
@@ -155,7 +176,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		public ActionAnswer onMouseAction(ActionReason reason, Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject) {
 			ActionAnswer groupAnswer = ActionAnswer.None;
 			foreach (IMovableGameObject imgo in groupMembers) {
-				ActionAnswer answer = imgo.onMouseAction(reason, point, hitObject, isFriendly, isMovableGameObject);//TODO Team Control
+				ActionAnswer answer = imgo.onMouseAction(reason, point, hitObject, isFriendly, isMovableGameObject);
 				if (answer > groupAnswer) {
 					groupAnswer = answer;
 				}
@@ -170,13 +191,13 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			var bonusesCopy = new Dictionary<string, object>(groupBonuses);
 
 			foreach (KeyValuePair<string, object> bonusPair in groupBonuses) {	// Group bonuses - add "Bonus" for distinguish bonus and ability
-				string newKey = bonusPair.Key + 50;
+				string newKey = bonusPair.Key + "Bonus";
 				object value = bonusPair.Value;
 				propDict.Add(newKey, value);
 			}
 
 			if (groupMembers.Count == 1) {
-				foreach (var pair in groupMembers[0].getPropertyToDisplay()) {// Just copy - don't want original (team add,...)
+				foreach (var pair in groupMembers[0].getPropertyToDisplay()) {  // Just copy - don't want original (team add,...)
 					propDict.Add(pair.Key, pair.Value);
 				}
 			} else {
@@ -191,6 +212,20 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 
 			return propDict;
+		}
+
+		public override void removeMember(IMovableGameObject m) {
+			base.removeMember(m);
+			var imgoBonus = m.onGroupAdd();
+			foreach (var bonusPair in imgoBonus) {
+				if (groupBonuses.ContainsKey(bonusPair.Key)) { //todo
+					// Add find type and add value
+				}
+			}
+		}
+
+		public bool IsSelected {
+			get { return isSelected; }
 		}
 
 	}
