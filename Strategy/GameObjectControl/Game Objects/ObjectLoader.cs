@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Reflection.Emit;
 using System.Xml;
 using Mogre;
+using Roslyn.Compilers;
+using Roslyn.Compilers.CSharp;
 using Strategy.Exceptions;
 using Strategy.GameMaterial;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
-using Strategy.TeamControl;
-using Roslyn.Compilers;
-using Roslyn.Compilers.CSharp;
-using System.IO;
-using System.Reflection;
-using System.Reflection.Emit;
+using Strategy.GameObjectControl.GroupMgr;
 using Strategy.GameObjectControl.RuntimeProperty;
+using Strategy.TeamControl;
 
 
 namespace Strategy.GameObjectControl.Game_Objects {
@@ -69,6 +70,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			metadataRef.Add(new MetadataFileReference(typeof(Strategy.Game).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(ActionReason).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(ActionAnswer).Assembly.Location));
+			metadataRef.Add(new MetadataFileReference(typeof(PropertyEnum).Assembly.Location));
 
 			comilationOption = new CompilationOptions(OutputKind.DynamicallyLinkedLibrary);
 

@@ -5,6 +5,7 @@ using System.Text;
 using Mogre;
 using Strategy.TeamControl;
 using Strategy.GameObjectControl;
+using Strategy.GameObjectControl.GroupMgr;
 using Strategy.GameObjectControl.RuntimeProperty;
 
 namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
@@ -16,9 +17,9 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			this.movableObjectTeam = myTeam;
 			this.manager = manager;
 			this.position = position;
-			setProperty("Speed", propMgr.getProperty<float>("speed2"));
-			setProperty("Attack", propMgr.getProperty<int>("basicAttack"));
-			setProperty("Deffence", propMgr.getProperty<int>("basicDeff"));
+			setProperty(PropertyEnum.Speed, propMgr.getProperty<float>("speed2"));
+			setProperty(PropertyEnum.Attack, propMgr.getProperty<int>("basicAttack"));
+			setProperty(PropertyEnum.Deffence, propMgr.getProperty<int>("basicDeff"));
 
 			//Mogre inicialization of object
 			entity = manager.CreateEntity(name, mesh);

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Mogre;
 using Strategy.TeamControl;
+using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.GameObjectControl.Game_Objects.GameActions;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 
@@ -66,8 +67,8 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
             }
         }
 
-		public Dictionary<string, object> getPropertyToDisplay() {
-			var propToDisp = new Dictionary<string, object>();
+		public Dictionary<PropertyEnum, object> getPropertyToDisplay() {
+			var propToDisp = new Dictionary<PropertyEnum, object>();
 			return propToDisp;
 		}
 

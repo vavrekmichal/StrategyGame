@@ -7,6 +7,7 @@ using Strategy.GameObjectControl.Game_Objects;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 using Strategy.GameObjectControl.RuntimeProperty;
+using Strategy.GameObjectControl.GroupMgr;
 using Strategy.MoveMgr;
 using Strategy.GameMaterial;
 using Strategy.TeamControl;
@@ -14,7 +15,7 @@ using Strategy.GameGUI;
 using Mogre;
 
 
-namespace Strategy.GameObjectControl {
+namespace Strategy.GameObjectControl.GroupMgr {
 	class GroupManager {
 
 		protected List<GroupMovables> groupMovList;

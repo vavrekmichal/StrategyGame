@@ -8,6 +8,7 @@ using Miyagi.UI.Controls;
 using Miyagi.UI.Controls.Styles;
 using Strategy.GameMaterial;
 using Strategy.GameObjectControl;
+using Strategy.GameObjectControl.GroupMgr;
 using Strategy.GameObjectControl.RuntimeProperty;
 using System.Reflection;
 
@@ -187,7 +188,7 @@ namespace Strategy.GameGUI {
 		/// Function shows every given Property from in propertisDict in propertyPanel
 		/// </summary>
 		/// <param name="propertiesDict">Dictionary with properties (key - name, value - Property)</param>
-		private void showGroupProperties(Dictionary<string, object> propertiesDict) {
+		private void showGroupProperties(Dictionary<PropertyEnum, object> propertiesDict) {
 			var propDict = propertiesDict;
 			int marginLeft = propertyPanel.Width / 2;
 			int marginTop = 26;
@@ -195,7 +196,7 @@ namespace Strategy.GameGUI {
 
 			// Add each property int propertyPanel name and value in one row
 			foreach (var property in propDict) {				
-				propertyPanel.Controls.Add(createLabel(marginTop * i, marginLeft, 26, property.Key));
+				propertyPanel.Controls.Add(createLabel(marginTop * i, marginLeft, 26, property.Key.ToString()));
 
 				propertyPanel.Controls.Add((Label)createPropertyLabelAsObject(marginLeft, marginTop * i, property.Value));
 				++i;
@@ -207,7 +208,7 @@ namespace Strategy.GameGUI {
 		/// Function shows Group's property and count or name of object (if is just one in the group)
 		/// </summary>
 		/// <param name="group">Showing group with IMovableGameObjects</param>
-		public void showTargeted(GameObjectControl.GroupMovables group) {
+		public void showTargeted(GroupMovables group) {
 			clearStatPanelProp();
 
 			if (group.Count == 1) { // Just one object
@@ -225,7 +226,7 @@ namespace Strategy.GameGUI {
 		/// Also can show nothingSelect constant if group is empty
 		/// </summary>
 		/// <param name="group"></param>
-		public void showTargeted(GameObjectControl.GroupStatics group) {
+		public void showTargeted(GroupStatics group) {
 			 
 			clearStatPanelProp();
 			if (group == null || group.Count == 0) {

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Mogre;
 using Strategy.GameObjectControl;
+using Strategy.GameObjectControl.GroupMgr;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Mogre;
 using Strategy.GameGUI;
+using Strategy.GameObjectControl.GroupMgr;
 using Strategy.GameObjectControl.Game_Objects;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;

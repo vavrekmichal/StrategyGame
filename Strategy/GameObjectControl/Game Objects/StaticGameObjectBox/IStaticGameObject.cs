@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using Mogre;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
+using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.TeamControl;
 
 namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
@@ -20,6 +18,6 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		Vector3 Position { get; }
 
 		ActionReaction reactToInitiative(ActionReason reason, IMovableGameObject target);
-		Dictionary<string, object> getPropertyToDisplay();
+		Dictionary<PropertyEnum, object> getPropertyToDisplay();
 	}
 }

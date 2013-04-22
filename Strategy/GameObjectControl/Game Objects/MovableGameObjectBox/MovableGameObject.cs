@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Mogre;
 using Strategy.Exceptions;
+using Strategy.GameObjectControl.GroupMgr;
 using Strategy.GameObjectControl.Game_Objects.GameActions;
 using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.MoveMgr;
@@ -20,8 +21,8 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		protected Mogre.SceneManager manager;
 
 		protected bool moving;
-		protected Dictionary<string, object> propertyDict;
-		protected Dictionary<string, object> propertyBonusDict;
+		protected Dictionary<PropertyEnum, object> propertyDict;
+		protected Dictionary<PropertyEnum, object> propertyBonusDict;
 		protected List<IGameAction> listOfAction; //TODO not implemented
 		protected LinkedList<Vector3> flyList; // Walking points in linked list
 		protected float distance = 0.0f;              // The distance the object has left to travel
@@ -44,8 +45,8 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			isVisible = false;
 			flyList = new LinkedList<Vector3>();
 			listOfAction = new List<IGameAction>();
-			propertyDict = new Dictionary<string, object>();
-			propertyDict.Add("Hp", new Property<int>(100));
+			propertyDict = new Dictionary<PropertyEnum, object>();
+			propertyDict.Add(PropertyEnum.Hp, new Property<int>(100));
 			propertyBonusDict = GroupMovables.baseTemplateBonusDict;
 		}
 
@@ -165,7 +166,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			} else {
 				if (!colision()) { // Object's not in colision
 
-					float move = getProperty<float>("Speed").Value * delay;
+					float move = getProperty<float>(PropertyEnum.Speed).Value * delay;
 					distance -= move;
 					if (distance <= .0f) { // Reach destination
 						sceneNode.Position = destination;
@@ -226,7 +227,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 				}
 			} else {
-				float move = getProperty<float>("Speed").Value * delay;
+				float move = getProperty<float>(PropertyEnum.Speed).Value * delay;
 				distance -= move;
 				if (distance <= .0f) { // Reach destination
 					position = destination;
@@ -288,18 +289,18 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			}
 		}
 
-		public virtual void setGroupBonuses(Dictionary<string, object> bonusDict) {
+		public virtual void setGroupBonuses(Dictionary<PropertyEnum, object> bonusDict) {
 			propertyBonusDict = bonusDict;
 		}
 
 
-		public virtual Dictionary<string, object> onGroupAdd() {
+		public virtual Dictionary<PropertyEnum, object> onGroupAdd() {
 			// Empty dictionary = no bonuses for other members of group
-			return new Dictionary<string, object>();
+			return new Dictionary<PropertyEnum, object>();
 		}
 
 
-		public Dictionary<string, object> getPropertyToDisplay() {
+		public Dictionary<PropertyEnum, object> getPropertyToDisplay() {
 			return propertyDict;
 		}
 
@@ -315,7 +316,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			return v;
 		}
 
-		public Property<T> getProperty<T>(string propertyName) {
+		public Property<T> getProperty<T>(PropertyEnum propertyName) {
 			if (!propertyDict.ContainsKey(propertyName)) {
 				throw new PropertyMissingException("Object "+ Name+" doesn't have property "+ propertyName+".");
 			}
@@ -323,7 +324,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			return prop;
 		}
 
-		protected void setProperty(string name, object prop) {
+		protected void setProperty(PropertyEnum name, object prop) {
 			if (!(prop.GetType().GetGenericTypeDefinition()==typeof(Property<>))) {
 				throw new ArgumentException("Given object is not Property<T>, it is " + prop.GetType());
 			}
@@ -334,7 +335,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			}
 		}
 
-		protected T getPropertyValueFromBonusDict<T>(string name) {
+		protected T getPropertyValueFromBonusDict<T>(PropertyEnum name) {
 			if (!propertyBonusDict.ContainsKey(name)) {
 				return default(T);
 			}
@@ -427,7 +428,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 
 		public int Hp {
-			get { return ((Property<int>)propertyDict["Hp"]).Value; }
+			get { return ((Property<int>)propertyDict[PropertyEnum.Hp]).Value; }
 		}
 
 

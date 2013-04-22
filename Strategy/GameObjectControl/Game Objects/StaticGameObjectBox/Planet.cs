@@ -4,6 +4,7 @@ using System.Linq;
 using Mogre;
 using Strategy.TeamControl;
 using Strategy.GameObjectControl.RuntimeProperty;
+using Strategy.GameObjectControl.GroupMgr;
 
 
 
@@ -30,9 +31,9 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			this.mesh = mesh;
 			planetTeam = myTeam;
 			this.manager = manager;
-			base.setProperty("Speed", propMgr.getProperty<float>("speed3"));
-			base.setProperty("Rotate", propMgr.getProperty<float>("planetRotateSpeed"));
-			base.setProperty("PickUp", propMgr.getProperty<float>("planetPickUpDistance"));
+			base.setProperty(PropertyEnum.Speed, propMgr.getProperty<float>("speed3"));
+			base.setProperty(PropertyEnum.Rotate, propMgr.getProperty<float>("planetRotateSpeed"));
+			base.setProperty(PropertyEnum.PickUp, propMgr.getProperty<float>("planetPickUpDistance"));
 
 			//prepare list of positions
 			circularPositions = calculatePositions(circularNum, distanceFromCenter, center);
@@ -49,7 +50,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// <param name="f">delay between frames</param>
 		public override void rotate(float f) {
 			tryExecute("Produce");
-			sceneNode.Roll(new Mogre.Degree((float)(getProperty<float>("Speed").Value * getProperty<float>("Rotate").Value * f)));
+			sceneNode.Roll(new Mogre.Degree((float)(getProperty<float>(PropertyEnum.Speed).Value * getProperty<float>(PropertyEnum.Rotate).Value * f)));
 			//position in LinkedList now moving
 			if (!mFlying) {
 				if (nextLocation()) {
@@ -62,7 +63,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 				} else {
 				}//nothing to do so stay in position    
 			} else {
-				double move = getProperty<float>("Speed").Value * f;
+				double move = getProperty<float>(PropertyEnum.Speed).Value * f;
 				mDistance -= move;
 				if (mDistance <= .0f) { //reach destination
 					travelledInvisible = 0;
@@ -90,7 +91,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 				} else {
 				}
 			} else {
-				double move = getProperty<float>("Speed").Value * f;
+				double move = getProperty<float>(PropertyEnum.Speed).Value * f;
 				mDistance -= move;
 				if (mDistance <= .0f) { //reach destination
 					travelledInvisible = 0;
@@ -187,10 +188,10 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			return true;
 		}
 
-		public override Dictionary<string, object> getPropertyToDisplay() {
-			var propToDisp = new Dictionary<string, object>(propertyDict);
-			return propToDisp;
-		}
+		//public override Dictionary<string, object> getPropertyToDisplay() {
+		//	var propToDisp = new Dictionary<string, object>(propertyDict);
+		//	return propToDisp;
+		//}
 
 
 		/// <summary>
@@ -205,7 +206,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// PickUpDistance is setted by runtime property
 		/// </summary>
 		public override float PickUpDistance {
-			get { return getProperty<float>("PickUp").Value; ; }
+			get { return getProperty<float>(PropertyEnum.PickUp).Value; ; }
 		}
 
 	}

@@ -9,6 +9,7 @@ using System.Reflection;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.Exceptions;
+using Strategy.GameObjectControl.GroupMgr;
 
 namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 	public abstract class StaticGameObject : IStaticGameObject {
@@ -26,13 +27,13 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		protected static Dictionary<string, IGameAction> gameActions;
 		protected static Dictionary<string, List<IStaticGameObject>> gameActionsPermitions;
 
-		protected Dictionary<string, object> propertyDict = new Dictionary<string,object>();
+		protected Dictionary<PropertyEnum, object> propertyDict = new Dictionary<PropertyEnum, object>();
 
 		//Look here create file load file
 		static StaticGameObject() {
 			gameActionsPermitions = new Dictionary<string, List<IStaticGameObject>>();
 			gameActions = new Dictionary<string, IGameAction>();
-			IGameAction o = (IGameAction)Assembly.GetExecutingAssembly().CreateInstance("Strategy.GameObjectControl.Game_Objects.GameActions.Produce");
+			IGameAction o = (IGameAction)Assembly.GetExecutingAssembly().CreateInstance("Strategy.GameObjectControl.Game_Objects.GameActions.Produce"); //TODO delete
 
 			gameActions.Add(o.getName(), o);
 			gameActionsPermitions.Add(o.getName(), new List<IStaticGameObject>());
@@ -49,7 +50,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			((Produce)gameActions["Produce"]).registerExecuter(this, specificType, value);
 		}
 
-		public Property<T> getProperty<T>(string propertyName) {
+		public Property<T> getProperty<T>(PropertyEnum propertyName) {
 			if (!propertyDict.ContainsKey(propertyName)) {
 				throw new PropertyMissingException("Object " + Name + " doesn't have property " + propertyName + ".");
 			}
@@ -57,7 +58,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			return prop;
 		}
 
-		protected void setProperty(string name, object prop) {
+		protected void setProperty(PropertyEnum name, object prop) {
 			if (!(prop.GetType().GetGenericTypeDefinition() == typeof(Property<>))) {
 				throw new ArgumentException("Given object is not Property<T>, it is " + prop.GetType());
 			}
@@ -83,8 +84,8 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		public virtual void nonActiveRotate(float f) {
 		}
 
-		public virtual Dictionary<string, object> getPropertyToDisplay() {
-			var propToDisp = new Dictionary<string, object>();
+		public virtual Dictionary<PropertyEnum, object> getPropertyToDisplay() {
+			var propToDisp = new Dictionary<PropertyEnum, object>();
 			return propToDisp;
 		}
 

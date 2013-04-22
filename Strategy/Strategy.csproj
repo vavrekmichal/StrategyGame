@@ -96,11 +96,13 @@
     <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\IStaticGameObject.cs" />
     <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\Traveler.cs" />
     <Compile Include="GameObjectControl\GameObjectManager.cs" />
-    <Compile Include="GameObjectControl\Group.cs" />
+    <Compile Include="GameObjectControl\RuntimeProperty\EditablePair.cs" />
+    <Compile Include="GameObjectControl\RuntimeProperty\PropertyEnum.cs" />
+    <Compile Include="GameObjectControl\GroupMgr\Group.cs" />
     <Compile Include="GameObjectControl\Game Objects\MovableGameObjectBox\MovableGameObject.cs" />
     <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\StaticGameObject.cs" />
     <Compile Include="GameObjectControl\Game Objects\ObjectCreator.cs" />
-    <Compile Include="GameObjectControl\GroupManager.cs" />
+    <Compile Include="GameObjectControl\GroupMgr\GroupManager.cs" />
     <Compile Include="GameObjectControl\RuntimeProperty\Property.cs" />
     <Compile Include="GameObjectControl\RuntimeProperty\PropertyManager.cs" />
     <Compile Include="GameObjectControl\SolarSystem.cs" />

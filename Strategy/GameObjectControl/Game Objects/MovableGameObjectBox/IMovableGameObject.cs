@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Mogre;
+using Strategy.GameObjectControl.GroupMgr;
 using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.MoveMgr;
 using Strategy.TeamControl;
@@ -86,13 +87,13 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// <typeparam name="T"></typeparam>
 		/// <param name="propertyName"></param>
 		/// <returns></returns>
-		Property<T> getProperty<T>(string propertyName);
+		Property<T> getProperty<T>(PropertyEnum propertyName);
 
 		/// <summary>
 		/// BunusDict contains bonuses from group and members of group. Object can use them to count his properties.
 		/// </summary>
 		/// <param name="bonusDict">Dictionary with Property as object (runtime generic)</param>
-		void setGroupBonuses(Dictionary<string, object> bonusDict);
+		void setGroupBonuses(Dictionary<PropertyEnum, object> bonusDict);
 
 		string Name { get; }
 		Team Team { get; set; }
@@ -119,12 +120,12 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// Returns bonuses for other members of group.
 		/// </summary>
 		/// <returns>Dictionary with Property as object (runtime generic)</returns>
-		Dictionary<string, object> onGroupAdd();
+		Dictionary<PropertyEnum, object> onGroupAdd();
 
 		/// <summary>
 		/// Return Dictionary with all object Property(ies).
 		/// </summary>
 		/// <returns>Dictionary with Property as object (runtime generic)</returns>
-		Dictionary<string, object> getPropertyToDisplay();
+		Dictionary<PropertyEnum, object> getPropertyToDisplay();
 	}
 }

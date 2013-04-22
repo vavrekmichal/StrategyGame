@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Strategy.GameMaterial;
 using Strategy.GameGUI;
+using Strategy.GameObjectControl.GroupMgr;
 using Strategy.GameObjectControl;
 using Strategy.TeamControl;
 using Mogre;
@@ -55,11 +56,11 @@ namespace Strategy.GameGUI {
 			myGUI.update();
 		}
 
-		public void showTargeted(GameObjectControl.GroupStatics group) {
+		public void showTargeted(GroupStatics group) {
 			myGUI.showTargeted(group);
 		}
 
-		public void showTargeted(GameObjectControl.GroupMovables group) {
+		public void showTargeted(GroupMovables group) {
 			myGUI.showTargeted(group);
 		}
 
