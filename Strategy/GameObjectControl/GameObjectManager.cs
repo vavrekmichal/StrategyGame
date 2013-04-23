@@ -140,7 +140,7 @@ namespace Strategy.GameObjectControl {
 					targetTeam = hitTest.getISGO(hitObject.Name).Team;
 					isIMGO = false;
 				}
-				isFriendly = teamMgr.areFriendly(groupMgr.getActiveTeam(), targetTeam);
+				isFriendly = teamMgr.areFriendly(groupMgr.ActiveTeam, targetTeam);
 
 			}
 			var answer = groupMgr.onRightMouseClick(clickedPoint, hitObject, isFriendly, isIMGO);

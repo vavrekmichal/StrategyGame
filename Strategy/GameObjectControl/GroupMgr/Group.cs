@@ -92,18 +92,6 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 	public class GroupMovables : IGroup<IMovableGameObject> {
 
-		//public static Dictionary<PropertyEnum, object> baseTemplateBonusDict;		//static template for creating new Group with setted basic bonuses
-
-		///// <summary>
-		///// Static constructor setted baseTemp.. dictionary with basic stats
-		///// </summary>
-		//static GroupMovables() {
-		//	baseTemplateBonusDict = new Dictionary<PropertyEnum, object>();
-		//	baseTemplateBonusDict.Add(PropertyEnum.Attack, new Property<int>(1));
-		//	baseTemplateBonusDict.Add(PropertyEnum.Deffence, new Property<int>(1));
-		//	baseTemplateBonusDict.Add(PropertyEnum.Speed, new Property<int>(1));
-		//}
-
 		private Dictionary<string, object> groupBonuses;
 
 		private bool isSelected;
@@ -111,50 +99,49 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		public GroupMovables() : this(new Team("")) { }
 		public GroupMovables(TeamControl.Team own)
 			: base(own) {
-			groupBonuses = new Dictionary<string, object>();
-
-			groupBonuses.Add(PropertyEnum.Attack.ToString(), new Property<int>(1));
-			groupBonuses.Add(PropertyEnum.Deffence.ToString(), new Property<int>(1));
-			groupBonuses.Add(PropertyEnum.Speed.ToString(), new Property<float>(1));
+			countBasicBonuses();
 		}
 
-		public void move(float f) {
-			foreach (IMovableGameObject obj in groupMembers) {
-				obj.move(f);
-			}
+		private object callPropertyMathViaReflection(Property<object>.Operator op, object p1, object p2) {
+			var type = p1.GetType().GetGenericArguments()[0];
+
+			// Using reflection to call function simpleMath with generic parameter
+			MethodInfo method = p1.GetType().GetMethod("simpleMath");
+			List<object> args = new List<object>();
+			args.Add(Property<object>.Operator.Plus);
+			args.Add(p2);
+			return method.Invoke(p1, args.ToArray());
+
 		}
 
-		public void nonVisibleMove(float f) {
-		}
-
-
-		public void select() {		// Called when group is changed from informative to selected
+		/// <summary>
+		/// Called when group is changed from informative to selected. Function count basic bonuses for selected
+		/// group (Attack and Deffence bonus +1 per each 3 members) and collect bonuses from members (onGroupAdd).
+		/// Finally set bonus dictionary for each member of group.
+		/// </summary>
+		public void select() {
 			if (isSelected) {
 				return;
 			}
-
 			isSelected = true;
-			// Need colect bonuses from count and from members
-			var countBonus = (int)(groupMembers.Count / 3);
-			((Property<int>)groupBonuses[PropertyEnum.Attack.ToString()]).Value = 1 + countBonus;
-			((Property<int>)groupBonuses[PropertyEnum.Deffence.ToString()]).Value = 1 + countBonus;
+
+			// Basic bonuses to the Attack and the Deffence ( 1 per each 3 members)
+			countBasicBonuses();
+
+			//var v = callPropertyMathViaReflection(Property<object>.Operator.Plus, new Property<int>(6), new Property<int>(12));
+
+			// Collect bonuses
 			foreach (IMovableGameObject imgo in groupMembers) {
-				// Collect bonuses
 				var imgoBonus = imgo.onGroupAdd();
 				foreach (var bonusPair in imgoBonus) {
-					if (groupBonuses.ContainsKey(bonusPair.Key)) { //todo
-						// Add find type and add value
-						if (bonusPair.Value.GetType().GetGenericTypeDefinition() == typeof(Property<>)) {
-							var type = bonusPair.Value.GetType().GetGenericArguments()[0];
-							var savedProp = groupBonuses[bonusPair.Key];
-							// createPropertyLabelAsLabel is private function
-							MethodInfo method = savedProp.GetType().GetMethod("simpleMath");
-							MethodInfo generic = method.MakeGenericMethod(type);
-							List<object> args = new List<object>();
-							args.Add(Property<string>.Operator.Plus);
-							args.Add(bonusPair.Value);
-							var o = generic.Invoke(savedProp, args.ToArray());
-							groupBonuses[bonusPair.Key] = o;
+					if (groupBonuses.ContainsKey(bonusPair.Key)) {
+
+						// Find type and add value. If Properties has not same type then isn't added
+						var type = bonusPair.Value.GetType();
+						if (type.GetGenericTypeDefinition() == typeof(Property<>) &&
+							type == groupBonuses[bonusPair.Key].GetType()) {
+
+							groupBonuses[bonusPair.Key] = callPropertyMathViaReflection(Property<object>.Operator.Plus,groupBonuses[bonusPair.Key],bonusPair.Value);
 						}
 					} else {
 						groupBonuses.Add(bonusPair.Key, bonusPair.Value);
@@ -190,14 +177,17 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			propDict.Add(PropertyEnum.Team.ToString(), owner);
 			var bonusesCopy = new Dictionary<string, object>(groupBonuses);
 
-			foreach (KeyValuePair<string, object> bonusPair in groupBonuses) {	// Group bonuses - add "Bonus" for distinguish bonus and ability
-				string newKey = bonusPair.Key + "Bonus";
+			const string bonus = "Bonus";
+			// Group bonuses - add "Bonus" for distinguish bonus and ability
+			foreach (KeyValuePair<string, object> bonusPair in groupBonuses) {
+
+				string newKey = bonusPair.Key + bonus;
 				object value = bonusPair.Value;
 				propDict.Add(newKey, value);
 			}
 
 			if (groupMembers.Count == 1) {
-				foreach (var pair in groupMembers[0].getPropertyToDisplay()) {  // Just copy - don't want original (team add,...)
+				foreach (var pair in groupMembers[0].getPropertyToDisplay()) {
 					propDict.Add(pair.Key, pair.Value);
 				}
 			} else {
@@ -220,14 +210,35 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			foreach (var bonusPair in imgoBonus) {
 				if (groupBonuses.ContainsKey(bonusPair.Key)) { //todo
 					// Add find type and add value
+					groupBonuses[bonusPair.Key] =
+						callPropertyMathViaReflection(Property<object>.Operator.Minus, groupBonuses[bonusPair.Key], bonusPair.Value);
 				}
 			}
+		}
+
+		/// <summary>
+		/// Function  calculate basic bonuses and save them in groupBonuses
+		/// (Attack and Deffence +1 per each 3 members)
+		/// </summary>
+		public void countBasicBonuses() {
+			groupBonuses = new Dictionary<string, object>();
+
+			// Quantitative bonus
+			var quantitativeBonus = 1 + groupMembers.Count / 3;
+			groupBonuses.Add(PropertyEnum.Attack.ToString(), new Property<int>(quantitativeBonus));
+			groupBonuses.Add(PropertyEnum.Deffence.ToString(), new Property<int>(quantitativeBonus));
+			groupBonuses.Add(PropertyEnum.Speed.ToString(), new Property<float>(0));
+			
 		}
 
 		public bool IsSelected {
 			get { return isSelected; }
 		}
 
+		public Dictionary<string, object> GroupBonusDict {
+			get { return groupBonuses; }
+			set { groupBonuses = value; }
+		}
 	}
 	#endregion
 
@@ -235,13 +246,14 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 	class GroupStatics : IGroup<IStaticGameObject> {
 		public GroupStatics() : base(new Team("None")) { }
+
 		public GroupStatics(TeamControl.Team own) : base(own) { }
 
 		public override Dictionary<string, object> getPropertyToDisplay() {
 			var propDict = new Dictionary<string, object>();
 			propDict.Add(PropertyEnum.Team.ToString(), owner);
 			if (groupMembers.Count == 1) {
-				foreach (var pair in groupMembers[0].getPropertyToDisplay()) {// Just copy - don't want original (team add,...)
+				foreach (var pair in groupMembers[0].getPropertyToDisplay()) {
 					propDict.Add(pair.Key, pair.Value);
 				}
 			} else {

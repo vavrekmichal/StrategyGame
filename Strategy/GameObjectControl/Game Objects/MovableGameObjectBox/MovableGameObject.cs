@@ -371,8 +371,8 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 			// Base Dictionary
 			Property<T> property = getProperty<T>(name);
-			var v = Property<T>.Operator.Plus;
-			return bonus.simpleMath<T>(v, property).Value;
+			var op = Property<T>.Operator.Plus;
+			return bonus.simpleMath(op, property).Value;
 		}
 
 		protected T getPropertyValue<T>(string name) {
@@ -385,8 +385,8 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 			// UserDefined Dictionary
 			Property<T> property = getProperty<T>(name);
-			var v = Property<T>.Operator.Plus;
-			return bonus.simpleMath<T>(v, property).Value;
+			var op = Property<T>.Operator.Plus;
+			return bonus.simpleMath(op, property).Value;
 		}
 
 		//protected T getPropertyValue<T>(string name) {

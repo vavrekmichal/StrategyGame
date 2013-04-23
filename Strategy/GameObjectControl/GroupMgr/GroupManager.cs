@@ -18,7 +18,7 @@ using Mogre;
 namespace Strategy.GameObjectControl.GroupMgr {
 	class GroupManager {
 
-		protected Dictionary<IMovableGameObject, GroupMovables> groupMovList;
+		protected Dictionary<IMovableGameObject, GroupMovables> imgoGroupDict;
 
 		protected Dictionary<int, SolarSystem> solarSystemDict;
 		protected int lastSolarSystem = 0;
@@ -50,7 +50,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		/// </summary>
 		private GroupManager() {
 			solarSystemDict = new Dictionary<int, SolarSystem>();
-			groupMovList = new Dictionary<IMovableGameObject, GroupMovables>();
+			imgoGroupDict = new Dictionary<IMovableGameObject, GroupMovables>();
 		}
 		#endregion
 
@@ -145,7 +145,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			isMovableGroupActive = false;
 			if (isgoList.Count > 0) {
 				var group = new GroupStatics(isgoList[0].Team);
-				group.insertMemeber(isgoList[0]);	// Insert firt
+				group.insertMemeber(isgoList[0]);	// Insert first
 				var inGroup = isgoList[0];
 				if (isgoList.Count > 1) {		// Check if there is more object
 					for (int i = 1; i < isgoList.Count; i++) {
@@ -173,25 +173,73 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		/// </summary>
 		/// <param name="isgoList">List with IMovableGameObject</param>
 		public void createInfoGroup(List<IMovableGameObject> imgoList) {
-
-			var group = new GroupMovables(imgoList[0].Team);
-			group.insertMemeber(imgoList[0]);
+			bool inSameGroup = true;
 			isMovableGroupActive = true;
 
-			if (imgoList.Count > 1) {		// Check if there is more object
-				for (int i = 1; i < imgoList.Count; i++) {
-					if (group.OwnerTeam.Name == Game.playerName && group.OwnerTeam == imgoList[i].Team) {
-						group.insertMemeber(imgoList[i]); // Insert player's imgo	
-					} else {
-						if (imgoList[i].Team.Name == Game.playerName) { // In some of elements in isgoList is players's -> has greater priority
-							group = new GroupMovables(imgoList[i].Team);
-							group.insertMemeber(imgoList[i]);	// Insert firt
+			// Test if all imgo are in same selected group
+			var firstGroup = getGroup(imgoList.First());
+
+			for (int i = 1; i < imgoList.Count; i++) {
+				var memberGroup = getGroup(imgoList[i]);
+				if (firstGroup != memberGroup) {
+					// Different groups => new group must be created (unselected)
+					inSameGroup = false;
+					break;
+				}
+			}
+
+			if (!inSameGroup) {
+
+				// Create new uselect group (selected object was not in same group)
+				var group = new GroupMovables(imgoList.First().Team);
+				group.insertMemeber(imgoList[0]);
+
+				if (imgoList.Count > 1) {		// Check if there is more object
+					for (int i = 1; i < imgoList.Count; i++) {
+						if (group.OwnerTeam.Name == Game.playerName && group.OwnerTeam == imgoList[i].Team) {
+							group.insertMemeber(imgoList[i]); // Insert player's imgo	
+						} else {
+							// Element of isgoList is in players's Team => has greater priority and must be selected
+							if (imgoList[i].Team.Name == Game.playerName) {
+								group = new GroupMovables(imgoList[i].Team);
+								group.insertMemeber(imgoList[i]);	// Insert firt
+							}
 						}
 					}
 				}
+				selectedGroupM = group;
+			} else {
+
+				// Objects are in same group. Now must be checked if group is complete.
+				if (firstGroup.Count == imgoList.Count) {
+					// Absolutly sam group just selected the group
+					selectedGroupM = firstGroup;
+				} else {
+					// Subset of group => copy parameters (group is not selected, parameters will only be showed)
+					var group = new GroupMovables(imgoList.First().Team);
+					// Copy bonuses, bonuses will have actual value (changes in the original will be also in this info group)
+					group.GroupBonusDict = firstGroup.GroupBonusDict;
+					
+					foreach (var imgo in imgoList) {
+						group.insertMemeber(imgo);
+					}
+					selectedGroupM = group;
+				}
+
 			}
-			selectedGroupM = group;
 		}
+
+		public GroupMovables getGroup(IMovableGameObject imgo) {
+			GroupMovables group;
+			if (imgoGroupDict.ContainsKey(imgo)) {
+				group = imgoGroupDict[imgo];
+			} else {
+				group = new GroupMovables(imgo.Team);
+				imgoGroupDict.Add(imgo, group);
+			}
+			return group;
+		}
+
 
 		public void showSelectedInfoGroup() {
 			if (isMovableGroupActive) {
@@ -201,32 +249,50 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			}
 		}
 
-		public Team getActiveTeam() {
-			if (isMovableGroupActive) {
-				return selectedGroupM.OwnerTeam;
-			} else {
-				return selectedGroupS.OwnerTeam;
+		public Team ActiveTeam {
+			get {
+				if (isMovableGroupActive) {
+					return selectedGroupM.OwnerTeam;
+				} else {
+					return selectedGroupS.OwnerTeam;
+				}
 			}
 		}
 
 		public ActionAnswer onRightMouseClick(Mogre.Vector3 clickedPoint, MovableObject hitObject, bool isFriendly, bool isImgo) {
 
 			if (isMovableGroupActive && selectedGroupM.OwnerTeam.Name == Game.playerName) {
-				if (!(groupMovList.ContainsKey(selectedGroupM[0]) && selectedGroupM == groupMovList[selectedGroupM[0]])) {
+
+				// Check if actual group is selectedGroupM
+				if (!(imgoGroupDict.ContainsKey(selectedGroupM[0]) && selectedGroupM == imgoGroupDict[selectedGroupM[0]])) {
+
+					// Group is unselect
 					var toRecount = new List<GroupMovables>();
 					foreach (IMovableGameObject imgo in selectedGroupM) {
-						if (groupMovList.ContainsKey(imgo)) {
-							// Odeber ze stavajici a prepocti ji.
-							groupMovList[imgo] = selectedGroupM;
+						if (imgoGroupDict.ContainsKey(imgo)) {
+
+							// Add object to toRecount 
+							if (!toRecount.Contains(imgoGroupDict[imgo])) {
+								toRecount.Add(imgoGroupDict[imgo]);
+							}
+
+							// Remove from old group and set new oneto Dict
+							imgoGroupDict[imgo].removeMember(imgo);
+							imgoGroupDict[imgo] = selectedGroupM;
 						} else {
-							groupMovList.Add(imgo, selectedGroupM);
+							imgoGroupDict.Add(imgo, selectedGroupM);
 						}
 					}
 
+					// Recount all modified groups
+					foreach (var group in toRecount) {
+						// Count just basic bonuses, others are removed when the source of them is removed.
+						group.countBasicBonuses();
+					}
 					selectedGroupM.select();
 				}
-				
 				return selectedGroupM.onMouseAction(ActionReason.onRightButtonClick, clickedPoint, hitObject, isFriendly, isImgo);
+
 			} else {
 				return ActionAnswer.None;
 			}

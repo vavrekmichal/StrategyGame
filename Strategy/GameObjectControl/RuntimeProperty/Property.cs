@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Strategy.GameObjectControl.RuntimeProperty {
-	public class Property<T> : ICloneable{
+	public class Property<T> : ICloneable {
 		private T value;
 
 		public Property(T value) {
@@ -34,40 +34,30 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 				case Operator.Minus:
 					return a - b;
 				default:
-					throw new Exception("Unknown operator " + op);
+					throw new ArgumentException("Unknown operator " + op);
 			}
 		}
 
-		public Property<T2> simpleMath<T2>(Operator op, Property<T2> p2) {
+		/// <summary>
+		/// Generic function calls private doTheOperation with Properties values
+		/// and convert to T2 type
+		/// </summary>
+		/// <typeparam name="T2">Result Property type</typeparam>
+		/// <param name="op">Operator of operation</param>
+		/// <param name="p2">Second argument of operation</param>
+		/// <returns>Property with result of operation</returns>
+		public Property<T> simpleMath(Operator op, Property<T> p2) {
 			var newValue = doTheOperation(op, Value, p2.Value);
-			T2 pok = (T2)Convert.ChangeType(newValue, typeof(T2));
-			return new Property<T2>(pok);
+			T pok = (T)Convert.ChangeType(newValue, typeof(T));
+			return new Property<T>(pok);
 		}
 
-		public object pokus(Operator op, object p1, object p2) {
-			if (p1.GetType() == typeof(Property<>) && p2.GetType() == typeof(Property<>)) {
-				Type t = typeof(T);
-				// createPropertyLabelAsLabel is private function
-				MethodInfo method = typeof(Property<>).GetMethod("simpleMath", BindingFlags.NonPublic | BindingFlags.Instance); 
-				MethodInfo generic = method.MakeGenericMethod(t);
-				List<object> args = new List<object>();
-				args.Add(op);
-				args.Add(p1);
-				args.Add(p2);
-				var o = generic.Invoke(null, args.ToArray());
-				return o;
-			} else {
-				throw new ArgumentException("Arguments must be Property.");
-			}
-
-		}
 
 		/// <summary>
 		/// Determines if a type is numeric.  Nullable numeric types are considered numeric.
 		/// </summary>
-		/// <remarks>
-		/// Boolean is not considered numeric.
-		/// </remarks>
+		/// <param name="type">Controling type</param>
+		/// <returns>If type is numeric (true) or not (false)</returns>
 		private static bool IsNumericType(Type type) {
 			if (type == null) {
 				return false;
