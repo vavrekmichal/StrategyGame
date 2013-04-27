@@ -13,39 +13,19 @@ using MOIS;
 namespace Strategy.GameGUI {
 	class GUIControler {
 		protected static MyGUI myGUI;
-        protected RenderWindow window;
-        protected Mouse mouse;
-        protected Keyboard keyboard;
 
-        private static GUIControler instance;
-
-        public static GUIControler getInstance(RenderWindow mWindow, Mouse m, Keyboard k) {
-            if (instance==null) {
-                instance = new GUIControler(mWindow, m, k);
-            }
-            return instance;
-        }
-
-		public static GUIControler getInstance() {
-			if (instance==null) {
-				throw new NullReferenceException("GUIControler is not initialized.");
-			}
-			return instance;
-		}
-
-		private GUIControler(RenderWindow mWindow, Mouse m, Keyboard k) {
-            window = mWindow;
-            mouse = m;
-            keyboard = k;
+		public GUIControler(RenderWindow mWindow, Mouse mouse, Keyboard keyboard) {
+			myGUI = new MyGUI((int)mWindow.Width, (int)mWindow.Height, mouse, keyboard);
 		}
 
 		/// <summary>
 		/// GUI inicialization			
 		/// </summary>
 		/// <param name="listMaterial">List with player's materials</param>
-        public void inicialization( Dictionary<string, IMaterial> listMaterial) {
-            myGUI = new MyGUI((int)window.Width, (int)window.Height, mouse, keyboard, listMaterial);
-        }
+		public void inicialization(Dictionary<string, IMaterial> listMaterial) {
+
+			myGUI.loadMaterials(listMaterial);
+		}
 
 
 		public void dispose() {
@@ -64,13 +44,13 @@ namespace Strategy.GameGUI {
 			myGUI.showTargeted(group);
 		}
 
-        public void setSolarSystemName(string name) {
-            myGUI.setSolarSystemName(name);
-        }
+		public void setSolarSystemName(string name) {
+			myGUI.setSolarSystemName(name);
+		}
 
-        public void setMaterialState(string material, int inc) {
-            myGUI.setMaterialState(material, inc);
-        }
+		public void setMaterialState(string material, int inc) {
+			myGUI.setMaterialState(material, inc);
+		}
 
 		public void showSolarSystSelectionPanel(List<string> possibilities, string topic, object gameObject) {
 			myGUI.showSolarSystSelectionPanel(possibilities, topic, gameObject);

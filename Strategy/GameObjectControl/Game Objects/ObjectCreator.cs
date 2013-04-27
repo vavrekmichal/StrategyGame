@@ -25,31 +25,17 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 		protected ObjectLoader loader;
 
-		#region singleton and constructor
-		private static ObjectCreator instance;
 
 		/// <summary>
-		/// Singleton instance
+		/// Public constructor
 		/// </summary>
 		/// <param name="manager">Mogre SceneManager</param>
-		/// <returns>returning singleton instance</returns>
-		public static ObjectCreator getInstance(Mogre.SceneManager manager) {
-			if (instance == null) {
-				instance = new ObjectCreator(manager);
-			}
-			return instance;
-		}
-
-		/// <summary>
-		/// Private constructor
-		/// </summary>
-		/// <param name="manager">Mogre SceneManager</param>
-		private ObjectCreator(Mogre.SceneManager manager) {
+		public ObjectCreator(Mogre.SceneManager manager) {
 			this.manager = manager;
 			teams = new Dictionary<string, Team>();
 			solarSystems = new List<SolarSystem>();
 		}
-		#endregion
+
 
 		/// <summary>
 		/// Inicialization of game World
@@ -69,13 +55,13 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 		public IStaticGameObject createIsgo(string typeName, object[] args) {	// prepared...never used
 			var isgo =  loader.createISGO(typeName, args);
-			HitTest.getInstance().registerISGO(isgo);
+			Game.HitTest.registerISGO(isgo);
 			return isgo;
 		}
 
 		public IMovableGameObject createImgo(string typeName, object[] args) {	// prepared...never used
 			var imgo = loader.createIMGO(typeName, args);
-			HitTest.getInstance().registerIMGO(imgo);
+			Game.HitTest.registerIMGO(imgo);
 			return imgo;
 		}
 

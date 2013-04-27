@@ -9,12 +9,12 @@ using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.MoveMgr;
 using Strategy.TeamControl;
+using MOIS;
 
 namespace Strategy.GameObjectControl {
 	class GameObjectManager {
 
 		protected ObjectCreator objectCreator;
-		protected GUIControler guiControler;
 		protected IMoveManager moveMgr;
 		protected PropertyManager propertyMgr;
 		protected TeamManager teamMgr;
@@ -28,9 +28,9 @@ namespace Strategy.GameObjectControl {
 		/// Singleton instance
 		/// </summary>
 		/// <returns>Returning singleton instance</returns>
-		public static GameObjectManager getInstance(SceneManager sceneMgr) {
+		public static GameObjectManager getInstance(SceneManager sceneMgr, Mouse m, Keyboard k, RenderWindow mWindow) {
 			if (instance == null) {
-				instance = new GameObjectManager(sceneMgr);
+				instance = new GameObjectManager(sceneMgr, m, k, mWindow);
 			}
 			return instance;
 		}
@@ -45,16 +45,33 @@ namespace Strategy.GameObjectControl {
 		/// <summary>
 		/// Private constructor
 		/// </summary>
-		private GameObjectManager(SceneManager sceneMgr) {
+		private GameObjectManager(SceneManager sceneMgr, Mouse m, Keyboard k, RenderWindow mWindow) {
 			teamMgr = TeamManager.getInstance();
-			objectCreator = ObjectCreator.getInstance(sceneMgr);
-			moveMgr = MoveManager.getInstance();
-			groupMgr = GroupManager.getInstance();
+			objectCreator = new ObjectCreator(sceneMgr);
+			moveMgr = new MoveManager();
+			groupMgr = new GroupManager();
 			propertyMgr = new PropertyManager("StartMission");
-			hitTest = HitTest.getInstance();
+			hitTest = new HitTest();
 		}
 		#endregion
 
+		public GroupManager GroupManager {
+			get {
+				if (groupMgr == null) {
+					throw new NullReferenceException("GroupManager is not initialized.");
+				}
+				return groupMgr; ;
+			}
+		}
+
+		public HitTest HitTest {
+			get {
+				if (hitTest == null) {
+					throw new NullReferenceException("HitTest is not initialized.");
+				}
+				return hitTest; ;
+			}
+		}
 
 		#region private
 
@@ -63,10 +80,6 @@ namespace Strategy.GameObjectControl {
 
 
 		#region public
-
-		public void setGUI(GUIControler gui) {
-			guiControler = gui;
-		}
 
 		public void update(float delay) {
 			teamMgr.update();
@@ -78,7 +91,7 @@ namespace Strategy.GameObjectControl {
 		/// Inicialization of managers, hittest...
 		/// </summary>
 		/// <param name="missionName">Name of choosen mission</param>
-		public void inicialization(string missionName) {
+		public void inicialization(string missionName, GUIControler guiControler) {
 			objectCreator.initializeWorld(missionName, propertyMgr);
 			groupMgr.createSolarSystems(objectCreator.getInicializedSolarSystems());
 			hitTest.createHitTestMap(objectCreator.getInicializedSolarSystems());
@@ -127,7 +140,7 @@ namespace Strategy.GameObjectControl {
 			bool isFriendly = true;
 			bool isIMGO = true;
 
-			// 
+			
 			if (selectedObjects.Count == 0) {
 				hitObject = null;
 			} else {
@@ -144,8 +157,7 @@ namespace Strategy.GameObjectControl {
 
 			}
 			var answer = groupMgr.onRightMouseClick(clickedPoint, hitObject, isFriendly, isIMGO);
-
-			// 
+ 
 			switch (answer) {
 				case ActionAnswer.Move:
 					moveMgr.goToLocation(groupMgr.getActiveMovableGroup(), clickedPoint);
@@ -155,7 +167,7 @@ namespace Strategy.GameObjectControl {
 					break;
 
 			}
-			groupMgr.showSelectedInfoGroup(); //TODO delete volano jen jako gui update pro kontrolu
+			groupMgr.showSelectedInfoGroup(); 
 
 		}
 

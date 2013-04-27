@@ -311,8 +311,8 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// <summary>
 		/// Function creates IStaticGameObject from given arguments and string with specific type of IStaticGameObject.
 		/// </summary>
-		/// <param name="type">specific type of IStaticGameObject in string</param>
-		/// <param name="args">arguments for object constructor</param>
+		/// <param name="type">Specific type of IStaticGameObject in string</param>
+		/// <param name="args">Arguments for object constructor</param>
 		/// <returns>Instance of IStaticGameObject (specific in type)</returns>
 		public IStaticGameObject createISGO(string type, object[] args) {
 			IStaticGameObject isgo = (IStaticGameObject)createGameObject(type, args);

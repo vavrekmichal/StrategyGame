@@ -14,16 +14,7 @@ namespace Strategy.MoveMgr {
 
 		private Dictionary<IMovableGameObject, IStaticGameObject> moveMgrControledDict;
 
-		private static MoveManager instance;
-
-		public static MoveManager getInstance() {
-			if (instance == null) {
-				instance = new MoveManager();
-			}
-			return instance;
-		}
-
-		private MoveManager() {
+		public MoveManager() {
 			moveMgrControledDict = new Dictionary<IMovableGameObject, IStaticGameObject>();
 		}
 

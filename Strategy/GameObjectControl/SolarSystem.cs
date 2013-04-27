@@ -84,7 +84,9 @@ namespace Strategy.GameObjectControl {
 
 		public void showSolarSystem() {
 			if (!active) {
-				
+
+				Game.GUIManager.setSolarSystemName(name);
+
 				foreach (IStaticGameObject isgo in isgoObjectList) {
 					isgo.changeVisible(true);
 				}

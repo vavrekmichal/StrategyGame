@@ -48,7 +48,7 @@ namespace Strategy.GameGUI {
 		/// <param name="keyboard">Mogre keyboard input</param>
 		/// <param name="materials">Names and values of user materials</param>
 		/// <param name="groupMgr">GroupManager instance</param>
-		public MyGUI(int width, int height, MOIS.Mouse mouse, MOIS.Keyboard keyboard, Dictionary<string, IMaterial> materials) {
+		public MyGUI(int width, int height, MOIS.Mouse mouse, MOIS.Keyboard keyboard) {
 
 			materialList = new Dictionary<string, MaterialGUIPair>();
 			screenHeight = height;
@@ -83,7 +83,7 @@ namespace Strategy.GameGUI {
 			system.GUIManager.Cursor = cursor;   // Set cursor
 
 			createMainMenu();
-			createTopMenu(materials);
+			createTopMenu();
 
 			createCameraBounds();				// Create bounds around screen to move the camera
 		}
@@ -282,7 +282,7 @@ namespace Strategy.GameGUI {
 		/// Creates top bar
 		/// </summary>
 		/// <param name="materials">Players materials</param>
-		private void createTopMenu(Dictionary<string, IMaterial> materials) {
+		private void createTopMenu() {
 			upperMenu = new FlowLayoutPanel() {				//create top panel (empty blue box)
 				Size = new Size(screenWidth * 18 / 20, screenHeight * 2 / 30),
 				Location = new Point(screenWidth / 20, 0),
@@ -326,7 +326,9 @@ namespace Strategy.GameGUI {
 				Padding = new Thickness(1)
 			};
 			upperMenu.Controls.Add(materialIntro);
+		}
 
+		public void loadMaterials(Dictionary<string, IMaterial> materials) {
 			//Material load - create one line with name of IMaterial and value
 			var materialBox = new Panel() {
 				Size = new Size(upperMenu.Width / 3, upperMenu.Height),
@@ -442,7 +444,8 @@ namespace Strategy.GameGUI {
 			};
 			statPanel.Controls.Add(statPanelName);
 
-			propertyPanel = createInnerScrollablePanel(y, statPanel.Width - 30, statPanel.Height - (y+10)); //minus 30 is padding correction (2*5 panel padding + 2*10 scrollablePanel padding)
+			// Minus 30 is padding correction (2*5 panel padding + 2*10 scrollablePanel padding)
+			propertyPanel = createInnerScrollablePanel(y, statPanel.Width - 30, statPanel.Height - (y+10)); 
 			statPanel.Controls.Add(propertyPanel);
 
 			return statPanel;
@@ -478,7 +481,7 @@ namespace Strategy.GameGUI {
 		private void selectSolarSystem(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
 			// Button Action for SelectionLabel calls GroupManager function changeSolarSystem and close Panel
 			if (sender.GetType() == typeof(SelectionLabel)) {
-				GroupManager.getInstance().changeSolarSystem(((SelectionLabel)sender).NumberOfItem);
+				Game.GroupManager.changeSolarSystem(((SelectionLabel)sender).NumberOfItem);
 				((SelectionLabel)sender).PanelToClose.Dispose();
 			}
 		}
@@ -487,7 +490,7 @@ namespace Strategy.GameGUI {
 			// Function calls createTraveler with selected number of SolarSystem and traveler(IMovableGameObject)
 			if (sender.GetType() == typeof(SelectionLabel)) {
 				var selLabel = (SelectionLabel)sender;
-				GroupManager.getInstance().createTraveler(selLabel.NumberOfItem, selLabel.StoredObject);
+				Game.GroupManager.createTraveler(selLabel.NumberOfItem, selLabel.StoredObject);
 				selLabel.PanelToClose.Dispose();
 			}
 		}
@@ -563,7 +566,7 @@ namespace Strategy.GameGUI {
 			};
 			panel.Controls.Add(label);
 
-			List<string> solarSystList = GroupManager.getInstance().getAllSolarSystemNames();
+			List<string> solarSystList = Game.GroupManager.getAllSolarSystemNames();
 
 			marginTop += 5 + label.Height;
 			var innerScrollablePanel = createInnerScrollablePanel(marginTop, panel.Width * 30 / 31, panel.Height / 3);
@@ -602,9 +605,7 @@ namespace Strategy.GameGUI {
 			innerScrollablePanel = createInnerScrollablePanel(marginTop, panel.Width * 30 / 31, panel.Height / 4);
 			panel.Controls.Add(innerScrollablePanel);
 
-			var travList = GroupManager.getInstance().getTravelers();
-
-
+			var travList = Game.GroupManager.getTravelers();
 
 			for (int i = 0; i < travList.Count; i++) {
 				// Labels with name of solar systems

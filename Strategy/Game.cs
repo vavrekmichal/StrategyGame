@@ -12,18 +12,20 @@ using Strategy.MogreControl;
 using Mogre.TutorialFramework;
 using MOIS;
 using Strategy.GameGUI;
+using Strategy.GameObjectControl.Game_Objects;
 
 namespace Strategy {
 	class Game {
 
 		protected MouseControl mouseControl;
-		protected GameObjectManager gameObjectMgr;
+
 
 		public static string playerName = "Player";
 
 		private static bool gamePaused;
 
-		protected GUIControler guiControler;
+		protected static GameObjectManager gameObjectMgr;
+		protected static GUIControler guiControler;
 		#region Singleton and constructor
 		private static Game instance;
 
@@ -36,12 +38,34 @@ namespace Strategy {
 
 		private Game(SceneManager sceneManager, CameraMan c, RenderWindow mWindow, Mouse mouse, Keyboard keyboard) {
 
-			gameObjectMgr = GameObjectManager.getInstance(sceneManager);
+			gameObjectMgr = GameObjectManager.getInstance(sceneManager,mouse, keyboard, mWindow);
 			//fightMgr = FightManager.getInstance();
-			guiControler = GUIControler.getInstance(mWindow, mouse, keyboard);
+			guiControler = new GUIControler(mWindow, mouse, keyboard);
 			mouseControl = MouseControl.getInstance(c, sceneManager, guiControler);
 			gamePaused = false;
 		}
+
+		public static GUIControler GUIManager {
+			get {
+				if (guiControler == null) {
+					throw new NullReferenceException("GUIManager is not initialized.");
+				}
+				return guiControler;
+			}
+		}
+
+		public static GroupManager GroupManager {
+			get {
+				return gameObjectMgr.GroupManager; ;
+			}
+		}
+
+		public static HitTest HitTest {
+			get {
+				return gameObjectMgr.HitTest; ;
+			}
+		}
+
 		#endregion
 
 		public void update(float delay) {
@@ -53,10 +77,8 @@ namespace Strategy {
 
 
 		public void inicialization() {
-			gameObjectMgr.setGUI(guiControler);
-			gameObjectMgr.inicialization("StartMission");
-			guiControler.setSolarSystemName(GroupManager.getInstance().getSolarSystemName(0));
-
+			gameObjectMgr.inicialization("StartMission", guiControler);
+			guiControler.setSolarSystemName(Game.GroupManager.getSolarSystemName(0));
 		}
 
 		// Get

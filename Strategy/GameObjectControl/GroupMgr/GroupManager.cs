@@ -30,29 +30,13 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 		private int activeSolarSystem = 0; // Now active solarSystem
 
-
-		#region singlton and constructor
-		private static GroupManager instance;
 		/// <summary>
-		/// Singleton constructor
+		/// Public constructor
 		/// </summary>
-		/// <returns>Instance of GroupManager</returns>
-		public static GroupManager getInstance() {
-			if (instance == null) {
-				instance = new GroupManager();
-			}
-			return instance;
-		}
-
-
-		/// <summary>
-		/// Private constructor
-		/// </summary>
-		private GroupManager() {
+		public GroupManager() {
 			solarSystemDict = new Dictionary<int, SolarSystem>();
 			imgoGroupDict = new Dictionary<IMovableGameObject, GroupMovables>();
 		}
-		#endregion
 
 
 		/// <summary>
@@ -100,7 +84,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 			activeSolarSystem = newSolarSystem; // Set new active solar system  
 			deselectGroup();
-			GUIControler.getInstance().setSolarSystemName(getSolarSystemName(activeSolarSystem)); //TODO to tu asi nechchi
+			
 		}
 
 		public List<string> getAllSolarSystemNames() {
@@ -243,9 +227,9 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 		public void showSelectedInfoGroup() {
 			if (isMovableGroupActive) {
-				GUIControler.getInstance().showTargeted(selectedGroupM);
+				Game.GUIManager.showTargeted(selectedGroupM);
 			} else {
-				GUIControler.getInstance().showTargeted(selectedGroupS);
+				Game.GUIManager.showTargeted(selectedGroupS);
 			}
 		}
 
@@ -259,8 +243,17 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			}
 		}
 
-		public ActionAnswer onRightMouseClick(Mogre.Vector3 clickedPoint, MovableObject hitObject, bool isFriendly, bool isImgo) {
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="clickedPoint">Mouse position</param>
+		/// <param name="hitObject">HitTest result</param>
+		/// <param name="isFriendly">If HitTest returns object => TeamTest result</param>
+		/// <param name="isImgo">If HitTest returns object => MovableTest result</param>
+		/// <returns>Returns group answer collected from each member of group</returns>
+		public ActionAnswer onRightMouseClick(Mogre.Vector3 clickedPoint, MovableObject hitObject, bool isFriendly, bool isImgo) {
+			//TODO comment
 			if (isMovableGroupActive && selectedGroupM.OwnerTeam.Name == Game.playerName) {
 
 				// Check if actual group is selectedGroupM

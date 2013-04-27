@@ -84,8 +84,8 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		}
 
 		public void showTravelDestinations(IMovableGameObject imgo) {
-			var gui = GameGUI.GUIControler.getInstance();
-			var groupMgr = GroupManager.getInstance();
+			var gui = Game.GUIManager;
+			var groupMgr = Game.GroupManager;
 			gui.showSolarSystSelectionPanel(groupMgr.getAllSolarSystemNames(), "Choose where you'll travel", imgo);
 
 			isPorting = true;

@@ -208,7 +208,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			base.removeMember(m);
 			var imgoBonus = m.onGroupAdd();
 			foreach (var bonusPair in imgoBonus) {
-				if (groupBonuses.ContainsKey(bonusPair.Key)) { //todo
+				if (groupBonuses.ContainsKey(bonusPair.Key)) {
 					// Add find type and add value
 					groupBonuses[bonusPair.Key] =
 						callPropertyMathViaReflection(Property<object>.Operator.Minus, groupBonuses[bonusPair.Key], bonusPair.Value);

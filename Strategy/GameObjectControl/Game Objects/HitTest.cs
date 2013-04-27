@@ -13,16 +13,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		protected Dictionary<string, IStaticGameObject> isgoDict;
 		protected Dictionary<string, IMovableGameObject> imgoDict;
 
-		private static HitTest instance;
-
-		public static HitTest getInstance() {
-			if (instance==null) {
-				instance = new HitTest();
-			}
-			return instance;
-		}
-
-		private HitTest() {
+		public HitTest() {
 			objectIsMovable = new Dictionary<string, bool>();
 			isgoDict = new Dictionary<string, IStaticGameObject>();
 			imgoDict = new Dictionary<string, IMovableGameObject>();
