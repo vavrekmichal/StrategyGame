@@ -13,6 +13,7 @@ using Mogre.TutorialFramework;
 using MOIS;
 using Strategy.GameGUI;
 using Strategy.GameObjectControl.Game_Objects;
+using Strategy.Sound;
 
 namespace Strategy {
 	class Game {
@@ -24,6 +25,7 @@ namespace Strategy {
 
 		private static bool gamePaused;
 
+		protected static SoundPlayer soundPlayer; // Background music
 		protected static GameObjectManager gameObjectMgr;
 		protected static GUIControler guiControler;
 		#region Singleton and constructor
@@ -38,11 +40,12 @@ namespace Strategy {
 
 		private Game(SceneManager sceneManager, CameraMan c, RenderWindow mWindow, Mouse mouse, Keyboard keyboard) {
 
-			gameObjectMgr = GameObjectManager.getInstance(sceneManager,mouse, keyboard, mWindow);
+			gameObjectMgr = GameObjectManager.getInstance(sceneManager, mouse, keyboard, mWindow);
 			//fightMgr = FightManager.getInstance();
 			guiControler = new GUIControler(mWindow, mouse, keyboard);
 			mouseControl = MouseControl.getInstance(c, sceneManager, guiControler);
 			gamePaused = false;
+			soundPlayer = new SoundPlayer(mWindow); //music player
 		}
 
 		public static GUIControler GUIManager {
@@ -56,13 +59,25 @@ namespace Strategy {
 
 		public static GroupManager GroupManager {
 			get {
-				return gameObjectMgr.GroupManager; ;
+				return gameObjectMgr.GroupManager;
 			}
 		}
 
 		public static HitTest HitTest {
 			get {
-				return gameObjectMgr.HitTest; ;
+				return gameObjectMgr.HitTest;
+			}
+		}
+
+		public static IEffectPlayer IEffectPlayer {
+			get {
+				return soundPlayer;
+			}
+		}
+
+		public static IGameSoundMakerPlayer IGameSoundMakerPlayer {
+			get {
+				return soundPlayer;
 			}
 		}
 
@@ -70,6 +85,7 @@ namespace Strategy {
 
 		public void update(float delay) {
 			guiControler.update();
+			soundPlayer.hideBox(delay);
 			if (!gamePaused) {
 				gameObjectMgr.update(delay);
 			}

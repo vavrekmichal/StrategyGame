@@ -148,6 +148,9 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		public virtual void move(float delay) {
 			if (!moving) {
 				if (nextLocation()) {
+
+					Game.IEffectPlayer.playEffect("power.mp3"); // Play effect
+
 					moving = true;
 					destination = flyList.First.Value; // Get the next destination.
 
@@ -167,7 +170,6 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 				}
 			} else {
 				if (!colision()) { // Object's not in colision
-
 					float move = getPropertyValue<float>(PropertyEnum.Speed) * delay;
 					distance -= move;
 					if (distance <= .0f) { // Reach destination

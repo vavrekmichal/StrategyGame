@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using Strategy.Game_Objects;
+﻿using System.Collections.Generic;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 using Strategy.TeamControl;
-using Mogre;
 using Strategy.GameMaterial;
 using Strategy.GameObjectControl.RuntimeProperty;
 

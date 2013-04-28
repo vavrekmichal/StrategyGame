@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using IrrKlang;
-using Strategy.Game_Objects;
 using Strategy.GameObjectControl;
 using Strategy.MogreControl;
 using Strategy.Sound;
@@ -29,7 +28,7 @@ namespace Strategy {
 		
 		protected CameraMan cameraMan;
 
-        protected IGameSoundMaker songMaker; // To make background music
+
 
         protected Game myGame;
 
@@ -60,8 +59,6 @@ namespace Strategy {
 
 			setSky(); //set sky texture
 
-			//hudba<
-			songMaker = new SoundMaker("../../media/music", mWindow); //music player
 	
 		}
 
@@ -130,7 +127,6 @@ namespace Strategy {
 					exit = false;
 				}
 			}
-			songMaker.hideBox(f);
 
 		}
 		#endregion
@@ -187,19 +183,19 @@ namespace Strategy {
 					break;
 				// Music section
 				case MOIS.KeyCode.KC_NUMPAD9:
-					songMaker.volumeUp();
+					Game.IGameSoundMakerPlayer.volumeUp();
 					break;
 				case MOIS.KeyCode.KC_NUMPAD6:
-					songMaker.volumeDown();
+					Game.IGameSoundMakerPlayer.volumeDown();
 					break;
 				case MOIS.KeyCode.KC_N:
-					songMaker.stopActualSong();
+					Game.IGameSoundMakerPlayer.stopActualSong();
 					break;
 				case MOIS.KeyCode.KC_M:
-					songMaker.pause();
+					Game.IGameSoundMakerPlayer.pause();
 					break;
 				case MOIS.KeyCode.KC_B:
-					songMaker.actualPlaying();
+					Game.IGameSoundMakerPlayer.actualPlaying();
 					break;
 				// End of music section
 				case MOIS.KeyCode.KC_R:

@@ -88,7 +88,6 @@
     <Compile Include="GameObjectControl\Action.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameActions\IGameAction.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameActions\Produce.cs" />
-    <Compile Include="GameObjectControl\Game Objects\GameObjectParameter\IGameObjectParameter.cs" />
     <Compile Include="GameObjectControl\Game Objects\HitTest.cs" />
     <Compile Include="GameObjectControl\Game Objects\MovableGameObjectBox\IMovableGameObject.cs" />
     <Compile Include="GameObjectControl\Game Objects\ObjectLoader.cs" />
@@ -114,8 +113,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Exceptions\ShutdownException.cs" />
-    <Compile Include="Sound\IGameSoundMaker.cs" />
-    <Compile Include="Sound\SongMaker.cs" />
+    <Compile Include="Sound\IEffectPlayer.cs" />
+    <Compile Include="Sound\IGameSoundPlayer.cs" />
+    <Compile Include="Sound\SoundPlayer.cs" />
     <Compile Include="MogreControl\Tutorial Framework\BaseApplication.cs" />
     <Compile Include="MogreControl\Tutorial Framework\BaseApplication.input.cs" />
     <Compile Include="MogreControl\Tutorial Framework\CameraMan.cs" />

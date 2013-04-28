@@ -3,41 +3,48 @@ using IrrKlang;
 using System.IO;
 using System.Timers;
 using Strategy.Sound;
+using System.Collections.Generic;
 
 namespace Strategy {
 	/// <summary>
 	/// The SoundMaker class derives from ISoundStopEventReceiver to make infinite loop of playing
 	/// songs from given file.
 	/// </summary>
-	class SoundMaker :ISoundStopEventReceiver , IGameSoundMaker {
+	class SoundPlayer :ISoundStopEventReceiver , IGameSoundMakerPlayer, IEffectPlayer {
 		
 		protected ISoundEngine engine; // Main thing of this music player
-		protected string path; // Path to folder witch songs (sounds) --mp3,ogg,wav
+		protected const string songPath = "../../media/music"; // Path to folder witch songs (sounds) --mp3,ogg,wav
+		protected const string effectPath = "../../media/music/effects"; // Path to folder witch effects
 		protected bool paused = false; // State of music player
 		protected int actual = 0; // Number of actual song (sound)
 		protected float volumeJump = 0.1f; // Difference to volume up/down
-		protected string[] fileNames; // Names of each song (sound) from given folder
+		protected string[] songs; // Names of each song (sound) from folder
+		protected Dictionary<string,string> effects; // Names of each song (effect) from folder
 		protected ISound sound; // Actual playing song (sound)
 		protected Mogre.RenderWindow mWindow; // RenderWindow instance for making overlays
 		protected float mTimer; // Float as timer to determine of duration overlay
 		protected Random r; // Makes random number to select song (sound)
 
 		/// <summary>
-		/// A constructor inicializes music player and random. After that play first song
+		/// A constructor inicializes music player and randomizator. After that play first song
 		/// (sound) and set event receiver
 		/// </summary>
-		/// <param name="path">Path to folder with music</param>
-		/// <param name="w">RenderWindow instance for making overlays</param>
-		public SoundMaker(string path, Mogre.RenderWindow mWindow) {
-			this.path = path;
+		/// <param name="mWindow">RenderWindow instance for making overlays</param>
+		public SoundPlayer( Mogre.RenderWindow mWindow) {	
 			engine = new ISoundEngine();
-		    fileNames = Directory.GetFiles(path);
+		    songs = Directory.GetFiles(songPath);
 			r = new Random();
 			this.mWindow = mWindow;
-			sound = engine.Play2D(fileNames[0]);
+			sound = engine.Play2D(songs[0]);
 			sound.setSoundStopEventReceiver(this);
-            nowPlaying(fileNames[actual]);
+            nowPlaying(songs[actual]);
 			engine.SoundVolume = 0; //TODO: DELETE
+			effects = new Dictionary<string, string>();
+			var tempEff = Directory.GetFiles(effectPath);
+			foreach (var effName in tempEff) {
+				var splited = effName.Split('\\');
+				effects.Add(splited[splited.Length - 1], effName);
+			}
 		}
 
 		/// <summary>
@@ -47,10 +54,10 @@ namespace Strategy {
 		/// </summary>
 		public void playMusic() { 
 			int i;
-			while (actual == (i = r.Next(fileNames.Length))) { }
+			while (actual == (i = r.Next(songs.Length))) { }
 			actual = i;
-			sound = engine.Play2D(fileNames[actual]);
-			nowPlaying(fileNames[actual]);
+			sound = engine.Play2D(songs[actual]);
+			nowPlaying(songs[actual]);
 			sound.setSoundStopEventReceiver(this);	
 		}
 
@@ -58,7 +65,7 @@ namespace Strategy {
 		/// Call method for show overlay with playing song (sound)
 		/// </summary>
 		public void actualPlaying(){
-			nowPlaying(fileNames[actual]);
+			nowPlaying(songs[actual]);
 		}
 
 		/// <summary>
@@ -165,5 +172,18 @@ namespace Strategy {
 			playMusic();
 		}
 
+		/// <summary>
+		/// The function play 2D effect from media/music/effects
+		/// </summary>
+		/// <param name="name">Name of effect</param>
+		public void playEffect(string name) {
+
+			// Controls if sound is in media/music/effect
+			if (effects.ContainsKey(name)) {
+				sound = engine.Play2D(effects[name]);
+			} else {
+				Console.WriteLine("Sound " + name + " missing");
+			}
+		}
 	}
 }
