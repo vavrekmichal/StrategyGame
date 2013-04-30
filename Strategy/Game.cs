@@ -41,7 +41,6 @@ namespace Strategy {
 		private Game(SceneManager sceneManager, CameraMan c, RenderWindow mWindow, Mouse mouse, Keyboard keyboard) {
 
 			gameObjectMgr = GameObjectManager.getInstance(sceneManager, mouse, keyboard, mWindow);
-			//fightMgr = FightManager.getInstance();
 			guiControler = new GUIControler(mWindow, mouse, keyboard);
 			mouseControl = MouseControl.getInstance(c, sceneManager, guiControler);
 			gamePaused = false;

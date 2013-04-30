@@ -28,15 +28,17 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		public override ActionAnswer onMouseAction(ActionReason reason, Vector3 point, MovableObject hitTarget, bool isFriendly, bool isMovableGameObject) {
 			switch (reason) {
 				case ActionReason.onRightButtonClick:
-					if (hitTarget != null && isFriendly) {
-						if (isMovableGameObject) {
-							return ActionAnswer.Move;
-						} else {
-							return ActionAnswer.MoveTo;
-						}
+					if (hitTarget != null) {
+						if (isFriendly) {
+							if (isMovableGameObject) {
+								return ActionAnswer.MoveTo;
+							} else {
+								return ActionAnswer.MoveTo;
+							}
 
-					} else {
-						return ActionAnswer.Move;
+						} else {
+							return ActionAnswer.Attack;
+						}
 					}
 					break;
 
@@ -46,7 +48,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 					}
 					break;
 			}
-			return ActionAnswer.None;
+			return ActionAnswer.Move;
 		}
 
 		protected override void onDisplayed() {

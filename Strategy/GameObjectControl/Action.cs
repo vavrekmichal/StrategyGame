@@ -11,6 +11,7 @@ namespace Strategy.GameObjectControl {
 		RunAway = 3,
 		MoveTo = 4,
 		Attack = 5, 
+		Occupy = 6
 	}
 
 	public enum ActionReaction {

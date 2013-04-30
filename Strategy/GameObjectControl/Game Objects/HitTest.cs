@@ -23,6 +23,14 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			return objectIsMovable[name];
 		}
 
+		public object getGameObject(string name) {
+			if (imgoDict.ContainsKey(name)) {
+				return imgoDict[name];
+			} else {
+				return isgoDict[name];
+			}
+		}
+
 		public IMovableGameObject getIMGO(string name) {
 			return imgoDict[name];
 		}

@@ -122,11 +122,12 @@ namespace Strategy.MoveMgr {
 
 
 
+
 		public void runAwayFrom(GroupMovables group, Mogre.Vector3 from) {
 			throw new NotImplementedException();
 		}
 
-		public void update(float delay) {
+		public void update() {
 			var copy = new Dictionary<IMovableGameObject, IStaticGameObject>(moveMgrControledDict);
 			foreach (KeyValuePair<IMovableGameObject,IStaticGameObject> trev in copy) {
 				double sqPickUpDist = trev.Value.PickUpDistance * trev.Value.PickUpDistance;
@@ -137,7 +138,18 @@ namespace Strategy.MoveMgr {
 
 		}
 
-		public void goToTarget(GroupMovables group, IStaticGameObject target) {
+
+		public void goToTarget(GroupMovables group, object gameObject) {
+			if (gameObject is IStaticGameObject) {
+				goToTarget(group, (IStaticGameObject)gameObject);
+				return;
+			}
+			if (gameObject is IMovableGameObject) {
+				goToTarget(group, (IMovableGameObject)gameObject);
+			}
+		}
+
+		private void goToTarget(GroupMovables group, IStaticGameObject target) {
 			List<Mogre.Vector3> destinations = preparePositions(group.Count, target.Position);
 			foreach (IMovableGameObject imgo in group) {
 				imgo.goToTarget(destinations[0], this);
@@ -147,9 +159,19 @@ namespace Strategy.MoveMgr {
 
 		}
 
+		private void goToTarget(GroupMovables group, IMovableGameObject target) {
+			List<Mogre.Vector3> destinations = preparePositions(group.Count, target.Position);
+			foreach (IMovableGameObject imgo in group) {
+				imgo.goToTarget(destinations[0], this);
+				destinations.RemoveAt(0);
+				//moveMgrControledDict.Add(imgo, target);
+			}
+		}
+
 
 		public void interuptMove(IMovableGameObject imgo) {
 			moveMgrControledDict.Remove(imgo);
 		}
+
 	}
 }

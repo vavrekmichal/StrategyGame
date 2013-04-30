@@ -38,7 +38,7 @@
       <isgo type="Planet" name="Jupiter" mesh="jupiter.mesh" team="Player" position="0,0,0" distance="6000"/>
       <isgo type="Planet" name="Saturn" mesh="saturn.mesh" team="Player" position="0,0,0" distance="8000"/>
       <isgo type="Planet" name="Uranus" mesh="uranus.mesh" team="Player" position="0,0,0" distance="10000"/>
-      <isgo type="Planet" name="Neptune" mesh="neptune.mesh" team="Player" position="0,0,0" distance="12000"/>
+      <isgo type="Planet" name="Neptune" mesh="neptune.mesh" team="Fun" position="0,0,0" distance="12000"/>
 
       <imgo type="SpaceShip" name="Mothership" mesh="SpaceShip1.mesh" team="Player" position="300,0,300"/>
       <imgo type="SpaceShip" name="Ship" mesh="SpaceShip2.mesh" team="Player" position="350,0,350"/>

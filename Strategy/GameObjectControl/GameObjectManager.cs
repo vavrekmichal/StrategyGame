@@ -10,12 +10,14 @@ using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.MoveMgr;
 using Strategy.TeamControl;
 using MOIS;
+using Strategy.FightMgr;
 
 namespace Strategy.GameObjectControl {
 	class GameObjectManager {
 
 		protected ObjectCreator objectCreator;
 		protected IMoveManager moveMgr;
+		protected IFightManager fightMgr;
 		protected PropertyManager propertyMgr;
 		protected TeamManager teamMgr;
 		protected GroupManager groupMgr;
@@ -49,6 +51,7 @@ namespace Strategy.GameObjectControl {
 			teamMgr = TeamManager.getInstance();
 			objectCreator = new ObjectCreator(sceneMgr);
 			moveMgr = new MoveManager();
+			fightMgr = new FightManager();
 			groupMgr = new GroupManager();
 			propertyMgr = new PropertyManager("StartMission");
 			hitTest = new HitTest();
@@ -83,8 +86,9 @@ namespace Strategy.GameObjectControl {
 
 		public void update(float delay) {
 			teamMgr.update();
+			fightMgr.update();
 			groupMgr.update(delay);
-			moveMgr.update(delay);
+			moveMgr.update();
 		}
 
 		/// <summary>
@@ -140,7 +144,7 @@ namespace Strategy.GameObjectControl {
 			bool isFriendly = true;
 			bool isIMGO = true;
 
-			
+
 			if (selectedObjects.Count == 0) {
 				hitObject = null;
 			} else {
@@ -157,17 +161,20 @@ namespace Strategy.GameObjectControl {
 
 			}
 			var answer = groupMgr.onRightMouseClick(clickedPoint, hitObject, isFriendly, isIMGO);
- 
+
 			switch (answer) {
 				case ActionAnswer.Move:
 					moveMgr.goToLocation(groupMgr.getActiveMovableGroup(), clickedPoint);
 					break;
 				case ActionAnswer.MoveTo:
-					moveMgr.goToTarget(groupMgr.getActiveMovableGroup(), hitTest.getISGO(hitObject.Name));
+					moveMgr.goToTarget(groupMgr.getActiveMovableGroup(), hitTest.getGameObject(hitObject.Name));
+					break;
+				case ActionAnswer.Attack:
+					fightMgr.attack(groupMgr.getActiveMovableGroup(), hitTest.getGameObject(hitObject.Name));
 					break;
 
 			}
-			groupMgr.showSelectedInfoGroup(); 
+			groupMgr.showSelectedInfoGroup();
 
 		}
 
