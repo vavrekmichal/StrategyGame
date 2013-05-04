@@ -36,7 +36,8 @@ namespace Strategy.TeamControl {
         // Isgo
         public void addISGO(IStaticGameObject isgo) {
             if (!isgoObjects.Contains(isgo)) {
-                isgoObjects.Add(isgo);   
+                isgoObjects.Add(isgo);
+				isgo.Team = this;
             }        
         }
 
@@ -50,6 +51,7 @@ namespace Strategy.TeamControl {
         public void addIMGO(IMovableGameObject imgo) {
             if (!imgoObjects.Contains(imgo)) {
                 imgoObjects.Add(imgo);
+				imgo.Team = this;
             }
         }
 

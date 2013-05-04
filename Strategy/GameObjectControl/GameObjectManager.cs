@@ -76,6 +76,33 @@ namespace Strategy.GameObjectControl {
 			}
 		}
 
+		public IMoveManager IMoveManager {
+			get {
+				if (moveMgr == null) {
+					throw new NullReferenceException("MoveManager is not initialized.");
+				}
+				return moveMgr; 
+			}
+		}
+
+		public IFightManager IFightManager {
+			get {
+				if (fightMgr == null) {
+					throw new NullReferenceException("IFightManager is not initialized.");
+				}
+				return fightMgr;
+			}
+		}
+
+		public PropertyManager PropertyManager {
+			get {
+				if (propertyMgr == null) {
+					throw new NullReferenceException("PropertyManager is not initialized.");
+				}
+				return propertyMgr;
+			}
+		}
+
 		#region private
 
 		#endregion
@@ -86,9 +113,21 @@ namespace Strategy.GameObjectControl {
 
 		public void update(float delay) {
 			teamMgr.update();
-			fightMgr.update();
+			fightMgr.update(delay);
 			groupMgr.update(delay);
 			moveMgr.update();
+		}
+
+		public void changeObjectsTeam(object gameObject, Team newTeam) {
+			var castedGO = gameObject as IMovableGameObject;
+			if (castedGO != null) {
+				groupMgr.removeFromGroup(castedGO);
+				teamMgr.changeTeam(castedGO, newTeam);
+			} else {
+				var castedGOS = gameObject as IStaticGameObject;
+				groupMgr.removeFromGroup(castedGOS);
+				teamMgr.changeTeam(castedGOS, newTeam);
+			}
 		}
 
 		/// <summary>
@@ -171,6 +210,9 @@ namespace Strategy.GameObjectControl {
 					break;
 				case ActionAnswer.Attack:
 					fightMgr.attack(groupMgr.getActiveMovableGroup(), hitTest.getGameObject(hitObject.Name));
+					break;
+				case ActionAnswer.Occupy:
+					fightMgr.occupy(groupMgr.getActiveMovableGroup(), hitTest.getGameObject(hitObject.Name));
 					break;
 
 			}

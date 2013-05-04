@@ -25,29 +25,25 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			entity = manager.CreateEntity(name, mesh);
 		}
 
-		public override ActionAnswer onMouseAction(ActionReason reason, Vector3 point, MovableObject hitTarget, bool isFriendly, bool isMovableGameObject) {
-			switch (reason) {
-				case ActionReason.onRightButtonClick:
-					if (hitTarget != null) {
-						if (isFriendly) {
-							if (isMovableGameObject) {
-								return ActionAnswer.MoveTo;
-							} else {
-								return ActionAnswer.MoveTo;
-							}
+		public override ActionAnswer onMouseAction(Vector3 point, MovableObject hitTarget, bool isFriendly, bool isMovableGameObject) {
 
-						} else {
-							return ActionAnswer.Attack;
-						}
+			if (hitTarget != null) {
+				if (isFriendly) {
+					if (isMovableGameObject) {
+						return ActionAnswer.MoveTo;
+					} else {
+						return ActionAnswer.MoveTo;
 					}
-					break;
 
-				default:
-					if (isFriendly) {
-						return ActionAnswer.Move;
+				} else {
+					if (isMovableGameObject) {
+						return ActionAnswer.Occupy;
+					} else {
+						return ActionAnswer.Occupy;
 					}
-					break;
+				}
 			}
+
 			return ActionAnswer.Move;
 		}
 

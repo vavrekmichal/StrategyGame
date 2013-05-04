@@ -8,7 +8,7 @@ using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.RuntimeProperty;
 
 
-namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
+namespace Strategy.GameObjectControl.GroupMgr {
 	public class Traveler {
 		private SolarSystem from;
 		private SolarSystem to;
@@ -23,7 +23,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			this.traveler = traveler;
 			long travelTime = (long)getSquareOfDistance(from, to);
 			from.removeIMGO(traveler);
-			timeToGo = new Property<TimeSpan>(new TimeSpan(travelTime*60)); //mult by min
+			timeToGo = new Property<TimeSpan>(new TimeSpan(travelTime*60)); //multiply by min
 			traveler.changeVisible(false);
 		}
 

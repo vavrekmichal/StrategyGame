@@ -70,6 +70,7 @@
     <Compile Include="Exceptions\XmlLoadException.cs" />
     <Compile Include="FightMgr\FightManager.cs" />
     <Compile Include="FightMgr\IFightManager.cs" />
+    <Compile Include="FightMgr\Occupation.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameGUI\CloseButton.cs" />
     <Compile Include="GameGUI\MaterialPair.cs" />
@@ -93,7 +94,7 @@
     <Compile Include="GameObjectControl\Game Objects\ObjectLoader.cs" />
     <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\Gate.cs" />
     <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\IStaticGameObject.cs" />
-    <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\Traveler.cs" />
+    <Compile Include="GameObjectControl\GroupMgr\Traveler.cs" />
     <Compile Include="GameObjectControl\GameObjectManager.cs" />
     <Compile Include="GameObjectControl\RuntimeProperty\EditablePair.cs" />
     <Compile Include="GameObjectControl\RuntimeProperty\PropertyEnum.cs" />
@@ -108,6 +109,7 @@
     <Compile Include="MogreControl\MouseControl.cs" />
     <Compile Include="GameGUI\MyGUI.cs" />
     <Compile Include="GameGUI\GUIControler.cs" />
+    <Compile Include="MoveMgr\IFinishMovementReciever.cs" />
     <Compile Include="MoveMgr\IMoveManager.cs" />
     <Compile Include="MoveMgr\MoveManager.cs" />
     <Compile Include="Program.cs" />

@@ -11,7 +11,7 @@ using Strategy.GameObjectControl.RuntimeProperty;
 using System.Reflection;
 
 namespace Strategy.GameObjectControl.GroupMgr {
-	public abstract class IGroup<T> : IEnumerable {
+	public abstract class IGroup<T> : IEnumerable where T : class {
 
 		protected List<T> groupMembers;
 		protected Property<Team> owner;
@@ -23,6 +23,15 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 		public int Count {
 			get { return groupMembers.Count; }
+		}
+
+		public virtual bool hasMember(T m) {
+			foreach (var member in groupMembers) {
+				if (member == m) {
+					return true;
+				}
+			}
+			return false;
 		}
 
 		public virtual void insertMemeber(T m) {
@@ -107,7 +116,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			// Using reflection to call function simpleMath with generic parameter
 			MethodInfo method = p1.GetType().GetMethod("simpleMath");
 			List<object> args = new List<object>();
-			args.Add(Property<object>.Operator.Plus);
+			args.Add(op);
 			args.Add(p2);
 			return method.Invoke(p1, args.ToArray());
 
@@ -140,7 +149,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 						if (type.GetGenericTypeDefinition() == typeof(Property<>) &&
 							type == groupBonuses[bonusPair.Key].GetType()) {
 
-							groupBonuses[bonusPair.Key] = callPropertyMathViaReflection(Property<object>.Operator.Plus,groupBonuses[bonusPair.Key],bonusPair.Value);
+							groupBonuses[bonusPair.Key] = callPropertyMathViaReflection(Property<object>.Operator.Plus, groupBonuses[bonusPair.Key], bonusPair.Value);
 						}
 					} else {
 						groupBonuses.Add(bonusPair.Key, bonusPair.Value);
@@ -159,10 +168,10 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		/// <param name="isFriendly">When was clicked on object - team test</param>
 		/// <param name="isMovableGameObject">When was clicked on object - movable test</param>
 		/// <returns>Answers with the highest priority</returns>
-		public ActionAnswer onMouseAction(ActionReason reason, Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject) {
+		public ActionAnswer onMouseAction(Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject) {
 			ActionAnswer groupAnswer = ActionAnswer.None;
 			foreach (IMovableGameObject imgo in groupMembers) {
-				ActionAnswer answer = imgo.onMouseAction(reason, point, hitObject, isFriendly, isMovableGameObject);
+				ActionAnswer answer = imgo.onMouseAction(point, hitObject, isFriendly, isMovableGameObject);
 				if (answer > groupAnswer) {
 					groupAnswer = answer;
 				}
@@ -227,7 +236,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			groupBonuses.Add(PropertyEnum.Attack.ToString(), new Property<int>(quantitativeBonus));
 			groupBonuses.Add(PropertyEnum.Deffence.ToString(), new Property<int>(quantitativeBonus));
 			groupBonuses.Add(PropertyEnum.Speed.ToString(), new Property<float>(0));
-			
+
 		}
 
 		public bool IsSelected {

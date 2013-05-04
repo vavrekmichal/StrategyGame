@@ -8,6 +8,8 @@ using Strategy.GameMaterial;
 using Strategy.GameObjectControl;
 using Mogre;
 using Strategy.GameGUI;
+using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
+using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 
 namespace Strategy.TeamControl {
     class TeamManager {
@@ -49,7 +51,7 @@ namespace Strategy.TeamControl {
             }
         }
 
-        //think about me
+        //TODO think about me- remove
         public void setGUI(GUIControler gui) {
             guiControler = gui;
         }
@@ -66,6 +68,16 @@ namespace Strategy.TeamControl {
 			} else {
 				return false;
 			}
+		}
+
+		public void changeTeam(IStaticGameObject isgo, Team newTeam) {
+			isgo.Team.removeISGO(isgo);
+			newTeam.addISGO(isgo);
+		}
+
+		public void changeTeam(IMovableGameObject imgo, Team newTeam) {
+			imgo.Team.removeIMGO(imgo);
+			newTeam.addIMGO(imgo);
 		}
         // Private
     }

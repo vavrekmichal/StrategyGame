@@ -15,6 +15,8 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 
         Team Team { get; set; }
 		float PickUpDistance { get; }
+		float OccupyDistance { get; }
+		float OccupyTime { get; }
 		Vector3 Position { get; }
 
 		ActionReaction reactToInitiative(ActionReason reason, IMovableGameObject target);

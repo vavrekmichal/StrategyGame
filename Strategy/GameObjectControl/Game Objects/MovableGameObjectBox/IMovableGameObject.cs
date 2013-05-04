@@ -71,15 +71,13 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// Controled movement of object. When object reached last position, must report to moveCntr.
 		/// </summary>
 		/// <param name="positionList">List with positions (Vector3)</param>
-		/// <param name="moveMgr">This object controls move and informs other object when is position reached</param>
-		void goToTarget(LinkedList<Vector3> positionList, IMoveManager moveMgr);
+		void goToTarget(LinkedList<Vector3> positionList);
 
 		/// <summary>
 		/// Controled movement of object. When object reached position, must report to moveCntr.
 		/// </summary>
 		/// <param name="placeToGo">Vectror3 with position to go</param>
-		/// <param name="moveMgr">This object controls move and informs other object when is position reached</param>
-		void goToTarget(Vector3 placeToGo, IMoveManager moveMgr);
+		void goToTarget(Vector3 placeToGo);
 
 		/// <summary>
 		/// Returns Property with given name (base properties)
@@ -106,6 +104,9 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		string Name { get; }
 		Team Team { get; set; }
 		bool Visible { get; }
+		float PickUpDistance { get; }
+		float OccupyDistance { get; }
+		int OccupyTime { get; }
 		Mogre.Vector3 Direction { get; }
 		Mogre.Vector3 Position { get; }
 
@@ -122,7 +123,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// <param name="isFriendly">If object is in friendly team</param>
 		/// <param name="isMovableGameObject">If object is movable or static</param>
 		/// <returns>Answer on action</returns>
-		ActionAnswer onMouseAction(ActionReason reason, Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject);
+		ActionAnswer onMouseAction(Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject);
 
 		/// <summary>
 		/// Returns bonuses for other members of group.
@@ -135,5 +136,13 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// </summary>
 		/// <returns>Dictionary with Property as object (runtime generic)</returns>
 		Dictionary<string, object> getPropertyToDisplay();
+
+		/// <summary>
+		/// Function is reaction on some stimul (ActionReason)
+		/// </summary>
+		/// <param name="reason">Action stimul</param>
+		/// <param name="target">Object that called the event</param>
+		/// <returns>Return reaction</returns>
+		ActionReaction reactToInitiative(ActionReason reason, IMovableGameObject target);
 	}
 }

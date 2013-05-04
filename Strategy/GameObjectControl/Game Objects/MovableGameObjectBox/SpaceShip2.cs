@@ -26,7 +26,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			entity = manager.CreateEntity(name, mesh);
 		}
 
-		public override ActionAnswer onMouseAction(ActionReason reason, Vector3 point, MovableObject hitTarget, bool isFriendly, bool isMovableGameObject) {
+		public override ActionAnswer onMouseAction(Vector3 point, MovableObject hitTarget, bool isFriendly, bool isMovableGameObject) {
 			return ActionAnswer.None;
 		}
 

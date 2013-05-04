@@ -30,7 +30,6 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		protected Vector3 direction = Vector3.ZERO;   // The direction the object is moving
 		protected Vector3 destination = Vector3.ZERO; // The destination the object is moving towards
 
-		protected IMoveManager interuptionReciever;	// Calls when object must go to another position (no to the target)
 		protected bool isMovingToTarget = false;			// Target move indicator
 
 		protected Vector3 modelDirection = Vector3.NEGATIVE_UNIT_Z;
@@ -62,7 +61,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// </summary>
 		protected void positionToMoveChanged() {
 			if (isMovingToTarget) {
-				interuptionReciever.interuptMove(this);
+				Game.IMoveManager.movementInterupted(this);
 				isMovingToTarget = false;
 			}
 		}
@@ -70,7 +69,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		#region virtual methods
 
 
-		public virtual ActionAnswer onMouseAction(ActionReason reason, Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject) {
+		public virtual ActionAnswer onMouseAction(Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject) {
 			return ActionAnswer.Move;
 		}
 
@@ -391,20 +390,17 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			return bonus.simpleMath(op, property).Value;
 		}
 
-		//protected T getPropertyValue<T>(string name) {
 
-		//}
 		/// <summary>
 		/// Sets flyList and move interupt reciever.
 		/// </summary>
 		/// <param name="positionList">New LinkedList with positions</param>
 		/// <param name="moveCntr">Move interupt reciever</param>
-		public void goToTarget(LinkedList<Vector3> positionList, IMoveManager moveCntr) {
+		public void goToTarget(LinkedList<Vector3> positionList) {
 			positionToMoveChanged();
 			flyList = positionList;
 			moving = false;
 			isMovingToTarget = true;
-			interuptionReciever = moveCntr;
 		}
 
 		/// <summary>
@@ -412,13 +408,12 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// </summary>
 		/// <param name="placeToGo">Position</param>
 		/// <param name="moveCntr">Move interupt reciever</param>
-		public void goToTarget(Vector3 placeToGo, IMoveManager moveCntr) {
+		public void goToTarget(Vector3 placeToGo) {
 			positionToMoveChanged();
 			flyList = new LinkedList<Vector3>();
 			flyList.AddLast(placeToGo);
 			moving = false;
 			isMovingToTarget = true;
-			interuptionReciever = moveCntr;
 		}
 
 		/// <summary>
@@ -481,5 +476,20 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			get { return ((Property<int>)propertyDict[PropertyEnum.Hp]).Value; }
 		}
 
+		public virtual float PickUpDistance {
+			get { return 80; }
+		}
+
+		public virtual float OccupyDistance {
+			get { return 90; }
+		}
+
+		public virtual int OccupyTime {
+			get { return 10; }
+		}
+
+		public ActionReaction reactToInitiative(ActionReason reason, IMovableGameObject target) {
+			return ActionReaction.None;
+		}
 	}
 }

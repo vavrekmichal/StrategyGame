@@ -14,6 +14,7 @@ using MOIS;
 using Strategy.GameGUI;
 using Strategy.GameObjectControl.Game_Objects;
 using Strategy.Sound;
+using Strategy.GameObjectControl.RuntimeProperty;
 
 namespace Strategy {
 	class Game {
@@ -62,6 +63,18 @@ namespace Strategy {
 			}
 		}
 
+		public static IFightManager IFightManager {
+			get {
+				return gameObjectMgr.IFightManager;
+			}
+		}
+
+		public static IMoveManager IMoveManager {
+			get {
+				return gameObjectMgr.IMoveManager;
+			}
+		}
+
 		public static HitTest HitTest {
 			get {
 				return gameObjectMgr.HitTest;
@@ -74,6 +87,12 @@ namespace Strategy {
 			}
 		}
 
+		public static PropertyManager PropertyManager {
+			get {
+				return gameObjectMgr.PropertyManager;
+			}
+		}
+
 		public static IGameSoundMakerPlayer IGameSoundMakerPlayer {
 			get {
 				return soundPlayer;
@@ -81,6 +100,10 @@ namespace Strategy {
 		}
 
 		#endregion
+
+		public static void changeObjectsTeam(object gameObject, Team newTeam) {
+			gameObjectMgr.changeObjectsTeam(gameObject, newTeam);
+		}
 
 		public void update(float delay) {
 			guiControler.update();

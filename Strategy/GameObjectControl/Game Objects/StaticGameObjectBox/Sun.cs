@@ -100,6 +100,14 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			get { return 250; }
 		}
 
+		public float OccupyDistance {
+			get { return 0; }
+		}
+
+		public float OccupyTime {
+			get { return -1; }
+		}
+
 		public Vector3 Position {
 			get {
 				return Vector3.ZERO;

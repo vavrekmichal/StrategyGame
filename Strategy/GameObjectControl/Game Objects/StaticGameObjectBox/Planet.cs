@@ -206,7 +206,14 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// PickUpDistance is setted by runtime property
 		/// </summary>
 		public override float PickUpDistance {
-			get { return getProperty<float>(PropertyEnum.PickUp).Value; ; }
+			get { return getProperty<float>(PropertyEnum.PickUp).Value; }
+		}
+
+		/// <summary>
+		/// OccupyDistance is overriden and now can be really occupied (value is not 0)
+		/// </summary>
+		public override float OccupyDistance {
+			get { return getProperty<float>(PropertyEnum.PickUp).Value * 5; }
 		}
 
 	}

@@ -172,6 +172,10 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			get { return 150; }
 		}
 
+		public virtual float OccupyDistance {
+			get { return 0; }
+		}
+
 
 		public Vector3 Position {
 			get {
@@ -183,7 +187,8 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			}
 		}
 
-
-		
+		public float OccupyTime {
+			get { return 20; }
+		}
 	}
 }

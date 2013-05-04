@@ -23,14 +23,14 @@
     <solarSystem name="This is my" position="3000,0,3000" gate="true">
 
       <isgo type="Sun" name="Sun" mesh="sun.mesh"  team="None" position="0,0,0" distance="0"/>
-      <isgo type="Planet" name="Mercury" mesh="mercury.mesh" team="Player" position="200,0,200" distance="500">
+      <isgo type="Planet" name="Mercury" mesh="mercury.mesh" team="Fun" position="200,0,200" distance="500">
         <gameAction name="Produce" value="Wolenium" />
       </isgo>
       <isgo type="Planet" name="Venus" mesh="venus.mesh" team="Player" position="0,0,0" distance="1500">
-        <gameAction name="Produce" value="Wolenium"/>
+   
       </isgo>
       <isgo type="Planet" name="Earth" mesh="earth.mesh" team="Player" position="0,0,0" distance="2500">
-        <gameAction name="Produce" value="Wolenarium"/>
+        
       </isgo>
 
 

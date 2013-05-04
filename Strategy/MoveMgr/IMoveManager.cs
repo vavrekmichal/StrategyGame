@@ -9,16 +9,15 @@ using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 
 namespace Strategy.MoveMgr {
-	public interface IMoveManager {
+	public interface IMoveManager : IFinishMovementReciever {
 		void goToLocation(IMovableGameObject imgo, Vector3 to);
 		void goToLocation(GroupMovables group, Vector3 to);
-		//void goToTarget(GroupMovables group, IStaticGameObject target);
-		//void goToTarget(GroupMovables group, IMovableGameObject target);
+
+		void goToTarget(GroupMovables group, object gameObject, IFinishMovementReciever reciever);
 		void goToTarget(GroupMovables group, object gameObject);
 		void runAwayFrom(GroupMovables group, Vector3 from);
 
-		void interuptMove(IMovableGameObject imgo);
-
+		void unlogFromFinishMoveReciever(IMovableGameObject imgo);
 		void update();
 	}
 }

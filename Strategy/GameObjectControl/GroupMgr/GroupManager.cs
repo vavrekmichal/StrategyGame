@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Strategy.FightMgr;
-using Strategy.GameObjectControl.Game_Objects;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
-using Strategy.GameObjectControl.RuntimeProperty;
-using Strategy.GameObjectControl.GroupMgr;
-using Strategy.MoveMgr;
-using Strategy.GameMaterial;
 using Strategy.TeamControl;
-using Strategy.GameGUI;
 using Mogre;
 
 
@@ -50,6 +41,35 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			Gate.updateTravelers(delay);
 		}
 
+		/// <summary>
+		/// Function removes gameObject from group (check if is movable or static and find the right group)
+		/// </summary>
+		/// <param name="gameObject">IStaticGameObject or IMovableGameObject to remove from the group</param>
+
+
+		/// <summary>
+		/// Function attempts to remove IStaticGameObject from selectedGroup
+		/// </summary>
+		/// <param name="isgo">IStaticGameObject to remove from the group</param>
+		public void removeFromGroup(IStaticGameObject isgo) {
+			if ((!isMovableGroupActive) && selectedGroupS.hasMember(isgo)) {
+				selectedGroupS.removeMember(isgo);
+				if (selectedGroupS.Count == 0) {
+					selectedGroupS = new GroupStatics();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Function attempts to remove IMovableGameObject from its group
+		/// </summary>
+		/// <param name="imgo">IMovableGameObject to remove from the group</param>
+		public void removeFromGroup(IMovableGameObject imgo) {
+			if (imgoGroupDict.ContainsKey(imgo)) {
+				imgoGroupDict[imgo].removeMember(imgo);
+				imgoGroupDict[imgo] = null;
+			}
+		}
 		public void createTraveler(int solarSystemNumberTo, object imgo) {
 			Gate.createTraveler(getActiveSolarSystem(), getSolarSystem(solarSystemNumberTo), imgo);
 		}
@@ -284,7 +304,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 					}
 					selectedGroupM.select();
 				}
-				return selectedGroupM.onMouseAction(ActionReason.onRightButtonClick, clickedPoint, hitObject, isFriendly, isImgo);
+				return selectedGroupM.onMouseAction(clickedPoint, hitObject, isFriendly, isImgo);
 
 			} else {
 				return ActionAnswer.None;

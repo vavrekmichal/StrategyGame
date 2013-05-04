@@ -10,12 +10,14 @@ using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 namespace Strategy.MoveMgr {
 	class MoveManager : IMoveManager {
 
-		private const int randConst = 40;
+		private const int randConst = 30;
 
-		private Dictionary<IMovableGameObject, IStaticGameObject> moveMgrControledDict;
+		private Dictionary<IMovableGameObject, object> moveMgrControledDict;
+		private Dictionary<IMovableGameObject, IFinishMovementReciever> finishMoveRecDict;
 
 		public MoveManager() {
-			moveMgrControledDict = new Dictionary<IMovableGameObject, IStaticGameObject>();
+			finishMoveRecDict = new Dictionary<IMovableGameObject, IFinishMovementReciever>();
+			moveMgrControledDict = new Dictionary<IMovableGameObject, object>();
 		}
 
 
@@ -59,12 +61,24 @@ namespace Strategy.MoveMgr {
 		/// </summary>
 		/// <param name="imgo">Object which reached destination</param>
 		/// <param name="isgo">Target of move</param>
-		private void reachedDestiantion(IMovableGameObject imgo, IStaticGameObject isgo) { //TODO implemenyt
+		private void reachedDestiantion(IMovableGameObject imgo, object gameObject) {
+
+			if (finishMoveRecDict.ContainsKey(imgo)) {
+				finishMoveRecDict[imgo].movementFinished(imgo);
+				finishMoveRecDict.Remove(imgo);
+			}
+
 			if (imgo.Visible) {
 
 				imgo.stop();
-				var answer = isgo.reactToInitiative(ActionReason.targetInDistance, imgo);
-				switch (answer) {
+				ActionReaction answer;
+				if (gameObject is IStaticGameObject) {
+					answer = ((IStaticGameObject)gameObject).reactToInitiative(ActionReason.targetInDistance, imgo);
+				} else {
+					answer = ((IMovableGameObject)gameObject).reactToInitiative(ActionReason.targetInDistance, imgo);
+				}
+				
+				switch (answer) { //TODO nejak to domyslet
 					default:
 						break;
 				}
@@ -128,16 +142,38 @@ namespace Strategy.MoveMgr {
 		}
 
 		public void update() {
-			var copy = new Dictionary<IMovableGameObject, IStaticGameObject>(moveMgrControledDict);
-			foreach (KeyValuePair<IMovableGameObject,IStaticGameObject> trev in copy) {
-				double sqPickUpDist = trev.Value.PickUpDistance * trev.Value.PickUpDistance;
-				if (checkDistance(trev.Key.Position, trev.Value.Position, sqPickUpDist)) {
+			var copy = new Dictionary<IMovableGameObject, object>(moveMgrControledDict);
+			
+			foreach (KeyValuePair<IMovableGameObject, object> trev in copy) {
+				float pickUpDistance;
+				Mogre.Vector3 position;
+
+				// trev.Value is IStaticGameObject or IMovableGameObject
+				var castedIsgo = trev.Value as IStaticGameObject;
+				if (castedIsgo == null) {
+					var castedImgo = trev.Value as IMovableGameObject;
+					pickUpDistance = castedImgo.PickUpDistance;
+					position = castedImgo.Position;
+				} else {
+					pickUpDistance = castedIsgo.PickUpDistance;
+					position = castedIsgo.Position;
+				}
+
+				// Count distance between objects and compare with pickUpDistance (squared)
+				double sqPickUpDist = pickUpDistance * pickUpDistance;
+				if (checkDistance(trev.Key.Position, position, sqPickUpDist)) {
 					reachedDestiantion(trev.Key, trev.Value);
 				}
 			}
 
 		}
 
+		public void goToTarget(GroupMovables group, object gameObject, IFinishMovementReciever reciever) {
+			foreach (IMovableGameObject imgo in group) {
+				finishMoveRecDict.Add(imgo, reciever);
+			}
+			goToTarget(group, gameObject);
+		}
 
 		public void goToTarget(GroupMovables group, object gameObject) {
 			if (gameObject is IStaticGameObject) {
@@ -152,7 +188,7 @@ namespace Strategy.MoveMgr {
 		private void goToTarget(GroupMovables group, IStaticGameObject target) {
 			List<Mogre.Vector3> destinations = preparePositions(group.Count, target.Position);
 			foreach (IMovableGameObject imgo in group) {
-				imgo.goToTarget(destinations[0], this);
+				imgo.goToTarget(destinations[0]);
 				destinations.RemoveAt(0);
 				moveMgrControledDict.Add(imgo, target);
 			}
@@ -162,16 +198,31 @@ namespace Strategy.MoveMgr {
 		private void goToTarget(GroupMovables group, IMovableGameObject target) {
 			List<Mogre.Vector3> destinations = preparePositions(group.Count, target.Position);
 			foreach (IMovableGameObject imgo in group) {
-				imgo.goToTarget(destinations[0], this);
+				imgo.goToTarget(destinations[0]);
 				destinations.RemoveAt(0);
-				//moveMgrControledDict.Add(imgo, target);
+				moveMgrControledDict.Add(imgo, target);
 			}
 		}
 
 
-		public void interuptMove(IMovableGameObject imgo) {
-			moveMgrControledDict.Remove(imgo);
+		public void moveFinished(IMovableGameObject imgo) {
+			
 		}
 
+		public void movementFinished(IMovableGameObject imgo) {
+			throw new NotImplementedException();
+		}
+
+		public void movementInterupted(IMovableGameObject imgo) {
+			moveMgrControledDict.Remove(imgo);
+			if (finishMoveRecDict.ContainsKey(imgo)) {
+				finishMoveRecDict[imgo].movementInterupted(imgo);
+				finishMoveRecDict.Remove(imgo);
+			}
+		}
+
+		public void unlogFromFinishMoveReciever(IMovableGameObject imgo) {
+			finishMoveRecDict.Remove(imgo);
+		}
 	}
 }
