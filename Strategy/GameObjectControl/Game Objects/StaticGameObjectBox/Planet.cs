@@ -29,7 +29,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			Vector3 center, PropertyManager propMgr, int circularNum = 30) {
 			this.name = name;
 			this.mesh = mesh;
-			planetTeam = myTeam;
+			this.team = myTeam;
 			this.manager = manager;
 			base.setProperty(PropertyEnum.Speed, propMgr.getProperty<float>("speed3"));
 			base.setProperty(PropertyEnum.Rotate, propMgr.getProperty<float>("planetRotateSpeed"));
@@ -38,7 +38,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			//prepare list of positions
 			circularPositions = calculatePositions(circularNum, distanceFromCenter, center);
 			randomizeStartPosition(circularNum); // randomize start position
-			mDestination = circularPositions.First();
+			position = circularPositions.First();
 
 			//Mogre inicialization of object
 			entity = manager.CreateEntity(name, mesh);
@@ -55,10 +55,10 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			if (!mFlying) {
 				if (nextLocation()) {
 					mFlying = true;
-					mDestination = circularPositions.First.Value; //get the next destination.
+					position = circularPositions.First.Value; //get the next destination.
 					prepareNextPosition();
 					//update the direction and the distance
-					mDirection = mDestination - sceneNode.Position;
+					mDirection = position - sceneNode.Position;
 					mDistance = mDirection.Normalise();
 				} else {
 				}//nothing to do so stay in position    
@@ -67,7 +67,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 				mDistance -= move;
 				if (mDistance <= .0f) { //reach destination
 					travelledInvisible = 0;
-					sceneNode.Position = mDestination;
+					sceneNode.Position = position;
 					mDirection = Mogre.Vector3.ZERO;
 					mFlying = false;
 				} else {
@@ -85,7 +85,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			if (!mFlying) {
 				if (nextLocation()) {
 					mFlying = true;
-					mDestination = circularPositions.First.Value; //get the next destination.
+					position = circularPositions.First.Value; //get the next destination.
 					prepareNextPosition();
 					mDistance = mDirection.Normalise();
 				} else {
@@ -148,34 +148,6 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		}
 
 
-		/// <summary>
-		/// Called when object will be invisible
-		/// </summary>
-		public override void changeVisible(bool visible) {   //now creating
-			if (visible) {
-				if (sceneNode == null) {
-					if (entity == null) { //control if the entity is inicialized
-						entity = manager.CreateEntity(name, mesh);
-					}
-
-					if (mDestination == null) { //control inicialization
-						mDestination = circularPositions.Last();
-					}
-
-					sceneNode = manager.RootSceneNode.CreateChildSceneNode(name + "Node", mDestination);
-
-					sceneNode.Pitch(new Degree(-90f));
-					sceneNode.AttachObject(entity);
-					onDisplayed();
-				}
-			} else {
-				if (sceneNode != null) {
-					manager.DestroySceneNode(sceneNode);
-					sceneNode = null;
-				}
-			}
-		}
-
 
 		/// <summary>
 		/// The NextLocation() check if exist next location to move
@@ -198,7 +170,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// Called when object is displayed (invisible to visible)
 		/// </summary>
 		protected override void onDisplayed() {
-			sceneNode.Position = mDestination;
+			sceneNode.Position = position;
 			mFlying = false; //jump correction
 		}
 

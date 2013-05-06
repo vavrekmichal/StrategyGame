@@ -22,19 +22,24 @@ namespace Strategy.FightMgr {
 
 		public Occupation(GroupMovables occupator, object occupied, TimeSpan time) {
 
-			var castedOccupied = occupied as IMovableGameObject;
-			if (castedOccupied != null) {
+			var castedImgo = occupied as IMovableGameObject;
+
+			remainingTime = new Property<TimeSpan>(time);
+
+			if (castedImgo != null) {
+				castedImgo.addProperty<TimeSpan>(PropertyEnum.Occupation, remainingTime);
 				occIsMov = true;
-				this.name = prepName + castedOccupied.Name;
+				this.name = prepName + castedImgo.Name;
 
 			} else {
 				occIsMov = false;
+				((IStaticGameObject)occupied).addProperty<TimeSpan>(PropertyEnum.Occupation, remainingTime);
 				this.name = prepName + ((IStaticGameObject)occupied).Name;
 			}
 
 			this.attackers = occupator;
 			this.target = occupied;
-			remainingTime = new Property<TimeSpan>(time);
+			
 		}
 
 		/// <summary>
@@ -71,6 +76,11 @@ namespace Strategy.FightMgr {
 		}
 
 		private void finishOccupation() {
+			if (occIsMov) {
+				((IMovableGameObject)target).removeProperty(PropertyEnum.Occupation);
+			} else {
+				((IStaticGameObject)target).removeProperty(PropertyEnum.Occupation);
+			}
 			Game.changeObjectsTeam(target,attackers.OwnerTeam);
 		}
 

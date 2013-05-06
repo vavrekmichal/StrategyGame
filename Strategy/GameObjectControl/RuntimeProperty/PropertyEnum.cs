@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace Strategy.GameObjectControl.RuntimeProperty {
 	public enum PropertyEnum {
-		Attack,
-		Deffence,
-		Hp,
-		Speed,
-		Rotate,
-		PickUp,
-		Team
+		Attack = 1,
+		Deffence = 2,
+		Hp = 3,
+		Speed= 4,
+		Rotate = 5,
+		PickUp = 6,
+		Team = 7,
+		Occupation = 11
 	}
 }

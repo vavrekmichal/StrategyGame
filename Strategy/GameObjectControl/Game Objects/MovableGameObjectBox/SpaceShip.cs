@@ -15,7 +15,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		public SpaceShip(string name, string mesh, Team myTeam, Mogre.SceneManager manager, Vector3 position, PropertyManager propMgr) {
 			this.name = name;
 			this.mesh = mesh;
-			this.movableObjectTeam = myTeam;
+			this.team = myTeam;
 			this.manager = manager;
 			this.position = position;
 			base.setProperty(PropertyEnum.Speed, propMgr.getProperty<float>("speed"));

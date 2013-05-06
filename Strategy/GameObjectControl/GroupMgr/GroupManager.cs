@@ -67,7 +67,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		public void removeFromGroup(IMovableGameObject imgo) {
 			if (imgoGroupDict.ContainsKey(imgo)) {
 				imgoGroupDict[imgo].removeMember(imgo);
-				imgoGroupDict[imgo] = null;
+				imgoGroupDict.Remove(imgo);
 			}
 		}
 		public void createTraveler(int solarSystemNumberTo, object imgo) {

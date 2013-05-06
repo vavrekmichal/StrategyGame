@@ -10,23 +10,11 @@ using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.Exceptions;
 
 namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
-	public abstract class StaticGameObject : IStaticGameObject {
-		protected string name;
-		protected Entity entity;
-		protected SceneNode sceneNode;
-		protected string mesh;
-
-
-		protected Vector3 mDestination = Vector3.ZERO; // The position
-
-		protected Team planetTeam;
-		protected Mogre.SceneManager manager;
+	public abstract class StaticGameObject : GameObject, IStaticGameObject {
 
 		protected static Dictionary<string, IGameAction> gameActions;
 		protected static Dictionary<string, List<IStaticGameObject>> gameActionsPermitions;
 
-		protected Dictionary<PropertyEnum, object> propertyDict = new Dictionary<PropertyEnum, object>();
-		protected Dictionary<string, object> propertyDictUserDefined = new Dictionary<string, object>();
 
 		//Look here create file load file
 		static StaticGameObject() {
@@ -49,43 +37,6 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			((Produce)gameActions["Produce"]).registerExecuter(this, specificType, value);
 		}
 
-		public Property<T> getProperty<T>(PropertyEnum propertyName) {
-			if (!propertyDict.ContainsKey(propertyName)) {
-				throw new PropertyMissingException("Object " + Name + " doesn't have property " + propertyName + ".");
-			}
-			var prop = (Property<T>)propertyDict[propertyName];
-			return prop;
-		}
-
-		public Property<T> getProperty<T>(string propertyName) {
-			if (!propertyDictUserDefined.ContainsKey(propertyName)) {
-				throw new PropertyMissingException("Object " + Name + " doesn't have property " + propertyName + ".");
-			}
-			var prop = (Property<T>)propertyDictUserDefined[propertyName];
-			return prop;
-		}
-
-		protected void setProperty(PropertyEnum name, object prop) {
-			if (!(prop.GetType().GetGenericTypeDefinition() == typeof(Property<>))) {
-				throw new ArgumentException("Given object is not Property<T>, it is " + prop.GetType());
-			}
-			if (propertyDict.ContainsKey(name)) {
-				propertyDict[name] = prop;
-			} else {
-				propertyDict.Add(name, prop);
-			}
-		}
-
-		protected void setProperty(string name, object prop) {
-			if (!(prop.GetType().GetGenericTypeDefinition() == typeof(Property<>))) {
-				throw new ArgumentException("Given object is not Property<T>, it is " + prop.GetType());
-			}
-			if (propertyDictUserDefined.ContainsKey(name)) {
-				propertyDictUserDefined[name] = prop;
-			} else {
-				propertyDictUserDefined.Add(name, prop);
-			}
-		}
 
 		/// <summary>
 		/// Rotating function 
@@ -102,93 +53,38 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		public virtual void nonActiveRotate(float f) {
 		}
 
-		public virtual Dictionary<string, object> getPropertyToDisplay() {
-			var result = new Dictionary<string, object>(propertyDictUserDefined);
-			foreach (var property in propertyDict) {
-				result.Add(property.Key.ToString(), property.Value);
-			}
-			return result;
-		}
-
-		public virtual ActionReaction reactToInitiative(ActionReason reason, IMovableGameObject target) {
-			return ActionReaction.None;
-		}
-
-		protected abstract void onDisplayed();
-
 
 		public bool tryExecute(string executingAction) {
 			if (gameActionsPermitions.ContainsKey(executingAction) && gameActionsPermitions[executingAction].Contains(this)) {
-				gameActions[executingAction].execute(this, planetTeam);
+				gameActions[executingAction].execute(this, Team);
 				return true;
 			}
 			return false;
 		}
 
-		public Team Team {
-			get {
-				return planetTeam;
-			}
-			set {
-				planetTeam = value;
-			}
-		}
+
 
 		/// <summary>
 		/// Called when object will be invisible
 		/// </summary>
-		public virtual void changeVisible(bool visible) {  
+		public override void changeVisible(bool visible) {
+			base.changeVisible(visible);
 			if (visible) {
-				if (sceneNode == null) {
-					if (entity == null) { // Control if the entity is inicialized
-						entity = manager.CreateEntity(name, mesh);
-					}
-
-					sceneNode = manager.RootSceneNode.CreateChildSceneNode(name + "Node", mDestination);
-
-					sceneNode.Pitch(new Degree(-90f));
-					sceneNode.AttachObject(entity);
-					onDisplayed();
-				}
-			} else {
-				if (sceneNode != null) {
-					mDestination = sceneNode.Position;
-					manager.DestroySceneNode(sceneNode);
-					sceneNode = null;
-				}
+				sceneNode.Pitch(new Degree(-90f));
 			}
 		}
 
-
-		public string Name {
-			get { return name; }
-		}
-
-		public string Mesh {
-			get { return mesh; }
-		}
-
-		public virtual float PickUpDistance {
+		public override float PickUpDistance {
 			get { return 150; }
 		}
 
-		public virtual float OccupyDistance {
+		public override float OccupyDistance {
 			get { return 0; }
 		}
 
-
-		public Vector3 Position {
-			get {
-				if (sceneNode == null) {
-					return mDestination;
-				} else {
-					return sceneNode.Position;
-				}
-			}
-		}
-
-		public float OccupyTime {
+		public override int OccupyTime {
 			get { return 20; }
 		}
+
 	}
 }

@@ -92,7 +92,7 @@ namespace Strategy.FightMgr {
 			if (fightsDict[onWayCopy[imgo]] == ActionAnswer.Attack) {
 				//TODO attack
 			} else {
-				occupationList.Add(new Occupation(group, gameObject, TimeSpan.FromSeconds(2)));
+				occupationList.Add(new Occupation(group, gameObject, TimeSpan.FromSeconds(20)));
 			}
 			fightsDict.Remove(onWayCopy[imgo]);
 		}

@@ -9,7 +9,7 @@ using Strategy.MoveMgr;
 using Strategy.TeamControl;
 
 namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
-	public interface IMovableGameObject {
+	public interface IMovableGameObject : IGameObject {
 
 		/// <summary>
 		/// Active move - SceneNode is setted
@@ -27,12 +27,6 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// </summary>
 		/// <param name="f">Delay between last two frames</param>
 		void nonActiveMove(float f);
-
-		/// <summary>
-		/// Function inicializes or destroy SceneNode. It means hide or show object.
-		/// </summary>
-		/// <param name="visible">Object shoud be visible (true) or hide (false)</param>
-		void changeVisible(bool visible);
 
 
 		void shout();
@@ -101,14 +95,9 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// <param name="bonusDict">Dictionary with Property as object (runtime generic)</param>
 		void setGroupBonuses(Dictionary<string, object> bonusDict);
 
-		string Name { get; }
-		Team Team { get; set; }
 		bool Visible { get; }
-		float PickUpDistance { get; }
-		float OccupyDistance { get; }
-		int OccupyTime { get; }
+
 		Mogre.Vector3 Direction { get; }
-		Mogre.Vector3 Position { get; }
 
 		int AttackPower { get; }
 		int DeffPower { get; }
@@ -131,18 +120,6 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// <returns>Dictionary with Property as object (runtime generic)</returns>
 		Dictionary<string, object> onGroupAdd();
 
-		/// <summary>
-		/// Return Dictionary with all object Property(ies).
-		/// </summary>
-		/// <returns>Dictionary with Property as object (runtime generic)</returns>
-		Dictionary<string, object> getPropertyToDisplay();
 
-		/// <summary>
-		/// Function is reaction on some stimul (ActionReason)
-		/// </summary>
-		/// <param name="reason">Action stimul</param>
-		/// <param name="target">Object that called the event</param>
-		/// <returns>Return reaction</returns>
-		ActionReaction reactToInitiative(ActionReason reason, IMovableGameObject target);
 	}
 }

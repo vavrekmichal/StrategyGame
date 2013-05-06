@@ -17,7 +17,6 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		private const float portTime = 3.4483f;
 		private float portTimeDuration;
 
-		private Vector3 position;
 		private AnimationState animationState; // The AnimationState the moving object
 
 		protected static List<Traveler> travelerList = new List<Traveler>();
@@ -29,7 +28,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			this.mesh = mesh;
 			this.manager = manager;
 			this.position = position;
-			this.Team = team;
+			this.team = team;
 			entity = manager.CreateEntity(name, mesh);
 
 			animationState = entity.GetAnimationState("funcionando3_eani_Clip");
@@ -92,11 +91,6 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			portTimeDuration = portTime;
 		}
 
-		public override float PickUpDistance {
-			get {
-				return 200;
-			}
-		}
 
 		public static void updateTravelers(float delay) {
 			List<Traveler> copy = new List<Traveler>(travelerList);

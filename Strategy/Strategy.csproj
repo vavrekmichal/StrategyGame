@@ -89,6 +89,8 @@
     <Compile Include="GameObjectControl\Action.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameActions\IGameAction.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameActions\Produce.cs" />
+    <Compile Include="GameObjectControl\Game Objects\GameObject.cs" />
+    <Compile Include="GameObjectControl\Game Objects\IGameObject.cs" />
     <Compile Include="GameObjectControl\Game Objects\HitTest.cs" />
     <Compile Include="GameObjectControl\Game Objects\MovableGameObjectBox\IMovableGameObject.cs" />
     <Compile Include="GameObjectControl\Game Objects\ObjectLoader.cs" />

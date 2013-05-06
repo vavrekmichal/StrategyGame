@@ -104,9 +104,14 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			get { return 0; }
 		}
 
-		public float OccupyTime {
+		public int OccupyTime {
 			get { return -1; }
 		}
+
+		public void addProperty<T>(PropertyEnum name, Property<T> property) { }
+		public void addProperty<T>(string name, Property<T> property) { }
+		public void removeProperty(PropertyEnum name) { }
+		public void removeProperty(string name) { }
 
 		public Vector3 Position {
 			get {

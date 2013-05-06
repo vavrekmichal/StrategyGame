@@ -5,21 +5,12 @@ using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.TeamControl;
 
 namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
-	public interface IStaticGameObject {
+	public interface IStaticGameObject : IGameObject {
 		void rotate(float f);
         void nonActiveRotate(float f);
-        void changeVisible(bool visible);
-		string Name { get; }
-		string Mesh { get; }
+
+		
         bool tryExecute(string executingAction);
 
-        Team Team { get; set; }
-		float PickUpDistance { get; }
-		float OccupyDistance { get; }
-		float OccupyTime { get; }
-		Vector3 Position { get; }
-
-		ActionReaction reactToInitiative(ActionReason reason, IMovableGameObject target);
-		Dictionary<string, object> getPropertyToDisplay();
 	}
 }

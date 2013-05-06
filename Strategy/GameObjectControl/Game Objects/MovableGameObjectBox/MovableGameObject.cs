@@ -9,20 +9,12 @@ using Strategy.MoveMgr;
 using Strategy.TeamControl;
 
 namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
-	public abstract class MovableGameObject : IMovableGameObject {
-		protected string name;
-		protected Team movableObjectTeam;
+	public abstract class MovableGameObject : GameObject, IMovableGameObject {
 
-		protected Mogre.Entity entity;
-		protected Mogre.SceneNode sceneNode;
-		protected string mesh;
-		protected Mogre.Vector3 position;
-		protected string team;
-		protected Mogre.SceneManager manager;
+
 
 		protected bool moving;
-		protected Dictionary<PropertyEnum, object> propertyDict;
-		protected Dictionary<string, object> propertyDictUserDefined;
+
 		protected Dictionary<string, object> propertyBonusDict;
 		protected List<IGameAction> listOfAction; //TODO not implemented
 		protected LinkedList<Vector3> flyList; // Walking points in linked list
@@ -34,7 +26,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 		protected Vector3 modelDirection = Vector3.NEGATIVE_UNIT_Z;
 
-		private bool isVisible;
+
 		private int collisionCount = 0;
 		private bool detourReached = false;
 		private int colliisionConst = 100;
@@ -51,10 +43,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			propertyBonusDict = new Dictionary<string, object>();
 		}
 
-		/// <summary>
-		/// Calls when object is showed by SolarSystem
-		/// </summary>
-		protected abstract void onDisplayed();
+		
 
 		/// <summary>
 		/// Checks if object go to target when is position changed
@@ -268,29 +257,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		}
 
 		#endregion
-		/// <summary>
-		/// Called when object will be invisible
-		/// </summary>
-		public virtual void changeVisible(bool visible) {
-			if (visible && !this.isVisible) {
-
-				// Control if the entity is inicialized
-				if (entity == null) {
-					entity = manager.CreateEntity(name, mesh);
-				}
-
-				sceneNode = manager.RootSceneNode.CreateChildSceneNode(name + "Node", position);
-				sceneNode.AttachObject(entity);
-				this.isVisible = true;
-			} else {
-				if (this.isVisible) {
-					position = sceneNode.Position;
-					manager.DestroySceneNode(sceneNode);
-					sceneNode = null;
-					this.isVisible = false;
-				}
-			}
-		}
+		
 
 		public virtual void setGroupBonuses(Dictionary<string, object> bonusDict) {
 			propertyBonusDict = bonusDict;
@@ -300,15 +267,6 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		public virtual Dictionary<string, object> onGroupAdd() {
 			// Empty dictionary = no bonuses for other members of group
 			return new Dictionary<string, object>();
-		}
-
-
-		public Dictionary<string, object> getPropertyToDisplay() {
-			var result = new Dictionary<string, object>(propertyDictUserDefined);
-			foreach (var property in propertyDict) {
-				result.Add(property.Key.ToString(), property.Value);
-			}
-			return result;
 		}
 
 		/// <summary>
@@ -323,43 +281,8 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			return v;
 		}
 
-		public Property<T> getProperty<T>(PropertyEnum propertyName) {
-			if (!propertyDict.ContainsKey(propertyName)) {
-				throw new PropertyMissingException("Object " + Name + " doesn't have property " + propertyName + ".");
-			}
-			var prop = (Property<T>)propertyDict[propertyName];
-			return prop;
-		}
 
-		public Property<T> getProperty<T>(string propertyName) {
-			if (!propertyDictUserDefined.ContainsKey(propertyName)) {
-				throw new PropertyMissingException("Object " + Name + " doesn't have property " + propertyName + ".");
-			}
-			var prop = (Property<T>)propertyDictUserDefined[propertyName];
-			return prop;
-		}
 
-		protected void setProperty(PropertyEnum name, object prop) {
-			if (!(prop.GetType().GetGenericTypeDefinition() == typeof(Property<>))) {
-				throw new ArgumentException("Given object is not Property<T>, it is " + prop.GetType());
-			}
-			if (propertyDict.ContainsKey(name)) {
-				propertyDict[name] = prop;
-			} else {
-				propertyDict.Add(name, prop);
-			}
-		}
-
-		protected void setProperty(string name, object prop) {
-			if (!(prop.GetType().GetGenericTypeDefinition() == typeof(Property<>))) {
-				throw new ArgumentException("Given object is not Property<T>, it is " + prop.GetType());
-			}
-			if (propertyDictUserDefined.ContainsKey(name)) {
-				propertyDictUserDefined[name] = prop;
-			} else {
-				propertyDictUserDefined.Add(name, prop);
-			}
-		}
 
 
 		protected T getPropertyValue<T>(PropertyEnum name) {
@@ -434,39 +357,6 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			get { return 0; }
 		}
 
-
-		public bool Visible {
-			get { return isVisible; }
-		}
-
-
-		public string Name {
-			get {
-				return name;
-			}
-		}
-
-
-		public Team Team {
-			get {
-				return movableObjectTeam;
-			}
-			set {
-				movableObjectTeam = value;
-			}
-		}
-
-
-		public Vector3 Position {
-			get {
-				if (sceneNode == null) {
-					return position;
-				} else {
-					return sceneNode.Position;
-				}
-			}
-		}
-
 		public Vector3 Direction {
 			get { return direction; }
 		}
@@ -476,19 +366,19 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			get { return ((Property<int>)propertyDict[PropertyEnum.Hp]).Value; }
 		}
 
-		public virtual float PickUpDistance {
+		public override float PickUpDistance {
 			get { return 80; }
 		}
 
-		public virtual float OccupyDistance {
+		public override float OccupyDistance {
 			get { return 90; }
 		}
 
-		public virtual int OccupyTime {
+		public override int OccupyTime {
 			get { return 10; }
 		}
 
-		public ActionReaction reactToInitiative(ActionReason reason, IMovableGameObject target) {
+		public override ActionReaction reactToInitiative(ActionReason reason, IMovableGameObject target) {
 			return ActionReaction.None;
 		}
 	}
