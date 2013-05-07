@@ -15,15 +15,15 @@ namespace Strategy.GameGUI {
 
 
 		/// <summary>
-		/// This constructor creates pair of Myiagi Label. One with name of material and other with value.
+		/// This constructor creates pair of Myiagi Label. One with Name of material and other with value.
 		/// </summary>
-		/// <param name="nameString">Name of material</param>
-		/// <param name="valueInt">Number of units of a material</param>
-		/// <param name="maxWidth">Maximum width of a row</param>
-		/// <param name="position">Order</param>
+		/// <param Name="nameString">Name of material</param>
+		/// <param Name="valueInt">Number of units of a material</param>
+		/// <param Name="maxWidth">Maximum width of a row</param>
+		/// <param Name="position">Order</param>
 		public MaterialGUIPair(string nameString, int valueInt, int maxWidth, int position) {
 			
-			// Label with name of material
+			// Label with Name of material
 			int newWidth = maxWidth / 5;
 			name = new Label() {
 				Size = new Size(newWidth * 3, rowHeight),

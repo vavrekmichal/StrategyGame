@@ -25,7 +25,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			get { return groupMembers.Count; }
 		}
 
-		public virtual bool hasMember(T m) {
+		public virtual bool HasMember(T m) {
 			foreach (var member in groupMembers) {
 				if (member == m) {
 					return true;
@@ -34,11 +34,11 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			return false;
 		}
 
-		public virtual void insertMemeber(T m) {
+		public virtual void InsertMemeber(T m) {
 			groupMembers.Add(m);
 		}
 
-		public virtual void removeMember(T m) {
+		public virtual void RemoveMember(T m) {
 			groupMembers.Remove(m);
 		}
 
@@ -46,11 +46,11 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			return groupMembers.GetEnumerator();
 		}
 
-		public virtual Dictionary<string, object> getPropertyToDisplay() {
+		public virtual Dictionary<string, object> GetPropertyToDisplay() {
 			return new Dictionary<string, object>();
 		}
 
-		protected void addObjectPropertyToDict(Dictionary<string, object> isgoPropDict, Dictionary<object, EditablePair<string, int>> summaryDict) {
+		protected void AddObjectPropertyToDict(Dictionary<string, object> isgoPropDict, Dictionary<object, EditablePair<string, int>> summaryDict) {
 			foreach (KeyValuePair<string, object> property in isgoPropDict) {		//object is real Property<T>	
 				if (summaryDict.ContainsKey(property.Value)) {
 					EditablePair<string, int> pair = summaryDict[property.Value];
@@ -61,12 +61,12 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			}
 		}
 
-		protected Dictionary<string, object> createCommonPropDict(Dictionary<object, EditablePair<string, int>> summaryDict, Dictionary<string, object> isgoPropDict) {
+		protected Dictionary<string, object> CreateCommonPropDict(Dictionary<object, EditablePair<string, int>> summaryDict, Dictionary<string, object> isgoPropDict) {
 			int groupCount = groupMembers.Count;
 			var result = new Dictionary<string, object>();
 			var notEveryone = new List<string>();
 			foreach (KeyValuePair<object, EditablePair<string, int>> propPair in summaryDict) {
-				//PropertyEnum name = isgoPropDict.FirstOrDefault(x => x.Value == propPair.Key).Key; //gets string name searched by object
+				//PropertyEnum Name = isgoPropDict.FirstOrDefault(x => x.Value == propPair.Key).Key; //gets string Name searched by object
 				string name = propPair.Value.Item1;
 				if (groupCount == propPair.Value.Item2) {
 					result.Add(name, propPair.Key);
@@ -107,14 +107,14 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		public GroupMovables() : this(new Team("")) { }
 		public GroupMovables(TeamControl.Team own)
 			: base(own) {
-			countBasicBonuses();
+			CountBasicBonuses();
 		}
 
-		private object callPropertyMathViaReflection(Property<object>.Operator op, object p1, object p2) {
+		private object CallPropertyMathViaReflection(Property<object>.Operator op, object p1, object p2) {
 			var type = p1.GetType().GetGenericArguments()[0];
 
-			// Using reflection to call function simpleMath with generic parameter
-			MethodInfo method = p1.GetType().GetMethod("simpleMath");
+			// Using reflection to call function SimpleMath with generic parameter
+			MethodInfo method = p1.GetType().GetMethod("SimpleMath");
 			List<object> args = new List<object>();
 			args.Add(op);
 			args.Add(p2);
@@ -125,22 +125,22 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		/// <summary>
 		/// Called when group is changed from informative to selected. Function count basic bonuses for selected
 		/// group (Attack and Deffence bonus +1 per each 3 members) and collect bonuses from members (onGroupAdd).
-		/// Finally set bonus dictionary for each member of group.
+		/// Finally Set bonus dictionary for each member of group.
 		/// </summary>
-		public void select() {
+		public void Select() {
 			if (isSelected) {
 				return;
 			}
 			isSelected = true;
 
 			// Basic bonuses to the Attack and the Deffence ( 1 per each 3 members)
-			countBasicBonuses();
+			CountBasicBonuses();
 
-			//var v = callPropertyMathViaReflection(Property<object>.Operator.Plus, new Property<int>(6), new Property<int>(12));
+			//var v = CallPropertyMathViaReflection(Property<object>.Operator.Plus, new Property<int>(6), new Property<int>(12));
 
 			// Collect bonuses
 			foreach (IMovableGameObject imgo in groupMembers) {
-				var imgoBonus = imgo.onGroupAdd();
+				var imgoBonus = imgo.OnGroupAdd();
 				foreach (var bonusPair in imgoBonus) {
 					if (groupBonuses.ContainsKey(bonusPair.Key)) {
 
@@ -149,29 +149,29 @@ namespace Strategy.GameObjectControl.GroupMgr {
 						if (type.GetGenericTypeDefinition() == typeof(Property<>) &&
 							type == groupBonuses[bonusPair.Key].GetType()) {
 
-							groupBonuses[bonusPair.Key] = callPropertyMathViaReflection(Property<object>.Operator.Plus, groupBonuses[bonusPair.Key], bonusPair.Value);
+							groupBonuses[bonusPair.Key] = CallPropertyMathViaReflection(Property<object>.Operator.Plus, groupBonuses[bonusPair.Key], bonusPair.Value);
 						}
 					} else {
 						groupBonuses.Add(bonusPair.Key, bonusPair.Value);
 					}
 				}
-				imgo.setGroupBonuses(groupBonuses);
+				imgo.SetGroupBonuses(groupBonuses);
 			}
 		}
 
 		/// <summary>
 		/// Function colects all answers and returns with the highest priority 
 		/// </summary>
-		/// <param name="reason">Reason of calling function</param>
-		/// <param name="point">Position of mouse when was clicked</param>
-		/// <param name="hitObject">Result of hit test</param>
-		/// <param name="isFriendly">When was clicked on object - team test</param>
-		/// <param name="isMovableGameObject">When was clicked on object - movable test</param>
+		/// <param Name="reason">Reason of calling function</param>
+		/// <param Name="point">Position of mouse when was clicked</param>
+		/// <param Name="hitObject">Result of hit test</param>
+		/// <param Name="isFriendly">When was clicked on object - team test</param>
+		/// <param Name="isMovableGameObject">When was clicked on object - movable test</param>
 		/// <returns>Answers with the highest priority</returns>
-		public ActionAnswer onMouseAction(Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject) {
+		public ActionAnswer OnMouseAction(Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject) {
 			ActionAnswer groupAnswer = ActionAnswer.None;
 			foreach (IMovableGameObject imgo in groupMembers) {
-				ActionAnswer answer = imgo.onMouseAction(point, hitObject, isFriendly, isMovableGameObject);
+				ActionAnswer answer = imgo.OnMouseAction(point, hitObject, isFriendly, isMovableGameObject);
 				if (answer > groupAnswer) {
 					groupAnswer = answer;
 				}
@@ -180,7 +180,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		}
 
 
-		public override Dictionary<string, object> getPropertyToDisplay() {
+		public override Dictionary<string, object> GetPropertyToDisplay() {
 			var propDict = new Dictionary<string, object>();
 			propDict.Add(PropertyEnum.Team.ToString(), owner);
 			var bonusesCopy = new Dictionary<string, object>(groupBonuses);
@@ -195,15 +195,15 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			}
 
 			if (groupMembers.Count == 1) {
-				foreach (var pair in groupMembers[0].getPropertyToDisplay()) {
+				foreach (var pair in groupMembers[0].GetPropertyToDisplay()) {
 					propDict.Add(pair.Key, pair.Value);
 				}
 			} else {
 				var summaryDict = new Dictionary<object, EditablePair<string, int>>();
 				foreach (IMovableGameObject imgo in groupMembers) {
-					addObjectPropertyToDict(imgo.getPropertyToDisplay(), summaryDict);
+					AddObjectPropertyToDict(imgo.GetPropertyToDisplay(), summaryDict);
 				}
-				foreach (var pair in createCommonPropDict(summaryDict, groupMembers[0].getPropertyToDisplay())) {
+				foreach (var pair in CreateCommonPropDict(summaryDict, groupMembers[0].GetPropertyToDisplay())) {
 					propDict.Add(pair.Key, pair.Value);
 				}
 			}
@@ -212,14 +212,14 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			return propDict;
 		}
 
-		public override void removeMember(IMovableGameObject m) {
-			base.removeMember(m);
-			var imgoBonus = m.onGroupAdd();
+		public override void RemoveMember(IMovableGameObject m) {
+			base.RemoveMember(m);
+			var imgoBonus = m.OnGroupAdd();
 			foreach (var bonusPair in imgoBonus) {
 				if (groupBonuses.ContainsKey(bonusPair.Key)) {
 					// Add find type and add value
 					groupBonuses[bonusPair.Key] =
-						callPropertyMathViaReflection(Property<object>.Operator.Minus, groupBonuses[bonusPair.Key], bonusPair.Value);
+						CallPropertyMathViaReflection(Property<object>.Operator.Minus, groupBonuses[bonusPair.Key], bonusPair.Value);
 				}
 			}
 		}
@@ -228,7 +228,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		/// Function  calculate basic bonuses and save them in groupBonuses
 		/// (Attack and Deffence +1 per each 3 members)
 		/// </summary>
-		public void countBasicBonuses() {
+		public void CountBasicBonuses() {
 			groupBonuses = new Dictionary<string, object>();
 
 			// Quantitative bonus
@@ -257,19 +257,19 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 		public GroupStatics(TeamControl.Team own) : base(own) { }
 
-		public override Dictionary<string, object> getPropertyToDisplay() {
+		public override Dictionary<string, object> GetPropertyToDisplay() {
 			var propDict = new Dictionary<string, object>();
 			propDict.Add(PropertyEnum.Team.ToString(), owner);
 			if (groupMembers.Count == 1) {
-				foreach (var pair in groupMembers[0].getPropertyToDisplay()) {
+				foreach (var pair in groupMembers[0].GetPropertyToDisplay()) {
 					propDict.Add(pair.Key, pair.Value);
 				}
 			} else {
 				var summaryDict = new Dictionary<object, EditablePair<string, int>>();
 				foreach (IStaticGameObject isgo in groupMembers) {
-					addObjectPropertyToDict(isgo.getPropertyToDisplay(), summaryDict);
+					AddObjectPropertyToDict(isgo.GetPropertyToDisplay(), summaryDict);
 				}
-				foreach (var pair in createCommonPropDict(summaryDict, groupMembers[0].getPropertyToDisplay())) {
+				foreach (var pair in CreateCommonPropDict(summaryDict, groupMembers[0].GetPropertyToDisplay())) {
 					propDict.Add(pair.Key, pair.Value);
 				}
 			}

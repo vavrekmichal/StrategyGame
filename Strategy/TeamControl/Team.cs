@@ -30,32 +30,32 @@ namespace Strategy.TeamControl {
             materialsStates = new Dictionary<string, IMaterial>();
             imgoObjects = new List<IMovableGameObject>();
             isgoObjects = new List<IStaticGameObject>();
-            setMaterials(materialList);
+            SetMaterials(materialList);
         }
 
         // Isgo
-        public void addISGO(IStaticGameObject isgo) {
+        public void AddISGO(IStaticGameObject isgo) {
             if (!isgoObjects.Contains(isgo)) {
                 isgoObjects.Add(isgo);
 				isgo.Team = this;
             }        
         }
 
-        public void removeISGO(IStaticGameObject isgo) {
+        public void RemoveISGO(IStaticGameObject isgo) {
             if (isgoObjects.Contains(isgo)) {
                 isgoObjects.Remove(isgo);
             }   
         }
 
         // Imgo
-        public void addIMGO(IMovableGameObject imgo) {
+        public void AddIMGO(IMovableGameObject imgo) {
             if (!imgoObjects.Contains(imgo)) {
                 imgoObjects.Add(imgo);
 				imgo.Team = this;
             }
         }
 
-        public void removeIMGO(IMovableGameObject imgo) {
+        public void RemoveIMGO(IMovableGameObject imgo) {
             if (imgoObjects.Contains(imgo)) {
                 imgoObjects.Remove(imgo);
             }
@@ -66,7 +66,7 @@ namespace Strategy.TeamControl {
 			get { return name; }
         }
 
-        public string print() {
+        public string Print() {
             StringBuilder s = new StringBuilder();
             s.Append(name+"\n");
             s.Append("\t ISGO" + "\n");
@@ -86,18 +86,18 @@ namespace Strategy.TeamControl {
 			return Name;
 		}
 
-        public void setMaterials(List<IMaterial> materials) {
+        public void SetMaterials(List<IMaterial> materials) {
             foreach (IMaterial mat in materials) {
-                materialsStates.Add(mat.name, mat);
+                materialsStates.Add(mat.Name, mat);
             }
         }
 
-        public void addMaterial(string materialName, double materialQuantity){
-            materialsStates[materialName].addQuantity(materialQuantity);
+        public void AddMaterial(string materialName, double materialQuantity){
+            materialsStates[materialName].AddQuantity(materialQuantity);
         }
 
 
-        public Dictionary<string, IMaterial> getMaterials() {
+        public Dictionary<string, IMaterial> GetMaterials() {
             return materialsStates;
         }
     }

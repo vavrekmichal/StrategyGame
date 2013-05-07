@@ -37,15 +37,22 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// Rotating function 
 		/// </summary>
 		/// <param name="f">deley of frames</param>
-		public virtual void rotate(float f) {
+		public virtual void Rotate(float f) {
 			sceneNode.Roll(new Mogre.Degree(5 * f));
 		}
 
-		public virtual void nonActiveRotate(float f) {
+		public virtual void NonActiveRotate(float f) {
 
 		}
 
-		public virtual ActionReaction reactToInitiative(ActionReason reason, IMovableGameObject target) {
+
+		public void Destroy() {
+			manager.DestroySceneNode(sceneNode);
+			manager.DestroyEntity(entity);
+		}
+
+
+		public virtual ActionReaction ReactToInitiative(ActionReason reason, IMovableGameObject target) {
 			return ActionReaction.None;
 		}
 
@@ -53,7 +60,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// Change visibility of sun
 		/// </summary>
 		/// <param name="visible">boolean value if the sun is visible or not</param>
-		public void changeVisible(bool visible) {   //now creating
+		public void ChangeVisible(bool visible) {   //now creating
 			if (visible) {
 				if (entity == null) {
 					entity = manager.CreateEntity(name, mesh);
@@ -67,7 +74,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			}
 		}
 
-		public Dictionary<string, object> getPropertyToDisplay() {
+		public Dictionary<string, object> GetPropertyToDisplay() {
 			var propToDisp = new Dictionary<string, object>();
 			return propToDisp;
 		}
@@ -108,10 +115,10 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			get { return -1; }
 		}
 
-		public void addProperty<T>(PropertyEnum name, Property<T> property) { }
-		public void addProperty<T>(string name, Property<T> property) { }
-		public void removeProperty(PropertyEnum name) { }
-		public void removeProperty(string name) { }
+		public void AddProperty<T>(PropertyEnum name, Property<T> property) { }
+		public void AddProperty<T>(string name, Property<T> property) { }
+		public void RemoveProperty(PropertyEnum name) { }
+		public void RemoveProperty(string name) { }
 
 		public Vector3 Position {
 			get {
@@ -119,8 +126,24 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			}
 		}
 
-		public bool tryExecute(string executingAction) {
+		public bool TryExecute(string executingAction) {
 			throw new NotImplementedException();
+		}
+
+		private DieEventHandler die = null;
+		public DieEventHandler DieHandler {
+			get { return die; }
+			set { die = value; }
+		}
+
+		public virtual int Hp {
+			get {
+				return 100;
+			}
+		}
+
+		public void TakeDamage(int damage) {
+			
 		}
 	}
 }

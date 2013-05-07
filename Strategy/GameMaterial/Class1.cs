@@ -8,29 +8,29 @@ namespace Strategy.GameMaterial {
 
         private double actualQuantity;
 
-        public string name {
+        public string Name {
             get { return "PIkopaso"; }
         }
 
-        public double displayChangees() {
+        public double DisplayChangees() {
             throw new NotImplementedException();
         }
 
-        public int getQuantityOfMaterial() {
+        public int GetQuantityOfMaterial() {
             throw new NotImplementedException();
         }
 
-        public bool tryBuild(int wantedQuantity) {
+        public bool TryBuild(int wantedQuantity) {
             throw new NotImplementedException();
         }
 
-        public int state {
+        public int State {
             get {
                 return (int)actualQuantity;
             }
         }
 
-        public void addQuantity(double quantity) {
+        public void AddQuantity(double quantity) {
             actualQuantity+=quantity;
         }
     }

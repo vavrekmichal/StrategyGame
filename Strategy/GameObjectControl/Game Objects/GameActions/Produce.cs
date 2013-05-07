@@ -18,13 +18,13 @@ namespace Strategy.GameObjectControl.Game_Objects.GameActions {
         }
 
 
-        public void execute(object executer, Team team) {
+        public void Execute(object executer, Team team) {
             foreach (var k in productionDictionary[executer]) {
-                team.addMaterial(k.Key.name,k.Value);
+                team.AddMaterial(k.Key.Name,k.Value);
             }
         }
 
-        public void registerExecuter(object executer, IMaterial specificMaterial, double value) {
+        public void RegisterExecuter(object executer, IMaterial specificMaterial, double value) {
             if (!productionDictionary.ContainsKey(executer)) {
                 productionDictionary.Add(executer, new List<KeyValuePair<IMaterial, double>>());
             }
@@ -32,8 +32,8 @@ namespace Strategy.GameObjectControl.Game_Objects.GameActions {
             productionDictionary[executer].Add(new KeyValuePair<IMaterial, double>(specificMaterial, value));
         }
 
-        public string getName() {
-           return "Produce";
+        public string Name{
+			get { return "Produce"; }
         }
     }
 }

@@ -6,11 +6,11 @@ using Strategy.TeamControl;
 
 namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 	public interface IStaticGameObject : IGameObject {
-		void rotate(float f);
-        void nonActiveRotate(float f);
+		void Rotate(float f);
+        void NonActiveRotate(float f);
 
 		
-        bool tryExecute(string executingAction);
+        bool TryExecute(string executingAction);
 
 	}
 }

@@ -28,8 +28,6 @@ namespace Strategy {
 		
 		protected CameraMan cameraMan;
 
-
-
         protected Game myGame;
 
 
@@ -47,17 +45,17 @@ namespace Strategy {
 			//createBars();
 			#endregion
 
-            myGame.inicialization();
+            myGame.Inicialization();
 
-			loadFont();
+			LoadFont();
 
-			setShadow(); //set shadow (color, technique)
+			SetShadow(); //Set shadow (color, technique)
 
-			setGround();	//set a floor
+			SetGround();	//Set a floor
 
-			setSun(); //set lights 
+			SetSun(); //Set lights 
 
-			setSky(); //set sky texture
+			SetSky(); //Set sky texture
 
 	
 		}
@@ -76,7 +74,7 @@ namespace Strategy {
 		}
 
 		/// <summary>
-		/// The CreateViewports set camera and gives viewport to camera
+		/// The CreateViewports Set camera and gives viewport to camera
 		/// </summary>
 		protected override void CreateViewports() {
 			Mogre.Viewport viewport = mWindow.AddViewport(mCamera);
@@ -104,21 +102,21 @@ namespace Strategy {
 		/// <summary>
 		/// Antibug
 		/// </summary>
-		private void loadFont(){
+		private void LoadFont(){
 			Mogre.FontManager.Singleton.Load("BlueHighway", Mogre.ResourceGroupManager.DEFAULT_RESOURCE_GROUP_NAME);
 		}
 		#region Animation
 
 
 		/// <summary>
-		/// This method is called in each time in game loop method update scene and call walk method of
+		/// This method is called in each time in game loop method Update scene and call walk method of
 		/// movable objects
 		/// </summary>
-		/// <param name="evt">delay between last frames</param>
+		/// <param Name="evt">delay between last frames</param>
 		protected override void UpdateScene(Mogre.FrameEvent evt) {
 
 			float f = evt.timeSinceLastFrame;
-			myGame.update(f);
+			myGame.Update(f);
 			base.UpdateScene(evt);
 			if (mTimer > 0) { //if overlay showed
 				mTimer -= f;
@@ -144,9 +142,9 @@ namespace Strategy {
             myGame = Game.getInstance(mSceneMgr, cameraMan, mWindow, mMouse, mKeyboard);
 
 
-            mMouse.MousePressed += new MOIS.MouseListener.MousePressedHandler(myGame.getMouseControl().OnMyMousePressed);
-			mMouse.MouseReleased += new MOIS.MouseListener.MouseReleasedHandler(myGame.getMouseControl().OnMyMouseReleased);
-			mMouse.MouseMoved += new MOIS.MouseListener.MouseMovedHandler(myGame.getMouseControl().OnMyMouseMoved);
+            mMouse.MousePressed += new MOIS.MouseListener.MousePressedHandler(myGame.GetMouseControl().OnMyMousePressed);
+			mMouse.MouseReleased += new MOIS.MouseListener.MouseReleasedHandler(myGame.GetMouseControl().OnMyMouseReleased);
+			mMouse.MouseMoved += new MOIS.MouseListener.MouseMovedHandler(myGame.GetMouseControl().OnMyMouseMoved);
 		}
 
 		#region Keyboard control
@@ -155,7 +153,7 @@ namespace Strategy {
 		/// <summary>
 		/// This function is called when any key is pressed
 		/// </summary>
-		/// <param name="evt">Wwhich button was pressed</param>
+		/// <param Name="evt">Wwhich button was pressed</param>
 		/// <returns>kKey was pressed -> true</returns>
 		protected override bool OnKeyPressed(MOIS.KeyEvent evt) {
 			base.OnKeyPressed(evt);
@@ -165,7 +163,7 @@ namespace Strategy {
 						try {
 							Shutdown();
 						} catch (System.Exception) {
-							quit();
+							Quit();
 						}
 					} else {
 						var messageBox = Mogre.OverlayManager.Singleton.GetOverlayElement("Author/MessageBox");
@@ -183,27 +181,27 @@ namespace Strategy {
 					break;
 				// Music section
 				case MOIS.KeyCode.KC_NUMPAD9:
-					Game.IGameSoundMakerPlayer.volumeUp();
+					Game.IGameSoundMakerPlayer.VolumeUp();
 					break;
 				case MOIS.KeyCode.KC_NUMPAD6:
-					Game.IGameSoundMakerPlayer.volumeDown();
+					Game.IGameSoundMakerPlayer.VolumeDown();
 					break;
 				case MOIS.KeyCode.KC_N:
-					Game.IGameSoundMakerPlayer.stopActualSong();
+					Game.IGameSoundMakerPlayer.StopActualSong();
 					break;
 				case MOIS.KeyCode.KC_M:
-					Game.IGameSoundMakerPlayer.pause();
+					Game.IGameSoundMakerPlayer.Pause();
 					break;
 				case MOIS.KeyCode.KC_B:
-					Game.IGameSoundMakerPlayer.actualPlaying();
+					Game.IGameSoundMakerPlayer.ActualPlaying();
 					break;
 				// End of music section
 				case MOIS.KeyCode.KC_R:
-					restartCamera();
+					RestartCamera();
 					break;
 
 				case MOIS.KeyCode.KC_ESCAPE:
-					quit();
+					Quit();
 					break;
 			}
 
@@ -213,19 +211,19 @@ namespace Strategy {
 
 		#endregion
 
-		private void quit() {
-			myGame.quit();
+		private void Quit() {
+			myGame.Quit();
 			throw new ShutdownException();
 		}
 
-		private void restartCamera(){
+		private void RestartCamera(){
 			mCamera.Position = cameraStart;
 			mCamera.LookAt(Mogre.Vector3.ZERO);
 		}
 
 
 		/// <summary>
-		/// This override function set basic setting to RenderSystem (Setup RenderSystem by code)
+		/// This override function Set basic setting to RenderSystem (Setup RenderSystem by code)
 		/// </summary>
 		/// <returns>True</returns>
 		protected override bool Configure() {
@@ -241,17 +239,17 @@ namespace Strategy {
 
 
 		/// <summary>
-		/// The setShadow() is function to set color and type of shadows
+		/// The setShadow() is function to Set color and type of shadows
 		/// </summary>
-		private void setShadow() {
+		private void SetShadow() {
 			mSceneMgr.AmbientLight = new Mogre.ColourValue(.1f, .1f, .1f);
 			mSceneMgr.ShadowTechnique = Mogre.ShadowTechnique.SHADOWTYPE_STENCIL_ADDITIVE;
 		}
 
 		/// <summary>
-		/// The function to set the ground
+		/// The function to Set the ground
 		/// </summary>
-		private void setGround() {
+		private void SetGround() {
 			//Mogre.Plane plane = new Mogre.Plane(Mogre.Vector3.UNIT_Y, 0);
 			////Inicialized ground
 			////my nota - poslendi  dve jsou hustota 4-5 je 2D vektor na velikost
@@ -265,9 +263,9 @@ namespace Strategy {
 
 
 		/// <summary>
-		/// The function set lights one is directional and second is spot (to make shadows like sunshine)
+		/// The function Set lights one is directional and second is spot (to make shadows like sunshine)
 		/// </summary>
-		private void setSun() {
+		private void SetSun() {
 
 			Mogre.Light directionalLight = mSceneMgr.CreateLight("directionalLight");
 			directionalLight.Type = Mogre.Light.LightTypes.LT_DIRECTIONAL;
@@ -291,9 +289,9 @@ namespace Strategy {
 		}
 
 		/// <summary>
-		/// The function set sky and fog
+		/// The function Set sky and fog
 		/// </summary>
-		private void setSky() {
+		private void SetSky() {
 			//mSceneMgr.SetSkyDome(true, "Examples/SpaceSkyBox", 10, 20);
 			mSceneMgr.SetFog(Mogre.FogMode.FOG_EXP2, fadeColour, 0.0003f);
 		}

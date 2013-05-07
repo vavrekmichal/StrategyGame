@@ -21,13 +21,13 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			this.from = from;
 			this.to = to;
 			this.traveler = traveler;
-			long travelTime = (long)getSquareOfDistance(from, to);
+			long travelTime = (long)GetSquareOfDistance(from, to);
 			from.removeIMGO(traveler);
 			timeToGo = new Property<TimeSpan>(new TimeSpan(travelTime*60)); //multiply by min
-			traveler.changeVisible(false);
+			traveler.ChangeVisible(false);
 		}
 
-		private double getSquareOfDistance(SolarSystem s1, SolarSystem s2) {
+		private double GetSquareOfDistance(SolarSystem s1, SolarSystem s2) {
 			double xd = s2.Position.x - s1.Position.x;
 			double yd = s2.Position.y - s1.Position.y;
 			double zd = s2.Position.z - s1.Position.z;
@@ -35,7 +35,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			return squareOfDistance;
 		}
 
-		public void update(float delay) {
+		public void Update(float delay) {
 			if (!arrived) {
 				var zeroSpan = new TimeSpan(0, 0, 0);
 				var diff = TimeSpan.FromSeconds(delay);
@@ -51,7 +51,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			}
 		}
 
-		public bool isDone {
+		public bool IsDone {
 			get { return arrived; }
 		}
 

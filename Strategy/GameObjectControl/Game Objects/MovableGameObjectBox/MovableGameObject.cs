@@ -18,7 +18,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		protected Dictionary<string, object> propertyBonusDict;
 		protected List<IGameAction> listOfAction; //TODO not implemented
 		protected LinkedList<Vector3> flyList; // Walking points in linked list
-		protected float distance = 0.0f;              // The distance the object has left to travel
+		protected float distance = 0.0f;              // The distance the object has left to Travel
 		protected Vector3 direction = Vector3.ZERO;   // The direction the object is moving
 		protected Vector3 destination = Vector3.ZERO; // The destination the object is moving towards
 
@@ -48,9 +48,9 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// <summary>
 		/// Checks if object go to target when is position changed
 		/// </summary>
-		protected void positionToMoveChanged() {
+		protected void PositionToMoveChanged() {
 			if (isMovingToTarget) {
-				Game.IMoveManager.movementInterupted(this);
+				Game.IMoveManager.MovementInterupted(this);
 				isMovingToTarget = false;
 			}
 		}
@@ -58,35 +58,35 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		#region virtual methods
 
 
-		public virtual ActionAnswer onMouseAction(Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject) {
+		public virtual ActionAnswer OnMouseAction(Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject) {
 			return ActionAnswer.Move;
 		}
 
 		/// <summary>
 		/// Add new position to flyList (on first place)
 		/// </summary>
-		/// <param name="pointToGo">Position</param>
-		public virtual void addNextLocation(Vector3 pointToGo) {
+		/// <param Name="pointToGo">Position</param>
+		public virtual void AddNextLocation(Vector3 pointToGo) {
 			flyList.AddFirst(pointToGo);
 		}
 
 		/// <summary>
 		/// Add all positions from given LinkedList to flyList
 		/// </summary>
-		/// <param name="positionList">LinkedList with positions</param>
-		public virtual void addNextLocation(LinkedList<Vector3> positionList) {
-			positionToMoveChanged();
+		/// <param Name="positionList">LinkedList with positions</param>
+		public virtual void AddNextLocation(LinkedList<Vector3> positionList) {
+			PositionToMoveChanged();
 			foreach (var pointToGo in positionList) {
 				flyList.AddLast(pointToGo);
 			}
 		}
 
 		/// <summary>
-		/// Creates new LinkedList and set one position to go.
+		/// Creates new LinkedList and Set one position to go.
 		/// </summary>
-		/// <param name="pointToGo">Position</param>
-		public virtual void setNextLocation(Vector3 pointToGo) {
-			positionToMoveChanged();
+		/// <param Name="pointToGo">Position</param>
+		public virtual void SetNextLocation(Vector3 pointToGo) {
+			PositionToMoveChanged();
 			flyList = new LinkedList<Vector3>();
 			flyList.AddLast(pointToGo);
 			moving = false;
@@ -95,9 +95,9 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// <summary>
 		/// Set given LinkedList as flyList
 		/// </summary>
-		/// <param name="positionList">LinkedList with positions</param>
-		public virtual void setNextLocation(LinkedList<Vector3> positionList) {
-			positionToMoveChanged();
+		/// <param Name="positionList">LinkedList with positions</param>
+		public virtual void SetNextLocation(LinkedList<Vector3> positionList) {
+			PositionToMoveChanged();
 			flyList = positionList;
 			moving = false;
 		}
@@ -105,8 +105,8 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// <summary>
 		/// Gives MovableGameObject to given position
 		/// </summary>
-		/// <param name="pointToGo">Position</param>
-		public virtual void jumpNextLocation(Vector3 pointToGo) {
+		/// <param Name="pointToGo">Position</param>
+		public virtual void JumpNextLocation(Vector3 pointToGo) {
 			if (sceneNode == null) {
 				position = pointToGo;
 			} else {
@@ -118,7 +118,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// Function check if exist next position to go.
 		/// </summary>
 		/// <returns>Exist = true</returns>
-		protected virtual bool nextLocation() {
+		protected virtual bool NextLocation() {
 			if (flyList.Count == 0) {
 				collisionCount = 0;
 				return false;
@@ -132,12 +132,10 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// is in acitve SolarSystem (SceneNode is setted). Function controls distance from destination,
 		/// collisions, etc.
 		/// </summary>
-		/// <param name="delay">Delay between frames</param>
-		public virtual void move(float delay) {
+		/// <param Name="delay">Delay between frames</param>
+		public virtual void Move(float delay) {
 			if (!moving) {
-				if (nextLocation()) {
-
-					Game.IEffectPlayer.playEffect("power.mp3"); // Play effect
+				if (NextLocation()) {
 
 					moving = true;
 					destination = flyList.First.Value; // Get the next destination.
@@ -145,7 +143,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 					// Update the direction and the distance
 					direction = destination - sceneNode.Position;
 					distance = direction.Normalise();
-					Vector3 src = getDirection(sceneNode.Orientation);
+					Vector3 src = GetDirection(sceneNode.Orientation);
 					if ((1.0f + src.DotProduct(direction)) < 0.0001f) {
 						sceneNode.Yaw(180.0f);
 					} else {
@@ -157,8 +155,8 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 				}
 			} else {
-				if (!colision()) { // Object's not in colision
-					float move = getPropertyValue<float>(PropertyEnum.Speed) * delay;
+				if (!Colision()) { // Object's not in colision
+					float move = GetPropertyValue<float>(PropertyEnum.Speed) * delay;
 					distance -= move;
 					if (distance <= .0f) { // Reach destination
 						sceneNode.Position = destination;
@@ -168,7 +166,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 						flyList.RemoveFirst(); // Remove that node from the front of the list
 					} else {
 						sceneNode.Translate(direction * move);
-						Vector3 src = getDirection(sceneNode.Orientation);
+						Vector3 src = GetDirection(sceneNode.Orientation);
 						if ((1.0f + src.DotProduct(direction)) < 0.0001f) { // Watch to right direction
 							sceneNode.Yaw(180.0f);
 						} else {
@@ -180,7 +178,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 				} else {
 					// Collision solver
 					if (collisionCount > colliisionConst) {
-						stop();
+						Stop();
 					}
 					moving = false;
 					if (collisionCount > 0 && !detourReached) {
@@ -194,7 +192,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 					Vector3 orto = new Vector3(direction.z * r, 0, -direction.x * r) * collisionCount * 3 + sceneNode.Position;
 					orto.y = 0;
 					detourReached = false;
-					addNextLocation(orto);
+					AddNextLocation(orto);
 
 				}
 			}
@@ -205,10 +203,10 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// is in hidden SolarSystem (SceneNode is null). Function controls distance from destination,
 		/// collisions, etc.
 		/// </summary>
-		/// <param name="delay">Delay between last two frames</param>
-		public virtual void nonActiveMove(float delay) {
+		/// <param Name="delay">Delay between last two frames</param>
+		public virtual void NonActiveMove(float delay) {
 			if (!moving) {
-				if (nextLocation()) {
+				if (NextLocation()) {
 					moving = true;
 					// Update the destination using the walklist.
 					destination = flyList.First.Value; //get the next destination.
@@ -219,7 +217,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 				}
 			} else {
-				float move = getPropertyValue<float>(PropertyEnum.Speed) * delay;
+				float move = GetPropertyValue<float>(PropertyEnum.Speed) * delay;
 				distance -= move;
 				if (distance <= .0f) { // Reach destination
 					position = destination;
@@ -237,8 +235,8 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// The colision() control if object can move forward 
 		/// </summary>
 		/// <returns>True -> Protector cannot move forward / false -> Protector can</returns>
-		public bool colision() {
-			Ray ray = new Ray(sceneNode.Position, getDirection(sceneNode.Orientation));
+		public bool Colision() {
+			Ray ray = new Ray(sceneNode.Position, GetDirection(sceneNode.Orientation));
 			var mRaySceneQuery = manager.CreateRayQuery(ray);
 			RaySceneQueryResult result = mRaySceneQuery.Execute();
 			const float farfarAway = 30;
@@ -252,19 +250,19 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		}
 
 
-		public virtual void shout() {
+		public virtual void Shout() {
 
 		}
 
 		#endregion
 		
 
-		public virtual void setGroupBonuses(Dictionary<string, object> bonusDict) {
+		public virtual void SetGroupBonuses(Dictionary<string, object> bonusDict) {
 			propertyBonusDict = bonusDict;
 		}
 
 
-		public virtual Dictionary<string, object> onGroupAdd() {
+		public virtual Dictionary<string, object> OnGroupAdd() {
 			// Empty dictionary = no bonuses for other members of group
 			return new Dictionary<string, object>();
 		}
@@ -273,9 +271,9 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// The getDirection() function transform Quaternion to Vector3 and return 
 		/// Vector3 with direction from Quaternion
 		/// </summary>
-		/// <param name="q">Quaternion to transform</param>
+		/// <param Name="q">Quaternion to transform</param>
 		/// <returns>Vector3 with direction</returns>
-		private Vector3 getDirection(Quaternion q) {
+		private Vector3 GetDirection(Quaternion q) {
 			Vector3 v; // Facing in +z
 			v = q * modelDirection;  // Transform the vector by the objects rotation.
 			return v;
@@ -283,9 +281,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 
 
-
-
-		protected T getPropertyValue<T>(PropertyEnum name) {
+		protected T GetPropertyValue<T>(PropertyEnum name) {
 			Property<T> bonus;
 			if (!propertyBonusDict.ContainsKey(name.ToString())) {
 				bonus = new Property<T>(default(T));
@@ -294,12 +290,12 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			}
 
 			// Base Dictionary
-			Property<T> property = getProperty<T>(name);
+			Property<T> property = GetProperty<T>(name);
 			var op = Property<T>.Operator.Plus;
-			return bonus.simpleMath(op, property).Value;
+			return bonus.SimpleMath(op, property).Value;
 		}
 
-		protected T getPropertyValue<T>(string name) {
+		protected T GetPropertyValue<T>(string name) {
 			Property<T> bonus;
 			if (!propertyBonusDict.ContainsKey(name)) {
 				bonus = new Property<T>(default(T));
@@ -308,19 +304,19 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			}
 
 			// UserDefined Dictionary
-			Property<T> property = getProperty<T>(name);
+			Property<T> property = GetProperty<T>(name);
 			var op = Property<T>.Operator.Plus;
-			return bonus.simpleMath(op, property).Value;
+			return bonus.SimpleMath(op, property).Value;
 		}
 
 
 		/// <summary>
 		/// Sets flyList and move interupt reciever.
 		/// </summary>
-		/// <param name="positionList">New LinkedList with positions</param>
-		/// <param name="moveCntr">Move interupt reciever</param>
-		public void goToTarget(LinkedList<Vector3> positionList) {
-			positionToMoveChanged();
+		/// <param Name="positionList">New LinkedList with positions</param>
+		/// <param Name="moveCntr">Move interupt reciever</param>
+		public void GoToTarget(LinkedList<Vector3> positionList) {
+			PositionToMoveChanged();
 			flyList = positionList;
 			moving = false;
 			isMovingToTarget = true;
@@ -329,10 +325,10 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// <summary>
 		/// Sets new LinkedList with one new position to go. And move interupt reciever is setted.
 		/// </summary>
-		/// <param name="placeToGo">Position</param>
-		/// <param name="moveCntr">Move interupt reciever</param>
-		public void goToTarget(Vector3 placeToGo) {
-			positionToMoveChanged();
+		/// <param Name="placeToGo">Position</param>
+		/// <param Name="moveCntr">Move interupt reciever</param>
+		public void GoToTarget(Vector3 placeToGo) {
+			PositionToMoveChanged();
 			flyList = new LinkedList<Vector3>();
 			flyList.AddLast(placeToGo);
 			moving = false;
@@ -342,8 +338,8 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// <summary>
 		/// Stops object's moving
 		/// </summary>
-		public void stop() {
-			positionToMoveChanged();
+		public void Stop() {
+			PositionToMoveChanged();
 			flyList = new LinkedList<Vector3>();
 			moving = false;
 		}
@@ -362,7 +358,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		}
 
 
-		public int Hp {
+		public override int Hp {
 			get { return ((Property<int>)propertyDict[PropertyEnum.Hp]).Value; }
 		}
 
@@ -378,7 +374,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			get { return 10; }
 		}
 
-		public override ActionReaction reactToInitiative(ActionReason reason, IMovableGameObject target) {
+		public override ActionReaction ReactToInitiative(ActionReason reason, IMovableGameObject target) {
 			return ActionReaction.None;
 		}
 	}

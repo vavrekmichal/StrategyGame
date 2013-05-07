@@ -16,14 +16,14 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		protected static Dictionary<string, List<IStaticGameObject>> gameActionsPermitions;
 
 
-		//Look here create file load file
+		//Look here create file Load file
 		static StaticGameObject() {
 			gameActionsPermitions = new Dictionary<string, List<IStaticGameObject>>();
 			gameActions = new Dictionary<string, IGameAction>();
 			IGameAction o = (IGameAction)Assembly.GetExecutingAssembly().CreateInstance("Strategy.GameObjectControl.Game_Objects.GameActions.Produce"); //TODO delete
 
-			gameActions.Add(o.getName(), o);
-			gameActionsPermitions.Add(o.getName(), new List<IStaticGameObject>());
+			gameActions.Add(o.Name, o);
+			gameActionsPermitions.Add(o.Name, new List<IStaticGameObject>());
 		}
 
 		public void registerExecuter(string nameOfAction, Dictionary<string, IMaterial> materials, string material) {
@@ -34,29 +34,29 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		}
 
 		private void registerProducer(IMaterial specificType, double value) {
-			((Produce)gameActions["Produce"]).registerExecuter(this, specificType, value);
+			((Produce)gameActions["Produce"]).RegisterExecuter(this, specificType, value);
 		}
 
 
 		/// <summary>
 		/// Rotating function 
 		/// </summary>
-		/// <param name="f">Deley of frames</param>
-		public virtual void rotate(float f) {
+		/// <param Name="f">Deley of frames</param>
+		public virtual void Rotate(float f) {
 			sceneNode.Roll(new Mogre.Degree(50 * f));
 		}
 
 		/// <summary>
 		/// StaticGameObject doesn't move in non-active mode but child can override.
 		/// </summary>
-		/// <param name="f">Deley of frames</param>
-		public virtual void nonActiveRotate(float f) {
+		/// <param Name="f">Deley of frames</param>
+		public virtual void NonActiveRotate(float f) {
 		}
 
 
-		public bool tryExecute(string executingAction) {
+		public bool TryExecute(string executingAction) {
 			if (gameActionsPermitions.ContainsKey(executingAction) && gameActionsPermitions[executingAction].Contains(this)) {
-				gameActions[executingAction].execute(this, Team);
+				gameActions[executingAction].Execute(this, Team);
 				return true;
 			}
 			return false;
@@ -67,8 +67,8 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// <summary>
 		/// Called when object will be invisible
 		/// </summary>
-		public override void changeVisible(bool visible) {
-			base.changeVisible(visible);
+		public override void ChangeVisible(bool visible) {
+			base.ChangeVisible(visible);
 			if (visible) {
 				sceneNode.Pitch(new Degree(-90f));
 			}

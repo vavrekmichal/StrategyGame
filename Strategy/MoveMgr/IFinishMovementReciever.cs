@@ -8,7 +8,7 @@ using Strategy.GameObjectControl.GroupMgr;
 
 namespace Strategy.MoveMgr {
 	public interface IFinishMovementReciever {
-		void movementFinished(IMovableGameObject imgo);
-		void movementInterupted(IMovableGameObject imgo);
+		void MovementFinished(IMovableGameObject imgo);
+		void MovementInterupted(IMovableGameObject imgo);
 	}
 }

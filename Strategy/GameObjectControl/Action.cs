@@ -20,6 +20,6 @@ namespace Strategy.GameObjectControl {
 	}
 
 	public enum ActionReason {
-		targetInDistance
+		TargetInDistance
 	}
 }

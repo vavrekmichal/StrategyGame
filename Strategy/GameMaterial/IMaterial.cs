@@ -7,12 +7,12 @@ using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 namespace Strategy.GameMaterial {
     public interface IMaterial {
   
-        double displayChangees();
-        int getQuantityOfMaterial();
-        bool tryBuild(int wantedQuantity);
-        void addQuantity(double quantity);
+        double DisplayChangees();
+        int GetQuantityOfMaterial();
+        bool TryBuild(int wantedQuantity);
+        void AddQuantity(double quantity);
 
-        int state {  get; }
-        string name { get; }
+        int State {  get; }
+        string Name { get; }
     }
 }

@@ -16,7 +16,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 		public bool isMovableGroupActive; // Active is movable group
 
-		private GroupMovables selectedGroupM; //not implemented ...will be actual selected group - need rectangular select
+		private GroupMovables selectedGroupM; //not implemented ...will be actual selected group - need rectangular Select
 		private GroupStatics selectedGroupS;
 
 		private int activeSolarSystem = 0; // Now active solarSystem
@@ -31,29 +31,41 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 
 		/// <summary>
-		/// Called on frame update
+		/// Called on frame Update
 		/// </summary>
-		/// <param name="delay">Delay between frames</param>
-		public void update(float delay) {
+		/// <param Name="delay">Delay between frames</param>
+		public void Update(float delay) {
 			foreach (KeyValuePair<int, SolarSystem> solarSys in solarSystemDict) {
-				solarSys.Value.update(delay);
+				solarSys.Value.Update(delay);
 			}
-			Gate.updateTravelers(delay);
+			Gate.UpdateTravelers(delay);
 		}
 
 		/// <summary>
-		/// Function removes gameObject from group (check if is movable or static and find the right group)
+		/// Function removes gameObject from group and calls Destroy to remove object from game
 		/// </summary>
-		/// <param name="gameObject">IStaticGameObject or IMovableGameObject to remove from the group</param>
+		/// <param Name="isgo">IStaticGameObject to remove from the game</param>
+		public void DestroyGameObject(IStaticGameObject isgo) {
+			RemoveFromGroup(isgo);
+			isgo.Destroy();
+		}
+		/// <summary>
+		/// Function removes gameObject from group and calls Destroy to remove object from game
+		/// </summary>
+		/// <param Name="gameObject">IMovableGameObject to remove from the game</param>
+		public void DestroyGameObject(IMovableGameObject imgo) {
+			RemoveFromGroup(imgo);
+			imgo.Destroy();
+		}
 
 
 		/// <summary>
 		/// Function attempts to remove IStaticGameObject from selectedGroup
 		/// </summary>
-		/// <param name="isgo">IStaticGameObject to remove from the group</param>
-		public void removeFromGroup(IStaticGameObject isgo) {
-			if ((!isMovableGroupActive) && selectedGroupS.hasMember(isgo)) {
-				selectedGroupS.removeMember(isgo);
+		/// <param Name="isgo">IStaticGameObject to remove from the group</param>
+		public void RemoveFromGroup(IStaticGameObject isgo) {
+			if ((!isMovableGroupActive) && selectedGroupS.HasMember(isgo)) {
+				selectedGroupS.RemoveMember(isgo);
 				if (selectedGroupS.Count == 0) {
 					selectedGroupS = new GroupStatics();
 				}
@@ -63,20 +75,20 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		/// <summary>
 		/// Function attempts to remove IMovableGameObject from its group
 		/// </summary>
-		/// <param name="imgo">IMovableGameObject to remove from the group</param>
-		public void removeFromGroup(IMovableGameObject imgo) {
+		/// <param Name="imgo">IMovableGameObject to remove from the group</param>
+		public void RemoveFromGroup(IMovableGameObject imgo) {
 			if (imgoGroupDict.ContainsKey(imgo)) {
-				imgoGroupDict[imgo].removeMember(imgo);
+				imgoGroupDict[imgo].RemoveMember(imgo);
 				imgoGroupDict.Remove(imgo);
 			}
 		}
-		public void createTraveler(int solarSystemNumberTo, object imgo) {
-			Gate.createTraveler(getActiveSolarSystem(), getSolarSystem(solarSystemNumberTo), imgo);
+		public void CreateTraveler(int solarSystemNumberTo, object imgo) {
+			Gate.CreateTraveler(GetActiveSolarSystem(), GetSolarSystem(solarSystemNumberTo), imgo);
 		}
 
 
-		public List<Traveler> getTravelers() {
-			return Gate.getTravelers();
+		public List<Traveler> GetTravelers() {
+			return Gate.GetTravelers();
 		}
 
 		#region solarSyst
@@ -85,7 +97,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		/// Get SolarSystem from ObjectCreator as List and creates Dictionary. 
 		/// Also initializes HitTest
 		/// </summary>
-		public void createSolarSystems(List<SolarSystem> solSystList) {
+		public void CreateSolarSystems(List<SolarSystem> solSystList) {
 
 			foreach (SolarSystem solarSyst in solSystList) {
 				solarSystemDict.Add(lastSolarSystem, solarSyst);
@@ -96,18 +108,18 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		/// <summary>
 		/// Show given solar system and hide actual
 		/// </summary>
-		/// <param name="newSolarSystem">Integer of showing solar system</param>
-		public void changeSolarSystem(int newSolarSystem) {
+		/// <param Name="newSolarSystem">Integer of showing solar system</param>
+		public void ChangeSolarSystem(int newSolarSystem) {
 
 			solarSystemDict[activeSolarSystem].hideSolarSystem();
 			solarSystemDict[newSolarSystem].showSolarSystem();
 
 			activeSolarSystem = newSolarSystem; // Set new active solar system  
-			deselectGroup();
+			DeselectGroup();
 			
 		}
 
-		public List<string> getAllSolarSystemNames() {
+		public List<string> GetAllSolarSystemNames() {
 			var list = new List<string>();
 			foreach (var ss in solarSystemDict) {
 				list.Add(ss.Value.Name);
@@ -116,49 +128,49 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		}
 
 
-		public string getSolarSystemName(int numberOfSolarSystem) {
+		public string GetSolarSystemName(int numberOfSolarSystem) {
 			return solarSystemDict[numberOfSolarSystem].Name;
 		}
 
-		public SolarSystem getActiveSolarSystem() {
+		public SolarSystem GetActiveSolarSystem() {
 			return solarSystemDict[activeSolarSystem];
 		}
 
-		public SolarSystem getSolarSystem(int numberOfSolarSystem) {
+		public SolarSystem GetSolarSystem(int numberOfSolarSystem) {
 			return solarSystemDict[numberOfSolarSystem];
 		}
 
 		#endregion
 
 		/// <summary>
-		/// Set all select group as new empty
+		/// Set all Select group as new empty
 		/// </summary>
-		public void deselectGroup() {
+		public void DeselectGroup() {
 			GroupMovables groupM = new GroupMovables();
 			GroupStatics groupS = new GroupStatics();
 			isMovableGroupActive = false;
-			showSelectedInfoGroup();
+			ShowSelectedInfoGroup();
 		}
 
 		/// <summary>
-		/// Creates group (without calling group.select()) from given List with IStaticGameObject
+		/// Creates group (without calling group.Select()) from given List with IStaticGameObject
 		/// Object from player team has greater priority then others
 		/// </summary>
-		/// <param name="isgoList">List with IStaticGameObject</param>
-		public void createInfoGroup(List<IStaticGameObject> isgoList) {
+		/// <param Name="isgoList">List with IStaticGameObject</param>
+		public void CreateInfoGroup(List<IStaticGameObject> isgoList) {
 			isMovableGroupActive = false;
 			if (isgoList.Count > 0) {
 				var group = new GroupStatics(isgoList[0].Team);
-				group.insertMemeber(isgoList[0]);	// Insert first
+				group.InsertMemeber(isgoList[0]);	// Insert first
 				var inGroup = isgoList[0];
 				if (isgoList.Count > 1) {		// Check if there is more object
 					for (int i = 1; i < isgoList.Count; i++) {
 						if (inGroup.Team.Name == Game.playerName && inGroup.Team == isgoList[i].Team) {
-							group.insertMemeber(isgoList[i]); // Insert player's isgo	
+							group.InsertMemeber(isgoList[i]); // Insert player's isgo	
 						} else {
 							if (isgoList[i].Team.Name == Game.playerName) { // In some of elements in isgoList is players's -> has greater priority
 								group = new GroupStatics(isgoList[i].Team);
-								group.insertMemeber(isgoList[i]);	// Insert firt
+								group.InsertMemeber(isgoList[i]);	// Insert firt
 								inGroup = isgoList[i];
 							}
 						}
@@ -172,19 +184,19 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		}
 
 		/// <summary>
-		/// Creates group (without calling group.select()) from given List with IMovableGameObject
+		/// Creates group (without calling group.Select()) from given List with IMovableGameObject
 		/// Object from player team has greater priority then others
 		/// </summary>
-		/// <param name="isgoList">List with IMovableGameObject</param>
-		public void createInfoGroup(List<IMovableGameObject> imgoList) {
+		/// <param Name="isgoList">List with IMovableGameObject</param>
+		public void CreateInfoGroup(List<IMovableGameObject> imgoList) {
 			bool inSameGroup = true;
 			isMovableGroupActive = true;
 
 			// Test if all imgo are in same selected group
-			var firstGroup = getGroup(imgoList.First());
+			var firstGroup = GetGroup(imgoList.First());
 
 			for (int i = 1; i < imgoList.Count; i++) {
-				var memberGroup = getGroup(imgoList[i]);
+				var memberGroup = GetGroup(imgoList[i]);
 				if (firstGroup != memberGroup) {
 					// Different groups => new group must be created (unselected)
 					inSameGroup = false;
@@ -196,17 +208,17 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 				// Create new uselect group (selected object was not in same group)
 				var group = new GroupMovables(imgoList.First().Team);
-				group.insertMemeber(imgoList[0]);
+				group.InsertMemeber(imgoList[0]);
 
 				if (imgoList.Count > 1) {		// Check if there is more object
 					for (int i = 1; i < imgoList.Count; i++) {
 						if (group.OwnerTeam.Name == Game.playerName && group.OwnerTeam == imgoList[i].Team) {
-							group.insertMemeber(imgoList[i]); // Insert player's imgo	
+							group.InsertMemeber(imgoList[i]); // Insert player's imgo	
 						} else {
 							// Element of isgoList is in players's Team => has greater priority and must be selected
 							if (imgoList[i].Team.Name == Game.playerName) {
 								group = new GroupMovables(imgoList[i].Team);
-								group.insertMemeber(imgoList[i]);	// Insert firt
+								group.InsertMemeber(imgoList[i]);	// Insert firt
 							}
 						}
 					}
@@ -225,7 +237,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 					group.GroupBonusDict = firstGroup.GroupBonusDict;
 					
 					foreach (var imgo in imgoList) {
-						group.insertMemeber(imgo);
+						group.InsertMemeber(imgo);
 					}
 					selectedGroupM = group;
 				}
@@ -233,7 +245,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			}
 		}
 
-		public GroupMovables getGroup(IMovableGameObject imgo) {
+		public GroupMovables GetGroup(IMovableGameObject imgo) {
 			GroupMovables group;
 			if (imgoGroupDict.ContainsKey(imgo)) {
 				group = imgoGroupDict[imgo];
@@ -245,11 +257,11 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		}
 
 
-		public void showSelectedInfoGroup() {
+		public void ShowSelectedInfoGroup() {
 			if (isMovableGroupActive) {
-				Game.GUIManager.showTargeted(selectedGroupM);
+				Game.GUIManager.ShowTargeted(selectedGroupM);
 			} else {
-				Game.GUIManager.showTargeted(selectedGroupS);
+				Game.GUIManager.ShowTargeted(selectedGroupS);
 			}
 		}
 
@@ -267,12 +279,12 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="clickedPoint">Mouse position</param>
-		/// <param name="hitObject">HitTest result</param>
-		/// <param name="isFriendly">If HitTest returns object => TeamTest result</param>
-		/// <param name="isImgo">If HitTest returns object => MovableTest result</param>
+		/// <param Name="clickedPoint">Mouse position</param>
+		/// <param Name="hitObject">HitTest result</param>
+		/// <param Name="isFriendly">If HitTest returns object => TeamTest result</param>
+		/// <param Name="isImgo">If HitTest returns object => MovableTest result</param>
 		/// <returns>Returns group answer collected from each member of group</returns>
-		public ActionAnswer onRightMouseClick(Mogre.Vector3 clickedPoint, MovableObject hitObject, bool isFriendly, bool isImgo) {
+		public ActionAnswer OnRightMouseClick(Mogre.Vector3 clickedPoint, MovableObject hitObject, bool isFriendly, bool isImgo) {
 			//TODO comment
 			if (isMovableGroupActive && selectedGroupM.OwnerTeam.Name == Game.playerName) {
 
@@ -289,8 +301,8 @@ namespace Strategy.GameObjectControl.GroupMgr {
 								toRecount.Add(imgoGroupDict[imgo]);
 							}
 
-							// Remove from old group and set new oneto Dict
-							imgoGroupDict[imgo].removeMember(imgo);
+							// Remove from old group and Set new oneto Dict
+							imgoGroupDict[imgo].RemoveMember(imgo);
 							imgoGroupDict[imgo] = selectedGroupM;
 						} else {
 							imgoGroupDict.Add(imgo, selectedGroupM);
@@ -300,11 +312,11 @@ namespace Strategy.GameObjectControl.GroupMgr {
 					// Recount all modified groups
 					foreach (var group in toRecount) {
 						// Count just basic bonuses, others are removed when the source of them is removed.
-						group.countBasicBonuses();
+						group.CountBasicBonuses();
 					}
-					selectedGroupM.select();
+					selectedGroupM.Select();
 				}
-				return selectedGroupM.onMouseAction(clickedPoint, hitObject, isFriendly, isImgo);
+				return selectedGroupM.OnMouseAction(clickedPoint, hitObject, isFriendly, isImgo);
 
 			} else {
 				return ActionAnswer.None;
@@ -313,7 +325,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		}
 
 
-		public GroupMovables getActiveMovableGroup() {
+		public GroupMovables GetActiveMovableGroup() {
 			return selectedGroupM;
 		}
 

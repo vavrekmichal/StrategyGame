@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Strategy.Sound {
 	interface IEffectPlayer {
 
-		void playEffect(string name);
+		void PlayEffect(string name);
 
 	}
 }

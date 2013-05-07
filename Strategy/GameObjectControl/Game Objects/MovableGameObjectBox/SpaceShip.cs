@@ -18,14 +18,14 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			this.team = myTeam;
 			this.manager = manager;
 			this.position = position;
-			base.setProperty(PropertyEnum.Speed, propMgr.getProperty<float>("speed"));
-			base.setProperty(PropertyEnum.Attack, propMgr.getProperty<int>("basicAttack"));
-			base.setProperty(PropertyEnum.Deffence, propMgr.getProperty<int>("basicDeff"));
+			base.SetProperty(PropertyEnum.Speed, propMgr.GetProperty<float>("speed"));
+			base.SetProperty(PropertyEnum.Attack, propMgr.GetProperty<int>("basicAttack"));
+			base.SetProperty(PropertyEnum.Deffence, propMgr.GetProperty<int>("basicDeff"));
 			//Mogre inicialization of object
 			entity = manager.CreateEntity(name, mesh);
 		}
 
-		public override ActionAnswer onMouseAction(Vector3 point, MovableObject hitTarget, bool isFriendly, bool isMovableGameObject) {
+		public override ActionAnswer OnMouseAction(Vector3 point, MovableObject hitTarget, bool isFriendly, bool isMovableGameObject) {
 
 			if (hitTarget != null) {
 				if (isFriendly) {
@@ -47,16 +47,16 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			return ActionAnswer.Move;
 		}
 
-		protected override void onDisplayed() {
+		protected override void OnDisplayed() {
 
 		}
 
 		public override int AttackPower {
-			get { return getPropertyValue<int>(PropertyEnum.Attack); }
+			get { return GetPropertyValue<int>(PropertyEnum.Attack); }
 		}
 
 		public override int DeffPower {
-			get { return getPropertyValue<int>(PropertyEnum.Deffence); }
+			get { return GetPropertyValue<int>(PropertyEnum.Deffence); }
 		}
 	}
 }

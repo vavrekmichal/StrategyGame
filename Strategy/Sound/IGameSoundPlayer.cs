@@ -5,17 +5,17 @@ using System.Text;
 
 namespace Strategy.Sound {
 	interface IGameSoundMakerPlayer {
-		void playMusic();
-		void actualPlaying();
-		void nowPlaying(string s);
-		void stopActualSong();
-		void pause();
+		void PlayMusic();
+		void ActualPlaying();
+		void NowPlaying(string s);
+		void StopActualSong();
+		void Pause();
 
 		// Volume 
-		void volumeUp();
-		void volumeDown();
+		void VolumeUp();
+		void VolumeDown();
 
 		// Overlay
-		void hideBox(float f);
+		void HideBox(float f);
 	}
 }

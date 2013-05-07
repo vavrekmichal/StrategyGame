@@ -39,15 +39,15 @@ namespace Strategy.GameGUI {
 		protected Dictionary<string, MaterialGUIPair> materialList;
 
 		/// <summary>
-		/// Constructor initializes GUI systrem for Mogre and load fonts, skins and create control panel.
+		/// Constructor initializes GUI systrem for Mogre and Load fonts, skins and create control panel.
 		/// Also the constuctor creates mouse bounds (app using Miagi cursor for control)
 		/// </summary>
-		/// <param name="width">Window width</param>
-		/// <param name="height">Window height</param>
-		/// <param name="mouse">Mogre mouse input</param>
-		/// <param name="keyboard">Mogre keyboard input</param>
-		/// <param name="materials">Names and values of user materials</param>
-		/// <param name="groupMgr">GroupManager instance</param>
+		/// <param Name="width">Window width</param>
+		/// <param Name="height">Window height</param>
+		/// <param Name="mouse">Mogre mouse input</param>
+		/// <param Name="keyboard">Mogre keyboard input</param>
+		/// <param Name="materials">Names and values of user materials</param>
+		/// <param Name="groupMgr">GroupManager instance</param>
 		public MyGUI(int width, int height, MOIS.Mouse mouse, MOIS.Keyboard keyboard) {
 
 			materialList = new Dictionary<string, MaterialGUIPair>();
@@ -82,16 +82,16 @@ namespace Strategy.GameGUI {
 
 			system.GUIManager.Cursor = cursor;   // Set cursor
 
-			createMainMenu();
-			createTopMenu();
+			CreateMainMenu();
+			CreateTopMenu();
 
-			createCameraBounds();				// Create bounds around screen to move the camera
+			CreateCameraBounds();				// Create bounds around screen to move the camera
 		}
 
 		/// <summary>
 		/// Function creates invisible bounds for moving with camera
 		/// </summary>
-		private void createCameraBounds() {
+		private void CreateCameraBounds() {
 
 			// Top bound
 			var topSection = new Button() {
@@ -99,8 +99,8 @@ namespace Strategy.GameGUI {
 				Location = new Point(screenWidth / 15, screenHeight * 2 / 30),
 				Name = "topSection"
 			};
-			topSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(mouseOver);
-			topSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(mouseLeave);
+			topSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseOver);
+			topSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseLeave);
 			gui.Controls.Add(topSection);
 
 			// Botton bound
@@ -109,8 +109,8 @@ namespace Strategy.GameGUI {
 				Location = new Point(screenWidth / 15, screenHeight * 7 / 10),
 				Name = "backSection"
 			};
-			backSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(mouseOver);
-			backSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(mouseLeave);
+			backSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseOver);
+			backSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseLeave);
 			gui.Controls.Add(backSection);
 
 			// Left bound
@@ -119,8 +119,8 @@ namespace Strategy.GameGUI {
 				Location = new Point(0, screenHeight / 10),
 				Name = "leftSection"
 			};
-			leftSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(mouseOver);
-			leftSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(mouseLeave);
+			leftSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseOver);
+			leftSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseLeave);
 			gui.Controls.Add(leftSection);
 
 			// Right bound
@@ -129,8 +129,8 @@ namespace Strategy.GameGUI {
 				Location = new Point(screenWidth * 14 / 15, screenHeight / 10),
 				Name = "rightSection"
 			};
-			rightSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(mouseOver);
-			rightSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(mouseLeave);
+			rightSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseOver);
+			rightSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseLeave);
 			gui.Controls.Add(rightSection);
 
 			// Rigth-up corner bound
@@ -139,8 +139,8 @@ namespace Strategy.GameGUI {
 				Location = new Point(screenWidth * 14 / 15, 0),
 				Name = "rightUpSection"
 			};
-			rightUpSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(mouseOver);
-			rightUpSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(mouseLeave);
+			rightUpSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseOver);
+			rightUpSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseLeave);
 			gui.Controls.Add(rightUpSection);
 
 			// Right-down corner bound
@@ -149,8 +149,8 @@ namespace Strategy.GameGUI {
 				Location = new Point(screenWidth * 14 / 15, screenHeight * 7 / 10),
 				Name = "rightDownSection"
 			};
-			rightDownSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(mouseOver);
-			rightDownSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(mouseLeave);
+			rightDownSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseOver);
+			rightDownSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseLeave);
 			gui.Controls.Add(rightDownSection);
 
 			// Left-down corner bound
@@ -159,8 +159,8 @@ namespace Strategy.GameGUI {
 				Location = new Point(0, screenHeight * 7 / 10),
 				Name = "leftDownSection"
 			};
-			leftDownSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(mouseOver);
-			leftDownSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(mouseLeave);
+			leftDownSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseOver);
+			leftDownSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseLeave);
 			gui.Controls.Add(leftDownSection);
 
 			// Left-up corner bound
@@ -169,66 +169,66 @@ namespace Strategy.GameGUI {
 				Location = new Point(0, 0),
 				Name = "leftUpSection"
 			};
-			leftUpSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(mouseOver);
-			leftUpSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(mouseLeave);
+			leftUpSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseOver);
+			leftUpSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseLeave);
 			gui.Controls.Add(leftUpSection);
 		}
 
 
 
 		/// <summary>
-		/// Change printed solar system name
+		/// Change printed solar system Name
 		/// </summary>
-		/// <param name="name">New printed SolarSystem's name</param>
-		public void setSolarSystemName(string name) {
+		/// <param Name="Name">New printed SolarSystem's Name</param>
+		public void SetSolarSystemName(string name) {
 			nameOfSolarSystem.Text = name;
 		}
 
 		/// <summary>
 		/// Function shows every given Property from in propertisDict in propertyPanel
 		/// </summary>
-		/// <param name="propertiesDict">Dictionary with properties (key - name, value - Property)</param>
-		private void showGroupProperties(Dictionary<string, object> propertiesDict) {
+		/// <param Name="propertiesDict">Dictionary with properties (key - Name, value - Property)</param>
+		private void ShowGroupProperties(Dictionary<string, object> propertiesDict) {
 			var propDict = propertiesDict;
 			int marginLeft = propertyPanel.Width / 2;
 			int marginTop = 26;
 			int i = 0;
 
-			// Add each property int propertyPanel name and value in one row
+			// Add each property int propertyPanel Name and value in one row
 			foreach (var property in propDict) {				
-				propertyPanel.Controls.Add(createLabel(marginTop * i, marginLeft, 26, property.Key));
+				propertyPanel.Controls.Add(CreateLabel(marginTop * i, marginLeft, 26, property.Key));
 
-				propertyPanel.Controls.Add((Label)createPropertyLabelAsObject(marginLeft, marginTop * i, property.Value));
+				propertyPanel.Controls.Add((Label)CreatePropertyLabelAsObject(marginLeft, marginTop * i, property.Value));
 				++i;
 			}
 		}
 
 
 		/// <summary>
-		/// Function shows Group's property and count or name of object (if is just one in the group)
+		/// Function shows Group's property and count or Name of object (if is just one in the group)
 		/// </summary>
-		/// <param name="group">Showing group with IMovableGameObjects</param>
-		public void showTargeted(GroupMovables group) {
-			clearStatPanelProp();
+		/// <param Name="group">Showing group with IMovableGameObjects</param>
+		public void ShowTargeted(GroupMovables group) {
+			ClearStatPanelProp();
 
 			if (group.Count == 1) { // Just one object
 				statPanelName.Text = group[0].Name;
 			} else {
 				statPanelName.Text = "Count: " + group.Count;
 			}
-			showGroupProperties(group.getPropertyToDisplay());
+			ShowGroupProperties(group.GetPropertyToDisplay());
 
 		}
 
 
 		/// <summary>
-		/// Function shows Group's property and count or name of object (if is just one in the group)
+		/// Function shows Group's property and count or Name of object (if is just one in the group)
 		/// Also can show nothingSelect constant if group is empty
 		/// </summary>
-		/// <param name="group"></param>
-		public void showTargeted(GroupStatics group) {
+		/// <param Name="group"></param>
+		public void ShowTargeted(GroupStatics group) {
 			 
-			clearStatPanelProp();
+			ClearStatPanelProp();
 			if (group == null || group.Count == 0) {
 				statPanelName.Text = nothingSelected;
 				propertyPanel.Controls.Add(new Label() {
@@ -239,7 +239,7 @@ namespace Strategy.GameGUI {
 				return;
 			}
 
-			showGroupProperties(group.getPropertyToDisplay());
+			ShowGroupProperties(group.GetPropertyToDisplay());
 
 			if (group.Count == 1) { // Just one object
 				var isgo = group[0];
@@ -248,10 +248,6 @@ namespace Strategy.GameGUI {
 
 			} else {// Player's planets (only way when is selected more than 1 IStaticGameObjects -> display actions
 				statPanelName.Text = "Count: "+ group.Count;
-
-
-
-
 			}
 
 		}
@@ -259,12 +255,12 @@ namespace Strategy.GameGUI {
 		/// <summary>
 		/// Creeates generic PropertyLabel with runtime setted type
 		/// </summary>
-		/// <param name="marginLeft">Left indent</param>
-		/// <param name="marginTop">Top indent</param>
-		/// <param name="property">Property </param>
+		/// <param Name="marginLeft">Left indent</param>
+		/// <param Name="marginTop">Top indent</param>
+		/// <param Name="property">Property </param>
 		/// <returns>PropertyLabel as object</returns>
-		private object createPropertyLabelAsObject(int marginLeft, int marginTop, object property) {
-			MethodInfo method = typeof(MyGUI).GetMethod("createPropertyLabelAsLabel", BindingFlags.NonPublic | BindingFlags.Instance); //createPropertyLabelAsLabel is private function
+		private object CreatePropertyLabelAsObject(int marginLeft, int marginTop, object property) {
+			MethodInfo method = typeof(MyGUI).GetMethod("CreatePropertyLabelAsLabel", BindingFlags.NonPublic | BindingFlags.Instance); //CreatePropertyLabelAsLabel is private function
 			var type = property.GetType().GetGenericArguments()[0];
 			MethodInfo generic = method.MakeGenericMethod(type);
 			List<object> args = new List<object>();
@@ -281,8 +277,8 @@ namespace Strategy.GameGUI {
 		/// <summary>
 		/// Creates top bar
 		/// </summary>
-		/// <param name="materials">Players materials</param>
-		private void createTopMenu() {
+		/// <param Name="materials">Players materials</param>
+		private void CreateTopMenu() {
 			upperMenu = new FlowLayoutPanel() {				//create top panel (empty blue box)
 				Size = new Size(screenWidth * 18 / 20, screenHeight * 2 / 30),
 				Location = new Point(screenWidth / 20, 0),
@@ -303,7 +299,7 @@ namespace Strategy.GameGUI {
 			};
 			upperMenu.Controls.Add(label1);
 
-			nameOfSolarSystem = new Label() {				//Label to show actual solar system name
+			nameOfSolarSystem = new Label() {				//Label to show actual solar system Name
 				Name = "nameOfSolarSystem",
 				Size = new Size(upperMenu.Width / 5, upperMenu.Height * 4 / 5),
 				Text = "Booted system ",
@@ -328,8 +324,8 @@ namespace Strategy.GameGUI {
 			upperMenu.Controls.Add(materialIntro);
 		}
 
-		public void loadMaterials(Dictionary<string, IMaterial> materials) {
-			//Material load - create one line with name of IMaterial and value
+		public void LoadMaterials(Dictionary<string, IMaterial> materials) {
+			//Material Load - create one line with Name of IMaterial and value
 			var materialBox = new Panel() {
 				Size = new Size(upperMenu.Width / 3, upperMenu.Height),
 				ResizeMode = ResizeModes.None,
@@ -361,13 +357,13 @@ namespace Strategy.GameGUI {
 			};
 
 			int row = 0;
-			foreach (KeyValuePair<string, IMaterial> k in materials) {			//creates pair name - value
-				materialList.Add(k.Key, new MaterialGUIPair(k.Key, k.Value.state, materialBox.Width, row));
+			foreach (KeyValuePair<string, IMaterial> k in materials) {			//creates pair Name - value
+				materialList.Add(k.Key, new MaterialGUIPair(k.Key, k.Value.State, materialBox.Width, row));
 				row++;
 			}
 
 			row = 0;
-			foreach (KeyValuePair<string, MaterialGUIPair> valuePair in materialList) {		//set pairs into GUI
+			foreach (KeyValuePair<string, MaterialGUIPair> valuePair in materialList) {		//Set pairs into GUI
 				materialBox.Controls.Add(valuePair.Value.name);
 				materialBox.Controls.Add(valuePair.Value.value);
 				row++;
@@ -382,7 +378,7 @@ namespace Strategy.GameGUI {
 		/// <summary>
 		/// Creates main bar
 		/// </summary>
-		private void createMainMenu() {
+		private void CreateMainMenu() {
 			mainMenu = new FlowLayoutPanel() {
 
 				Size = new Size(screenWidth, screenHeight / 5),
@@ -391,9 +387,9 @@ namespace Strategy.GameGUI {
 			};
 			gui.Controls.Add(mainMenu);
 
-			mainMenu.Controls.Add(createButtonPanel());
-			mainMenu.Controls.Add(createStatPanel());
-			mainMenu.Controls.Add(createActionPanel());
+			mainMenu.Controls.Add(CreateButtonPanel());
+			mainMenu.Controls.Add(CreateStatPanel());
+			mainMenu.Controls.Add(CreateActionPanel());
 
 		}
 
@@ -401,21 +397,21 @@ namespace Strategy.GameGUI {
 		/// Create first panel in main panel. (Control buttons)
 		/// </summary>
 		/// <returns>Miyagi Panel</returns>
-		private Panel createButtonPanel() {
-			buttonsPanel = createMainmenuSubpanel();
+		private Panel CreateButtonPanel() {
+			buttonsPanel = CreateMainmenuSubpanel();
 			int buttonMarginLeft = buttonsPanel.Width / 4;
 			int buttonMarginTop = buttonsPanel.Height * 6 / 25;
 			int row = buttonsPanel.Height / 5 + 5;
-			Button b = createButton(buttonsPanel.Width / 2, buttonsPanel.Height / 5, "  Pause BUTTON", new Point(buttonMarginLeft, 0));
+			Button b = CreateButton(buttonsPanel.Width / 2, buttonsPanel.Height / 5, "  Pause BUTTON", new Point(buttonMarginLeft, 0));
 			buttonsPanel.Controls.Add(b);
-			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(pause);
-			b = createButton(buttonsPanel.Width / 2, buttonsPanel.Height / 5, "  Solar systems", new Point(buttonMarginLeft, buttonMarginTop));
+			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(Pause);
+			b = CreateButton(buttonsPanel.Width / 2, buttonsPanel.Height / 5, "  Solar systems", new Point(buttonMarginLeft, buttonMarginTop));
 			buttonsPanel.Controls.Add(b);
-			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(showSolarSystems);
+			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(ShowSolarSystems);
 
-			b = createButton(buttonsPanel.Width / 2, buttonsPanel.Height / 5, "  Exit BUTTON", new Point(buttonMarginLeft, buttonMarginTop * 2));
+			b = CreateButton(buttonsPanel.Width / 2, buttonsPanel.Height / 5, "  Exit BUTTON", new Point(buttonMarginLeft, buttonMarginTop * 2));
 			buttonsPanel.Controls.Add(b);
-			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(quitOnClick);
+			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(QuitOnClick);
 
 
 			return buttonsPanel;
@@ -425,8 +421,8 @@ namespace Strategy.GameGUI {
 		/// Create second panel in main panel
 		/// </summary>
 		/// <returns>Miyagi Panel</returns>
-		private Panel createStatPanel() {
-			statPanel = createMainmenuSubpanel();
+		private Panel CreateStatPanel() {
+			statPanel = CreateMainmenuSubpanel();
 			int x1 = statPanel.Width / 3;
 			int y = 40;
 
@@ -445,7 +441,7 @@ namespace Strategy.GameGUI {
 			statPanel.Controls.Add(statPanelName);
 
 			// Minus 30 is padding correction (2*5 panel padding + 2*10 scrollablePanel padding)
-			propertyPanel = createInnerScrollablePanel(y, statPanel.Width - 30, statPanel.Height - (y+10)); 
+			propertyPanel = CreateInnerScrollablePanel(y, statPanel.Width - 30, statPanel.Height - (y+10)); 
 			statPanel.Controls.Add(propertyPanel);
 
 			return statPanel;
@@ -455,7 +451,7 @@ namespace Strategy.GameGUI {
 		/// <summary>
 		/// Clear panel with descriptions
 		/// </summary>
-		private void clearStatPanelProp() {
+		private void ClearStatPanelProp() {
 			propertyPanel.Controls.Clear();
 		}
 
@@ -463,8 +459,8 @@ namespace Strategy.GameGUI {
 		/// Create third panel in main panel
 		/// </summary>
 		/// <returns>Miyagi Panel</returns>
-		private Panel createActionPanel() {
-			actionPanel = createMainmenuSubpanel();
+		private Panel CreateActionPanel() {
+			actionPanel = CreateMainmenuSubpanel();
 			actionPanel.Controls.Add(new Label() {
 				Size = new Size(140, 50),
 				Text = " Developing",
@@ -478,54 +474,54 @@ namespace Strategy.GameGUI {
 		#endregion
 
 		#region Button Actions
-		private void selectSolarSystem(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
-			// Button Action for SelectionLabel calls GroupManager function changeSolarSystem and close Panel
+		private void SelectSolarSystem(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
+			// Button Action for SelectionLabel calls GroupManager function ChangeSolarSystem and close Panel
 			if (sender.GetType() == typeof(SelectionLabel)) {
-				Game.GroupManager.changeSolarSystem(((SelectionLabel)sender).NumberOfItem);
+				Game.GroupManager.ChangeSolarSystem(((SelectionLabel)sender).NumberOfItem);
 				((SelectionLabel)sender).PanelToClose.Dispose();
 			}
 		}
 
-		private void travel(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
-			// Function calls createTraveler with selected number of SolarSystem and traveler(IMovableGameObject)
+		private void Travel(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
+			// Function calls CreateTraveler with selected number of SolarSystem and traveler(IMovableGameObject)
 			if (sender.GetType() == typeof(SelectionLabel)) {
 				var selLabel = (SelectionLabel)sender;
-				Game.GroupManager.createTraveler(selLabel.NumberOfItem, selLabel.StoredObject);
+				Game.GroupManager.CreateTraveler(selLabel.NumberOfItem, selLabel.StoredObject);
 				selLabel.PanelToClose.Dispose();
 			}
 		}
 
-		private void quitOnClick(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
+		private void QuitOnClick(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
 			// Function closes application (throw ShutdownException)
 			system.Dispose();
 			throw new Strategy.Exceptions.ShutdownException();
 		}
 
-		private void pause(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
-			Game.pause(!Game.GameStatus);
+		private void Pause(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
+			Game.Pause(!Game.GameStatus);
 		}
 
-		private void mouseOver(object sender, Miyagi.Common.Events.MouseEventArgs e) {
+		private void MouseOver(object sender, Miyagi.Common.Events.MouseEventArgs e) {
 			// Controls camera move
-			MogreControl.MouseControl.move(((Button)sender).Name);
+			MogreControl.MouseControl.Move(((Button)sender).Name);
 
 		}
 
-		private void mouseLeave(object sender, Miyagi.Common.Events.MouseEventArgs e) {
+		private void MouseLeave(object sender, Miyagi.Common.Events.MouseEventArgs e) {
 			// Controls camera move
-			MogreControl.MouseControl.moveStop(((Button)sender).Name);
+			MogreControl.MouseControl.MoveStop(((Button)sender).Name);
 		}
 
-		private void disposePanel(object sender, Miyagi.Common.Events.MouseEventArgs e) {
-			// On click button dispose the panel 
+		private void DisposePanel(object sender, Miyagi.Common.Events.MouseEventArgs e) {
+			// On click button Dispose the panel 
 			if (sender.GetType() == typeof(CloseButton)) {
 				((CloseButton)sender).PanelToClose.Dispose();
 			}
 		}
 
-		private void showSolarSystems(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
+		private void ShowSolarSystems(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
 			// Shows Panel with SolarSystems and travelers
-			createSolarSystemPanel();
+			CreateSolarSystemPanel();
 		}
 		#endregion
 
@@ -534,7 +530,7 @@ namespace Strategy.GameGUI {
 		/// Main panel with three subPanels
 		/// </summary>
 		/// <returns>Main panel (Miyagi Panel)</returns>
-		private Panel createMainmenuSubpanel() {
+		private Panel CreateMainmenuSubpanel() {
 			var p = new Panel() {
 				ResizeMode = ResizeModes.None,
 				Padding = new Thickness(5),
@@ -549,9 +545,9 @@ namespace Strategy.GameGUI {
 		/// <summary>
 		/// Creates top bar with info about current SolarSystem and players materials
 		/// </summary>
-		private void createSolarSystemPanel() {
+		private void CreateSolarSystemPanel() {
 
-			var panel = createPopUpPanel();
+			var panel = CreatePopUpPanel();
 
 			int marginTop = 10;
 
@@ -566,10 +562,10 @@ namespace Strategy.GameGUI {
 			};
 			panel.Controls.Add(label);
 
-			List<string> solarSystList = Game.GroupManager.getAllSolarSystemNames();
+			List<string> solarSystList = Game.GroupManager.GetAllSolarSystemNames();
 
 			marginTop += 5 + label.Height;
-			var innerScrollablePanel = createInnerScrollablePanel(marginTop, panel.Width * 30 / 31, panel.Height / 3);
+			var innerScrollablePanel = CreateInnerScrollablePanel(marginTop, panel.Width * 30 / 31, panel.Height / 3);
 
 			panel.Controls.Add(innerScrollablePanel);
 
@@ -577,15 +573,15 @@ namespace Strategy.GameGUI {
 			int selectionLabelMarginLeft = innerScrollablePanel.Width / 8;
 			int selectionLabelWidth = innerScrollablePanel.Width;
 
-			// Labels with name of solar systems
+			// Labels with Name of solar systems
 			for (int i = 0; i < solarSystList.Count; i++) {					
-				var selectionLabel = createSelectionLabel(
+				var selectionLabel = CreateSelectionLabel(
 					selectionLabelWidth, 25, solarSystList[i],
 					new Point(selectionLabelMarginLeft, i * selectionLabelMarginTop), i, panel
 					);
 
 				innerScrollablePanel.Controls.Add(selectionLabel);
-				selectionLabel.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(selectSolarSystem);
+				selectionLabel.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(SelectSolarSystem);
 			}
 
 			marginTop = panel.Height / 2;
@@ -602,25 +598,25 @@ namespace Strategy.GameGUI {
 			panel.Controls.Add(label);
 
 			marginTop += panel.Height / 10;
-			innerScrollablePanel = createInnerScrollablePanel(marginTop, panel.Width * 30 / 31, panel.Height / 4);
+			innerScrollablePanel = CreateInnerScrollablePanel(marginTop, panel.Width * 30 / 31, panel.Height / 4);
 			panel.Controls.Add(innerScrollablePanel);
 
-			var travList = Game.GroupManager.getTravelers();
+			var travList = Game.GroupManager.GetTravelers();
 
 			for (int i = 0; i < travList.Count; i++) {
-				// Labels with name of solar systems
-				var testButton = createPropertyLabel<TimeSpan>(selectionLabelWidth, 25, travList[i].ToString(),
+				// Labels with Name of solar systems
+				var testButton = CreatePropertyLabel<TimeSpan>(selectionLabelWidth, 25, travList[i].ToString(),
 					new Point(selectionLabelMarginLeft, i * selectionLabelMarginTop), travList[i].TimeProperty);
 				innerScrollablePanel.Controls.Add(testButton);
 			}
 
 
-			var closeButton = createCloseButton(panel.Width / 2,
+			var closeButton = CreateCloseButton(panel.Width / 2,
 				panel.Height / 12,
 				"	Cancel",
 				new Point(panel.Width / 2, panel.Height * 9 / 10),
 					panel);
-			closeButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(disposePanel);
+			closeButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(DisposePanel);
 			panel.Controls.Add(closeButton);
 			gui.Controls.Add(panel);
 		}
@@ -628,11 +624,11 @@ namespace Strategy.GameGUI {
 		/// <summary>
 		/// Create panel width scroll bars, setted margin-left = 10 and border thickness = 2
 		/// </summary>
-		/// <param name="marginTop">Margin from top</param>
-		/// <param name="width">Width of panel</param>
-		/// <param name="height">Height of panel</param>
+		/// <param Name="marginTop">Margin from top</param>
+		/// <param Name="width">Width of panel</param>
+		/// <param Name="height">Height of panel</param>
 		/// <returns></returns>
-		private Panel createInnerScrollablePanel(int marginTop, int width, int height) {
+		private Panel CreateInnerScrollablePanel(int marginTop, int width, int height) {
 			return new Panel() {
 				Location = new Point(10, marginTop),
 				Size = new Size(width, height),
@@ -661,16 +657,16 @@ namespace Strategy.GameGUI {
 		}
 
 		/// <summary>
-		/// Create SelectionLabel - on click select positon and can close setted panel
+		/// Create SelectionLabel - on click Select positon and can close setted panel
 		/// </summary>
-		/// <param name="width">Width of Label</param>
-		/// <param name="height">Height of Label</param>
-		/// <param name="text">Text in Label</param>
-		/// <param name="location">Relative position in Panel</param>
-		/// <param name="order">Number of choice</param>
-		/// <param name="panelToClose">Closing Panel</param>
+		/// <param Name="width">Width of Label</param>
+		/// <param Name="height">Height of Label</param>
+		/// <param Name="text">Text in Label</param>
+		/// <param Name="location">Relative position in Panel</param>
+		/// <param Name="order">Number of choice</param>
+		/// <param Name="panelToClose">Closing Panel</param>
 		/// <returns></returns>
-		private SelectionLabel createSelectionLabel(int width, int height, string text, Point location, int order, Panel panelToClose, object objectRef = null) {
+		private SelectionLabel CreateSelectionLabel(int width, int height, string text, Point location, int order, Panel panelToClose, object objectRef = null) {
 			var selectLabel = new SelectionLabel(order, objectRef, panelToClose) {
 				Size = new Size(width, height),
 				Text = text,
@@ -681,16 +677,16 @@ namespace Strategy.GameGUI {
 		}
 
 		/// <summary>
-		/// Strange name for runtime generic calling (unique name)
+		/// Strange Name for runtime generic calling (unique Name)
 		/// </summary>
-		/// <typeparam name="T">Generic type</typeparam>
-		/// <param name="marginLeft">Left indent </param>
-		/// <param name="marginTop">Top indent</param>
-		/// <param name="width">Width of Label</param>
-		/// <param name="height">Height of Label</param>
-		/// <param name="property">Property with Label's value</param>
+		/// <typeparam Name="T">Generic type</typeparam>
+		/// <param Name="marginLeft">Left indent </param>
+		/// <param Name="marginTop">Top indent</param>
+		/// <param Name="width">Width of Label</param>
+		/// <param Name="height">Height of Label</param>
+		/// <param Name="property">Property with Label's value</param>
 		/// <returns>PropertyLabel as Label </returns>
-		private Label createPropertyLabelAsLabel<T>(int marginLeft, int marginTop, int width, int height, Property<T> property) {
+		private Label CreatePropertyLabelAsLabel<T>(int marginLeft, int marginTop, int width, int height, Property<T> property) {
 
 			var propLabel = new PropertyLabel<T>(property, "") {
 				Size = new Size(width, height),
@@ -699,7 +695,7 @@ namespace Strategy.GameGUI {
 			return propLabel;
 		}
 
-		private PropertyLabel<T> createPropertyLabel<T>(int width, int height, string text, Point location, Property<T> timeProperty) {
+		private PropertyLabel<T> CreatePropertyLabel<T>(int width, int height, string text, Point location, Property<T> timeProperty) {
 			var propLabel = new PropertyLabel<T>(timeProperty, text) {
 				Size = new Size(width, height),
 				Location = location
@@ -711,12 +707,12 @@ namespace Strategy.GameGUI {
 		/// <summary>
 		/// Creates classic Miyagi Button
 		/// </summary>
-		/// <param name="width">Width of Button</param>
-		/// <param name="height">Hidth of Button</param>
-		/// <param name="text">Button's text</param>
-		/// <param name="location">Relative position</param>
+		/// <param Name="width">Width of Button</param>
+		/// <param Name="height">Hidth of Button</param>
+		/// <param Name="text">Button's text</param>
+		/// <param Name="location">Relative position</param>
 		/// <returns>Miyagi Button</returns>
-		private Button createButton(int width, int height, string text, Point location) {
+		private Button CreateButton(int width, int height, string text, Point location) {
 			Button b = new Button() {
 				Size = new Size(width, height),
 				Location = location,
@@ -726,11 +722,11 @@ namespace Strategy.GameGUI {
 			return b;
 		}
 
-		private Label createLabel(int marginTop, int width, int height, string text) {
-			return createLabel(10, marginTop, width, height, text);
+		private Label CreateLabel(int marginTop, int width, int height, string text) {
+			return CreateLabel(10, marginTop, width, height, text);
 		}
 
-		private Label createLabel(int marginLeft, int marginTop, int width, int height, string text) {
+		private Label CreateLabel(int marginLeft, int marginTop, int width, int height, string text) {
 			var label = new Label() {
 				Text = text,
 				Size = new Size(width, height),
@@ -739,7 +735,7 @@ namespace Strategy.GameGUI {
 			return label;
 		}
 
-		private Panel createPopUpPanel() {
+		private Panel CreatePopUpPanel() {
 			// Background panel
 			var panel = new Panel() {								
 				Width = screenWidth / 2,
@@ -751,7 +747,7 @@ namespace Strategy.GameGUI {
 			return panel;
 		}
 
-		private CloseButton createCloseButton(int width, int height, string text, Point location, Panel panelToClose) {
+		private CloseButton CreateCloseButton(int width, int height, string text, Point location, Panel panelToClose) {
 			var b = new CloseButton(panelToClose) {
 				Size = new Size(width, height),
 				Location = location,
@@ -764,20 +760,20 @@ namespace Strategy.GameGUI {
 		/// <summary>
 		/// Dispose GUI system
 		/// </summary>
-		public void dispose() {
+		public void Dispose() {
 			system.Dispose();
 		}
 
 		/// <summary>
 		/// Function updete GUI
 		/// </summary>
-		public void update() {
+		public void Update() {
 			system.Update();
 		}
 
 
-		public void showSolarSystSelectionPanel(List<string> possibilities, string topic, object gameObject) {
-			var panel = createPopUpPanel();
+		public void ShowSolarSystSelectionPanel(List<string> possibilities, string topic, object gameObject) {
+			var panel = CreatePopUpPanel();
 			gui.Controls.Add(panel);
 
 			int marginTop = 10;
@@ -796,7 +792,7 @@ namespace Strategy.GameGUI {
 
 			marginTop += label.Height;
 
-			var innerScrollablePanel = createInnerScrollablePanel(marginTop, panel.Width * 30 / 31, panel.Height - (marginTop * 2));
+			var innerScrollablePanel = CreateInnerScrollablePanel(marginTop, panel.Width * 30 / 31, panel.Height - (marginTop * 2));
 
 			panel.Controls.Add(innerScrollablePanel);
 
@@ -807,21 +803,21 @@ namespace Strategy.GameGUI {
 
 			// Create SelectionLabels with names of SolarSystems
 			for (int i = 0; i < possibilities.Count; i++) {
-				SelectionLabel selectionLabel = createSelectionLabel(
+				SelectionLabel selectionLabel = CreateSelectionLabel(
 					selectionLabelWidth, 25, possibilities[i],
 					new Point(selectionLabelMarginLeft, i * selectionLabelMarginTop), i, panel, gameObject
 					);
 
 				innerScrollablePanel.Controls.Add(selectionLabel);
-				selectionLabel.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(travel);
+				selectionLabel.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(Travel);
 			}
 
-			var closeButton = createCloseButton(panel.Width / 2,
+			var closeButton = CreateCloseButton(panel.Width / 2,
 				panel.Height / 12,
 				"	Cancel",
 				new Point(panel.Width / 2, panel.Height * 9 / 10),
 					panel);
-			closeButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(disposePanel);
+			closeButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(DisposePanel);
 			panel.Controls.Add(closeButton);
 
 		}
@@ -831,7 +827,7 @@ namespace Strategy.GameGUI {
 		///pokusy
 		///
 
-		public void setMaterialState(string material, int inc) {
+		public void SetMaterialState(string material, int inc) {
 			if (materialList.ContainsKey(material)) {
 				materialList[material].value.Text = (inc).ToString();
 			} else {

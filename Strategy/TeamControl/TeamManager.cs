@@ -14,7 +14,7 @@ using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 namespace Strategy.TeamControl {
     class TeamManager {
         //TODO: ProduceManager
-        // Protected List<IMaterial> materials; //will be singleton and shared with this and GUI to show state
+        // Protected List<IMaterial> materials; //will be singleton and shared with this and GUI to show State
 
         protected GUIControler guiControler;
 
@@ -27,7 +27,7 @@ namespace Strategy.TeamControl {
         #region singleton and constructor
         public static TeamManager instance;
 
-        public static TeamManager getInstance() {
+        public static TeamManager GetInstance() {
             if (instance==null) {
                 instance = new TeamManager();
             }
@@ -41,28 +41,28 @@ namespace Strategy.TeamControl {
 
         // Public
         
-        public void inicialization(Dictionary<string,Team> settingTeam, Dictionary<Team, List<Team>> friendlyDict) {
+        public void Inicialization(Dictionary<string,Team> settingTeam, Dictionary<Team, List<Team>> friendlyDict) {
 			friendlyTeamDict = friendlyDict;
             teamDict = settingTeam;
             playerTeam = teamDict[Game.playerName];
             Console.WriteLine("Team print at Start of the Game:");
             foreach(KeyValuePair<string,Team> team in teamDict){
-                Console.WriteLine(team.Value.print());
+                Console.WriteLine(team.Value.Print());
             }
         }
 
         //TODO think about me- remove
-        public void setGUI(GUIControler gui) {
+        public void SetGUI(GUIControler gui) {
             guiControler = gui;
         }
 
-        public void update() {
-            foreach (KeyValuePair<string, IMaterial> k in playerTeam.getMaterials()) {
-                guiControler.setMaterialState(k.Key, k.Value.state);
+        public void Update() {
+            foreach (KeyValuePair<string, IMaterial> k in playerTeam.GetMaterials()) {
+                guiControler.SetMaterialState(k.Key, k.Value.State);
             }
         }
 
-		public bool areFriendly(Team t1, Team t2) {
+		public bool AreFriendly(Team t1, Team t2) {
 			if (friendlyTeamDict[t1].Contains(t2)) {
 				return true;
 			} else {
@@ -70,14 +70,22 @@ namespace Strategy.TeamControl {
 			}
 		}
 
-		public void changeTeam(IStaticGameObject isgo, Team newTeam) {
-			isgo.Team.removeISGO(isgo);
-			newTeam.addISGO(isgo);
+		public void ChangeTeam(IStaticGameObject isgo, Team newTeam) {
+			RemoveFromOwnTeam(isgo);
+			newTeam.AddISGO(isgo);
 		}
 
-		public void changeTeam(IMovableGameObject imgo, Team newTeam) {
-			imgo.Team.removeIMGO(imgo);
-			newTeam.addIMGO(imgo);
+		public void ChangeTeam(IMovableGameObject imgo, Team newTeam) {
+			RemoveFromOwnTeam(imgo);
+			newTeam.AddIMGO(imgo);
+		}
+
+		public void RemoveFromOwnTeam(IStaticGameObject isgo) {
+			isgo.Team.RemoveISGO(isgo);
+		}
+
+		public void RemoveFromOwnTeam(IMovableGameObject imgo) {
+			imgo.Team.RemoveIMGO(imgo);
 		}
         // Private
     }

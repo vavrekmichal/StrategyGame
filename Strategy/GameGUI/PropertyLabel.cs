@@ -23,7 +23,7 @@ namespace Strategy.GameGUI {
 			base.UpdateCore();
 		}
 
-		public void set(T value) {
+		public void Set(T value) {
 			property.Value = value;
 		}
 	}

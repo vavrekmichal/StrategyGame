@@ -31,13 +31,13 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			this.mesh = mesh;
 			this.team = myTeam;
 			this.manager = manager;
-			base.setProperty(PropertyEnum.Speed, propMgr.getProperty<float>("speed3"));
-			base.setProperty(PropertyEnum.Rotate, propMgr.getProperty<float>("planetRotateSpeed"));
-			base.setProperty(PropertyEnum.PickUp, propMgr.getProperty<float>("planetPickUpDistance"));
+			base.SetProperty(PropertyEnum.Speed, propMgr.GetProperty<float>("speed3"));
+			base.SetProperty(PropertyEnum.Rotate, propMgr.GetProperty<float>("planetRotateSpeed"));
+			base.SetProperty(PropertyEnum.PickUp, propMgr.GetProperty<float>("planetPickUpDistance"));
 
 			//prepare list of positions
-			circularPositions = calculatePositions(circularNum, distanceFromCenter, center);
-			randomizeStartPosition(circularNum); // randomize start position
+			circularPositions = CalculatePositions(circularNum, distanceFromCenter, center);
+			RandomizeStartPosition(circularNum); // randomize start position
 			position = circularPositions.First();
 
 			//Mogre inicialization of object
@@ -48,22 +48,22 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// Rotating in visible mood, it means when planet is in active solar system
 		/// </summary>
 		/// <param name="f">delay between frames</param>
-		public override void rotate(float f) {
-			tryExecute("Produce");
-			sceneNode.Roll(new Mogre.Degree((float)(getProperty<float>(PropertyEnum.Speed).Value * getProperty<float>(PropertyEnum.Rotate).Value * f)));
+		public override void Rotate(float f) {
+			TryExecute("Produce");
+			sceneNode.Roll(new Mogre.Degree((float)(GetProperty<float>(PropertyEnum.Speed).Value * GetProperty<float>(PropertyEnum.Rotate).Value * f)));
 			//position in LinkedList now moving
 			if (!mFlying) {
-				if (nextLocation()) {
+				if (NextLocation()) {
 					mFlying = true;
 					position = circularPositions.First.Value; //get the next destination.
-					prepareNextPosition();
+					PrepareNextPosition();
 					//update the direction and the distance
 					mDirection = position - sceneNode.Position;
 					mDistance = mDirection.Normalise();
 				} else {
 				}//nothing to do so stay in position    
 			} else {
-				double move = getProperty<float>(PropertyEnum.Speed).Value * f;
+				double move = GetProperty<float>(PropertyEnum.Speed).Value * f;
 				mDistance -= move;
 				if (mDistance <= .0f) { //reach destination
 					travelledInvisible = 0;
@@ -80,18 +80,18 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// Function calculate moves in invisible mode
 		/// </summary>
 		/// <param name="f">delay between frames</param>
-		public override void nonActiveRotate(float f) {
-			tryExecute("Produce");
+		public override void NonActiveRotate(float f) {
+			TryExecute("Produce");
 			if (!mFlying) {
-				if (nextLocation()) {
+				if (NextLocation()) {
 					mFlying = true;
 					position = circularPositions.First.Value; //get the next destination.
-					prepareNextPosition();
+					PrepareNextPosition();
 					mDistance = mDirection.Normalise();
 				} else {
 				}
 			} else {
-				double move = getProperty<float>(PropertyEnum.Speed).Value * f;
+				double move = GetProperty<float>(PropertyEnum.Speed).Value * f;
 				mDistance -= move;
 				if (mDistance <= .0f) { //reach destination
 					travelledInvisible = 0;
@@ -111,20 +111,20 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// Randomize starting position of planet
 		/// </summary>
 		/// <param name="max">max of rotates</param>
-		private void randomizeStartPosition(int max) {
-			for (int i = 0; i < getRandomNumber(max); i++) {
-				prepareNextPosition();
+		private void RandomizeStartPosition(int max) {
+			for (int i = 0; i < GetRandomNumber(max); i++) {
+				PrepareNextPosition();
 			}
 		}
 
-		private static int getRandomNumber(int max) {
+		private static int GetRandomNumber(int max) {
 			return random.Next(max);
 		}
 
 		/// <summary>
 		/// Cyclic remove from LinkedList and add on the end
 		/// </summary>
-		private void prepareNextPosition() {
+		private void PrepareNextPosition() {
 			var tmp = circularPositions.First; //save the node that held it
 			circularPositions.RemoveFirst(); //remove that node from the front of the list
 			circularPositions.AddLast(tmp);  //add it to the back of the list.
@@ -136,7 +136,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// <param name="circularNum">Number of positions on circle</param>
 		/// <param name="distanceFromCenter">radius on circle</param>
 		/// <returns>linkedList with position on ngon (circle)</returns>
-		private LinkedList<Mogre.Vector3> calculatePositions(int circularNum, double distanceFromCenter, Vector3 center) {
+		private LinkedList<Mogre.Vector3> CalculatePositions(int circularNum, double distanceFromCenter, Vector3 center) {
 			var list = new LinkedList<Mogre.Vector3>();
 			for (int i = 0; i < circularNum; i++) {
 				double x = System.Math.Cos(i * 2 * System.Math.PI / circularNum) * distanceFromCenter;
@@ -153,7 +153,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// The NextLocation() check if exist next location to move
 		/// </summary>
 		/// <returns>true ->exist / false -> not exist</returns>
-		private bool nextLocation() {
+		private bool NextLocation() {
 			if (circularPositions.Count == 0) {
 				return false;
 			}
@@ -169,7 +169,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// <summary>
 		/// Called when object is displayed (invisible to visible)
 		/// </summary>
-		protected override void onDisplayed() {
+		protected override void OnDisplayed() {
 			sceneNode.Position = position;
 			mFlying = false; //jump correction
 		}
@@ -178,14 +178,14 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// PickUpDistance is setted by runtime property
 		/// </summary>
 		public override float PickUpDistance {
-			get { return getProperty<float>(PropertyEnum.PickUp).Value; }
+			get { return GetProperty<float>(PropertyEnum.PickUp).Value; }
 		}
 
 		/// <summary>
 		/// OccupyDistance is overriden and now can be really occupied (value is not 0)
 		/// </summary>
 		public override float OccupyDistance {
-			get { return getProperty<float>(PropertyEnum.PickUp).Value * 5; }
+			get { return GetProperty<float>(PropertyEnum.PickUp).Value * 5; }
 		}
 
 	}

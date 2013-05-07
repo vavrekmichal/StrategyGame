@@ -21,39 +21,39 @@ namespace Strategy.GameGUI {
 		/// <summary>
 		/// GUI inicialization			
 		/// </summary>
-		/// <param name="listMaterial">List with player's materials</param>
-		public void inicialization(Dictionary<string, IMaterial> listMaterial) {
+		/// <param Name="listMaterial">List with player's materials</param>
+		public void Inicialization(Dictionary<string, IMaterial> listMaterial) {
 
-			myGUI.loadMaterials(listMaterial);
+			myGUI.LoadMaterials(listMaterial);
 		}
 
 
-		public void dispose() {
-			myGUI.dispose();
+		public void Dispose() {
+			myGUI.Dispose();
 		}
 
-		public void update() {
-			myGUI.update();
+		public void Update() {
+			myGUI.Update();
 		}
 
-		public void showTargeted(GroupStatics group) {
-			myGUI.showTargeted(group);
+		public void ShowTargeted(GroupStatics group) {
+			myGUI.ShowTargeted(group);
 		}
 
-		public void showTargeted(GroupMovables group) {
-			myGUI.showTargeted(group);
+		public void ShowTargeted(GroupMovables group) {
+			myGUI.ShowTargeted(group);
 		}
 
-		public void setSolarSystemName(string name) {
-			myGUI.setSolarSystemName(name);
+		public void SetSolarSystemName(string name) {
+			myGUI.SetSolarSystemName(name);
 		}
 
-		public void setMaterialState(string material, int inc) {
-			myGUI.setMaterialState(material, inc);
+		public void SetMaterialState(string material, int inc) {
+			myGUI.SetMaterialState(material, inc);
 		}
 
-		public void showSolarSystSelectionPanel(List<string> possibilities, string topic, object gameObject) {
-			myGUI.showSolarSystSelectionPanel(possibilities, topic, gameObject);
+		public void ShowSolarSystSelectionPanel(List<string> possibilities, string topic, object gameObject) {
+			myGUI.ShowSolarSystSelectionPanel(possibilities, topic, gameObject);
 		}
 	}
 

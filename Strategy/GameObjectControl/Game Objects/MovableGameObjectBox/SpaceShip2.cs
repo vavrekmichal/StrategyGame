@@ -17,24 +17,24 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			this.team = myTeam;
 			this.manager = manager;
 			this.position = position;
-			setProperty(PropertyEnum.Speed, propMgr.getProperty<float>("speed2"));
-			setProperty(PropertyEnum.Attack, propMgr.getProperty<int>("basicAttack"));
-			setProperty(PropertyEnum.Deffence, propMgr.getProperty<int>("basicDeff"));
-			setProperty("Hovno", new Property<string>("Toto je hovno"));
+			SetProperty(PropertyEnum.Speed, propMgr.GetProperty<float>("speed2"));
+			SetProperty(PropertyEnum.Attack, propMgr.GetProperty<int>("basicAttack"));
+			SetProperty(PropertyEnum.Deffence, propMgr.GetProperty<int>("basicDeff"));
+			SetProperty("Hovno", new Property<string>("Toto je hovno"));
 
 			//Mogre inicialization of object
 			entity = manager.CreateEntity(name, mesh);
 		}
 
-		public override ActionAnswer onMouseAction(Vector3 point, MovableObject hitTarget, bool isFriendly, bool isMovableGameObject) {
+		public override ActionAnswer OnMouseAction(Vector3 point, MovableObject hitTarget, bool isFriendly, bool isMovableGameObject) {
 			return ActionAnswer.None;
 		}
 
-		protected override void onDisplayed() {
+		protected override void OnDisplayed() {
 
 		}
 
-		public override Dictionary<string, object> onGroupAdd() {
+		public override Dictionary<string, object> OnGroupAdd() {
 			var dict = new Dictionary<string, object>();
 			dict.Add(PropertyEnum.Speed.ToString(), new Property<float>(200));
 			return dict;

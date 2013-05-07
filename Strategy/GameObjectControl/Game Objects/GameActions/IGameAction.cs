@@ -6,8 +6,10 @@ using Strategy.TeamControl;
 
 namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 	public interface IGameAction {
-        void execute(object executer, Team team);
+        void Execute(object executer, Team team);
 
-        string getName();
+		string Name {
+			get;
+		}
 	}
 }

@@ -27,7 +27,7 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 			Minus
 		}
 
-		private object doTheOperation(Operator op, dynamic a, dynamic b) {
+		private object DoTheOperation(Operator op, dynamic a, dynamic b) {
 			switch (op) {
 				case Operator.Plus:
 					return a + b;
@@ -39,15 +39,15 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 		}
 
 		/// <summary>
-		/// Generic function calls private doTheOperation with Properties values
+		/// Generic function calls private DoTheOperation with Properties values
 		/// and convert to T2 type
 		/// </summary>
-		/// <typeparam name="T2">Result Property type</typeparam>
-		/// <param name="op">Operator of operation</param>
-		/// <param name="p2">Second argument of operation</param>
+		/// <typeparam Name="T2">Result Property type</typeparam>
+		/// <param Name="op">Operator of operation</param>
+		/// <param Name="p2">Second argument of operation</param>
 		/// <returns>Property with result of operation</returns>
-		public Property<T> simpleMath(Operator op, Property<T> p2) {
-			var newValue = doTheOperation(op, Value, p2.Value);
+		public Property<T> SimpleMath(Operator op, Property<T> p2) {
+			var newValue = DoTheOperation(op, Value, p2.Value);
 			T pok = (T)Convert.ChangeType(newValue, typeof(T));
 			return new Property<T>(pok);
 		}
@@ -56,7 +56,7 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 		/// <summary>
 		/// Determines if a type is numeric.  Nullable numeric types are considered numeric.
 		/// </summary>
-		/// <param name="type">Controling type</param>
+		/// <param Name="type">Controling type</param>
 		/// <returns>If type is numeric (true) or not (false)</returns>
 		private static bool IsNumericType(Type type) {
 			if (type == null) {

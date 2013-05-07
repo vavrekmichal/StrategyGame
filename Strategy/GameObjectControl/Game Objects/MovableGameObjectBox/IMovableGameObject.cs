@@ -14,86 +14,86 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// <summary>
 		/// Active move - SceneNode is setted
 		/// </summary>
-		/// <param name="f">Delay between last two frames</param>
-		void move(float f);
+		/// <param Name="f">Delay between last two frames</param>
+		void Move(float f);
 
 		/// <summary>
 		/// Function stops objects moving
 		/// </summary>
-		void stop();
+		void Stop();
 
 		/// <summary>
 		/// Non-Active move is called when SceneNode is unsetted (object is in hidden SolarSystem or travels between them)
 		/// </summary>
-		/// <param name="f">Delay between last two frames</param>
-		void nonActiveMove(float f);
+		/// <param Name="f">Delay between last two frames</param>
+		void NonActiveMove(float f);
 
 
-		void shout();
+		void Shout();
 
 		/// <summary>
 		/// Add position in flyList on a firts place
 		/// </summary>
-		/// <param name="placeToGo">Vectror3 with position to go</param>
-		void addNextLocation(Vector3 placeToGo);
+		/// <param Name="placeToGo">Vectror3 with position to go</param>
+		void AddNextLocation(Vector3 placeToGo);
 
 		/// <summary>
 		/// Add list with positions in flyList (after actual)
 		/// </summary>
-		/// <param name="positionList">List with positions (Vector3)</param>
-		void addNextLocation(LinkedList<Vector3> positionList);
+		/// <param Name="positionList">List with positions (Vector3)</param>
+		void AddNextLocation(LinkedList<Vector3> positionList);
 
 		/// <summary>
 		/// Set given position in flyList (creates new)
 		/// </summary>
-		/// <param name="placeToGo">Vectror3 with position to go</param>
-		void setNextLocation(Vector3 placeToGo);
+		/// <param Name="placeToGo">Vectror3 with position to go</param>
+		void SetNextLocation(Vector3 placeToGo);
 
 		/// <summary>
 		/// Set list with positions as flyList
 		/// </summary>
-		/// <param name="positionList">List with positions (Vector3)</param>
-		void setNextLocation(LinkedList<Vector3> positionList);
+		/// <param Name="positionList">List with positions (Vector3)</param>
+		void SetNextLocation(LinkedList<Vector3> positionList);
 
 		/// <summary>
 		/// Change actual position
 		/// </summary>
-		/// <param name="placeToGo">new position</param>
-		void jumpNextLocation(Vector3 placeToGo);
+		/// <param Name="placeToGo">new position</param>
+		void JumpNextLocation(Vector3 placeToGo);
 
 		/// <summary>
 		/// Controled movement of object. When object reached last position, must report to moveCntr.
 		/// </summary>
-		/// <param name="positionList">List with positions (Vector3)</param>
-		void goToTarget(LinkedList<Vector3> positionList);
+		/// <param Name="positionList">List with positions (Vector3)</param>
+		void GoToTarget(LinkedList<Vector3> positionList);
 
 		/// <summary>
 		/// Controled movement of object. When object reached position, must report to moveCntr.
 		/// </summary>
-		/// <param name="placeToGo">Vectror3 with position to go</param>
-		void goToTarget(Vector3 placeToGo);
+		/// <param Name="placeToGo">Vectror3 with position to go</param>
+		void GoToTarget(Vector3 placeToGo);
 
 		/// <summary>
-		/// Returns Property with given name (base properties)
+		/// Returns Property with given Name (base properties)
 		/// </summary>
-		/// <typeparam name="T">Type</typeparam>
-		/// <param name="propertyName">Name of property from Enum (base properties)</param>
+		/// <typeparam Name="T">Type</typeparam>
+		/// <param Name="propertyName">Name of property from Enum (base properties)</param>
 		/// <returns>Instance of Property</returns>
-		Property<T> getProperty<T>(PropertyEnum propertyName);
+		Property<T> GetProperty<T>(PropertyEnum propertyName);
 
 		/// <summary>
-		/// Returns Property with given name (user defined properties)
+		/// Returns Property with given Name (user defined properties)
 		/// </summary>
-		/// <typeparam name="T">Type</typeparam>
-		/// <param name="propertyName">Name of property (user defined properties)</param>
+		/// <typeparam Name="T">Type</typeparam>
+		/// <param Name="propertyName">Name of property (user defined properties)</param>
 		/// <returns>Instance of Property</returns>
-		Property<T> getProperty<T>(string propertyName);
+		Property<T> GetProperty<T>(string propertyName);
 
 		/// <summary>
 		/// BunusDict contains bonuses from group and members of group. Object can use them to count his properties.
 		/// </summary>
-		/// <param name="bonusDict">Dictionary with Property as object (runtime generic)</param>
-		void setGroupBonuses(Dictionary<string, object> bonusDict);
+		/// <param Name="bonusDict">Dictionary with Property as object (runtime generic)</param>
+		void SetGroupBonuses(Dictionary<string, object> bonusDict);
 
 		bool Visible { get; }
 
@@ -101,24 +101,23 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 		int AttackPower { get; }
 		int DeffPower { get; }
-		int Hp { get; }
 
 		/// <summary>
 		/// Function handles communication between game control units and object. Object gets what happened and answed what it want to do.
 		/// </summary>
-		/// <param name="reason">Reason of calling function</param>
-		/// <param name="point">Mouse position</param>
-		/// <param name="hitObject">Hitted object</param>
-		/// <param name="isFriendly">If object is in friendly team</param>
-		/// <param name="isMovableGameObject">If object is movable or static</param>
+		/// <param Name="reason">Reason of calling function</param>
+		/// <param Name="point">Mouse position</param>
+		/// <param Name="hitObject">Hitted object</param>
+		/// <param Name="isFriendly">If object is in friendly team</param>
+		/// <param Name="isMovableGameObject">If object is movable or static</param>
 		/// <returns>Answer on action</returns>
-		ActionAnswer onMouseAction(Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject);
+		ActionAnswer OnMouseAction(Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject);
 
 		/// <summary>
 		/// Returns bonuses for other members of group.
 		/// </summary>
 		/// <returns>Dictionary with Property as object (runtime generic)</returns>
-		Dictionary<string, object> onGroupAdd();
+		Dictionary<string, object> OnGroupAdd();
 
 
 	}

@@ -25,39 +25,36 @@ namespace Strategy.GameObjectControl {
 			imgoObjectList = new List<IMovableGameObject>();
 		}
 
-		public void setSun(IStaticGameObject sun) {
-			this.sun = sun;
-		}
-
-		public IStaticGameObject getSun() {
-			return sun;
+		public IStaticGameObject Sun {
+			get { return sun; }
+			set { sun = value; }
 		}
 
 		public void addISGO(IStaticGameObject isgo) {
 			if (!isgoObjectList.Contains(isgo)) {
 				isgoObjectList.Add(isgo);
-				isgo.changeVisible(active);
+				isgo.ChangeVisible(active);
 			}
 		}
 
 		public void addISGO(List<IStaticGameObject> listOfISGO) {
 			foreach (IStaticGameObject isgo in listOfISGO) {
 				addISGO(isgo);
-				isgo.changeVisible(active);
+				isgo.ChangeVisible(active);
 			}
 		}
 
 		public void addIMGO(IMovableGameObject imgo) {
 			if (!imgoObjectList.Contains(imgo)) {
 				imgoObjectList.Add(imgo);
-				imgo.changeVisible(active);
+				imgo.ChangeVisible(active);
 			}
 		}
 
 		public void addIMGO(List<IMovableGameObject> listOfIMGO) {
 			foreach (IMovableGameObject imgo in listOfIMGO) {
 				addIMGO(imgo);
-				imgo.changeVisible(active);
+				imgo.ChangeVisible(active);
 			}
 		}
 
@@ -70,13 +67,13 @@ namespace Strategy.GameObjectControl {
 		public void hideSolarSystem() {
 			if (active) {
 				foreach (IStaticGameObject isgo in isgoObjectList) {
-					isgo.changeVisible(false);
+					isgo.ChangeVisible(false);
 				}
 				foreach (IMovableGameObject imgo in imgoObjectList) {
-					imgo.changeVisible(false);
+					imgo.ChangeVisible(false);
 				}
 				if (sun != null) {
-					sun.changeVisible(false);
+					sun.ChangeVisible(false);
 				}
 				active = false;
 			}
@@ -85,44 +82,44 @@ namespace Strategy.GameObjectControl {
 		public void showSolarSystem() {
 			if (!active) {
 
-				Game.GUIManager.setSolarSystemName(name);
+				Game.GUIManager.SetSolarSystemName(name);
 
 				foreach (IStaticGameObject isgo in isgoObjectList) {
-					isgo.changeVisible(true);
+					isgo.ChangeVisible(true);
 				}
 				foreach (IMovableGameObject imgo in imgoObjectList) {
-					imgo.changeVisible(true);
+					imgo.ChangeVisible(true);
 					
 				}// Check nonActive collisions
 				repairHidenCollision(imgoObjectList);
 				if (sun != null) {
-					sun.changeVisible(true);
+					sun.ChangeVisible(true);
 				}
 
 				active = true;
 			}
 		}
 
-		public void update(float delay) {
+		public void Update(float delay) {
 			if (active) {
 				foreach (IStaticGameObject isgo in isgoObjectList) {
-					isgo.rotate(delay);
+					isgo.Rotate(delay);
 				}
 				foreach (IMovableGameObject imgo in imgoObjectList) {
-					imgo.move(delay);
+					imgo.Move(delay);
 				}
 				if (sun != null) {
-					sun.rotate(delay);
+					sun.Rotate(delay);
 				}
 			} else {
 				foreach (IStaticGameObject isgo in isgoObjectList) {
-					isgo.nonActiveRotate(delay);
+					isgo.NonActiveRotate(delay);
 				}
 				foreach (IMovableGameObject imgo in imgoObjectList) {
-					imgo.nonActiveMove(delay);
+					imgo.NonActiveMove(delay);
 				}
 				if (sun != null) {
-					sun.nonActiveRotate(delay);
+					sun.NonActiveRotate(delay);
 				}
 			}
 
@@ -136,7 +133,7 @@ namespace Strategy.GameObjectControl {
 			get { return position; }
 		}
 
-		//public List<IStaticGameObject> getISGO() {
+		//public List<IStaticGameObject> GetISGO() {
 		//	return isgoObjects;
 		//}
 
@@ -144,7 +141,7 @@ namespace Strategy.GameObjectControl {
 			return isgoObjectList;
 		}
 
-		//public List<IMovableGameObject> getIMGO() {
+		//public List<IMovableGameObject> GetIMGO() {
 		//	return imgoObjects;
 		//}
 
@@ -184,7 +181,7 @@ namespace Strategy.GameObjectControl {
 
 						}
 					}
-					imgo.jumpNextLocation(addVect);
+					imgo.JumpNextLocation(addVect);
 				} else {
 					collision.Add(imgo.Position, imgo);
 				}

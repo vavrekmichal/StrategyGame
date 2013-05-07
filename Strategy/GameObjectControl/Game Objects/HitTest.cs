@@ -19,11 +19,11 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			imgoDict = new Dictionary<string, IMovableGameObject>();
 		}
 
-		public bool isObjectMovable(string name) {
+		public bool IsObjectMovable(string name) {
 			return objectIsMovable[name];
 		}
 
-		public object getGameObject(string name) {
+		public IGameObject GetGameObject(string name) {
 			if (imgoDict.ContainsKey(name)) {
 				return imgoDict[name];
 			} else {
@@ -31,24 +31,24 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			}
 		}
 
-		public IMovableGameObject getIMGO(string name) {
+		public IMovableGameObject GetIMGO(string name) {
 			return imgoDict[name];
 		}
 
-		public IStaticGameObject getISGO(string name) {
+		public IStaticGameObject GetISGO(string name) {
 			return isgoDict[name];
 		}
 
 		/// <summary>
 		/// Initialization of HitTest. Sort game objects to ISGO and IMGO Dictionaries
 		/// </summary>
-		/// <param name="solarSystems">List with all solarSystems</param>
-		public void createHitTestMap(List<SolarSystem> solarSystems) {
+		/// <param Name="solarSystems">List with all solarSystems</param>
+		public void CreateHitTestMap(List<SolarSystem> solarSystems) {
 			objectIsMovable = new Dictionary<string, bool>();
 			isgoDict = new Dictionary<string, IStaticGameObject>();
 			imgoDict = new Dictionary<string, IMovableGameObject>();
 			foreach (SolarSystem ss in solarSystems) {
-				IStaticGameObject s = ss.getSun();
+				IStaticGameObject s = ss.Sun;
 				if (s != null) {
 					objectIsMovable.Add(s.Name, false);
 					isgoDict.Add(s.Name, s);
@@ -66,12 +66,12 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			}
 		}
 
-		public void registerISGO(IStaticGameObject isgo) {
+		public void RegisterISGO(IStaticGameObject isgo) {
 			objectIsMovable.Add(isgo.Name, false);
 			isgoDict.Add(isgo.Name, isgo);
 		}
 
-		public void registerIMGO(IMovableGameObject imgo) {
+		public void RegisterIMGO(IMovableGameObject imgo) {
 			objectIsMovable.Add(imgo.Name, true);
 			imgoDict.Add(imgo.Name, imgo);
 		}

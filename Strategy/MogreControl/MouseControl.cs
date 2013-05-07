@@ -21,7 +21,7 @@ namespace Strategy.MogreControl {
 
 		private static float mouseBoundY = BaseApplication.getRenderWindow().Height * 8 / 10;
 
-		// Rectangular select items
+		// Rectangular Select items
 		bool isRectagularSelect;
 		Vector2 mStart, mStop;
 		List<MovableObject> mSelected = new List<MovableObject>();
@@ -29,7 +29,7 @@ namespace Strategy.MogreControl {
 		bool bSelecting;
 
 
-		public static MouseControl getInstance(CameraMan c, SceneManager m, GUIControler guiControl) {
+		public static MouseControl GetInstance(CameraMan c, SceneManager m, GUIControler guiControl) {
 			if (instance == null) {
 				instance = new MouseControl(c, m, guiControl);
 			}
@@ -48,8 +48,8 @@ namespace Strategy.MogreControl {
 		/// <summary>
 		/// This special function is called when any mouse button is pressed
 		/// </summary>
-		/// <param name="arg">Argument of press</param>
-		/// <param name="id">Pressed button</param>
+		/// <param Name="arg">Argument of press</param>
+		/// <param Name="id">Pressed button</param>
 		/// <returns>True</returns>
 		public bool OnMyMousePressed(MouseEvent arg, MouseButtonID id) {
 			if (arg.state.Y.abs > mouseBoundY) {
@@ -67,7 +67,7 @@ namespace Strategy.MogreControl {
 				case MouseButtonID.MB_Button7:
 					break;
 				case MouseButtonID.MB_Left:
-					// Rectangular select
+					// Rectangular Select
 					mStart.x = (float)arg.state.X.abs / (float)arg.state.width;
 					mStart.y = (float)arg.state.Y.abs / (float)arg.state.height;
 					mStop = mStart;
@@ -87,8 +87,8 @@ namespace Strategy.MogreControl {
 		/// <summary>
 		/// This special function is called when any mouse button is released
 		/// </summary>
-		/// <param name="arg">Argument of release</param>
-		/// <param name="id">Released button</param>
+		/// <param Name="arg">Argument of release</param>
+		/// <param Name="id">Released button</param>
 		/// <returns>True</returns>
 		public bool OnMyMouseReleased(MouseEvent arg, MouseButtonID id) {
 			if (arg.state.Y.abs > mouseBoundY) {
@@ -98,11 +98,11 @@ namespace Strategy.MogreControl {
 				case MouseButtonID.MB_Left:
 					bSelecting = false;
 					if (isRectagularSelect) {
-						performSelection(mStart, mStop);
+						PerformSelection(mStart, mStop);
 						mRect.Visible = false;
 						isRectagularSelect = false;
 					} else {
-						GameObjectManager.getInstance().leftClick(simpleClick(arg));
+						GameObjectManager.GetInstance().OnLeftClick(SimpleClick(arg));
 					}
 					break;
 				case MouseButtonID.MB_Right:
@@ -115,7 +115,7 @@ namespace Strategy.MogreControl {
 						Mogre.Ray mouseRay = cameraMan.getCamera().GetCameraToViewportRay(mouseX, mouseY);
 						v = mouseRay.GetPoint(mouseRay.Intersects(plane).second);
 					}
-					GameObjectManager.getInstance().rightClick(v, simpleClick(arg));
+					GameObjectManager.GetInstance().OnRightClick(v, SimpleClick(arg));
 					break;
 			}
 			return true;
@@ -135,7 +135,7 @@ namespace Strategy.MogreControl {
 				mStop.x = arg.state.X.abs / (float)arg.state.width;
 				mStop.y = arg.state.Y.abs / (float)arg.state.height;
 
-				mRect.setCorners(mStart, mStop);
+				mRect.SetCorners(mStart, mStop);
 			}
 			if (arg.state.ButtonDown(MouseButtonID.MB_Middle)) {
 				cameraMan.MouseMovement(arg.state.X.rel, arg.state.Y.rel);
@@ -146,7 +146,7 @@ namespace Strategy.MogreControl {
 			return true;
 		}
 
-		private List<MovableObject> simpleClick(MouseEvent arg) {
+		private List<MovableObject> SimpleClick(MouseEvent arg) {
 			using (Mogre.RaySceneQuery raySceneQuery = sceneMgr.CreateRayQuery(new Mogre.Ray())) {
 				float mouseX = (float)arg.state.X.abs / (float)arg.state.width;
 				float mouseY = (float)arg.state.Y.abs / (float)arg.state.height;
@@ -168,12 +168,12 @@ namespace Strategy.MogreControl {
 		}
 
 
-		private void performSelection(Vector2 first, Vector2 second) {
+		private void PerformSelection(Vector2 first, Vector2 second) {
 			float left = first.x, right = second.x,
 			top = first.y, bottom = second.y;
 
-			if (left > right) swap(ref left, ref right);
-			if (top > bottom) swap(ref top, ref bottom);
+			if (left > right) Swap(ref left, ref right);
+			if (top > bottom) Swap(ref top, ref bottom);
 
 			if ((right - left) * (bottom - top) < 0.0001) return;
 
@@ -201,20 +201,20 @@ namespace Strategy.MogreControl {
 					list.Add(entry);
 				}
 			}
-			GameObjectManager.getInstance().leftClick(list);
+			GameObjectManager.GetInstance().OnLeftClick(list);
 
 			sceneMgr.DestroyQuery(volQuery);
 		}
 
 		// Static method tests
 
-		static void swap(ref float x, ref float y) {
+		static void Swap(ref float x, ref float y) {
 			float tmp = x;
 			x = y;
 			y = tmp;
 		}
 
-		public static void move(string s) {
+		public static void Move(string s) {
 			switch (s) {
 				case "topSection":
 					cameraMan.GoingUp = true;
@@ -256,7 +256,7 @@ namespace Strategy.MogreControl {
 
 		}
 
-		public static void moveStop(string s) {
+		public static void MoveStop(string s) {
 			switch (s) {
 				case "topSection":
 					cameraMan.GoingUp = false;
@@ -312,7 +312,7 @@ namespace Strategy.MogreControl {
 		* range [0, 1] representing a percentage of the screen the SelectionRectangle
 		* should take up.
 		*/
-		void setCorners(float left, float top, float right, float bottom) {
+		void SetCorners(float left, float top, float right, float bottom) {
 			left = left * 2 - 1;
 			right = right * 2 - 1;
 			top = 1 - top * 2;
@@ -328,9 +328,9 @@ namespace Strategy.MogreControl {
 			BoundingBox.SetInfinite();
 		}
 
-		public void setCorners(Vector2 topLeft, Vector2 bottomRight) {
+		public void SetCorners(Vector2 topLeft, Vector2 bottomRight) {
 
-			setCorners(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
+			SetCorners(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
 		}
 	}
 }

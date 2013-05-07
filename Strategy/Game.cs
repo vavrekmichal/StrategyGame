@@ -41,9 +41,9 @@ namespace Strategy {
 
 		private Game(SceneManager sceneManager, CameraMan c, RenderWindow mWindow, Mouse mouse, Keyboard keyboard) {
 
-			gameObjectMgr = GameObjectManager.getInstance(sceneManager, mouse, keyboard, mWindow);
+			gameObjectMgr = GameObjectManager.GetInstance(sceneManager, mouse, keyboard, mWindow);
 			guiControler = new GUIControler(mWindow, mouse, keyboard);
-			mouseControl = MouseControl.getInstance(c, sceneManager, guiControler);
+			mouseControl = MouseControl.GetInstance(c, sceneManager, guiControler);
 			gamePaused = false;
 			soundPlayer = new SoundPlayer(mWindow); //music player
 		}
@@ -101,36 +101,41 @@ namespace Strategy {
 
 		#endregion
 
-		public static void changeObjectsTeam(object gameObject, Team newTeam) {
-			gameObjectMgr.changeObjectsTeam(gameObject, newTeam);
+
+		public static void RemoveObject(IGameObject gameObject) {
+			gameObjectMgr.RemoveObject(gameObject);
 		}
 
-		public void update(float delay) {
-			guiControler.update();
-			soundPlayer.hideBox(delay);
+		public static void ChangeObjectsTeam(IGameObject gameObject, Team newTeam) {
+			gameObjectMgr.ChangeObjectsTeam(gameObject, newTeam);
+		}
+
+		public void Update(float delay) {
+			guiControler.Update();
+			soundPlayer.HideBox(delay);
 			if (!gamePaused) {
-				gameObjectMgr.update(delay);
+				gameObjectMgr.Update(delay);
 			}
 		}
 
 
-		public void inicialization() {
-			gameObjectMgr.inicialization("StartMission", guiControler);
-			guiControler.setSolarSystemName(Game.GroupManager.getSolarSystemName(0));
+		public void Inicialization() {
+			gameObjectMgr.Inicialization("StartMission", guiControler);
+			guiControler.SetSolarSystemName(Game.GroupManager.GetSolarSystemName(0));
 		}
 
 		// Get
-		public MouseControl getMouseControl() {
+		public MouseControl GetMouseControl() {
 			return mouseControl;
 		}
 
 		// Quit
-		public void quit() {
-			guiControler.dispose();
+		public void Quit() {
+			guiControler.Dispose();
 		}
 
 		// Pause
-		public static void pause(bool paused) {
+		public static void Pause(bool paused) {
 			gamePaused = paused;
 		}
 

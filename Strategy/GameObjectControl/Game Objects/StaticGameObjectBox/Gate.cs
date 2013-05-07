@@ -36,7 +36,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			animationState.Enabled = true;
 		}
 
-		public override void rotate(float f) {
+		public override void Rotate(float f) {
 			if (isPorting) {
 				animationState = entity.GetAnimationState("abrirse_eani_Clip");
 				f *= 5;
@@ -52,9 +52,9 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			animationState.AddTime(f / 10);
 		}
 
-		public override void nonActiveRotate(float f) { }
+		public override void NonActiveRotate(float f) { }
 
-		public override void changeVisible(bool visible) {
+		public override void ChangeVisible(bool visible) {
 			if (visible) {
 				if (sceneNode == null) {
 					if (entity == null) {
@@ -73,43 +73,43 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			}
 		}
 
-		public override ActionReaction reactToInitiative(ActionReason reason, IMovableGameObject target) {
-			showTravelDestinations(target);
+		public override ActionReaction ReactToInitiative(ActionReason reason, IMovableGameObject target) {
+			ShowTravelDestinations(target);
 			return ActionReaction.None;
 		}
 
-		protected override void onDisplayed() {
+		protected override void OnDisplayed() {
 
 		}
 
-		public void showTravelDestinations(IMovableGameObject imgo) {
+		public void ShowTravelDestinations(IMovableGameObject imgo) {
 			var gui = Game.GUIManager;
 			var groupMgr = Game.GroupManager;
-			gui.showSolarSystSelectionPanel(groupMgr.getAllSolarSystemNames(), "Choose where you'll travel", imgo);
+			gui.ShowSolarSystSelectionPanel(groupMgr.GetAllSolarSystemNames(), "Choose where you'll travel", imgo);
 
 			isPorting = true;
 			portTimeDuration = portTime;
 		}
 
 
-		public static void updateTravelers(float delay) {
+		public static void UpdateTravelers(float delay) {
 			List<Traveler> copy = new List<Traveler>(travelerList);
 			foreach (var traveler in copy) {
-				if (traveler.isDone) {
+				if (traveler.IsDone) {
 					travelerList.Remove(traveler);
 
 				} else {
-					traveler.update(delay);
+					traveler.Update(delay);
 				}
 			}
 
 		}
 
-		public static List<Traveler> getTravelers() {
+		public static List<Traveler> GetTravelers() {
 			return travelerList;
 		}
 
-		public static void createTraveler(SolarSystem from, SolarSystem to, object gameObject) {
+		public static void CreateTraveler(SolarSystem from, SolarSystem to, object gameObject) {
 			if (gameObject is IMovableGameObject) {
 				if (from != to) {
 					IMovableGameObject imgo = (IMovableGameObject)gameObject;

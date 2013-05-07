@@ -93,9 +93,14 @@
     <Compile Include="GameObjectControl\Game Objects\IGameObject.cs" />
     <Compile Include="GameObjectControl\Game Objects\HitTest.cs" />
     <Compile Include="GameObjectControl\Game Objects\MovableGameObjectBox\IMovableGameObject.cs" />
+    <Compile Include="GameObjectControl\Game Objects\MovableGameObjectBox\SpaceShip.cs" />
+    <Compile Include="GameObjectControl\Game Objects\MovableGameObjectBox\SpaceShip2.cs" />
+    <Compile Include="GameObjectControl\Game Objects\MyDieArgs.cs" />
     <Compile Include="GameObjectControl\Game Objects\ObjectLoader.cs" />
     <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\Gate.cs" />
     <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\IStaticGameObject.cs" />
+    <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\Planet.cs" />
+    <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\Sun.cs" />
     <Compile Include="GameObjectControl\GroupMgr\Traveler.cs" />
     <Compile Include="GameObjectControl\GameObjectManager.cs" />
     <Compile Include="GameObjectControl\RuntimeProperty\EditablePair.cs" />

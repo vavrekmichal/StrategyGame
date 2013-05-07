@@ -23,6 +23,8 @@ namespace Strategy.GameObjectControl {
 		protected GroupManager groupMgr;
 		protected HitTest hitTest;
 
+		const string groupSelectedSound = "power1.wav";
+
 		#region singleton and constructor
 		private static GameObjectManager instance;
 
@@ -30,14 +32,14 @@ namespace Strategy.GameObjectControl {
 		/// Singleton instance
 		/// </summary>
 		/// <returns>Returning singleton instance</returns>
-		public static GameObjectManager getInstance(SceneManager sceneMgr, Mouse m, Keyboard k, RenderWindow mWindow) {
+		public static GameObjectManager GetInstance(SceneManager sceneMgr, Mouse m, Keyboard k, RenderWindow mWindow) {
 			if (instance == null) {
 				instance = new GameObjectManager(sceneMgr, m, k, mWindow);
 			}
 			return instance;
 		}
 
-		public static GameObjectManager getInstance() {
+		public static GameObjectManager GetInstance() {
 			if (instance == null) {
 				throw new NullReferenceException("GameObjectManager is not initialized.");
 			}
@@ -48,7 +50,7 @@ namespace Strategy.GameObjectControl {
 		/// Private constructor
 		/// </summary>
 		private GameObjectManager(SceneManager sceneMgr, Mouse m, Keyboard k, RenderWindow mWindow) {
-			teamMgr = TeamManager.getInstance();
+			teamMgr = TeamManager.GetInstance();
 			objectCreator = new ObjectCreator(sceneMgr);
 			moveMgr = new MoveManager();
 			fightMgr = new FightManager();
@@ -111,73 +113,107 @@ namespace Strategy.GameObjectControl {
 
 		#region public
 
-		public void update(float delay) {
-			teamMgr.update();
-			fightMgr.update(delay);
-			groupMgr.update(delay);
-			moveMgr.update();
+		public void Update(float delay) {
+			teamMgr.Update();
+			fightMgr.Update(delay);
+			groupMgr.Update(delay);
+			moveMgr.Update();
 		}
 
-		public void changeObjectsTeam(object gameObject, Team newTeam) {
-			var castedGO = gameObject as IMovableGameObject;
-			if (castedGO != null) {
-				groupMgr.removeFromGroup(castedGO);
-				teamMgr.changeTeam(castedGO, newTeam);
+		private void OnDieEvent(IGameObject igo, MyDieArgs m) {
+			Console.WriteLine(
+				"Object Hp is lower then 0.");
+			RemoveObject(igo);
+		} 
+
+
+		public void RemoveObject(IGameObject gameObject) {
+
+			//gameObject.takeDamage(1000); //TODO asdasdas
+
+			var castedImgo = gameObject as IMovableGameObject;
+			if (castedImgo != null) {
+				teamMgr.RemoveFromOwnTeam(castedImgo);
+				groupMgr.DestroyGameObject(castedImgo);
 			} else {
-				var castedGOS = gameObject as IStaticGameObject;
-				groupMgr.removeFromGroup(castedGOS);
-				teamMgr.changeTeam(castedGOS, newTeam);
+				var castedIsgo = gameObject as IStaticGameObject;
+				teamMgr.RemoveFromOwnTeam(castedIsgo);
+				groupMgr.DestroyGameObject(castedIsgo);
+			}
+		}
+
+		public void ChangeObjectsTeam(IGameObject gameObject, Team newTeam) {
+			var castedImgo = gameObject as IMovableGameObject;
+			if (castedImgo != null) {
+				groupMgr.RemoveFromGroup(castedImgo);
+				teamMgr.ChangeTeam(castedImgo, newTeam);
+			} else {
+				var castedIsgo = gameObject as IStaticGameObject;
+				groupMgr.RemoveFromGroup(castedIsgo);
+				teamMgr.ChangeTeam(castedIsgo, newTeam);
 			}
 		}
 
 		/// <summary>
 		/// Inicialization of managers, hittest...
 		/// </summary>
-		/// <param name="missionName">Name of choosen mission</param>
-		public void inicialization(string missionName, GUIControler guiControler) {
-			objectCreator.initializeWorld(missionName, propertyMgr);
-			groupMgr.createSolarSystems(objectCreator.getInicializedSolarSystems());
-			hitTest.createHitTestMap(objectCreator.getInicializedSolarSystems());
-			teamMgr.setGUI(guiControler);
-			teamMgr.inicialization(objectCreator.getTeams(), objectCreator.getTeamsRelations());
-			guiControler.inicialization(teamMgr.playerTeam.getMaterials());
-			groupMgr.deselectGroup();
+		/// <param Name="missionName">Name of choosen mission</param>
+		public void Inicialization(string missionName, GUIControler guiControler) {
+			objectCreator.InitializeWorld(missionName, propertyMgr);
+
+			foreach (var solarSys in objectCreator.GetInicializedSolarSystems()) {
+				foreach (var gameObject in solarSys.getIMGOs()) {
+					gameObject.DieHandler += OnDieEvent;
+				}
+				foreach (var gameObject in solarSys.getISGOs()) {
+					gameObject.DieHandler += OnDieEvent;
+				}
+			}
+
+			groupMgr.CreateSolarSystems(objectCreator.GetInicializedSolarSystems());
+			hitTest.CreateHitTestMap(objectCreator.GetInicializedSolarSystems());
+			teamMgr.SetGUI(guiControler);
+			teamMgr.Inicialization(objectCreator.GetTeams(), objectCreator.GetTeamsRelations());
+			guiControler.Inicialization(teamMgr.playerTeam.GetMaterials());
+			groupMgr.DeselectGroup();
 		}
 
 		/// <summary>
-		/// Called from GUI when a left mouse button click or a rectangular select in game area 
+		/// Called from GUI when a left mouse button click or a rectangular Select in game area 
 		/// </summary>
-		/// <param name="selectedObjects">Objects in clicked area</param>
-		public void leftClick(List<Mogre.MovableObject> selectedObjects) {
+		/// <param Name="selectedObjects">Objects in clicked area</param>
+		public void OnLeftClick(List<Mogre.MovableObject> selectedObjects) {
 			bool isMovableSelected = false;
 			List<IMovableGameObject> imgoList = new List<IMovableGameObject>();
 			List<IStaticGameObject> isgoList = new List<IStaticGameObject>();
 
 			foreach (var gameObject in selectedObjects) {
-				if (hitTest.isObjectMovable(gameObject.Name)) {
+				if (hitTest.IsObjectMovable(gameObject.Name)) {
 					isMovableSelected = true;
-					imgoList.Add(hitTest.getIMGO(gameObject.Name));
+					imgoList.Add(hitTest.GetIMGO(gameObject.Name));
 				} else {
 					if (isMovableSelected == false) {
-						isgoList.Add(hitTest.getISGO(gameObject.Name));
+						isgoList.Add(hitTest.GetISGO(gameObject.Name));
 					}
 				}
 			}
 
 			if (isMovableSelected) {
-				groupMgr.createInfoGroup(imgoList);
+				groupMgr.CreateInfoGroup(imgoList);
 			} else {
-				groupMgr.createInfoGroup(isgoList);
+				groupMgr.CreateInfoGroup(isgoList);
 			}
-			groupMgr.showSelectedInfoGroup();
+			groupMgr.ShowSelectedInfoGroup();
 		}
 
 		/// <summary>
-		/// Called from GUI when right mouse button click in game area
+		/// Called from GUI when right mouse button click in game area. Function selectes group and
+		/// evaluate the place where user clicked. After that is called OnRightMouseClick on group 
+		/// and depending on the response is called the appropriate action. 
 		/// </summary>
-		/// <param name="clickedPoint">Mouse position</param>
-		/// <param name="selectedObjects">Objects in clicked area</param>
-		public void rightClick(Mogre.Vector3 clickedPoint, List<Mogre.MovableObject> selectedObjects) {
+		/// <param Name="clickedPoint">Mouse position</param>
+		/// <param Name="selectedObjects">Objects in clicked area</param>
+		public void OnRightClick(Mogre.Vector3 clickedPoint, List<Mogre.MovableObject> selectedObjects) {
 
 			Mogre.MovableObject hitObject;
 			bool isFriendly = true;
@@ -189,34 +225,35 @@ namespace Strategy.GameObjectControl {
 			} else {
 				hitObject = selectedObjects[0];
 				Team targetTeam;
-				if (hitTest.isObjectMovable(hitObject.Name)) {
-					targetTeam = hitTest.getIMGO(hitObject.Name).Team;
+				if (hitTest.IsObjectMovable(hitObject.Name)) {
+					targetTeam = hitTest.GetIMGO(hitObject.Name).Team;
 
 				} else {
-					targetTeam = hitTest.getISGO(hitObject.Name).Team;
+					targetTeam = hitTest.GetISGO(hitObject.Name).Team;
 					isIMGO = false;
 				}
-				isFriendly = teamMgr.areFriendly(groupMgr.ActiveTeam, targetTeam);
-
+				isFriendly = teamMgr.AreFriendly(groupMgr.ActiveTeam, targetTeam);
 			}
-			var answer = groupMgr.onRightMouseClick(clickedPoint, hitObject, isFriendly, isIMGO);
+			var answer = groupMgr.OnRightMouseClick(clickedPoint, hitObject, isFriendly, isIMGO);
+
+			Game.IEffectPlayer.PlayEffect(groupSelectedSound); // Play effect
 
 			switch (answer) {
 				case ActionAnswer.Move:
-					moveMgr.goToLocation(groupMgr.getActiveMovableGroup(), clickedPoint);
+					moveMgr.GoToLocation(groupMgr.GetActiveMovableGroup(), clickedPoint);
 					break;
 				case ActionAnswer.MoveTo:
-					moveMgr.goToTarget(groupMgr.getActiveMovableGroup(), hitTest.getGameObject(hitObject.Name));
+					moveMgr.GoToTarget(groupMgr.GetActiveMovableGroup(), hitTest.GetGameObject(hitObject.Name));
 					break;
 				case ActionAnswer.Attack:
-					fightMgr.attack(groupMgr.getActiveMovableGroup(), hitTest.getGameObject(hitObject.Name));
+					fightMgr.Attack(groupMgr.GetActiveMovableGroup(), hitTest.GetGameObject(hitObject.Name));
 					break;
 				case ActionAnswer.Occupy:
-					fightMgr.occupy(groupMgr.getActiveMovableGroup(), hitTest.getGameObject(hitObject.Name));
+					fightMgr.Occupy(groupMgr.GetActiveMovableGroup(), hitTest.GetGameObject(hitObject.Name));
 					break;
 
 			}
-			groupMgr.showSelectedInfoGroup();
+			groupMgr.ShowSelectedInfoGroup();
 
 		}
 

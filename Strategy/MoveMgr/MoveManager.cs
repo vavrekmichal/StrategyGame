@@ -6,6 +6,7 @@ using Strategy.GameObjectControl;
 using Strategy.GameObjectControl.GroupMgr;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
+using Strategy.GameObjectControl.Game_Objects;
 
 namespace Strategy.MoveMgr {
 	class MoveManager : IMoveManager {
@@ -22,7 +23,7 @@ namespace Strategy.MoveMgr {
 
 
 		private static Random r = new Random();
-		private Mogre.Vector3 randomizeVector(Mogre.Vector3 v) {
+		private Mogre.Vector3 RandomizeVector(Mogre.Vector3 v) {
 			
 			int i = r.Next(4);
 			switch (i) {
@@ -41,11 +42,11 @@ namespace Strategy.MoveMgr {
 		/// <summary>
 		/// Returns true when distance between given points is lower then given squaredDistance
 		/// </summary>
-		/// <param name="point1">First point</param>
-		/// <param name="point2">Second point</param>
-		/// <param name="squaredDistance">Squared distance (no root needed)</param>
+		/// <param Name="point1">First point</param>
+		/// <param Name="point2">Second point</param>
+		/// <param Name="squaredDistance">Squared distance (no root needed)</param>
 		/// <returns>Distance is lower (true) or not</returns>
-		private bool checkDistance(Mogre.Vector3 point1, Mogre.Vector3 point2, double squaredDistance) {
+		private bool CheckDistance(Mogre.Vector3 point1, Mogre.Vector3 point2, double squaredDistance) {
 			double xd = point2.x - point1.x;
 			double yd = point2.z - point1.z;
 			double distance = xd * xd + yd * yd;
@@ -59,23 +60,23 @@ namespace Strategy.MoveMgr {
 		/// <summary>
 		/// Called by MoveMgr when destiantion is reached
 		/// </summary>
-		/// <param name="imgo">Object which reached destination</param>
-		/// <param name="isgo">Target of move</param>
-		private void reachedDestiantion(IMovableGameObject imgo, object gameObject) {
+		/// <param Name="imgo">Object which reached destination</param>
+		/// <param Name="isgo">Target of move</param>
+		private void ReachedDestiantion(IMovableGameObject imgo, object gameObject) {
 
 			if (finishMoveRecDict.ContainsKey(imgo)) {
-				finishMoveRecDict[imgo].movementFinished(imgo);
+				finishMoveRecDict[imgo].MovementFinished(imgo);
 				finishMoveRecDict.Remove(imgo);
 			}
 
 			if (imgo.Visible) {
 
-				imgo.stop();
+				imgo.Stop();
 				ActionReaction answer;
 				if (gameObject is IStaticGameObject) {
-					answer = ((IStaticGameObject)gameObject).reactToInitiative(ActionReason.targetInDistance, imgo);
+					answer = ((IStaticGameObject)gameObject).ReactToInitiative(ActionReason.TargetInDistance, imgo);
 				} else {
-					answer = ((IMovableGameObject)gameObject).reactToInitiative(ActionReason.targetInDistance, imgo);
+					answer = ((IMovableGameObject)gameObject).ReactToInitiative(ActionReason.TargetInDistance, imgo);
 				}
 				
 				switch (answer) { //TODO nejak to domyslet
@@ -89,10 +90,10 @@ namespace Strategy.MoveMgr {
 		/// <summary>
 		/// Create List of positions around given point.
 		/// </summary>
-		/// <param name="count">Number of positions</param>
-		/// <param name="position">Center position</param>
+		/// <param Name="count">Number of positions</param>
+		/// <param Name="position">Center position</param>
 		/// <returns>List with positions around given position</returns>
-		private List<Mogre.Vector3> preparePositions(int count, Mogre.Vector3 position) {
+		private List<Mogre.Vector3> PreparePositions(int count, Mogre.Vector3 position) {
 
 			List<Mogre.Vector3> positionList = new List<Mogre.Vector3>();
 			List<Mogre.Vector3> collision = new List<Mogre.Vector3>();
@@ -108,7 +109,7 @@ namespace Strategy.MoveMgr {
 							collision.Add(positionToGo);
 							isTaken = false;
 						} else {
-							positionToGo = randomizeVector(positionToGo);
+							positionToGo = RandomizeVector(positionToGo);
 						}
 					}
 					positionList.Add(positionToGo);
@@ -120,28 +121,28 @@ namespace Strategy.MoveMgr {
 			return positionList;
 		}
 
-		public void goToLocation(GroupMovables group, Mogre.Vector3 to) {
-			var destinations = preparePositions(group.Count, to);
+		public void GoToLocation(GroupMovables group, Mogre.Vector3 to) {
+			var destinations = PreparePositions(group.Count, to);
 			foreach (IMovableGameObject imgo in group) {
-				imgo.setNextLocation(destinations[0]);
+				imgo.SetNextLocation(destinations[0]);
 				destinations.RemoveAt(0);
 			}
 		}
 
-		public void goToLocation(IMovableGameObject imgo, Mogre.Vector3 to) {
+		public void GoToLocation(IMovableGameObject imgo, Mogre.Vector3 to) {
 			var a = new LinkedList<Mogre.Vector3>();
 			a.AddLast(to);
-			imgo.setNextLocation(a);
+			imgo.SetNextLocation(a);
 		}
 
 
 
 
-		public void runAwayFrom(GroupMovables group, Mogre.Vector3 from) {
+		public void RunAwayFrom(GroupMovables group, Mogre.Vector3 from) {
 			throw new NotImplementedException();
 		}
 
-		public void update() {
+		public void Update() {
 			var copy = new Dictionary<IMovableGameObject, object>(moveMgrControledDict);
 			
 			foreach (KeyValuePair<IMovableGameObject, object> trev in copy) {
@@ -149,79 +150,72 @@ namespace Strategy.MoveMgr {
 				Mogre.Vector3 position;
 
 				// trev.Value is IStaticGameObject or IMovableGameObject
-				var castedIsgo = trev.Value as IStaticGameObject;
-				if (castedIsgo == null) {
-					var castedImgo = trev.Value as IMovableGameObject;
-					pickUpDistance = castedImgo.PickUpDistance;
-					position = castedImgo.Position;
+				var castedIgo = trev.Value as IGameObject;
+				if (castedIgo != null) {
+					pickUpDistance = castedIgo.PickUpDistance;
+					position = castedIgo.Position;
 				} else {
-					pickUpDistance = castedIsgo.PickUpDistance;
-					position = castedIsgo.Position;
+					throw new InvalidCastException();
 				}
 
 				// Count distance between objects and compare with pickUpDistance (squared)
 				double sqPickUpDist = pickUpDistance * pickUpDistance;
-				if (checkDistance(trev.Key.Position, position, sqPickUpDist)) {
-					reachedDestiantion(trev.Key, trev.Value);
+				if (CheckDistance(trev.Key.Position, position, sqPickUpDist)) {
+					ReachedDestiantion(trev.Key, trev.Value);
 				}
 			}
 
 		}
 
-		public void goToTarget(GroupMovables group, object gameObject, IFinishMovementReciever reciever) {
+		public void GoToTarget(GroupMovables group, object gameObject, IFinishMovementReciever reciever) {
 			foreach (IMovableGameObject imgo in group) {
 				finishMoveRecDict.Add(imgo, reciever);
 			}
-			goToTarget(group, gameObject);
+			GoToTarget(group, gameObject);
 		}
 
-		public void goToTarget(GroupMovables group, object gameObject) {
+		public void GoToTarget(GroupMovables group, object gameObject) {
 			if (gameObject is IStaticGameObject) {
-				goToTarget(group, (IStaticGameObject)gameObject);
+				GoToTarget(group, (IStaticGameObject)gameObject);
 				return;
 			}
 			if (gameObject is IMovableGameObject) {
-				goToTarget(group, (IMovableGameObject)gameObject);
+				GoToTarget(group, (IMovableGameObject)gameObject);
 			}
 		}
 
-		private void goToTarget(GroupMovables group, IStaticGameObject target) {
-			List<Mogre.Vector3> destinations = preparePositions(group.Count, target.Position);
+		private void GoToTarget(GroupMovables group, IStaticGameObject target) {
+			List<Mogre.Vector3> destinations = PreparePositions(group.Count, target.Position);
 			foreach (IMovableGameObject imgo in group) {
-				imgo.goToTarget(destinations[0]);
+				imgo.GoToTarget(destinations[0]);
 				destinations.RemoveAt(0);
 				moveMgrControledDict.Add(imgo, target);
 			}
 
 		}
 
-		private void goToTarget(GroupMovables group, IMovableGameObject target) {
-			List<Mogre.Vector3> destinations = preparePositions(group.Count, target.Position);
+		private void GoToTarget(GroupMovables group, IMovableGameObject target) {
+			List<Mogre.Vector3> destinations = PreparePositions(group.Count, target.Position);
 			foreach (IMovableGameObject imgo in group) {
-				imgo.goToTarget(destinations[0]);
+				imgo.GoToTarget(destinations[0]);
 				destinations.RemoveAt(0);
 				moveMgrControledDict.Add(imgo, target);
 			}
 		}
 
-
-		public void moveFinished(IMovableGameObject imgo) {
-			
-		}
-
-		public void movementFinished(IMovableGameObject imgo) {
+		public void MovementFinished(IMovableGameObject imgo) {
 			throw new NotImplementedException();
 		}
 
-		public void movementInterupted(IMovableGameObject imgo) {
+		public void MovementInterupted(IMovableGameObject imgo) {
 			moveMgrControledDict.Remove(imgo);
 			if (finishMoveRecDict.ContainsKey(imgo)) {
-				finishMoveRecDict[imgo].movementInterupted(imgo);
+				finishMoveRecDict[imgo].MovementInterupted(imgo);
 				finishMoveRecDict.Remove(imgo);
 			}
 		}
 
-		public void unlogFromFinishMoveReciever(IMovableGameObject imgo) {
+		public void UnlogFromFinishMoveReciever(IMovableGameObject imgo) {
 			finishMoveRecDict.Remove(imgo);
 		}
 	}

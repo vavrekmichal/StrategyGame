@@ -10,7 +10,10 @@ using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.TeamControl;
 
 namespace Strategy.GameObjectControl.Game_Objects {
-	public abstract class GameObject :IGameObject {
+
+	public delegate void DieEventHandler(IGameObject igo, MyDieArgs m);
+
+	public abstract class GameObject : IGameObject {
 
 
 		protected Dictionary<PropertyEnum, object> propertyDict = new Dictionary<PropertyEnum, object>();
@@ -26,10 +29,12 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		protected Mogre.Vector3 position;
 		protected Mogre.SceneManager manager;
 
+		private int hp = 100;
+
 		/// <summary>
 		/// Called when object will be invisible
 		/// </summary>
-		public virtual void changeVisible(bool visible) {
+		public virtual void ChangeVisible(bool visible) {
 			if (visible && !this.isVisible) {
 
 				// Control if the entity is inicialized
@@ -40,21 +45,27 @@ namespace Strategy.GameObjectControl.Game_Objects {
 				sceneNode = manager.RootSceneNode.CreateChildSceneNode(name + "Node", position);
 				sceneNode.AttachObject(entity);
 				this.isVisible = true;
-				onDisplayed();
+				OnDisplayed();
 			} else {
 				if (this.isVisible) {
 					position = sceneNode.Position;
 					manager.DestroySceneNode(sceneNode);
 					sceneNode = null;
-					this.isVisible = false;
+					isVisible = false;
 				}
 			}
 		}
 
+		public void Destroy() {
+			manager.DestroySceneNode(sceneNode);
+			manager.DestroyEntity(entity);
+		}
+
+
 		/// <summary>
 		/// Calls when object is showed by SolarSystem
 		/// </summary>
-		protected virtual void onDisplayed() { }
+		protected virtual void OnDisplayed() { }
 
 		public string Name {
 			get { return name; }
@@ -95,24 +106,24 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			}
 		}
 
-		public void addProperty<T>(PropertyEnum propertyName, Property<T> property) {
+		public void AddProperty<T>(PropertyEnum propertyName, Property<T> property) {
 			if (!propertyDict.ContainsKey(propertyName)) {
 				propertyDict.Add(propertyName, property);
 			}
 		}
-		public void addProperty<T>(string propertyName, Property<T> property) {
+		public void AddProperty<T>(string propertyName, Property<T> property) {
 			if (!propertyDictUserDefined.ContainsKey(propertyName)) {
 				propertyDictUserDefined.Add(propertyName, property);
 			}
 		}
-		public void removeProperty(string propertyName) {
+		public void RemoveProperty(string propertyName) {
 			if (!propertyDictUserDefined.ContainsKey(propertyName)) {
 				propertyDictUserDefined.Remove(propertyName);
 				return;
 			}
 		}
 
-		public void removeProperty(PropertyEnum propertyName) {
+		public void RemoveProperty(PropertyEnum propertyName) {
 			if (propertyDict.ContainsKey(propertyName) && (int)propertyName > 10) {
 				propertyDict.Remove(propertyName);
 				return;
@@ -120,7 +131,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 
-		public Property<T> getProperty<T>(PropertyEnum propertyName) {
+		public Property<T> GetProperty<T>(PropertyEnum propertyName) {
 			if (!propertyDict.ContainsKey(propertyName)) {
 				throw new PropertyMissingException("Object " + Name + " doesn't have property " + propertyName + ".");
 			}
@@ -128,7 +139,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			return prop;
 		}
 
-		public Property<T> getProperty<T>(string propertyName) {
+		public Property<T> GetProperty<T>(string propertyName) {
 			if (!propertyDictUserDefined.ContainsKey(propertyName)) {
 				throw new PropertyMissingException("Object " + Name + " doesn't have property " + propertyName + ".");
 			}
@@ -136,7 +147,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			return prop;
 		}
 
-		protected void setProperty(PropertyEnum name, object prop) {
+		protected void SetProperty(PropertyEnum name, object prop) {
 			if (!(prop.GetType().GetGenericTypeDefinition() == typeof(Property<>))) {
 				throw new ArgumentException("Given object is not Property<T>, it is " + prop.GetType());
 			}
@@ -147,7 +158,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			}
 		}
 
-		protected void setProperty(string name, object prop) {
+		protected void SetProperty(string name, object prop) {
 			if (!(prop.GetType().GetGenericTypeDefinition() == typeof(Property<>))) {
 				throw new ArgumentException("Given object is not Property<T>, it is " + prop.GetType());
 			}
@@ -159,7 +170,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 
-		public Dictionary<string, object> getPropertyToDisplay() {
+		public Dictionary<string, object> GetPropertyToDisplay() {
 			var result = new Dictionary<string, object>(propertyDictUserDefined);
 			foreach (var property in propertyDict) {
 				result.Add(property.Key.ToString(), property.Value);
@@ -167,8 +178,37 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			return result;
 		}
 
-		public virtual ActionReaction reactToInitiative(ActionReason reason, IMovableGameObject target) {
+		public virtual ActionReaction ReactToInitiative(ActionReason reason, IMovableGameObject target) {
 			return ActionReaction.None;
 		}
+
+		private DieEventHandler die = null;
+		public DieEventHandler DieHandler {
+			get { return die; }
+			set { die = value; }
+		}
+
+		private void RaiseDie() {
+			if (die != null) {
+				die(this, new MyDieArgs(hp));
+			}
+		}
+
+		public void TakeDamage(int damage) {
+			var actualHp = hp - damage;
+			if (actualHp < 0) {
+				RaiseDie();
+			}
+		}
+
+		public virtual int Hp {
+			get {
+				return hp;
+			}
+		}
 	}
+
+	
+
+
 }

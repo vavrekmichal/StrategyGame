@@ -3,73 +3,63 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Strategy.GameObjectControl;
+using Strategy.GameObjectControl.Game_Objects;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 using Strategy.GameObjectControl.GroupMgr;
 
 namespace Strategy.FightMgr {
-	class FightManager : IFightManager{
+	class FightManager : IFightManager {
 
 		private Dictionary<GroupMovables, ActionAnswer> fightsDict; // Dictionary with information about group action (Occupy/Attack)
 
 		private List<Occupation> occupationList; // Every occupation 
 
-		private Dictionary<IMovableGameObject,GroupMovables> onWayToTargetDict; // Dictionary with object on the way
+		private Dictionary<IMovableGameObject, GroupMovables> onWayToTargetDict; // Dictionary with object on the way
 
-		private Dictionary<IMovableGameObject, object> attackersTarget; // Dictionary with information about witch obejct attack an other
-		
+		private Dictionary<IMovableGameObject, IGameObject> attackersTarget; // Dictionary with information about witch obejct attack an other
+
 		public FightManager() {
-			attackersTarget = new Dictionary<IMovableGameObject, object>();
+			attackersTarget = new Dictionary<IMovableGameObject, IGameObject>();
 			onWayToTargetDict = new Dictionary<IMovableGameObject, GroupMovables>();
 			fightsDict = new Dictionary<GroupMovables, ActionAnswer>();
 			occupationList = new List<Occupation>();
 		}
 
-		public void update(float delay){
+		public void Update(float delay) {
 			var occupCopy = new List<Occupation>(occupationList);
 			foreach (var occ in occupCopy) {
-				if (occ.check(delay)) {
+				if (occ.Check(delay)) {
 					occupationList.Remove(occ);
 				}
 			}
 		}
 
-		public void attack(GroupMovables group, object gameObject) {
+		public void Attack(GroupMovables group, IGameObject gameObject) {
 			if (gameObject is IStaticGameObject) {
 				Console.WriteLine("Utocis na static");
 			}
 			if (gameObject is IMovableGameObject) {
 				Console.WriteLine("Utocis na movable");
+				//Game.removeObject(gameObject);
+				gameObject.TakeDamage(1000);
 			}
 		}
 
-		public void occupy(GroupMovables group, object gameObject) {
+		public void Occupy(GroupMovables group, IGameObject gameObject) {
 
-			var castedIsgo = gameObject as IStaticGameObject;
-			if (castedIsgo != null) {
-				
-				if (castedIsgo.OccupyTime < 0) {
-					Console.WriteLine("Nelze obsadit");
-					return;					
-				}
-				Console.WriteLine("Obsazujes static");
-			} else {
-				var castedImgo = gameObject as IMovableGameObject;
-				
-				if (castedImgo.OccupyTime < 0) {
-					Console.WriteLine("Nelze obsadit");
-					return;
-				}
-				Console.WriteLine("Obsazujes movable");
+
+			if (gameObject.OccupyTime < 0) {
+				Console.WriteLine("Nelze obsadit");
+				return;
 			}
 
-			
 			if (fightsDict.ContainsKey(group)) {
 				return;
 			}
 
 			// Object can be occupied
-			Game.IMoveManager.goToTarget(group, gameObject, this);
+			Game.IMoveManager.GoToTarget(group, gameObject, this);
 			fightsDict.Add(group, ActionAnswer.Occupy);
 
 			foreach (IMovableGameObject imgo in group) {
@@ -78,7 +68,7 @@ namespace Strategy.FightMgr {
 			}
 		}
 
-		public void movementFinished(IMovableGameObject imgo) {
+		public void MovementFinished(IMovableGameObject imgo) {
 			var onWayCopy = new Dictionary<IMovableGameObject, GroupMovables>(onWayToTargetDict);
 			var group = onWayCopy[imgo];
 			var gameObject = attackersTarget[imgo];
@@ -86,18 +76,18 @@ namespace Strategy.FightMgr {
 			foreach (IMovableGameObject item in onWayCopy[imgo]) {
 				onWayToTargetDict.Remove(item);
 				attackersTarget.Remove(item);
-				moveMgr.unlogFromFinishMoveReciever(item);
+				moveMgr.UnlogFromFinishMoveReciever(item);
 			}
 
 			if (fightsDict[onWayCopy[imgo]] == ActionAnswer.Attack) {
 				//TODO attack
 			} else {
-				occupationList.Add(new Occupation(group, gameObject, TimeSpan.FromSeconds(20)));
+				occupationList.Add(new Occupation(group, gameObject));
 			}
 			fightsDict.Remove(onWayCopy[imgo]);
 		}
 
-		public void movementInterupted(IMovableGameObject imgo) {
+		public void MovementInterupted(IMovableGameObject imgo) {
 			if (onWayToTargetDict.ContainsKey(imgo)) {
 				onWayToTargetDict.Remove(imgo);
 				attackersTarget.Remove(imgo);

@@ -44,7 +44,7 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 			session.AddReference("System");
 			session.AddReference("System.Core");
 
-			// Create start properties - load XML file with used ones
+			// Create start properties - Load XML file with used ones
 			XmlDocument xml = new XmlDocument();
 			xml.Load("../../Media/Mission/Scripts/test.xml");
 			root = xml.DocumentElement;
@@ -55,8 +55,8 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 		/// Function called when file "Properties.csx" is changed. This function controls delay between
 		/// changes (delay must be longer then 5s when is less so properties are not reloaded) 
 		/// </summary>
-		/// <param name="source">Source</param>
-		/// <param name="e">Changed file</param>
+		/// <param Name="source">Source</param>
+		/// <param Name="e">Changed file</param>
 		private static void OnChanged(object source, FileSystemEventArgs e) {
 			DateTime lastWriteTime = File.GetLastWriteTime(e.FullPath); // Bug fix - function is called twice
 			DateTime now = DateTime.Now;
@@ -71,7 +71,7 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 					return;
 				}
 				
-				instance.loadProperties();
+				instance.LoadProperties();
 
 			}
 		}
@@ -79,10 +79,10 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 		/// <summary>
 		/// Add generic property into baseDict (or modify)
 		/// </summary>
-		/// <typeparam name="T">Type of property</typeparam>
-		/// <param name="key">Name of property</param>
-		/// <param name="value">Value of property</param>
-		private void add<T>(string key, T value) {
+		/// <typeparam Name="T">Type of property</typeparam>
+		/// <param Name="key">Name of property</param>
+		/// <param Name="value">Value of property</param>
+		private void Add<T>(string key, T value) {
 			Type type = typeof(T);
 			Dictionary<string, Property<T>> subDict;
 			if (baseDict.ContainsKey(type)) {
@@ -100,22 +100,22 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 		}
 
 		/// <summary>
-		/// A function loads properties for given mission from Property file
+		/// Function loads properties for given mission from Property file
 		/// </summary>
-		/// <param name="missionName">Mission name</param>
-		public void loadPropertyToMission(string missionName) {
+		/// <param Name="missionName">Mission Name</param>
+		public void LoadPropertyToMission(string missionName) {
 			session.ExecuteFile("../../Media/Mission/Scripts/Properties.csx");
 			missionPropertyNode = root.SelectNodes("runTimeProperty[@missionName='" + missionName + "'][1]")[0];
-			loadProperties();
+			LoadProperties();
 		}
 
 		/// <summary>
-		/// A function returns a generic property Property<T>
+		/// Function returns a generic property Property<T>
 		/// </summary>
-		/// <typeparam name="T">Type of property</typeparam>
-		/// <param name="key">Property name</param>
+		/// <typeparam Name="T">Type of property</typeparam>
+		/// <param Name="key">Property Name</param>
 		/// <returns>Generic instance of Property found by key </returns>
-		public Property<T> getProperty<T>(string key) {
+		public Property<T> GetProperty<T>(string key) {
 			Type type = typeof(T);
 			Dictionary<string, Property<T>> subDict;
 			if (baseDict.ContainsKey(type)) {
@@ -128,12 +128,12 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 		}
 
 		/// <summary>
-		/// A function loads all properties in executing file and save them in generic Property by name(key)
+		/// A function loads all properties in executing file and save them in generic Property by Name(key)
 		/// </summary>
-		public void loadProperties() {
+		public void LoadProperties() {
 
 			// Reflection is used because here is needed runtime generic add is private function
-			MethodInfo method = typeof(PropertyManager).GetMethod("add", BindingFlags.NonPublic | BindingFlags.Instance);
+			MethodInfo method = typeof(PropertyManager).GetMethod("Add", BindingFlags.NonPublic | BindingFlags.Instance);
 			foreach (XmlNode property in missionPropertyNode.ChildNodes) {
 				string propertyName = property.Attributes["name"].InnerText;
 
@@ -145,7 +145,9 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 				List<object> args = new List<object>();
 				args.Add(propertyName);
 				args.Add(d);
-				generic.Invoke(this, args.ToArray());						//calls add with type of property from script
+
+				//  Calls add with type of property from script
+				generic.Invoke(this, args.ToArray());						
 
 			}
 		}
