@@ -17,21 +17,27 @@ namespace Strategy.FightMgr {
 		private IGameObject target;
 		private Property<TimeSpan> remainingTime;
 
-		const float distanceConst = 1.5f;
-		const string prepName = "Occupation of ";
-		const string occStart = "OccBegan1.wav";
-		const string occEnd = "OccSucc1.wav";
+		const float distanceConst = 1.5f;	// Occupy-distance is increased by this constant.
+		const string occStart = "OccBegan1.wav"; // Sound of start the occupation
+		const string occEnd = "OccSucc1.wav";  // Sound of end the occupation
 
-		public Occupation(GroupMovables occupator, IGameObject occupied) {
+		/// <summary>
+		/// Constructor creates Property with remaining time to end of the occupation.
+		/// This Property is added to occupied object (time is displayed in GUI - object's properties).
+		/// It also runs the sound of the occupation. 
+		/// </summary>
+		/// <param name="occupier">Attacking group</param>
+		/// <param name="occupied">Occupied group</param>
+		public Occupation(GroupMovables occupier, IGameObject occupied) {
 			var time = TimeSpan.FromSeconds(occupied.OccupyTime);
 
 			remainingTime = new Property<TimeSpan>(time);
 
 			occupied.AddProperty<TimeSpan>(PropertyEnum.Occupation, remainingTime);
-			this.name = prepName + occupied.Name;
+			this.name = "Occupation of " + occupied.Name;
 
 
-			this.attackers = occupator;
+			this.attackers = occupier;
 			this.target = (IGameObject)occupied;
 			Game.IEffectPlayer.PlayEffect(occStart);
 
@@ -60,8 +66,10 @@ namespace Strategy.FightMgr {
 
 			var delayTimeSpan = TimeSpan.FromSeconds(delay);
 			var remaining = remainingTime.Value - delayTimeSpan;
-			// Object is occupied
+
 			if (remaining < TimeSpan.Zero) {
+
+				// Object is occupied
 				FinishOccupation();
 				return true;
 			} else {

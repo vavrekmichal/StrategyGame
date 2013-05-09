@@ -46,6 +46,12 @@ namespace Strategy.FightMgr {
 			}
 		}
 
+		/// <summary>
+		/// Occupy controls if target can be occupied or if is now currently occupied.
+		/// If it is possible so attackers are sent to the destination and are registered.
+		/// </summary>
+		/// <param name="group">Attackers</param>
+		/// <param name="gameObject">Target</param>
 		public void Occupy(GroupMovables group, IGameObject gameObject) {
 
 
