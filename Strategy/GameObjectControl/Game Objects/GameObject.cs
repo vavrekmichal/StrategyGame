@@ -59,6 +59,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		public void Destroy() {
 			manager.DestroySceneNode(sceneNode);
 			manager.DestroyEntity(entity);
+			sceneNode = null;
 		}
 
 
@@ -208,7 +209,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 	}
 
-	
+
 
 
 }

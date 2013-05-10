@@ -41,8 +41,15 @@ namespace Strategy.FightMgr {
 			}
 			if (gameObject is IMovableGameObject) {
 				Console.WriteLine("Utocis na movable");
-				//Game.removeObject(gameObject);
-				gameObject.TakeDamage(1000);
+			}
+
+			// Object can be occupied
+			Game.IMoveManager.GoToTarget(group, gameObject, this);
+			fightsDict.Add(group, ActionAnswer.Attack);
+
+			foreach (IMovableGameObject imgo in group) {
+				attackersTarget.Add(imgo, gameObject);
+				onWayToTargetDict.Add(imgo, group);
 			}
 		}
 
@@ -87,6 +94,7 @@ namespace Strategy.FightMgr {
 
 			if (fightsDict[onWayCopy[imgo]] == ActionAnswer.Attack) {
 				//TODO attack
+				gameObject.TakeDamage(1000);
 			} else {
 				occupationList.Add(new Occupation(group, gameObject));
 			}
