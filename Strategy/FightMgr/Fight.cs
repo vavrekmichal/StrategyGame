@@ -11,16 +11,16 @@ namespace Strategy.FightMgr {
 		GroupMovables groupAttackers;
 		T groupDeffenders;
 
+		AttackExecuter attackExec;
+		DamageCounter damageCounter;
+
 		public Fight(GroupMovables attackers, T deffenders) {
 			groupAttackers = attackers;
 			groupDeffenders = deffenders;
+			attackExec = new AttackExecuter();
+			damageCounter = new DamageCounter();
 		}
 
-		public abstract void TryAttack(IBullet bullet);
-
-		protected abstract bool CanAttack();
-
-		protected abstract void Attack(IBullet bullet);
 	}
 
 	class FightWithStatic : Fight<GroupStatics> {
@@ -29,17 +29,6 @@ namespace Strategy.FightMgr {
 
 		}
 
-		public override void TryAttack(IBullet bullet) {
-			throw new NotImplementedException();
-		}
-
-		protected override bool CanAttack() {
-			throw new NotImplementedException();
-		}
-
-		protected override void Attack(IBullet bullet) {
-			throw new NotImplementedException();
-		}
 	}
 
 	class FightWithMovables : Fight<GroupMovables> {
@@ -48,16 +37,5 @@ namespace Strategy.FightMgr {
 
 		}
 
-		public override void TryAttack(IBullet bullet) {
-			throw new NotImplementedException();
-		}
-
-		protected override bool CanAttack() {
-			throw new NotImplementedException();
-		}
-
-		protected override void Attack(IBullet bullet) {
-			throw new NotImplementedException();
-		}
 	}
 }

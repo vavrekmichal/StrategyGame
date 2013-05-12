@@ -68,7 +68,9 @@
     <Compile Include="Exceptions\MissingMaterialException.cs" />
     <Compile Include="Exceptions\PropertyMissingException.cs" />
     <Compile Include="Exceptions\XmlLoadException.cs" />
+    <Compile Include="FightMgr\AttackExecuter.cs" />
     <Compile Include="FightMgr\Bullet\IBullet.cs" />
+    <Compile Include="FightMgr\DamageCounter.cs" />
     <Compile Include="FightMgr\Fight.cs" />
     <Compile Include="FightMgr\FightManager.cs" />
     <Compile Include="FightMgr\IFightManager.cs" />

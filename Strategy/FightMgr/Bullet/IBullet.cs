@@ -6,5 +6,9 @@ using System.Threading.Tasks;
 
 namespace Strategy.FightMgr.Bullet {
 	interface IBullet {
+
+		int Attack { get; }
+
+
 	}
 }
