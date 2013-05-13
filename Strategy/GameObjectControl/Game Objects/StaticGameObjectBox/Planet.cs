@@ -30,7 +30,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			this.name = name;
 			this.mesh = mesh;
 			this.team = myTeam;
-			this.manager = manager;
+			this.sceneMgr = manager;
 			base.SetProperty(PropertyEnum.Speed, propMgr.GetProperty<float>("speed3"));
 			base.SetProperty(PropertyEnum.Rotate, propMgr.GetProperty<float>("planetRotateSpeed"));
 			base.SetProperty(PropertyEnum.PickUp, propMgr.GetProperty<float>("planetPickUpDistance"));

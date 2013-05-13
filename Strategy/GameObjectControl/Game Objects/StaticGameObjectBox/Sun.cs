@@ -142,8 +142,14 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			}
 		}
 
+		public int ShoutDistance {
+			get { return 0; }
+		}
+
 		public void TakeDamage(int damage) {
 			
 		}
+
+		public void Shout(List<IGameObject> objectsInDistance) { }
 	}
 }

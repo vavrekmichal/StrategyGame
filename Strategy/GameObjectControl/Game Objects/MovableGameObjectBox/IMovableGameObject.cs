@@ -28,9 +28,6 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// <param Name="f">Delay between last two frames</param>
 		void NonActiveMove(float f);
 
-
-		void Shout();
-
 		/// <summary>
 		/// Add position in flyList on a firts place
 		/// </summary>

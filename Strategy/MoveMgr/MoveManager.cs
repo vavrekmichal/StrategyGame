@@ -168,10 +168,11 @@ namespace Strategy.MoveMgr {
 		}
 
 		public void GoToTarget(GroupMovables group, object gameObject, IFinishMovementReciever reciever) {
+			GoToTarget(group, gameObject);
 			foreach (IMovableGameObject imgo in group) {
 				finishMoveRecDict.Add(imgo, reciever);
 			}
-			GoToTarget(group, gameObject);
+			
 		}
 
 		public void GoToTarget(GroupMovables group, object gameObject) {

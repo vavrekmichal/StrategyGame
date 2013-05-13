@@ -54,14 +54,14 @@ namespace Strategy.GameObjectControl.Game_Objects {
 					isgoDict.Add(s.Name, s);
 				}
 
-				foreach (IStaticGameObject isgo in ss.getISGOs()) {
-					objectIsMovable.Add(isgo.Name, false);
-					isgoDict.Add(isgo.Name, isgo);
+				foreach (var isgoPair in ss.GetISGOs()) {
+					objectIsMovable.Add(isgoPair.Key, false);
+					isgoDict.Add(isgoPair.Key, isgoPair.Value);
 				}
 
-				foreach (IMovableGameObject imgo in ss.getIMGOs()) {
-					objectIsMovable.Add(imgo.Name, true);
-					imgoDict.Add(imgo.Name, imgo);
+				foreach (var imgoPair in ss.GetIMGOs()) {
+					objectIsMovable.Add(imgoPair.Key, true);
+					imgoDict.Add(imgoPair.Key, imgoPair.Value);
 				}
 			}
 		}

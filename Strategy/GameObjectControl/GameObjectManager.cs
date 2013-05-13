@@ -135,6 +135,7 @@ namespace Strategy.GameObjectControl {
 			if (castedImgo != null) {
 				teamMgr.RemoveFromOwnTeam(castedImgo);
 				groupMgr.DestroyGameObject(castedImgo);
+
 			} else {
 				var castedIsgo = gameObject as IStaticGameObject;
 				teamMgr.RemoveFromOwnTeam(castedIsgo);
@@ -162,11 +163,11 @@ namespace Strategy.GameObjectControl {
 			objectCreator.InitializeWorld(missionName, propertyMgr);
 
 			foreach (var solarSys in objectCreator.GetInicializedSolarSystems()) {
-				foreach (var gameObject in solarSys.getIMGOs()) {
-					gameObject.DieHandler += OnDieEvent;
+				foreach (var gameObject in solarSys.GetIMGOs()) {
+					gameObject.Value.DieHandler += OnDieEvent;
 				}
-				foreach (var gameObject in solarSys.getISGOs()) {
-					gameObject.DieHandler += OnDieEvent;
+				foreach (var gameObject in solarSys.GetISGOs()) {
+					gameObject.Value.DieHandler += OnDieEvent;
 				}
 			}
 

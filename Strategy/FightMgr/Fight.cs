@@ -3,39 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Strategy.FightMgr.Bullet;
+using Strategy.GameObjectControl.Game_Objects;
+using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
+using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 using Strategy.GameObjectControl.GroupMgr;
 
 namespace Strategy.FightMgr {
-	abstract class Fight<T> {
+	class Fight {
 		GroupMovables groupAttackers;
-		T groupDeffenders;
+		GroupMovables imgoDeffenders;
+		GroupStatics isgoDeffenders;
+
 
 		AttackExecuter attackExec;
 		DamageCounter damageCounter;
 
-		public Fight(GroupMovables attackers, T deffenders) {
+		public Fight(GroupMovables attackers, IGameObject deffenders) {
 			groupAttackers = attackers;
-			groupDeffenders = deffenders;
 			attackExec = new AttackExecuter();
 			damageCounter = new DamageCounter();
+			var objectsInShoutDistance = new List<IGameObject>();
+			deffenders.Shout(objectsInShoutDistance);
+			imgoDeffenders = Game.GroupManager.CreateSelectedGroupMovable(objectsInShoutDistance);
+			isgoDeffenders = Game.GroupManager.CreateSelectedGroupStatic(objectsInShoutDistance);
 		}
+
+
 
 	}
 
-	class FightWithStatic : Fight<GroupStatics> {
-		public FightWithStatic(GroupMovables attackers, GroupStatics deffenders)
-			: base(attackers, deffenders) {
-
-		}
-
-	}
-
-	class FightWithMovables : Fight<GroupMovables> {
-		public FightWithMovables(GroupMovables attackers, GroupMovables deffenders)
-			: base(attackers, deffenders) {
-
-		}
-
-	}
 }

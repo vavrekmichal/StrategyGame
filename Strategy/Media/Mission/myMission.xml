@@ -48,6 +48,13 @@
       <imgo type="SpaceShip2" name="Ship" mesh="SpaceShip2.mesh" team="Player" position="450,0,550"/>
       <imgo type="SpaceShip" name="ShipD" mesh="SpaceShip2.mesh" team="Devastator" position="600,0,600"/>
       <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,600"/>
+      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="800,0,600"/>
+      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,550"/>
+      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Devastator" position="700,0,550"/>
+      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,500"/>
+      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,450"/>
+      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,400"/>
+      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,350"/>
     </solarSystem>
     <solarSystem name="FunnySystem" position="300,500,3000">
       <isgo type="Sun" name="FunnyThings" mesh="jupiter.mesh"  team="None" position="0,0,0" distance="0"/>

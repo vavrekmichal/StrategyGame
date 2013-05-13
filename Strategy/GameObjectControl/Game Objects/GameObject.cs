@@ -27,29 +27,30 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		protected Mogre.SceneNode sceneNode;
 		protected string mesh;
 		protected Mogre.Vector3 position;
-		protected Mogre.SceneManager manager;
+		protected Mogre.SceneManager sceneMgr;
 
 		private int hp = 100;
 
 		/// <summary>
-		/// Called when object will be invisible
+		/// Called when visibility is changed. Visible is true -> Function creates SceneNode and checks Entity (if is null -> initializes.
+		/// Visible is false -> Destroy SceneNode and save actual position.
 		/// </summary>
 		public virtual void ChangeVisible(bool visible) {
 			if (visible && !this.isVisible) {
 
 				// Control if the entity is inicialized
 				if (entity == null) {
-					entity = manager.CreateEntity(name, mesh);
+					entity = sceneMgr.CreateEntity(name, mesh);
 				}
 
-				sceneNode = manager.RootSceneNode.CreateChildSceneNode(name + "Node", position);
+				sceneNode = sceneMgr.RootSceneNode.CreateChildSceneNode(name + "Node", position);
 				sceneNode.AttachObject(entity);
 				this.isVisible = true;
 				OnDisplayed();
 			} else {
 				if (this.isVisible) {
 					position = sceneNode.Position;
-					manager.DestroySceneNode(sceneNode);
+					sceneMgr.DestroySceneNode(sceneNode);
 					sceneNode = null;
 					isVisible = false;
 				}
@@ -57,8 +58,8 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 		public void Destroy() {
-			manager.DestroySceneNode(sceneNode);
-			manager.DestroyEntity(entity);
+			sceneMgr.DestroySceneNode(sceneNode);
+			sceneMgr.DestroyEntity(entity);
 			sceneNode = null;
 		}
 
@@ -203,10 +204,42 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 		public virtual int Hp {
-			get {
-				return hp;
+			get { return hp; }
+		}
+
+		public virtual int ShoutDistance {
+			get { return 70; }
+		}
+
+		public void Shout(List<IGameObject> objectsInDistance) {
+
+			int solarSystemNumber = Game.GroupManager.GetSolarSystemsNumber(this);
+			var solarSystem = Game.GroupManager.GetSolarSystem(solarSystemNumber);
+
+			foreach (var imgoPair in solarSystem.GetIMGOs()) {
+				if (IsTargetInShoutDistance(imgoPair.Value.Position) && !objectsInDistance.Contains(imgoPair.Value) &&
+					team == imgoPair.Value.Team) {
+					objectsInDistance.Add(imgoPair.Value);
+					imgoPair.Value.Shout(objectsInDistance);
+				}
+			}
+			foreach (var isgoPair in solarSystem.GetISGOs()) {
+				if (IsTargetInShoutDistance(isgoPair.Value.Position) && !objectsInDistance.Contains(isgoPair.Value) &&
+					team == isgoPair.Value.Team) {
+					objectsInDistance.Add(isgoPair.Value);
+					isgoPair.Value.Shout(objectsInDistance);
+				}
 			}
 		}
+
+		private bool IsTargetInShoutDistance(Vector3 targetPosition) {
+			var xd = targetPosition.x - position.x;
+			var yd = targetPosition.z - position.z;
+			var squaredDistance = xd * xd + yd * yd;
+
+			return squaredDistance < (ShoutDistance * ShoutDistance);
+		}
+
 	}
 
 

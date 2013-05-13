@@ -15,7 +15,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			this.name = name;
 			this.mesh = mesh;
 			this.team = myTeam;
-			this.manager = manager;
+			this.sceneMgr = manager;
 			this.position = position;
 			SetProperty(PropertyEnum.Speed, propMgr.GetProperty<float>("speed2"));
 			SetProperty(PropertyEnum.Attack, propMgr.GetProperty<int>("basicAttack"));

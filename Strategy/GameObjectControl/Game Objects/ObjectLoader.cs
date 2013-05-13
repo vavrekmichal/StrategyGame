@@ -355,8 +355,8 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			IStaticGameObject sun = null) {
 
 			SolarSystem sSys = new SolarSystem(name, position);
-			sSys.addISGO(isgoObjects);
-			sSys.addIMGO(imgoObjects);
+			sSys.AddISGO(isgoObjects);
+			sSys.AddIMGO(imgoObjects);
 			sSys.Sun = sun;
 			return sSys;
 		}

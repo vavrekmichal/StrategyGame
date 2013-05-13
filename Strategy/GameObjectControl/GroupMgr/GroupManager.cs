@@ -4,6 +4,7 @@ using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 using Strategy.TeamControl;
 using Mogre;
+using Strategy.GameObjectControl.Game_Objects;
 
 
 namespace Strategy.GameObjectControl.GroupMgr {
@@ -48,6 +49,12 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		public void DestroyGameObject(IStaticGameObject isgo) {
 			RemoveFromGroup(isgo);
 			isgo.Destroy();
+			foreach (var solSysPair in solarSystemDict) {
+				if (solSysPair.Value.HasISGO(isgo)) {
+					solSysPair.Value.RemoveISGO(isgo);
+					break;
+				}
+			}
 		}
 		/// <summary>
 		/// Function removes gameObject from group and calls Destroy to remove object from game
@@ -56,6 +63,12 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		public void DestroyGameObject(IMovableGameObject imgo) {
 			RemoveFromGroup(imgo);
 			imgo.Destroy();
+			foreach (var solSysPair in solarSystemDict) {
+				if (solSysPair.Value.HasIMGO(imgo)) {
+					solSysPair.Value.RemoveIMGO(imgo);
+					break;
+				}
+			}
 		}
 
 
@@ -93,6 +106,26 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 		#region solarSyst
 
+		public int GetSolarSystemsNumber(IGameObject igo) {
+			var imgo = igo as IMovableGameObject;
+			if (imgo != null) {
+				for (int i = 0; i < solarSystemDict.Count; i++) {
+					if (solarSystemDict[i].HasIMGO(imgo)) {
+						return i;
+					}
+				}
+			} else {
+				var isgo = igo as IStaticGameObject;
+				for (int i = 0; i < solarSystemDict.Count; i++) {
+					if (solarSystemDict[i].HasISGO(isgo)) {
+						return i;
+					}
+				}
+			}
+
+			return -1;
+		}
+
 		/// <summary>
 		/// Get SolarSystem from ObjectCreator as List and creates Dictionary. 
 		/// Also initializes HitTest
@@ -111,12 +144,12 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		/// <param Name="newSolarSystem">Integer of showing solar system</param>
 		public void ChangeSolarSystem(int newSolarSystem) {
 
-			solarSystemDict[activeSolarSystem].hideSolarSystem();
-			solarSystemDict[newSolarSystem].showSolarSystem();
+			solarSystemDict[activeSolarSystem].HideSolarSystem();
+			solarSystemDict[newSolarSystem].ShowSolarSystem();
 
 			activeSolarSystem = newSolarSystem; // Set new active solar system  
 			DeselectGroup();
-			
+
 		}
 
 		public List<string> GetAllSolarSystemNames() {
@@ -192,6 +225,8 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			bool inSameGroup = true;
 			isMovableGroupActive = true;
 
+			imgoList = checkPlayersObjects(imgoList);
+
 			// Test if all imgo are in same selected group
 			var firstGroup = GetGroup(imgoList.First());
 
@@ -235,7 +270,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 					var group = new GroupMovables(imgoList.First().Team);
 					// Copy bonuses, bonuses will have actual value (changes in the original will be also in this info group)
 					group.GroupBonusDict = firstGroup.GroupBonusDict;
-					
+
 					foreach (var imgo in imgoList) {
 						group.InsertMemeber(imgo);
 					}
@@ -244,6 +279,78 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 			}
 		}
+
+		/// <summary>
+		/// Function checks every IMovableGameObject in imgoList if is from player team.
+		/// When function found any player's object so it returns just player's objects, 
+		/// else it return whole imgoList.
+		/// </summary>
+		/// <param name="imgoList">List with checking IMovableObjects</param>
+		/// <returns>Returns checked list with whole imgoList or just with player's objects</returns>
+		private List<IMovableGameObject> checkPlayersObjects(List<IMovableGameObject> imgoList) {
+
+			var resultList = new List<IMovableGameObject>();
+
+			foreach (var imgo in imgoList) {
+				if (imgo.Team.Name == Game.playerName) {
+					resultList.Add(imgo);
+				}
+			}
+
+			if (resultList.Count == 0) {
+				resultList = imgoList;
+			}
+			return resultList;
+		}
+
+
+		/// <summary>
+		/// Function remove objects from their group and creates new one.
+		/// List can contains some IStaticGameObjects so they must be removed.
+		/// </summary>
+		/// <param name="igos">List with IStaticGameObjects and IMovableGameObjects</param>
+		/// <returns>Created group with IMovableGameObjects from igos List</returns>
+		public GroupMovables CreateSelectedGroupMovable(List<IGameObject> igos) {
+			var toRecount = new List<GroupMovables>();
+			var group = new GroupMovables(igos[0].Team);
+			foreach (var igo in igos) {
+				var imgo = igo as IMovableGameObject;
+				if (imgo != null) {
+					group.InsertMemeber(imgo);
+					if (imgoGroupDict.ContainsKey(imgo)) {
+						// Add object to toRecount 
+						if (!toRecount.Contains(imgoGroupDict[imgo])) {
+							toRecount.Add(imgoGroupDict[imgo]);
+						}
+						// Remove from old group and set new one to Dict
+						imgoGroupDict[imgo].RemoveMember(imgo);
+						imgoGroupDict[imgo] = group;
+					} else {
+						imgoGroupDict.Add(imgo, group);
+					}
+				}
+			}
+
+			// Recount all modified groups
+			foreach (var groupRec in toRecount) {
+				// Recount just basic bonuses, others are removed when the source of them is removed.
+				groupRec.CountBasicBonuses();
+			}
+			group.Select();
+			return group;
+		}
+
+		public GroupStatics CreateSelectedGroupStatic(List<IGameObject> igos) {
+			var group = new GroupStatics(igos[0].Team);
+			foreach (var igo in igos) {
+				var imgo = igo as IStaticGameObject;
+				if (imgo != null) {
+					group.InsertMemeber(imgo);
+				}
+			}
+			return group;
+		}
+
 
 		public GroupMovables GetGroup(IMovableGameObject imgo) {
 			GroupMovables group;
@@ -277,7 +384,8 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 
 		/// <summary>
-		/// 
+		/// Function checks if player can controls selected group. If the group is new so the function remove
+		/// all object from their actual groups and recount them. Finally call Select (count bonuses, etc.)
 		/// </summary>
 		/// <param Name="clickedPoint">Mouse position</param>
 		/// <param Name="hitObject">HitTest result</param>
@@ -285,7 +393,6 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		/// <param Name="isImgo">If HitTest returns object => MovableTest result</param>
 		/// <returns>Returns group answer collected from each member of group</returns>
 		public ActionAnswer OnRightMouseClick(Mogre.Vector3 clickedPoint, MovableObject hitObject, bool isFriendly, bool isImgo) {
-			//TODO comment
 			if (isMovableGroupActive && selectedGroupM.OwnerTeam.Name == Game.playerName) {
 
 				// Check if actual group is selectedGroupM
@@ -301,7 +408,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 								toRecount.Add(imgoGroupDict[imgo]);
 							}
 
-							// Remove from old group and Set new oneto Dict
+							// Remove from old group and set new oneto Dict
 							imgoGroupDict[imgo].RemoveMember(imgo);
 							imgoGroupDict[imgo] = selectedGroupM;
 						} else {
@@ -311,7 +418,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 					// Recount all modified groups
 					foreach (var group in toRecount) {
-						// Count just basic bonuses, others are removed when the source of them is removed.
+						// Recount just basic bonuses, others are removed when the source of them is removed.
 						group.CountBasicBonuses();
 					}
 					selectedGroupM.Select();

@@ -94,7 +94,14 @@ namespace Strategy.FightMgr {
 
 			if (fightsDict[onWayCopy[imgo]] == ActionAnswer.Attack) {
 				//TODO attack
-				gameObject.TakeDamage(1000);
+				//gameObject.TakeDamage(1000);
+
+				// List with GameObject in gameObject's ShoutDistance and recursively called to the other
+				//var objectsInShoutDistance = new List<IGameObject>();
+				//gameObject.Shout(objectsInShoutDistance);
+				//var groupDeff = Game.GroupManager.CreateSelectedGroup(objectsInShoutDistance);
+				var v = new Fight(group, gameObject);
+
 			} else {
 				occupationList.Add(new Occupation(group, gameObject));
 			}
@@ -102,7 +109,9 @@ namespace Strategy.FightMgr {
 		}
 
 		public void MovementInterupted(IMovableGameObject imgo) {
+
 			if (onWayToTargetDict.ContainsKey(imgo)) {
+				fightsDict.Remove(onWayToTargetDict[imgo]);
 				onWayToTargetDict.Remove(imgo);
 				attackersTarget.Remove(imgo);
 			}

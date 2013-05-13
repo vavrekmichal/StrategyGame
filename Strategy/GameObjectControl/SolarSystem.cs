@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
+using Strategy.GameObjectControl.Game_Objects.Bullet;
 
 namespace Strategy.GameObjectControl {
 	public class SolarSystem {
 
 		protected IStaticGameObject sun;
-		protected List<IStaticGameObject> isgoObjectList;
-		protected List<IMovableGameObject> imgoObjectList;
+		protected Dictionary<string, IStaticGameObject> isgoObjectDict;
+		protected Dictionary<string, IMovableGameObject> imgoObjectDict;
+		protected Dictionary<string, IBullet> bulletDict;
 		protected bool active = false;
 		protected Mogre.Vector3 position;
 
@@ -21,8 +23,9 @@ namespace Strategy.GameObjectControl {
 		public SolarSystem(string name, Mogre.Vector3 position) {
 			this.name = name;
 			this.position = position;
-			isgoObjectList = new List<IStaticGameObject>();
-			imgoObjectList = new List<IMovableGameObject>();
+			isgoObjectDict = new Dictionary<string, IStaticGameObject>();
+			imgoObjectDict = new Dictionary<string, IMovableGameObject>();
+			bulletDict = new Dictionary<string, IBullet>();
 		}
 
 		public IStaticGameObject Sun {
@@ -30,47 +33,79 @@ namespace Strategy.GameObjectControl {
 			set { sun = value; }
 		}
 
-		public void addISGO(IStaticGameObject isgo) {
-			if (!isgoObjectList.Contains(isgo)) {
-				isgoObjectList.Add(isgo);
+
+		public void AddIBullet(IBullet bullet) {
+			if (!bulletDict.ContainsKey(bullet.Name)) {
+				bulletDict.Add(bullet.Name, bullet);
+			}
+		}
+
+		public void RemoveIBullet(IBullet bullet) {
+			if (bulletDict.ContainsKey(bullet.Name)) {
+				bulletDict.Remove(bullet.Name);
+			}
+		}
+
+		public bool HasISGO(IStaticGameObject isgo) {
+			return isgoObjectDict.ContainsKey(isgo.Name);
+		}
+
+
+		public void AddISGO(IStaticGameObject isgo) {
+			if (!isgoObjectDict.ContainsKey(isgo.Name)) {
+				isgoObjectDict.Add(isgo.Name, isgo);
 				isgo.ChangeVisible(active);
 			}
 		}
 
-		public void addISGO(List<IStaticGameObject> listOfISGO) {
+		public void AddISGO(List<IStaticGameObject> listOfISGO) {
 			foreach (IStaticGameObject isgo in listOfISGO) {
-				addISGO(isgo);
+				AddISGO(isgo);
 				isgo.ChangeVisible(active);
 			}
 		}
 
-		public void addIMGO(IMovableGameObject imgo) {
-			if (!imgoObjectList.Contains(imgo)) {
-				imgoObjectList.Add(imgo);
+
+		public bool HasIMGO(IMovableGameObject imgo) {
+			return imgoObjectDict.ContainsKey(imgo.Name);
+		}
+
+		public void RemoveISGO(IStaticGameObject isgo) {
+			if (isgoObjectDict.ContainsKey(isgo.Name)) {
+				isgoObjectDict.Remove(isgo.Name);
+			}
+		}
+
+		public void AddIMGO(IMovableGameObject imgo) {
+			if (!imgoObjectDict.ContainsKey(imgo.Name)) {
+				imgoObjectDict.Add(imgo.Name, imgo);
 				imgo.ChangeVisible(active);
 			}
 		}
 
-		public void addIMGO(List<IMovableGameObject> listOfIMGO) {
+		public void AddIMGO(List<IMovableGameObject> listOfIMGO) {
 			foreach (IMovableGameObject imgo in listOfIMGO) {
-				addIMGO(imgo);
+				AddIMGO(imgo);
 				imgo.ChangeVisible(active);
 			}
 		}
 
-		public void removeIMGO(IMovableGameObject imgo) {
-			if (imgoObjectList.Contains(imgo)) {
-				imgoObjectList.Remove(imgo);
+		public void RemoveIMGO(IMovableGameObject imgo) {
+			if (imgoObjectDict.ContainsKey(imgo.Name)) {
+				imgoObjectDict.Remove(imgo.Name);
 			}
 		}
 
-		public void hideSolarSystem() {
+		public void HideSolarSystem() {
 			if (active) {
-				foreach (IStaticGameObject isgo in isgoObjectList) {
-					isgo.ChangeVisible(false);
+				foreach (var isgoPair in isgoObjectDict) {
+					isgoPair.Value.ChangeVisible(false);
 				}
-				foreach (IMovableGameObject imgo in imgoObjectList) {
-					imgo.ChangeVisible(false);
+				foreach (var imgoPair in imgoObjectDict) {
+					imgoPair.Value.ChangeVisible(false);
+				}
+				foreach (var bullet in bulletDict) {
+					bullet.Value.ChangeVisible(false);
 				}
 				if (sun != null) {
 					sun.ChangeVisible(false);
@@ -79,19 +114,23 @@ namespace Strategy.GameObjectControl {
 			}
 		}
 
-		public void showSolarSystem() {
+		public void ShowSolarSystem() {
 			if (!active) {
 
 				Game.GUIManager.SetSolarSystemName(name);
 
-				foreach (IStaticGameObject isgo in isgoObjectList) {
-					isgo.ChangeVisible(true);
+				foreach (var isgoPair in isgoObjectDict) {
+					isgoPair.Value.ChangeVisible(true);
 				}
-				foreach (IMovableGameObject imgo in imgoObjectList) {
-					imgo.ChangeVisible(true);
-					
-				}// Check nonActive collisions
-				repairHidenCollision(imgoObjectList);
+				foreach (var imgoPair in imgoObjectDict) {
+					imgoPair.Value.ChangeVisible(true);
+				}
+				foreach (var bullet in bulletDict) {
+					bullet.Value.ChangeVisible(true);
+				}
+
+				// Check nonActive collisions
+				RepairHidenCollision(imgoObjectDict);
 				if (sun != null) {
 					sun.ChangeVisible(true);
 				}
@@ -102,21 +141,27 @@ namespace Strategy.GameObjectControl {
 
 		public void Update(float delay) {
 			if (active) {
-				foreach (IStaticGameObject isgo in isgoObjectList) {
-					isgo.Rotate(delay);
+				foreach (var isgoPair in isgoObjectDict) {
+					isgoPair.Value.Rotate(delay);
 				}
-				foreach (IMovableGameObject imgo in imgoObjectList) {
-					imgo.Move(delay);
+				foreach (var imgoPair in imgoObjectDict) {
+					imgoPair.Value.Move(delay);
+				}
+				foreach (var bullet in bulletDict) {
+					bullet.Value.Update(delay);
 				}
 				if (sun != null) {
 					sun.Rotate(delay);
 				}
 			} else {
-				foreach (IStaticGameObject isgo in isgoObjectList) {
-					isgo.NonActiveRotate(delay);
+				foreach (var isgoPair in isgoObjectDict) {
+					isgoPair.Value.NonActiveRotate(delay);
 				}
-				foreach (IMovableGameObject imgo in imgoObjectList) {
-					imgo.NonActiveMove(delay);
+				foreach (var imgoPair in imgoObjectDict) {
+					imgoPair.Value.NonActiveMove(delay);
+				}
+				foreach (var bullet in bulletDict) {
+					bullet.Value.HiddenUpdate(delay);
 				}
 				if (sun != null) {
 					sun.NonActiveRotate(delay);
@@ -133,24 +178,16 @@ namespace Strategy.GameObjectControl {
 			get { return position; }
 		}
 
-		//public List<IStaticGameObject> GetISGO() {
-		//	return isgoObjects;
-		//}
-
-		public List<IStaticGameObject> getISGOs() {
-			return isgoObjectList;
+		public Dictionary<string, IStaticGameObject> GetISGOs() {
+			return isgoObjectDict;
 		}
 
-		//public List<IMovableGameObject> GetIMGO() {
-		//	return imgoObjects;
-		//}
-
-		public List<IMovableGameObject> getIMGOs() {
-			return imgoObjectList;
+		public Dictionary<string, IMovableGameObject> GetIMGOs() {
+			return imgoObjectDict;
 		}
 
 		private static Random r = new Random();
-		private Mogre.Vector3 randomizeVector(Mogre.Vector3 v) {
+		private Mogre.Vector3 RandomizeVector(Mogre.Vector3 v) {
 			int i = r.Next(4);
 			switch (i) {
 				case 0: v.x += randConst;
@@ -165,25 +202,25 @@ namespace Strategy.GameObjectControl {
 			return v;
 		}
 
-		private void repairHidenCollision(List<IMovableGameObject> group) {
-			Dictionary<Mogre.Vector3, IMovableGameObject> collision = new Dictionary<Mogre.Vector3,IMovableGameObject>();
-			foreach (var imgo in group) {
-				if (collision.ContainsKey(imgo.Position)) {
+		private void RepairHidenCollision(Dictionary<string, IMovableGameObject> groupInCollistion) {
+			Dictionary<Mogre.Vector3, IMovableGameObject> collision = new Dictionary<Mogre.Vector3, IMovableGameObject>();
+			foreach (var imgoPair in groupInCollistion) {
+				if (collision.ContainsKey(imgoPair.Value.Position)) {
 					bool isTaken = true;
-					Mogre.Vector3 addVect = imgo.Position;
-					
+					Mogre.Vector3 addVect = imgoPair.Value.Position;
+
 					while (isTaken) {
 						if (!collision.ContainsKey(addVect)) {
-							collision.Add(addVect,imgo);
+							collision.Add(addVect, imgoPair.Value);
 							isTaken = false;
 						} else {
-							addVect = randomizeVector(addVect);
+							addVect = RandomizeVector(addVect);
 
 						}
 					}
-					imgo.JumpNextLocation(addVect);
+					imgoPair.Value.JumpNextLocation(addVect);
 				} else {
-					collision.Add(imgo.Position, imgo);
+					collision.Add(imgoPair.Value.Position, imgoPair.Value);
 				}
 			}
 		}

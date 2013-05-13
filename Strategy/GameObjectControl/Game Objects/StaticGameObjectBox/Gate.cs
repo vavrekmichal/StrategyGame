@@ -26,7 +26,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		public Gate(string name, string mesh, SceneManager manager, Vector3 position, Team team) {
 			this.name = name;
 			this.mesh = mesh;
-			this.manager = manager;
+			this.sceneMgr = manager;
 			this.position = position;
 			this.team = team;
 			entity = manager.CreateEntity(name, mesh);
@@ -58,16 +58,16 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			if (visible) {
 				if (sceneNode == null) {
 					if (entity == null) {
-						entity = manager.CreateEntity(name, mesh);
+						entity = sceneMgr.CreateEntity(name, mesh);
 					}
-					sceneNode = manager.RootSceneNode.CreateChildSceneNode(name + "Node", position);
+					sceneNode = sceneMgr.RootSceneNode.CreateChildSceneNode(name + "Node", position);
 
 					sceneNode.Pitch(new Degree(-90f));
 					sceneNode.AttachObject(entity);
 				}
 			} else {
 				if (sceneNode != null) {
-					manager.DestroySceneNode(sceneNode);
+					sceneMgr.DestroySceneNode(sceneNode);
 					sceneNode = null;
 				}
 			}

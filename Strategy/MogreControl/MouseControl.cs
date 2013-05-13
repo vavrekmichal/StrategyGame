@@ -72,10 +72,10 @@ namespace Strategy.MogreControl {
 					mStart.y = (float)arg.state.Y.abs / (float)arg.state.height;
 					mStop = mStart;
 					bSelecting = true;
-					
+
 					break;
 
-				case MouseButtonID.MB_Right:					
+				case MouseButtonID.MB_Right:
 					break;
 				default:
 					break;
@@ -195,12 +195,8 @@ namespace Strategy.MogreControl {
 			PlaneBoundedVolumeListSceneQuery volQuery = sceneMgr.CreatePlaneBoundedVolumeQuery(volList);
 			SceneQueryResult result = volQuery.Execute();
 
-			List<MovableObject> list = new List<MovableObject>();
-			foreach (var entry in result.movables) {
-				if (entry.Name != "GroundEntity") {
-					list.Add(entry);
-				}
-			}
+			List<MovableObject> list = new List<MovableObject>(result.movables);
+
 			GameObjectManager.GetInstance().OnLeftClick(list);
 
 			sceneMgr.DestroyQuery(volQuery);

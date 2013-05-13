@@ -22,7 +22,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			this.to = to;
 			this.traveler = traveler;
 			long travelTime = (long)GetSquareOfDistance(from, to);
-			from.removeIMGO(traveler);
+			from.RemoveIMGO(traveler);
 			timeToGo = new Property<TimeSpan>(new TimeSpan(travelTime*60)); //multiply by min
 			traveler.ChangeVisible(false);
 		}
@@ -45,7 +45,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 					timeToGo.Value = timeToGo2;
 				} else {
 					timeToGo.Value = zeroSpan;
-					to.addIMGO(traveler);
+					to.AddIMGO(traveler);
 					arrived = true;
 				}
 			}

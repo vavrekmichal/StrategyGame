@@ -237,7 +237,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// <returns>True -> Protector cannot move forward / false -> Protector can</returns>
 		public bool Colision() {
 			Ray ray = new Ray(sceneNode.Position, GetDirection(sceneNode.Orientation));
-			var mRaySceneQuery = manager.CreateRayQuery(ray);
+			var mRaySceneQuery = sceneMgr.CreateRayQuery(ray);
 			RaySceneQueryResult result = mRaySceneQuery.Execute();
 			const float farfarAway = 30;
 
@@ -247,11 +247,6 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 				}
 			}
 			return false;
-		}
-
-
-		public virtual void Shout() {
-
 		}
 
 		#endregion

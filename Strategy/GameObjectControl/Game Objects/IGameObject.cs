@@ -24,6 +24,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		string Name { get; }
 		Team Team { get; set; }
 		int Hp { get; }
+		int ShoutDistance { get; }
 		float PickUpDistance { get; }
 		float OccupyDistance { get; }
 		int OccupyTime { get; }
@@ -85,5 +86,11 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// <param Name="target">Object that called the event</param>
 		/// <returns>Return reaction</returns>
 		ActionReaction ReactToInitiative(ActionReason reason, IMovableGameObject target);
+
+		/// <summary>
+		/// Shout return all IGameObjects in ShoutDistance around this object which are in same Team.
+		/// </summary>
+		/// <param name="objectsInDistance">Objects in ShoutDistance are inserted in the List</param>
+		void Shout(List<IGameObject> objectsInDistance);
 	}
 }

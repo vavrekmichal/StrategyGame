@@ -42,7 +42,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			loader = new ObjectLoader("../../Media/Mission/MyMission.xml", manager, teams, materialList, solarSystems);
 			loader.Load(mission, propMan);
 
-			solarSystems[0].showSolarSystem();
+			solarSystems[0].ShowSolarSystem();
 
 		}
 

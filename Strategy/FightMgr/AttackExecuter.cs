@@ -3,16 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Strategy.FightMgr.Bullet;
 using Strategy.GameObjectControl.Game_Objects;
+using Strategy.GameObjectControl.Game_Objects.Bullet;
 
 namespace Strategy.FightMgr {
 	class AttackExecuter {
 
-		private Dictionary<GameObject, bool> canAttack;
+		private static Dictionary<GameObject, bool> canAttack = new Dictionary<GameObject,bool>();
 
 		public AttackExecuter() {
-			canAttack = new Dictionary<GameObject, bool>();
+			
 		}
 
 		public IBullet TryAttack(IBullet bullet) { return null; }

@@ -16,7 +16,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			this.name = name;
 			this.mesh = mesh;
 			this.team = myTeam;
-			this.manager = manager;
+			this.sceneMgr = manager;
 			this.position = position;
 			base.SetProperty(PropertyEnum.Speed, propMgr.GetProperty<float>("speed"));
 			base.SetProperty(PropertyEnum.Attack, propMgr.GetProperty<int>("basicAttack"));
@@ -39,7 +39,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 					if (isMovableGameObject) {
 						return ActionAnswer.Attack;
 					} else {
-						return ActionAnswer.Occupy;
+						return ActionAnswer.Attack;
 					}
 				}
 			}
