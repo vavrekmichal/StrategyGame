@@ -155,7 +155,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 				}
 			} else {
-				if (!Colision()) { // Object's not in colision
+				if (!Collision()) { // Object's not in colision
 					float move = GetPropertyValue<float>(PropertyEnum.Speed) * delay;
 					distance -= move;
 					if (distance <= .0f) { // Reach destination
@@ -232,10 +232,11 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		}
 
 		/// <summary>
-		/// The colision() control if object can move forward 
+		/// Function controls if object can move forward. Function cast Ray in object's direction
+		/// and controls distance between objects.
 		/// </summary>
-		/// <returns>True -> Protector cannot move forward / false -> Protector can</returns>
-		public bool Colision() {
+		/// <returns>True -> object cannot move forward / false -> object can move</returns>
+		public bool Collision() {
 			Ray ray = new Ray(sceneNode.Position, GetDirection(sceneNode.Orientation));
 			var mRaySceneQuery = sceneMgr.CreateRayQuery(ray);
 			RaySceneQueryResult result = mRaySceneQuery.Execute();

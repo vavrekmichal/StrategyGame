@@ -19,6 +19,10 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			imgoDict = new Dictionary<string, IMovableGameObject>();
 		}
 
+		public bool IsObjectControlable(string name) {
+			return objectIsMovable.ContainsKey(name);
+		}
+
 		public bool IsObjectMovable(string name) {
 			return objectIsMovable[name];
 		}

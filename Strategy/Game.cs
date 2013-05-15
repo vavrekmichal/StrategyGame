@@ -29,6 +29,7 @@ namespace Strategy {
 		protected static SoundPlayer soundPlayer; // Background music
 		protected static GameObjectManager gameObjectMgr;
 		protected static GUIControler guiControler;
+		protected static SceneManager sceneMgr;
 		#region Singleton and constructor
 		private static Game instance;
 
@@ -40,7 +41,7 @@ namespace Strategy {
 		}
 
 		private Game(SceneManager sceneManager, CameraMan c, RenderWindow mWindow, Mouse mouse, Keyboard keyboard) {
-
+			sceneMgr = sceneManager;
 			gameObjectMgr = GameObjectManager.GetInstance(sceneManager, mouse, keyboard, mWindow);
 			guiControler = new GUIControler(mWindow, mouse, keyboard);
 			mouseControl = MouseControl.GetInstance(c, sceneManager, guiControler);
@@ -97,6 +98,10 @@ namespace Strategy {
 			get {
 				return soundPlayer;
 			}
+		}
+
+		public static SceneManager SceneManager {
+			get { return sceneMgr; }
 		}
 
 		#endregion

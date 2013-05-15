@@ -139,28 +139,33 @@ namespace Strategy.GameObjectControl {
 			}
 		}
 
+		/// <summary>
+		/// Function update all objects in SolarSystem in visible or invisible mode.
+		/// The function is using shallow copies for removing from original Dictionaries.
+		/// </summary>
+		/// <param name="delay">Deley between last two frames</param>
 		public void Update(float delay) {
 			if (active) {
-				foreach (var isgoPair in isgoObjectDict) {
+				foreach (var isgoPair in new Dictionary<string,IStaticGameObject>(isgoObjectDict)) {
 					isgoPair.Value.Rotate(delay);
 				}
-				foreach (var imgoPair in imgoObjectDict) {
+				foreach (var imgoPair in new Dictionary<string,IMovableGameObject>(imgoObjectDict)) {
 					imgoPair.Value.Move(delay);
 				}
-				foreach (var bullet in bulletDict) {
+				foreach (var bullet in new Dictionary<string,IBullet>(bulletDict)) {
 					bullet.Value.Update(delay);
 				}
 				if (sun != null) {
 					sun.Rotate(delay);
 				}
 			} else {
-				foreach (var isgoPair in isgoObjectDict) {
+				foreach (var isgoPair in new Dictionary<string, IStaticGameObject>(isgoObjectDict)) {
 					isgoPair.Value.NonActiveRotate(delay);
 				}
-				foreach (var imgoPair in imgoObjectDict) {
+				foreach (var imgoPair in new Dictionary<string, IMovableGameObject>(imgoObjectDict)) {
 					imgoPair.Value.NonActiveMove(delay);
 				}
-				foreach (var bullet in bulletDict) {
+				foreach (var bullet in new Dictionary<string, IBullet>(bulletDict)) {
 					bullet.Value.HiddenUpdate(delay);
 				}
 				if (sun != null) {

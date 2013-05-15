@@ -189,6 +189,7 @@ namespace Strategy.GameObjectControl {
 			List<IStaticGameObject> isgoList = new List<IStaticGameObject>();
 
 			foreach (var gameObject in selectedObjects) {
+				if (!hitTest.IsObjectControlable(gameObject.Name)) return;
 				if (hitTest.IsObjectMovable(gameObject.Name)) {
 					isMovableSelected = true;
 					imgoList.Add(hitTest.GetIMGO(gameObject.Name));
@@ -226,6 +227,7 @@ namespace Strategy.GameObjectControl {
 			} else {
 				hitObject = selectedObjects[0];
 				Team targetTeam;
+				if (!hitTest.IsObjectControlable(hitObject.Name)) return;
 				if (hitTest.IsObjectMovable(hitObject.Name)) {
 					targetTeam = hitTest.GetIMGO(hitObject.Name).Team;
 
