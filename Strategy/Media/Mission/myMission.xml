@@ -10,6 +10,9 @@
     </friendlyTeams>
   </teams>
   <usedObjects>
+    <ibullets>
+      <ibullet name="Missile" path="Bullet/Missile.cs" fullName="Strategy.GameObjectControl.Game_Objects.Bullet.Missile"/>
+    </ibullets>
     <isgos>
       <gameObject name="Planet" path="StaticGameObjectBox/Planet.cs" fullName="Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox.Planet"/>
       <gameObject name="Sun" path="StaticGameObjectBox/Sun.cs" fullName="Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox.Sun"/>

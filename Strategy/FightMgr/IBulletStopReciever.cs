@@ -7,7 +7,7 @@ using Strategy.GameObjectControl.Game_Objects;
 using Strategy.GameObjectControl.Game_Objects.Bullet;
 
 namespace Strategy.FightMgr {
-	interface IBulletStopReciever {
+	public interface IBulletStopReciever {
 		void BulletHit(IBullet bullet, IGameObject hittedObject);
 		void BulletMiss(IBullet bullet);
 	}

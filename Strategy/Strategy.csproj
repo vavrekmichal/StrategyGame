@@ -70,7 +70,6 @@
     <Compile Include="Exceptions\XmlLoadException.cs" />
     <Compile Include="FightMgr\IBulletStopReciever.cs" />
     <Compile Include="GameObjectControl\Game Objects\Bullet\IBullet.cs" />
-    <Compile Include="GameObjectControl\Game Objects\Bullet\Missile.cs" />
     <Compile Include="FightMgr\DamageCounter.cs" />
     <Compile Include="FightMgr\Fight.cs" />
     <Compile Include="FightMgr\FightManager.cs" />
@@ -92,6 +91,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GameObjectControl\Action.cs" />
+    <Compile Include="GameObjectControl\Game Objects\Bullet\Missile.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="GameObjectControl\Game Objects\GameActions\IGameAction.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameActions\Produce.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameObject.cs" />

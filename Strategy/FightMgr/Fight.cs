@@ -11,13 +11,14 @@ using Strategy.GameObjectControl.GroupMgr;
 using Strategy.MoveMgr;
 
 namespace Strategy.FightMgr {
-	class Fight : IBulletStopReciever {
+	public class Fight : IBulletStopReciever {
 		private GroupMovables groupAttackers;
 		private GroupMovables imgoDeffenders;
 		private GroupStatics isgoDeffenders;
+		private DamageCounter damageCounter;
 
 		private static Dictionary<IGameObject, bool> canAttack = new Dictionary<IGameObject, bool>();
-		private Dictionary<string, IBullet> bulletDict;
+
 
 		public static void DisableAttackGameObject(IGameObject gameObject) {
 			if (canAttack.ContainsKey(gameObject)) {
@@ -35,38 +36,67 @@ namespace Strategy.FightMgr {
 			}
 		}
 
-		DamageCounter damageCounter;
-
 		public Fight(GroupMovables attackers, IGameObject deffender) {
 			groupAttackers = attackers;
 			damageCounter = new DamageCounter();
-			bulletDict = new Dictionary<string,IBullet>();
+
 			var objectsInShoutDistance = new List<IGameObject>();
 			deffender.Shout(objectsInShoutDistance);
 			imgoDeffenders = Game.GroupManager.CreateSelectedGroupMovable(objectsInShoutDistance);
 			isgoDeffenders = Game.GroupManager.CreateSelectedGroupStatic(objectsInShoutDistance);
 			var solS = Game.GroupManager.GetSolarSystem(Game.GroupManager.GetSolarSystemsNumber(attackers[0]));
-			bulletDict.Add("bla",new Missile(Game.SceneManager, new Mogre.Vector3(100, 0, 100), "bla", solS, deffender.Position, this));
+			new Missile(Game.SceneManager, new Mogre.Vector3(100, 0, 100), "bla", solS, deffender.Position, this);
 		}
 
 
 
-		public IBullet TryAttack(IBullet bullet) { return null; }
+		public bool TryAttack(IGameObject gameObject, IGameObject target, float attackDistance) {
+			if (CanAttack(gameObject)) {
+				var xd = target.Position.x - gameObject.Position.x;
+				var yd = target.Position.z - target.Position.z;
+				var squareDistance = xd * xd + yd * yd;
 
-		protected bool CanAttack() { return false; }
+				if (squareDistance > attackDistance) {
+					// Cannot attack because it is too far.
+					//neco jako stopattack a moveto s hl9d8n9m
+					Console.WriteLine("Je moc daleko");
+					return false;
+				}
+				Console.WriteLine(gameObject.Name + " bude utocit.");
+				return true;
+			}
 
-		protected IBullet Attack(IBullet bullet) { return null; }
+			return false;
+		}
 
-
+		protected bool CanAttack(IGameObject gameObject) {
+			if (canAttack.ContainsKey(gameObject)) {
+				return canAttack[gameObject];
+			}
+			return false;
+		}
 
 		public void BulletHit(IBullet bullet, IGameObject hittedObject) {
-			Console.WriteLine(bullet.Name+" kulka trefila "+ hittedObject.Name);
-			hittedObject.TakeDamage(damageCounter.CountDamage(hittedObject,bullet)); 
+			Console.WriteLine(bullet.Name + " kulka trefila " + hittedObject.Name);
+			hittedObject.TakeDamage(damageCounter.CountDamage(hittedObject, bullet));
 		}
 
 		public void BulletMiss(IBullet bullet) {
-			if (bulletDict.ContainsKey(bullet.Name)) {
-				bulletDict.Remove(bullet.Name);
+
+		}
+
+		/// <summary>
+		/// Each object in the Fight will start attacking.
+		/// </summary>
+		private void StartFight() {
+			foreach (IMovableGameObject imgoAtt in groupAttackers) {
+				imgoAtt.StartAttack(this);
+			}
+			foreach (IMovableGameObject imgoDeff in imgoDeffenders) {
+				imgoDeff.StartAttack(this);
+			}
+			foreach (IStaticGameObject isgoDeff in isgoDeffenders) {
+				isgoDeff.StartAttack(this);
 			}
 		}
 	}

@@ -27,7 +27,8 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		protected Mogre.SceneNode sceneNode;
 		protected string mesh;
 		protected Mogre.Vector3 position;
-
+		protected bool attack;
+		protected Strategy.FightMgr.Fight fight;
 
 		private int hp = 100;
 
@@ -248,6 +249,17 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			return squaredDistance < (ShoutDistance * ShoutDistance);
 		}
 
+
+
+		public void StartAttack(Strategy.FightMgr.Fight fight){
+			attack = true;
+			this.fight = fight;
+		}
+
+		public void StopAttack() {
+			attack = false;
+			fight = null;
+		}
 	}
 
 

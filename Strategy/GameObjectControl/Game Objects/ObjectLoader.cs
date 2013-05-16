@@ -84,8 +84,10 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			// Load mission (first of given Name)
 			missionNode = root.SelectNodes("/mission[@name='" + missionName + "'][1]")[0];
 
-			LoadTeams(root.SelectNodes("teams[1]")[0]);
+			LoadTeams(missionNode.SelectNodes("teams[1]")[0]);
 
+			// Load IBullets
+			CompileIBullets(missionNode.SelectNodes("usedObjects//ibullets[1]")[0]);
 
 			// Load every IGameObject
 			XmlNode missionSolarSystemNode = missionNode.SelectNodes("solarSystems[1]")[0];
@@ -148,6 +150,33 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 			}
 		}
+
+		private void CompileIBullets(XmlNode bullets) {
+			foreach (XmlNode bullet in bullets) {
+				string fullPath = bullet.Attributes["path"].InnerText;
+				string type = bullet.Attributes["name"].InnerText; ;
+				if (!isCompiled.Contains(type)) {
+					isCompiled.Add(type);
+					var syntaxTree = SyntaxTree.ParseFile("../../GameObjectControl/Game Objects/" + fullPath);
+
+					var comp = Compilation.Create("Test.dll"
+						, syntaxTrees: new[] { syntaxTree }
+						, references: metadataRef
+						, options: comilationOption
+						);
+
+					// Runtime compilation and check errors
+					var result = comp.Emit(moduleBuilder);
+					if (!result.Success) {
+						foreach (var d in result.Diagnostics) {
+							Console.WriteLine(d);
+						}
+						throw new XmlLoadException("Class not found " + fullPath);
+					}
+				}
+			}
+		}
+
 
 		/// <summary>
 		/// Function Load names of teams from XML file

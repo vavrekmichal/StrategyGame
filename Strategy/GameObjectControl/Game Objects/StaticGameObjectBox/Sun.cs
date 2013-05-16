@@ -158,5 +158,10 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		public int DeffPower {
 			get { return 0; }
 		}
+
+
+		public void StartAttack(Strategy.FightMgr.Fight fight) { }
+
+		public void StopAttack() {}
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Strategy.FightMgr;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.TeamControl;
@@ -20,6 +21,10 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// DieHandler is called when any IGameObject has less hp then 0
 		/// </summary>
 		DieEventHandler DieHandler { get; set; }
+
+		void StartAttack(Fight fight);
+		void StopAttack();
+
 
 		string Name { get; }
 		Team Team { get; set; }
@@ -94,5 +99,6 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// </summary>
 		/// <param name="objectsInDistance">Objects in ShoutDistance are inserted in the List</param>
 		void Shout(List<IGameObject> objectsInDistance);
+
 	}
 }
