@@ -11,7 +11,7 @@ using Mogre;
 using MOIS;
 
 namespace Strategy.GameGUI {
-	class GUIControler {
+	public class GUIControler {
 		protected static MyGUI myGUI;
 
 		public GUIControler(RenderWindow mWindow, Mouse mouse, Keyboard keyboard) {

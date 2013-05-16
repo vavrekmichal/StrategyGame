@@ -17,7 +17,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		void ChangeVisible(bool visible);
 
 		/// <summary>
-		/// DieHandler is called when any GameObject has less hp then 0
+		/// DieHandler is called when any IGameObject has less hp then 0
 		/// </summary>
 		DieEventHandler DieHandler { get; set; }
 
@@ -28,10 +28,12 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		float PickUpDistance { get; }
 		float OccupyDistance { get; }
 		int OccupyTime { get; }
+		int AttackPower { get; }
+		int DeffPower { get; }
 		Mogre.Vector3 Position { get; }
 
 		/// <summary>
-		/// AddProperty inserts given Property in GameObject's container.
+		/// AddProperty inserts given Property in IGameObject's container.
 		/// </summary>
 		/// <typeparam Name="T">Type of inserted Property</typeparam>
 		/// <param Name="Name">Property's Name is in this case a PropertyEnum. It is used
@@ -40,7 +42,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		void AddProperty<T>(PropertyEnum name, Property<T> property);
 
 		/// <summary>
-		/// AddProperty inserts given Property in GameObject's container.
+		/// AddProperty inserts given Property in IGameObject's container.
 		/// </summary>
 		/// <typeparam Name="T">Type of inserted Property</typeparam>
 		/// <param Name="Name">Property's Name is in this case a string. It is usually used
@@ -49,19 +51,19 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		void AddProperty<T>(string name, Property<T> property);
 
 		/// <summary>
-		/// Function removes Property from GameObject's container by Name. 
+		/// Function removes Property from IGameObject's container by Name. 
 		/// </summary>
 		/// <param Name="Name">PropertyEnum with Name of removing Property</param>
 		void RemoveProperty(PropertyEnum name);
 
 		/// <summary>
-		/// Function removes Property from GameObject's container by Name. 
+		/// Function removes Property from IGameObject's container by Name. 
 		/// </summary>
 		/// <param Name="Name">String with Name of removing Property</param>
 		void RemoveProperty(string name);
 
 		/// <summary>
-		/// Destroy is called when a GameObject is removed from the game, so the function
+		/// Destroy is called when a IGameObject is removed from the game, so the function
 		/// must unregister all Mogre components.
 		/// </summary>
 		void Destroy();

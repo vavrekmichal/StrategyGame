@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Strategy.Sound {
-	interface IEffectPlayer {
+	public interface IEffectPlayer {
 
 		void PlayEffect(string name);
 

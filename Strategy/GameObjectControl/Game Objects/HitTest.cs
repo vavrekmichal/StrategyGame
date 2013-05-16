@@ -7,7 +7,7 @@ using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 
 namespace Strategy.GameObjectControl.Game_Objects {
-	class HitTest {
+	public class HitTest {
 
 		protected Dictionary<string, bool> objectIsMovable;
 		protected Dictionary<string, IStaticGameObject> isgoDict;

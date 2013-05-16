@@ -13,7 +13,7 @@ using MOIS;
 using Strategy.FightMgr;
 
 namespace Strategy.GameObjectControl {
-	class GameObjectManager {
+	public class GameObjectManager {
 
 		protected ObjectCreator objectCreator;
 		protected IMoveManager moveMgr;
@@ -51,7 +51,7 @@ namespace Strategy.GameObjectControl {
 		/// </summary>
 		private GameObjectManager(SceneManager sceneMgr, Mouse m, Keyboard k, RenderWindow mWindow) {
 			teamMgr = TeamManager.GetInstance();
-			objectCreator = new ObjectCreator(sceneMgr);
+			objectCreator = new ObjectCreator();
 			moveMgr = new MoveManager();
 			fightMgr = new FightManager();
 			groupMgr = new GroupManager();
@@ -160,7 +160,7 @@ namespace Strategy.GameObjectControl {
 		/// </summary>
 		/// <param Name="missionName">Name of choosen mission</param>
 		public void Inicialization(string missionName, GUIControler guiControler) {
-			objectCreator.InitializeWorld(missionName, propertyMgr);
+			objectCreator.InitializeWorld(missionName);
 
 			foreach (var solarSys in objectCreator.GetInicializedSolarSystems()) {
 				foreach (var gameObject in solarSys.GetIMGOs()) {

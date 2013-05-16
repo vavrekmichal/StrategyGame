@@ -6,7 +6,7 @@ using Miyagi.UI.Controls;
 using Miyagi.Common.Data;
 
 namespace Strategy.GameGUI {
-	struct MaterialGUIPair {
+	public struct MaterialGUIPair {
 		public Label name;
 		public Label value;
 

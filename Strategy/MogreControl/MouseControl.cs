@@ -10,7 +10,7 @@ using Strategy.GameGUI;
 using MOIS;
 
 namespace Strategy.MogreControl {
-	class MouseControl {
+	public class MouseControl {
 		protected static Mogre.TutorialFramework.CameraMan cameraMan;
 		protected SceneManager sceneMgr;
 		protected GUIControler guiControl; //TODO:mys nebude mit guicko

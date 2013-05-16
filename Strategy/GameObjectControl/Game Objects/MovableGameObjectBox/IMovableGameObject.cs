@@ -96,9 +96,6 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 		Mogre.Vector3 Direction { get; }
 
-		int AttackPower { get; }
-		int DeffPower { get; }
-
 		/// <summary>
 		/// Function handles communication between game control units and object. Object gets what happened and answed what it want to do.
 		/// </summary>

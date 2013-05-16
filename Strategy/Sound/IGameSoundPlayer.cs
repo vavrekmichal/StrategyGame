@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 
 namespace Strategy.Sound {
-	interface IGameSoundMakerPlayer {
+	public interface IGameSoundMakerPlayer {
 		void PlayMusic();
 		void ActualPlaying();
 		void NowPlaying(string s);

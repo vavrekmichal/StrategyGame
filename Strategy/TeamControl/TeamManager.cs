@@ -12,7 +12,7 @@ using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 
 namespace Strategy.TeamControl {
-    class TeamManager {
+    public class TeamManager {
         //TODO: ProduceManager
         // Protected List<IMaterial> materials; //will be singleton and shared with this and GUI to show State
 

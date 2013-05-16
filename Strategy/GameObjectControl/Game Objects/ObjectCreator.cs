@@ -10,11 +10,10 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 	enum IsgoType { StaticObject, Sun }
 
-	class ObjectCreator {
+	public class ObjectCreator {
 
 		protected List<IMaterial> materialList;
 		protected List<SolarSystem> solarSystems;
-		protected Mogre.SceneManager manager;
 		protected Dictionary<string, Team> teams;
 
 		protected ObjectLoader loader;
@@ -24,8 +23,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// Public constructor
 		/// </summary>
 		/// <param Name="manager">Mogre SceneManager</param>
-		public ObjectCreator(Mogre.SceneManager manager) {
-			this.manager = manager;
+		public ObjectCreator() {
 			teams = new Dictionary<string, Team>();
 			solarSystems = new List<SolarSystem>();
 		}
@@ -35,12 +33,12 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// Inicialization of game World
 		/// </summary>
 		/// <param Name="mission">Name of mission</param>
-		public void InitializeWorld(string mission, PropertyManager propMan) {
+		public void InitializeWorld(string mission) {
 
 			createMaterials();
 
-			loader = new ObjectLoader("../../Media/Mission/MyMission.xml", manager, teams, materialList, solarSystems);
-			loader.Load(mission, propMan);
+			loader = new ObjectLoader("../../Media/Mission/MyMission.xml", teams, materialList, solarSystems);
+			loader.Load(mission);
 
 			solarSystems[0].ShowSolarSystem();
 

@@ -23,13 +23,12 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 
 		protected static Team gateTeam;
 
-		public Gate(string name, string mesh, SceneManager manager, Vector3 position, Team team) {
+		public Gate(string name, string mesh, Vector3 position, Team team) {
 			this.name = name;
 			this.mesh = mesh;
-			this.sceneMgr = manager;
 			this.position = position;
 			this.team = team;
-			entity = manager.CreateEntity(name, mesh);
+			entity = Game.SceneManager.CreateEntity(name, mesh);
 
 			animationState = entity.GetAnimationState("funcionando3_eani_Clip");
 			animationState.Loop = true;
@@ -58,16 +57,16 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			if (visible) {
 				if (sceneNode == null) {
 					if (entity == null) {
-						entity = sceneMgr.CreateEntity(name, mesh);
+						entity = Game.SceneManager.CreateEntity(name, mesh);
 					}
-					sceneNode = sceneMgr.RootSceneNode.CreateChildSceneNode(name + "Node", position);
+					sceneNode = Game.SceneManager.RootSceneNode.CreateChildSceneNode(name + "Node", position);
 
 					sceneNode.Pitch(new Degree(-90f));
 					sceneNode.AttachObject(entity);
 				}
 			} else {
 				if (sceneNode != null) {
-					sceneMgr.DestroySceneNode(sceneNode);
+					Game.SceneManager.DestroySceneNode(sceneNode);
 					sceneNode = null;
 				}
 			}

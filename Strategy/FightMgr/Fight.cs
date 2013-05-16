@@ -16,10 +16,10 @@ namespace Strategy.FightMgr {
 		private GroupMovables imgoDeffenders;
 		private GroupStatics isgoDeffenders;
 
-		private static Dictionary<GameObject, bool> canAttack = new Dictionary<GameObject, bool>();
+		private static Dictionary<IGameObject, bool> canAttack = new Dictionary<IGameObject, bool>();
 		private Dictionary<string, IBullet> bulletDict;
 
-		public static void DisableAttackGameObject(GameObject gameObject) {
+		public static void DisableAttackGameObject(IGameObject gameObject) {
 			if (canAttack.ContainsKey(gameObject)) {
 				canAttack[gameObject] = false;
 			} else {
@@ -27,7 +27,7 @@ namespace Strategy.FightMgr {
 			}
 		}
 
-		public static void EnableAttackGameObject(GameObject gameObject) {
+		public static void EnableAttackGameObject(IGameObject gameObject) {
 			if (canAttack.ContainsKey(gameObject)) {
 				canAttack[gameObject] = true;
 			} else {
@@ -61,6 +61,7 @@ namespace Strategy.FightMgr {
 
 		public void BulletHit(IBullet bullet, IGameObject hittedObject) {
 			Console.WriteLine(bullet.Name+" kulka trefila "+ hittedObject.Name);
+			hittedObject.TakeDamage(damageCounter.CountDamage(hittedObject,bullet)); 
 		}
 
 		public void BulletMiss(IBullet bullet) {

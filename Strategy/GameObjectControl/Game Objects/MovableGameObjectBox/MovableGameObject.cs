@@ -238,7 +238,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// <returns>True -> object cannot move forward / false -> object can move</returns>
 		public bool Collision() {
 			Ray ray = new Ray(sceneNode.Position, GetDirection(sceneNode.Orientation));
-			var mRaySceneQuery = sceneMgr.CreateRayQuery(ray);
+			var mRaySceneQuery = Game.SceneManager.CreateRayQuery(ray);
 			RaySceneQueryResult result = mRaySceneQuery.Execute();
 			const float farfarAway = 30;
 
@@ -340,15 +340,6 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			moving = false;
 		}
 
-
-		public virtual int AttackPower {
-			get { return 0; }
-		}
-
-		public virtual int DeffPower {
-			get { return 0; }
-		}
-
 		public Vector3 Direction {
 			get { return direction; }
 		}
@@ -356,6 +347,16 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 		public override int Hp {
 			get { return ((Property<int>)propertyDict[PropertyEnum.Hp]).Value; }
+		}
+
+		public override void TakeDamage(int damage) {
+			var hpProp = (Property<int>)propertyDict[PropertyEnum.Hp];
+			var actualHp = hpProp.Value - damage;
+			if (actualHp < 0) {
+				RaiseDie();
+			} else {
+				hpProp.Value = actualHp;
+			}
 		}
 
 		public override float PickUpDistance {

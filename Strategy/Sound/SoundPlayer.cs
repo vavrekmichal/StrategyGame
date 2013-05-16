@@ -10,7 +10,7 @@ namespace Strategy {
 	/// The SoundMaker class derives from ISoundStopEventReceiver to make infinite loop of playing
 	/// songs from given file.
 	/// </summary>
-	class SoundPlayer :ISoundStopEventReceiver , IGameSoundMakerPlayer, IEffectPlayer {
+	public class SoundPlayer :ISoundStopEventReceiver , IGameSoundMakerPlayer, IEffectPlayer {
 		
 		protected ISoundEngine engine; // Main thing of this music player
 		protected const string songPath = "../../media/music"; // Path to folder witch songs (sounds) --mp3,ogg,wav

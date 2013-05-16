@@ -15,7 +15,6 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		protected Mogre.SceneNode sceneNode;
 		protected string mesh;
 		protected List<IGameAction> listOfAction = new List<IGameAction>();
-		protected Mogre.SceneManager manager;
 
 		protected static Team sunTeam;
 		/// <summary>
@@ -25,12 +24,11 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// <param name="mesh">mesh of this sun</param>
 		/// <param name="solarSystem">number of solar system</param>
 		/// <param name="manager">Mogre SceneManager</param>
-		public Sun(string name, string mesh, Mogre.SceneManager manager, Team team) {
+		public Sun(string name, string mesh, Team team) {
 			this.name = name;
 			this.mesh = mesh;
-			this.manager = manager;
 			this.Team = team;
-			entity = manager.CreateEntity(name, mesh);
+			entity = Game.SceneManager.CreateEntity(name, mesh);
 		}
 
 		/// <summary>
@@ -47,8 +45,8 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 
 
 		public void Destroy() {
-			manager.DestroySceneNode(sceneNode);
-			manager.DestroyEntity(entity);
+			Game.SceneManager.DestroySceneNode(sceneNode);
+			Game.SceneManager.DestroyEntity(entity);
 		}
 
 
@@ -63,14 +61,14 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		public void ChangeVisible(bool visible) {   //now creating
 			if (visible) {
 				if (entity == null) {
-					entity = manager.CreateEntity(name, mesh);
+					entity = Game.SceneManager.CreateEntity(name, mesh);
 				}
-				sceneNode = manager.RootSceneNode.CreateChildSceneNode(name + "Node", Mogre.Vector3.ZERO);
+				sceneNode = Game.SceneManager.RootSceneNode.CreateChildSceneNode(name + "Node", Mogre.Vector3.ZERO);
 
 				sceneNode.Pitch(new Mogre.Degree(-90f));
 				sceneNode.AttachObject(entity);
 			} else {
-				manager.DestroySceneNode(sceneNode);
+				Game.SceneManager.DestroySceneNode(sceneNode);
 			}
 		}
 
@@ -151,5 +149,14 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		}
 
 		public void Shout(List<IGameObject> objectsInDistance) { }
+
+
+		public int AttackPower {
+			get { return 0; }
+		}
+
+		public int DeffPower {
+			get { return 0; }
+		}
 	}
 }

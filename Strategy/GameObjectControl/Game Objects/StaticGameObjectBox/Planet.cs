@@ -25,15 +25,14 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		private static Random random = new Random();
 
 
-		public Planet(string name, string mesh, Team myTeam, Mogre.SceneManager manager, double distanceFromCenter,
-			Vector3 center, PropertyManager propMgr, int circularNum = 30) {
+		public Planet(string name, string mesh, Team myTeam, double distanceFromCenter,
+			Vector3 center, int circularNum = 30) {
 			this.name = name;
 			this.mesh = mesh;
 			this.team = myTeam;
-			this.sceneMgr = manager;
-			base.SetProperty(PropertyEnum.Speed, propMgr.GetProperty<float>("speed3"));
-			base.SetProperty(PropertyEnum.Rotate, propMgr.GetProperty<float>("planetRotateSpeed"));
-			base.SetProperty(PropertyEnum.PickUp, propMgr.GetProperty<float>("planetPickUpDistance"));
+			base.SetProperty(PropertyEnum.Speed, Game.PropertyManager.GetProperty<float>("speed3"));
+			base.SetProperty(PropertyEnum.Rotate, Game.PropertyManager.GetProperty<float>("planetRotateSpeed"));
+			base.SetProperty(PropertyEnum.PickUp, Game.PropertyManager.GetProperty<float>("planetPickUpDistance"));
 
 			//prepare list of positions
 			circularPositions = CalculatePositions(circularNum, distanceFromCenter, center);
@@ -41,7 +40,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			position = circularPositions.First();
 
 			//Mogre inicialization of object
-			entity = manager.CreateEntity(name, mesh);
+			entity = Game.SceneManager.CreateEntity(name, mesh);
 		}
 
 		/// <summary>

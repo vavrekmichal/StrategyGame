@@ -13,7 +13,7 @@ using Strategy.GameObjectControl.RuntimeProperty;
 using System.Reflection;
 
 namespace Strategy.GameGUI {
-	class MyGUI {
+	public class MyGUI {
 		//TODO: udelat dictionary s string a label pro nastavovani stavu surovin.
 		protected int screenWidth;
 		protected int screenHeight;

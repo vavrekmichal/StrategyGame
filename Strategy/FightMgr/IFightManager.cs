@@ -7,7 +7,7 @@ using Strategy.GameObjectControl.GroupMgr;
 using Strategy.MoveMgr;
 
 namespace Strategy.FightMgr {
-	interface IFightManager : IFinishMovementReciever{
+	public interface IFightManager : IFinishMovementReciever{
 		/// <summary>
 		/// Attack registers attacking group. IFightManager shall carry out combat.
 		/// (Move to combat distance, complete defender's group, attacking...)

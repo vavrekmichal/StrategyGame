@@ -17,21 +17,17 @@ using Strategy.TeamControl;
 
 
 namespace Strategy.GameObjectControl.Game_Objects {
-	class ObjectLoader {
+	public class ObjectLoader {
 
 		private Dictionary<string, int> usedNameDict;
 
 		private XmlDocument xml;
-		private Mogre.SceneManager manager;
 		private Dictionary<string, Team> teamDict;
 		private List<IMaterial> materialList;
 		private List<SolarSystem> solarSystemList;
 		private Dictionary<Team, List<Team>> teamRealationDict;
 		private XmlElement root;
 		XmlNode missionNode; // Selected mission
-
-		// Property manager
-		private PropertyManager propMgr;
 
 		// Assembly Load
 		private AssemblyBuilder assemblyBuilder;
@@ -40,12 +36,11 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		private CompilationOptions comilationOption;
 		private List<string> isCompiled;
 
-		public ObjectLoader(string path, Mogre.SceneManager manager, Dictionary<string, Team> teams,
+		public ObjectLoader(string path, Dictionary<string, Team> teams,
 			List<IMaterial> materialList, List<SolarSystem> solarSystems) {
 			teamRealationDict = new Dictionary<Team, List<Team>>();
 			usedNameDict = new Dictionary<string, int>();
 
-			this.manager = manager;
 			this.teamDict = teams;
 			this.materialList = materialList;
 			this.solarSystemList = solarSystems;
@@ -80,9 +75,9 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			moduleBuilder = assemblyBuilder.DefineDynamicModule("DynamicModule");
 		}
 
-		public void Load(string missionName, PropertyManager propMan) {
-			propMgr = propMan;									//TODO thinks about try-block
-			propMan.LoadPropertyToMission(missionName);
+		public void Load(string missionName) {
+			//TODO thinks about try-block
+			Game.PropertyManager.LoadPropertyToMission(missionName);
 			bool hasSun = false;
 			IStaticGameObject sun = null;
 
@@ -92,7 +87,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			LoadTeams(root.SelectNodes("teams[1]")[0]);
 
 
-			// Load every GameObject
+			// Load every IGameObject
 			XmlNode missionSolarSystemNode = missionNode.SelectNodes("solarSystems[1]")[0];
 			foreach (XmlNode solarSystem in missionSolarSystemNode) {
 				List<IStaticGameObject> isgos = new List<IStaticGameObject>();
@@ -252,10 +247,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 				throw new XmlException("Undefined Team " + team + " .");
 			}
 			args.Add(teamDict[team]);
-			args.Add(manager);
-
 			args.Add(ParseStringToVector3(gameObject.Attributes["position"].InnerText));
-			args.Add(propMgr);
 
 			return CreateIMGO(type, args.ToArray());
 		}
@@ -291,17 +283,14 @@ namespace Strategy.GameObjectControl.Game_Objects {
 				throw new XmlException("Undefined Team " + team + " .");
 			}
 			if (isgoType == IsgoType.Sun) {
-				args.Add(manager);
 				type = IsgoType.Sun.ToString();
 				args.Add(teamDict[team]);
 			} else {
 				type = gameObject.Attributes["type"].InnerText;
 				args.Add(teamDict[team]);
-				args.Add(manager);
 				string distance = gameObject.Attributes["distance"].InnerText;
 				args.Add(Int32.Parse(distance));
 				args.Add(ParseStringToVector3(gameObject.Attributes["position"].InnerText));
-				args.Add(propMgr);
 				args.Add(pointsOnCircle);
 
 			}
@@ -335,7 +324,6 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			}
 			var gate = new Gate("Gate " + solarSystName,
 				"gate.mesh",
-				manager,
 				new Vector3(500, 0, -500),
 				teamDict[team]);
 			gate.Team.AddISGO(gate);

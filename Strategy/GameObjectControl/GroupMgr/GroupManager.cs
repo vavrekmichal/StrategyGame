@@ -8,7 +8,7 @@ using Strategy.GameObjectControl.Game_Objects;
 
 
 namespace Strategy.GameObjectControl.GroupMgr {
-	class GroupManager {
+	public class GroupManager {
 
 		protected Dictionary<IMovableGameObject, GroupMovables> imgoGroupDict;
 

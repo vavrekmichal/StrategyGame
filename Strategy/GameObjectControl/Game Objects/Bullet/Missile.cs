@@ -58,7 +58,7 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		}
 
 		public int Attack {
-			get { return 2; }
+			get { return 7; }
 		}
 
 		public string Name {

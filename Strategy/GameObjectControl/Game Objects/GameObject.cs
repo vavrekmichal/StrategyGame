@@ -27,7 +27,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		protected Mogre.SceneNode sceneNode;
 		protected string mesh;
 		protected Mogre.Vector3 position;
-		protected Mogre.SceneManager sceneMgr;
+
 
 		private int hp = 100;
 
@@ -40,17 +40,17 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 				// Control if the entity is inicialized
 				if (entity == null) {
-					entity = sceneMgr.CreateEntity(name, mesh);
+					entity = Game.SceneManager.CreateEntity(name, mesh);
 				}
 
-				sceneNode = sceneMgr.RootSceneNode.CreateChildSceneNode(name + "Node", position);
+				sceneNode = Game.SceneManager.RootSceneNode.CreateChildSceneNode(name + "Node", position);
 				sceneNode.AttachObject(entity);
 				this.isVisible = true;
 				OnDisplayed();
 			} else {
 				if (this.isVisible) {
 					position = sceneNode.Position;
-					sceneMgr.DestroySceneNode(sceneNode);
+					Game.SceneManager.DestroySceneNode(sceneNode);
 					sceneNode = null;
 					isVisible = false;
 				}
@@ -58,8 +58,8 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 		public void Destroy() {
-			sceneMgr.DestroySceneNode(sceneNode);
-			sceneMgr.DestroyEntity(entity);
+			Game.SceneManager.DestroySceneNode(sceneNode);
+			Game.SceneManager.DestroyEntity(entity);
 			sceneNode = null;
 		}
 
@@ -190,13 +190,13 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			set { die = value; }
 		}
 
-		private void RaiseDie() {
+		protected void RaiseDie() {
 			if (die != null) {
 				die(this, new MyDieArgs(hp));
 			}
 		}
 
-		public void TakeDamage(int damage) {
+		public virtual void TakeDamage(int damage) {
 			var actualHp = hp - damage;
 			if (actualHp < 0) {
 				RaiseDie();
@@ -209,6 +209,14 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 		public virtual int ShoutDistance {
 			get { return 70; }
+		}
+
+		public virtual int AttackPower {
+			get { return 0; }
+		}
+
+		public virtual int DeffPower {
+			get { return 0; }
 		}
 
 		public void Shout(List<IGameObject> objectsInDistance) {

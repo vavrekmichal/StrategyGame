@@ -12,17 +12,18 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 	public class SpaceShip : MovableGameObject {
 
 
-		public SpaceShip(string name, string mesh, Team myTeam, Mogre.SceneManager manager, Vector3 position, PropertyManager propMgr) {
+		public SpaceShip(string name, string mesh, Team myTeam, Vector3 position) {
 			this.name = name;
 			this.mesh = mesh;
 			this.team = myTeam;
-			this.sceneMgr = manager;
 			this.position = position;
-			base.SetProperty(PropertyEnum.Speed, propMgr.GetProperty<float>("speed"));
-			base.SetProperty(PropertyEnum.Attack, propMgr.GetProperty<int>("basicAttack"));
-			base.SetProperty(PropertyEnum.Deffence, propMgr.GetProperty<int>("basicDeff"));
+
+			base.SetProperty(PropertyEnum.Speed, Game.PropertyManager.GetProperty<float>("speed"));
+			base.SetProperty(PropertyEnum.Attack, Game.PropertyManager.GetProperty<int>("basicAttack"));
+			base.SetProperty(PropertyEnum.Deffence, Game.PropertyManager.GetProperty<int>("basicDeff"));
+
 			//Mogre inicialization of object
-			entity = manager.CreateEntity(name, mesh);
+			entity = Game.SceneManager.CreateEntity(name, mesh);
 		}
 
 		public override ActionAnswer OnMouseAction(Vector3 point, MovableObject hitTarget, bool isFriendly, bool isMovableGameObject) {

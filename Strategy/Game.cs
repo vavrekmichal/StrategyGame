@@ -17,7 +17,7 @@ using Strategy.Sound;
 using Strategy.GameObjectControl.RuntimeProperty;
 
 namespace Strategy {
-	class Game {
+	public class Game {
 
 		protected MouseControl mouseControl;
 

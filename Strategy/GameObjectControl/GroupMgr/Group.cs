@@ -252,7 +252,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 	#region GroupStatic
 
-	class GroupStatics : IGroup<IStaticGameObject> {
+	public class GroupStatics : IGroup<IStaticGameObject> {
 		public GroupStatics() : base(new Team("None")) { }
 
 		public GroupStatics(TeamControl.Team own) : base(own) { }
