@@ -100,6 +100,8 @@ namespace Strategy.FightMgr {
 				//var objectsInShoutDistance = new List<IGameObject>();
 				//gameObject.Shout(objectsInShoutDistance);
 				//var groupDeff = Game.GroupManager.CreateSelectedGroup(objectsInShoutDistance);
+
+				// zkontroluj jestli se na to uz nejak neutoci a kdyztak jen addToGroup a bude hotovo.
 				var v = new Fight(group, gameObject);
 
 			} else {

@@ -58,6 +58,7 @@
       <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,450"/>
       <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,400"/>
       <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,350"/>
+      
     </solarSystem>
     <solarSystem name="FunnySystem" position="300,500,3000">
       <isgo type="Sun" name="FunnyThings" mesh="jupiter.mesh"  team="None" position="0,0,0" distance="0"/>
@@ -91,3 +92,5 @@
     </solarSystem>
   </solarSystems>
 </mission>
+<!--
+-->

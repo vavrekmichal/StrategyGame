@@ -237,7 +237,7 @@ namespace Strategy.GameObjectControl {
 				}
 				isFriendly = teamMgr.AreFriendly(groupMgr.ActiveTeam, targetTeam);
 			}
-			var answer = groupMgr.OnRightMouseClick(clickedPoint, hitObject, isFriendly, isIMGO);
+			var answer = groupMgr.SelectInfoGroup(clickedPoint, hitObject, isFriendly, isIMGO);
 
 			Game.IEffectPlayer.PlayEffect(groupSelectedSound); // Play effect
 

@@ -18,7 +18,6 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		private float distance = 0.0f;              //The distance the object has left to travel
 		private Vector3 direction = Vector3.ZERO;   // The direction the object is moving
 		private SolarSystem solarSystem;
-		private SceneManager sceneMgr;
 		private const string mesh = "missile.mesh";
 		private string name;
 
@@ -33,10 +32,9 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		IBulletStopReciever reciever;
 
 
-		public Missile(SceneManager sceneMgr, Vector3 position, string name, SolarSystem solSystem, Vector3 targetPosition, IBulletStopReciever rec) {
+		public Missile(Vector3 position, SolarSystem solSystem, Vector3 targetPosition, IBulletStopReciever rec) {
 			this.position = position;
-			this.sceneMgr = sceneMgr;
-			this.name = name;
+			this.name = GetUniqueName();
 			this.solarSystem = solSystem;
 			this.reciever = rec;
 
@@ -57,14 +55,27 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 
 		}
 
+		private static int uniquNameNumber;
+		private static string GetUniqueName() {
+			uniquNameNumber++;
+			return typeof(Missile).ToString() + uniquNameNumber;
+		}
+
+
 		public int Attack {
 			get { return 7; }
 		}
 
 		public string Name {
-			get {
-				return name;
-			}
+			get { return name; }
+		}
+
+		public static int AttackDistance {
+			get { return 200; }
+		}
+
+		public static TimeSpan Cooldown {
+			get { return TimeSpan.FromSeconds(2); }
 		}
 
 		/// <summary>
@@ -75,10 +86,10 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 			if (visible && sceneNode == null) {
 				// Control if the entity is inicialized
 				if (entity == null) {
-					entity = sceneMgr.CreateEntity(name, mesh);
+					entity = Game.SceneManager.CreateEntity(name, mesh);
 				}
 
-				sceneNode = sceneMgr.RootSceneNode.CreateChildSceneNode(name + "Node", position);
+				sceneNode = Game.SceneManager.RootSceneNode.CreateChildSceneNode(name + "Node", position);
 				sceneNode.AttachObject(entity);
 
 				Vector3 src = sceneNode.Orientation * Vector3.NEGATIVE_UNIT_Z;
@@ -93,7 +104,7 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 			} else {
 				if (sceneNode != null) {
 					position = sceneNode.Position;
-					sceneMgr.DestroySceneNode(sceneNode);
+					Game.SceneManager.DestroySceneNode(sceneNode);
 					sceneNode = null;
 				}
 
@@ -141,7 +152,7 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 
 		private bool Collision() {
 			Ray ray = new Ray(sceneNode.Position, GetDirection(sceneNode.Orientation));
-			var mRaySceneQuery = sceneMgr.CreateRayQuery(ray);
+			var mRaySceneQuery = Game.SceneManager.CreateRayQuery(ray);
 			RaySceneQueryResult result = mRaySceneQuery.Execute();
 
 
@@ -201,7 +212,7 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 			foreach (var item in dict2) {
 				var positionVector2 = new Vector2(item.Value.Position.x, item.Value.Position.z);
 				if (minBound < positionVector2 && positionVector2 < maxBound) {
-					if (DistanceFromDiagonal(positionVector2) < (farfarAway* farfarAway)) {
+					if (DistanceFromDiagonal(positionVector2) < (farfarAway * farfarAway)) {
 						hittedObject = item.Value;
 						return true;
 					}
@@ -238,10 +249,10 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		private void Destroy() {
 			solarSystem.RemoveIBullet(this);
 			if (sceneNode != null) {
-				sceneMgr.DestroySceneNode(sceneNode);
+				Game.SceneManager.DestroySceneNode(sceneNode);
 				sceneNode = null;
 			}
-			sceneMgr.DestroyEntity(entity);
+			Game.SceneManager.DestroyEntity(entity);
 		}
 	}
 }

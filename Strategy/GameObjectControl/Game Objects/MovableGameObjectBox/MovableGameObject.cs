@@ -7,6 +7,7 @@ using Strategy.GameObjectControl.Game_Objects.GameActions;
 using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.MoveMgr;
 using Strategy.TeamControl;
+using Strategy.GameObjectControl.Game_Objects.Bullet;
 
 namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 	public abstract class MovableGameObject : GameObject, IMovableGameObject {
@@ -17,19 +18,6 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 		protected Dictionary<string, object> propertyBonusDict;
 		protected List<IGameAction> listOfAction; //TODO not implemented
-		protected LinkedList<Vector3> flyList; // Walking points in linked list
-		protected float distance = 0.0f;              // The distance the object has left to Travel
-		protected Vector3 direction = Vector3.ZERO;   // The direction the object is moving
-		protected Vector3 destination = Vector3.ZERO; // The destination the object is moving towards
-
-		protected bool isMovingToTarget = false;			// Target move indicator
-
-		protected Vector3 modelDirection = Vector3.NEGATIVE_UNIT_Z;
-
-
-		private int collisionCount = 0;
-		private bool detourReached = false;
-		private int colliisionConst = 100;
 
 
 
@@ -43,7 +31,21 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			propertyBonusDict = new Dictionary<string, object>();
 		}
 
-		
+		#region Moving
+
+		protected LinkedList<Vector3> flyList; // Walking points in linked list
+		protected float distance = 0.0f;              // The distance the object has left to Travel
+		protected Vector3 direction = Vector3.ZERO;   // The direction the object is moving
+		protected Vector3 destination = Vector3.ZERO; // The destination the object is moving towards
+
+		protected bool isMovingToTarget = false;			// Target move indicator
+
+		protected Vector3 modelDirection = Vector3.NEGATIVE_UNIT_Z;
+
+		private int collisionCount = 0;
+		private bool detourReached = false;
+		private int colliisionConst = 100;
+
 
 		/// <summary>
 		/// Checks if object go to target when is position changed
@@ -53,13 +55,6 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 				Game.IMoveManager.MovementInterupted(this);
 				isMovingToTarget = false;
 			}
-		}
-
-		#region virtual methods
-
-
-		public virtual ActionAnswer OnMouseAction(Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject) {
-			return ActionAnswer.Move;
 		}
 
 		/// <summary>
@@ -134,6 +129,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// </summary>
 		/// <param Name="delay">Delay between frames</param>
 		public virtual void Move(float delay) {
+			TryAttack(delay);
 			if (!moving) {
 				if (NextLocation()) {
 
@@ -166,6 +162,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 						flyList.RemoveFirst(); // Remove that node from the front of the list
 					} else {
 						sceneNode.Translate(direction * move);
+						position = sceneNode.Position;
 						Vector3 src = GetDirection(sceneNode.Orientation);
 						if ((1.0f + src.DotProduct(direction)) < 0.0001f) { // Watch to right direction
 							sceneNode.Yaw(180.0f);
@@ -205,6 +202,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// </summary>
 		/// <param Name="delay">Delay between last two frames</param>
 		public virtual void NonActiveMove(float delay) {
+			TryAttack(delay);
 			if (!moving) {
 				if (NextLocation()) {
 					moving = true;
@@ -250,19 +248,6 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			return false;
 		}
 
-		#endregion
-		
-
-		public virtual void SetGroupBonuses(Dictionary<string, object> bonusDict) {
-			propertyBonusDict = bonusDict;
-		}
-
-
-		public virtual Dictionary<string, object> OnGroupAdd() {
-			// Empty dictionary = no bonuses for other members of group
-			return new Dictionary<string, object>();
-		}
-
 		/// <summary>
 		/// The getDirection() function transform Quaternion to Vector3 and return 
 		/// Vector3 with direction from Quaternion
@@ -274,37 +259,6 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			v = q * modelDirection;  // Transform the vector by the objects rotation.
 			return v;
 		}
-
-
-
-		protected T GetPropertyValue<T>(PropertyEnum name) {
-			Property<T> bonus;
-			if (!propertyBonusDict.ContainsKey(name.ToString())) {
-				bonus = new Property<T>(default(T));
-			} else {
-				bonus = ((Property<T>)propertyBonusDict[name.ToString()]);
-			}
-
-			// Base Dictionary
-			Property<T> property = GetProperty<T>(name);
-			var op = Property<T>.Operator.Plus;
-			return bonus.SimpleMath(op, property).Value;
-		}
-
-		protected T GetPropertyValue<T>(string name) {
-			Property<T> bonus;
-			if (!propertyBonusDict.ContainsKey(name)) {
-				bonus = new Property<T>(default(T));
-			} else {
-				bonus = ((Property<T>)propertyBonusDict[name]);
-			}
-
-			// UserDefined Dictionary
-			Property<T> property = GetProperty<T>(name);
-			var op = Property<T>.Operator.Plus;
-			return bonus.SimpleMath(op, property).Value;
-		}
-
 
 		/// <summary>
 		/// Sets flyList and move interupt reciever.
@@ -340,6 +294,125 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			moving = false;
 		}
 
+		#endregion
+
+		#region Attack
+
+		private Property<IGameObject> target;
+		private Dictionary<Type, TimeSpan> coolDownList = new Dictionary<Type, TimeSpan>();
+
+		protected virtual void Attack() {
+			if (target == null || target.Value.Hp <= 0) {
+				target = fight.GetTarget(team);
+			}
+
+			if (!coolDownList.ContainsKey(GetIBulletType())) {
+				if (fight.TryAttack(this, target.Value, GetIBulletAttackDistance())) {
+					var attackDirection = target.Value.Position - position;
+
+					if (sceneNode != null) {
+						Vector3 src = GetDirection(sceneNode.Orientation);
+						if ((1.0f + src.DotProduct(attackDirection)) < 0.0001f) {
+							sceneNode.Yaw(180.0f);
+						} else {
+							direction.y = 0; // Rotation fix
+							Quaternion quat = src.GetRotationTo(attackDirection);
+							sceneNode.Rotate(quat);
+						}
+					}
+					coolDownList.Add(GetIBulletType(), GetIBulletAttackCooldown());
+					CreateIBullet();
+				}
+			}
+		}
+
+		protected virtual void TryAttack(float delay) {
+			if (coolDownList.Count > 0) {
+				var delayTimeSpan = TimeSpan.FromSeconds(delay);
+				var copy = new Dictionary<Type, TimeSpan>(coolDownList);
+				foreach (var coolDown in copy) {
+					var newCooldown = coolDown.Value - delayTimeSpan;
+					if (newCooldown < TimeSpan.Zero) {
+						coolDownList.Remove(coolDown.Key);
+					} else {
+						coolDownList[coolDown.Key] = newCooldown;
+					}
+				}
+			}
+			if (attack) {
+				Attack();
+			}
+		}
+
+		protected virtual Type GetIBulletType() {
+			return typeof(Strategy.GameObjectControl.Game_Objects.Bullet.Missile);
+		}
+
+		protected virtual int GetIBulletAttackDistance() {
+			return Missile.AttackDistance;
+		}
+
+		protected virtual TimeSpan GetIBulletAttackCooldown() {
+			return Missile.Cooldown;
+		}
+
+		protected virtual IBullet CreateIBullet() {
+			var solS = Game.GroupManager.GetSolarSystem(Game.GroupManager.GetSolarSystemsNumber(this));
+			return new Missile(position, solS, target.Value.Position, fight);
+		}
+
+		#endregion
+
+
+		public virtual ActionAnswer OnMouseAction(Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject) {
+			return ActionAnswer.Move;
+		}
+
+		public virtual void SetGroupBonuses(Dictionary<string, object> bonusDict) {
+			propertyBonusDict = bonusDict;
+		}
+
+
+		public virtual Dictionary<string, object> OnGroupAdd() {
+			// Empty dictionary = no bonuses for other members of group
+			return new Dictionary<string, object>();
+		}
+
+
+
+
+
+		protected T GetPropertyValue<T>(PropertyEnum name) {
+			Property<T> bonus;
+			if (!propertyBonusDict.ContainsKey(name.ToString())) {
+				bonus = new Property<T>(default(T));
+			} else {
+				bonus = ((Property<T>)propertyBonusDict[name.ToString()]);
+			}
+
+			// Base Dictionary
+			Property<T> property = GetProperty<T>(name);
+			var op = Property<T>.Operator.Plus;
+			return bonus.SimpleMath(op, property).Value;
+		}
+
+		protected T GetPropertyValue<T>(string name) {
+			Property<T> bonus;
+			if (!propertyBonusDict.ContainsKey(name)) {
+				bonus = new Property<T>(default(T));
+			} else {
+				bonus = ((Property<T>)propertyBonusDict[name]);
+			}
+
+			// UserDefined Dictionary
+			Property<T> property = GetProperty<T>(name);
+			var op = Property<T>.Operator.Plus;
+			return bonus.SimpleMath(op, property).Value;
+		}
+
+
+
+
 		public Vector3 Direction {
 			get { return direction; }
 		}
@@ -352,10 +425,9 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		public override void TakeDamage(int damage) {
 			var hpProp = (Property<int>)propertyDict[PropertyEnum.Hp];
 			var actualHp = hpProp.Value - damage;
+			hpProp.Value = actualHp;
 			if (actualHp < 0) {
 				RaiseDie();
-			} else {
-				hpProp.Value = actualHp;
 			}
 		}
 

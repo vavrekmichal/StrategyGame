@@ -392,7 +392,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		/// <param Name="isFriendly">If HitTest returns object => TeamTest result</param>
 		/// <param Name="isImgo">If HitTest returns object => MovableTest result</param>
 		/// <returns>Returns group answer collected from each member of group</returns>
-		public ActionAnswer OnRightMouseClick(Mogre.Vector3 clickedPoint, MovableObject hitObject, bool isFriendly, bool isImgo) {
+		public ActionAnswer SelectInfoGroup(Mogre.Vector3 clickedPoint, MovableObject hitObject, bool isFriendly, bool isImgo) {
 			if (isMovableGroupActive && selectedGroupM.OwnerTeam.Name == Game.playerName) {
 
 				// Check if actual group is selectedGroupM
@@ -436,6 +436,25 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			return selectedGroupM;
 		}
 
+		/// <summary>
+		/// Function inserts given IMovableGameObject to group.
+		/// </summary>
+		/// <param name="group">The member will be inserted into this group.</param>
+		/// <param name="gameObject">This object will be inesrted.</param>
+		public void AddToGroup(GroupMovables group, IGameObject gameObject) {
+			var imgo = gameObject as IMovableGameObject;
+			if (imgo != null) {
+				if (imgoGroupDict.ContainsKey(imgo)) {
+					var removeFromGroup = imgoGroupDict[imgo];
+					removeFromGroup.RemoveMember(imgo);
+					removeFromGroup.CountBasicBonuses();
+					imgoGroupDict[imgo] = group;
+				} else {
+					imgoGroupDict.Add(imgo, group);
+				}
+				group.InsertMemeber(imgo);
+			}
+		}
 	}
 
 

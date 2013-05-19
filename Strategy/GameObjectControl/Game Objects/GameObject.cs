@@ -249,8 +249,6 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			return squaredDistance < (ShoutDistance * ShoutDistance);
 		}
 
-
-
 		public void StartAttack(Strategy.FightMgr.Fight fight){
 			attack = true;
 			this.fight = fight;
