@@ -184,7 +184,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// OccupyDistance is overriden and now can be really occupied (value is not 0)
 		/// </summary>
 		public override float OccupyDistance {
-			get { return GetProperty<float>(PropertyEnum.PickUp).Value * 5; }
+			get { return GetProperty<float>(PropertyEnum.PickUp).Value * 2; }
 		}
 
 	}

@@ -159,6 +159,11 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			}
 		}
 
+		public void Reselect() {
+			isSelected = false;
+			Select();
+		}
+
 		/// <summary>
 		/// Function colects all answers and returns with the highest priority 
 		/// </summary>

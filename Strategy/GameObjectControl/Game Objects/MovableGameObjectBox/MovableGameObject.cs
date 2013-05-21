@@ -37,6 +37,8 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		protected float distance = 0.0f;              // The distance the object has left to Travel
 		protected Vector3 direction = Vector3.ZERO;   // The direction the object is moving
 		protected Vector3 destination = Vector3.ZERO; // The destination the object is moving towards
+		protected bool follow;
+		protected IGameObject followTarget;
 
 		protected bool isMovingToTarget = false;			// Target move indicator
 
@@ -51,6 +53,11 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// Checks if object go to target when is position changed
 		/// </summary>
 		protected void PositionToMoveChanged() {
+			follow = false;
+			if (attack) {
+				attack = false;
+				target = null;
+			}
 			if (isMovingToTarget) {
 				Game.IMoveManager.MovementInterupted(this);
 				isMovingToTarget = false;
@@ -130,6 +137,10 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// <param Name="delay">Delay between frames</param>
 		public virtual void Move(float delay) {
 			TryAttack(delay);
+			if (follow) {
+				direction = followTarget.Position - sceneNode.Position;
+				distance = direction.Normalise();
+			}
 			if (!moving) {
 				if (NextLocation()) {
 
@@ -162,7 +173,6 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 						flyList.RemoveFirst(); // Remove that node from the front of the list
 					} else {
 						sceneNode.Translate(direction * move);
-						position = sceneNode.Position;
 						Vector3 src = GetDirection(sceneNode.Orientation);
 						if ((1.0f + src.DotProduct(direction)) < 0.0001f) { // Watch to right direction
 							sceneNode.Yaw(180.0f);
@@ -171,6 +181,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 							Quaternion quat = src.GetRotationTo(direction);
 							sceneNode.Rotate(quat);
 						}
+						position = sceneNode.Position;
 					}
 				} else {
 					// Collision solver
@@ -264,7 +275,6 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// Sets flyList and move interupt reciever.
 		/// </summary>
 		/// <param Name="positionList">New LinkedList with positions</param>
-		/// <param Name="moveCntr">Move interupt reciever</param>
 		public void GoToTarget(LinkedList<Vector3> positionList) {
 			PositionToMoveChanged();
 			flyList = positionList;
@@ -276,7 +286,6 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// Sets new LinkedList with one new position to go. And move interupt reciever is setted.
 		/// </summary>
 		/// <param Name="placeToGo">Position</param>
-		/// <param Name="moveCntr">Move interupt reciever</param>
 		public void GoToTarget(Vector3 placeToGo) {
 			PositionToMoveChanged();
 			flyList = new LinkedList<Vector3>();
@@ -286,10 +295,29 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		}
 
 		/// <summary>
+		/// Sets new LinkedList with one new position to go. And move interupt reciever is setted.
+		/// </summary>
+		/// <param Name="objectToGo">Position</param>
+		/// <param Name="moveCntr">Move interupt reciever</param>
+		public void GoToTarget(IGameObject objectToGo) {
+			PositionToMoveChanged();
+			flyList = new LinkedList<Vector3>();
+			flyList.AddLast(objectToGo.Position);
+			follow = true;
+			followTarget = objectToGo;
+			moving = false;
+			isMovingToTarget = true;
+		}
+
+
+		/// <summary>
 		/// Stops object's moving
 		/// </summary>
 		public void Stop() {
-			PositionToMoveChanged();
+			if (isMovingToTarget) {
+				Game.IMoveManager.MovementInterupted(this);
+				isMovingToTarget = false;
+			}
 			flyList = new LinkedList<Vector3>();
 			moving = false;
 		}
@@ -302,10 +330,13 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		private Dictionary<Type, TimeSpan> coolDownList = new Dictionary<Type, TimeSpan>();
 
 		protected virtual void Attack() {
-			if (target == null || target.Value.Hp <= 0) {
+			if (target == null || target.Value == null || target.Value.Hp <= 0) {
 				target = fight.GetTarget(team);
 			}
-
+			if (target== null) {
+				StopAttack();
+				return;
+			}
 			if (!coolDownList.ContainsKey(GetIBulletType())) {
 				if (fight.TryAttack(this, target.Value, GetIBulletAttackDistance())) {
 					var attackDirection = target.Value.Position - position;

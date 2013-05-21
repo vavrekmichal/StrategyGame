@@ -24,7 +24,7 @@ namespace Strategy.MoveMgr {
 
 		private static Random r = new Random();
 		private Mogre.Vector3 RandomizeVector(Mogre.Vector3 v) {
-			
+
 			int i = r.Next(4);
 			switch (i) {
 				case 0: v.x += randConst;
@@ -62,7 +62,7 @@ namespace Strategy.MoveMgr {
 		/// </summary>
 		/// <param Name="imgo">Object which reached destination</param>
 		/// <param Name="isgo">Target of move</param>
-		private void ReachedDestiantion(IMovableGameObject imgo, object gameObject) {
+		private void ReachedDestiantion(IMovableGameObject imgo, IGameObject gameObject) {
 
 			if (finishMoveRecDict.ContainsKey(imgo)) {
 				finishMoveRecDict[imgo].MovementFinished(imgo);
@@ -73,18 +73,21 @@ namespace Strategy.MoveMgr {
 
 				imgo.Stop();
 				ActionReaction answer;
-				if (gameObject is IStaticGameObject) {
-					answer = ((IStaticGameObject)gameObject).ReactToInitiative(ActionReason.TargetInDistance, imgo);
-				} else {
-					answer = ((IMovableGameObject)gameObject).ReactToInitiative(ActionReason.TargetInDistance, imgo);
-				}
-				
+				//if (gameObject is IStaticGameObject) {
+				//	answer = ((IStaticGameObject)gameObject).ReactToInitiative(ActionReason.TargetInDistance, imgo);
+				//} else {
+				//	answer = ((IMovableGameObject)gameObject).ReactToInitiative(ActionReason.TargetInDistance, imgo);
+				//}
+
+				answer = gameObject.ReactToInitiative(ActionReason.TargetInDistance, imgo);
+
 				switch (answer) { //TODO nejak to domyslet
 					default:
 						break;
 				}
-
 			}
+
+			
 		}
 
 		/// <summary>
@@ -144,7 +147,7 @@ namespace Strategy.MoveMgr {
 
 		public void Update() {
 			var copy = new Dictionary<IMovableGameObject, object>(moveMgrControledDict);
-			
+
 			foreach (KeyValuePair<IMovableGameObject, object> trev in copy) {
 				float pickUpDistance;
 				Mogre.Vector3 position;
@@ -161,47 +164,33 @@ namespace Strategy.MoveMgr {
 				// Count distance between objects and compare with pickUpDistance (squared)
 				double sqPickUpDist = pickUpDistance * pickUpDistance;
 				if (CheckDistance(trev.Key.Position, position, sqPickUpDist)) {
-					ReachedDestiantion(trev.Key, trev.Value);
+					ReachedDestiantion(trev.Key, (IGameObject)trev.Value);
 				}
 			}
 
 		}
 
-		public void GoToTarget(GroupMovables group, object gameObject, IFinishMovementReciever reciever) {
-			GoToTarget(group, gameObject);
+		public void GoToTarget(GroupMovables group, IGameObject gameObject, IFinishMovementReciever reciever) {
+			GoToTargetGroup(group, gameObject);
 			foreach (IMovableGameObject imgo in group) {
 				finishMoveRecDict.Add(imgo, reciever);
 			}
-			
+
 		}
 
-		public void GoToTarget(GroupMovables group, object gameObject) {
-			if (gameObject is IStaticGameObject) {
-				GoToTarget(group, (IStaticGameObject)gameObject);
-				return;
-			}
-			if (gameObject is IMovableGameObject) {
-				GoToTarget(group, (IMovableGameObject)gameObject);
-			}
+		public void GoToTarget(GroupMovables group, IGameObject gameObject) {
+			GoToTargetGroup(group, gameObject);
 		}
 
-		private void GoToTarget(GroupMovables group, IStaticGameObject target) {
+		private void GoToTargetGroup(GroupMovables group, IGameObject target) {
 			List<Mogre.Vector3> destinations = PreparePositions(group.Count, target.Position);
 			foreach (IMovableGameObject imgo in group) {
-				imgo.GoToTarget(destinations[0]);
+				//imgo.GoToTarget(destinations[0]);
+				imgo.GoToTarget(target);
 				destinations.RemoveAt(0);
 				moveMgrControledDict.Add(imgo, target);
 			}
 
-		}
-
-		private void GoToTarget(GroupMovables group, IMovableGameObject target) {
-			List<Mogre.Vector3> destinations = PreparePositions(group.Count, target.Position);
-			foreach (IMovableGameObject imgo in group) {
-				imgo.GoToTarget(destinations[0]);
-				destinations.RemoveAt(0);
-				moveMgrControledDict.Add(imgo, target);
-			}
 		}
 
 		public void MovementFinished(IMovableGameObject imgo) {
@@ -218,6 +207,15 @@ namespace Strategy.MoveMgr {
 
 		public void UnlogFromFinishMoveReciever(IMovableGameObject imgo) {
 			finishMoveRecDict.Remove(imgo);
+		}
+
+
+		public void GoToTarget(IMovableGameObject imgo, IGameObject gameObject, IFinishMovementReciever reciever) {
+			imgo.GoToTarget(gameObject);
+			moveMgrControledDict.Add(imgo, gameObject);
+
+			finishMoveRecDict.Add(imgo, reciever);
+
 		}
 	}
 }

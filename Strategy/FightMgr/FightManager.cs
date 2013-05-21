@@ -11,9 +11,10 @@ using Strategy.GameObjectControl.GroupMgr;
 namespace Strategy.FightMgr {
 	class FightManager : IFightManager {
 
-		private Dictionary<GroupMovables, ActionAnswer> fightsDict; // Dictionary with information about group action (Occupy/Attack)
+		private Dictionary<GroupMovables, ActionAnswer> offensiveActionDict; // Dictionary with information about group action (Occupy/Attack)
 
 		private List<Occupation> occupationList; // Every occupation 
+		private List<Fight> fightList;
 
 		private Dictionary<IMovableGameObject, GroupMovables> onWayToTargetDict; // Dictionary with object on the way
 
@@ -22,8 +23,9 @@ namespace Strategy.FightMgr {
 		public FightManager() {
 			attackersTarget = new Dictionary<IMovableGameObject, IGameObject>();
 			onWayToTargetDict = new Dictionary<IMovableGameObject, GroupMovables>();
-			fightsDict = new Dictionary<GroupMovables, ActionAnswer>();
+			offensiveActionDict = new Dictionary<GroupMovables, ActionAnswer>();
 			occupationList = new List<Occupation>();
+			fightList = new List<Fight>();
 		}
 
 		public void Update(float delay) {
@@ -31,6 +33,13 @@ namespace Strategy.FightMgr {
 			foreach (var occ in occupCopy) {
 				if (occ.Check(delay)) {
 					occupationList.Remove(occ);
+				}
+			}
+
+			var fightCopy = new List<Fight>(fightList);
+			foreach (var fight in fightCopy) {
+				if (fight.Check(delay)) {
+					fightList.Remove(fight);
 				}
 			}
 		}
@@ -43,9 +52,16 @@ namespace Strategy.FightMgr {
 				Console.WriteLine("Utocis na movable");
 			}
 
-			// Object can be occupied
+			if (fightList.Count>5) {
+				Console.WriteLine("Kurva");
+			}
+
+			if (!CheckActionPossibility(group, gameObject)) {
+				return;
+			}
+
 			Game.IMoveManager.GoToTarget(group, gameObject, this);
-			fightsDict.Add(group, ActionAnswer.Attack);
+			offensiveActionDict.Add(group, ActionAnswer.Attack);
 
 			foreach (IMovableGameObject imgo in group) {
 				attackersTarget.Add(imgo, gameObject);
@@ -61,19 +77,23 @@ namespace Strategy.FightMgr {
 		/// <param name="gameObject">Target</param>
 		public void Occupy(GroupMovables group, IGameObject gameObject) {
 
-
 			if (gameObject.OccupyTime < 0) {
 				Console.WriteLine("Nelze obsadit");
 				return;
 			}
 
-			if (fightsDict.ContainsKey(group)) {
+			// The object is already occupied by this group 
+			if (offensiveActionDict.ContainsKey(group) && offensiveActionDict[group] == ActionAnswer.Occupy && attackersTarget[group[0]] == gameObject) {
+				return;
+			}
+
+			if (!CheckActionPossibility(group, gameObject)) {
 				return;
 			}
 
 			// Object can be occupied
 			Game.IMoveManager.GoToTarget(group, gameObject, this);
-			fightsDict.Add(group, ActionAnswer.Occupy);
+			offensiveActionDict.Add(group, ActionAnswer.Occupy);
 
 			foreach (IMovableGameObject imgo in group) {
 				attackersTarget.Add(imgo, gameObject);
@@ -92,7 +112,7 @@ namespace Strategy.FightMgr {
 				moveMgr.UnlogFromFinishMoveReciever(item);
 			}
 
-			if (fightsDict[onWayCopy[imgo]] == ActionAnswer.Attack) {
+			if (offensiveActionDict[onWayCopy[imgo]] == ActionAnswer.Attack) {
 				//TODO attack
 				//gameObject.TakeDamage(1000);
 
@@ -102,21 +122,42 @@ namespace Strategy.FightMgr {
 				//var groupDeff = Game.GroupManager.CreateSelectedGroup(objectsInShoutDistance);
 
 				// zkontroluj jestli se na to uz nejak neutoci a kdyztak jen addToGroup a bude hotovo.
-				var v = new Fight(group, gameObject);
+				fightList.Add(new Fight(group, gameObject));
 
 			} else {
 				occupationList.Add(new Occupation(group, gameObject));
 			}
-			fightsDict.Remove(onWayCopy[imgo]);
+			offensiveActionDict.Remove(onWayCopy[imgo]);
 		}
 
 		public void MovementInterupted(IMovableGameObject imgo) {
 
 			if (onWayToTargetDict.ContainsKey(imgo)) {
-				fightsDict.Remove(onWayToTargetDict[imgo]);
+				offensiveActionDict.Remove(onWayToTargetDict[imgo]);
 				onWayToTargetDict.Remove(imgo);
 				attackersTarget.Remove(imgo);
 			}
+		}
+
+		private bool CheckActionPossibility(GroupMovables group, IGameObject gameObject) {
+			foreach (var item in fightList) {
+				if (item.ContainsAttackingGroup(group, gameObject)) {
+					Console.WriteLine("Presne je to ona");
+					return false;
+				}
+				if (item.Contains(gameObject)) {
+					item.AddGroup(group);
+					return false;
+				}
+			}
+			foreach (var item in occupationList) {
+				if (item.Contains(gameObject)) {
+					item.AddGroup(group);
+					return false;
+
+				}
+			}
+			return true;
 		}
 	}
 }

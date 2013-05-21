@@ -17,34 +17,38 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		private const float portTime = 3.4483f;
 		private float portTimeDuration;
 
+		private const string animationPort = "funcionando3_eani_Clip";
+		private const string animationStay = "abrirse_eani_Clip";
+		private readonly Vector3 gatePosition = new Vector3(1000, 0, 1000);
+
 		private AnimationState animationState; // The AnimationState the moving object
 
 		protected static List<Traveler> travelerList = new List<Traveler>();
 
 		protected static Team gateTeam;
 
-		public Gate(string name, string mesh, Vector3 position, Team team) {
+		public Gate(string name, string mesh, Team team) {
 			this.name = name;
 			this.mesh = mesh;
-			this.position = position;
 			this.team = team;
+			position = gatePosition;
 			entity = Game.SceneManager.CreateEntity(name, mesh);
 
-			animationState = entity.GetAnimationState("funcionando3_eani_Clip");
+			animationState = entity.GetAnimationState(animationPort);
 			animationState.Loop = true;
 			animationState.Enabled = true;
 		}
 
 		public override void Rotate(float f) {
 			if (isPorting) {
-				animationState = entity.GetAnimationState("abrirse_eani_Clip");
+				animationState = entity.GetAnimationState(animationStay);
 				f *= 5;
 				portTimeDuration -= f / 10;
 				if (portTimeDuration < 0) {
 					isPorting = false;
 				}
 			} else {
-				animationState = entity.GetAnimationState("funcionando3_eani_Clip");
+				animationState = entity.GetAnimationState(animationPort);
 			}
 			animationState.Loop = true;
 			animationState.Enabled = true;

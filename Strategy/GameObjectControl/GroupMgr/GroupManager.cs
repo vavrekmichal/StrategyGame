@@ -340,6 +340,12 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			return group;
 		}
 
+		/// <summary>
+		/// Function remove objects from their group and creates new one.
+		/// List can contains some IMovableGameObjects so they must be removed.
+		/// </summary>
+		/// <param name="igos">List with IStaticGameObjects and IMovableGameObjects</param>
+		/// <returns>Created group with IStaticGameObjects from igos List</returns>
 		public GroupStatics CreateSelectedGroupStatic(List<IGameObject> igos) {
 			var group = new GroupStatics(igos[0].Team);
 			foreach (var igo in igos) {
@@ -434,6 +440,19 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 		public GroupMovables GetActiveMovableGroup() {
 			return selectedGroupM;
+		}
+
+		public void SelectGroup(GroupMovables group) {
+			selectedGroupM = group;
+			isMovableGroupActive = true;
+			ShowSelectedInfoGroup();
+			
+		}
+
+		public void SelectGroup(GroupStatics group) {
+			selectedGroupS = group;
+			isMovableGroupActive = false;
+			ShowSelectedInfoGroup();
 		}
 
 		/// <summary>

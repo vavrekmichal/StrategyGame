@@ -17,7 +17,7 @@ namespace Strategy.FightMgr {
 		private IGameObject target;
 		private Property<TimeSpan> remainingTime;
 
-		const float distanceConst = 1.5f;	// Occupy-distance is increased by this constant.
+		const float distanceConst = 1.2f;	// Occupy-distance is increased by this constant.
 		const string occStart = "OccBegan1.wav"; // Sound of start the occupation
 		const string occEnd = "OccSucc1.wav";  // Sound of end the occupation
 
@@ -40,6 +40,29 @@ namespace Strategy.FightMgr {
 			this.attackers = occupier;
 			this.target = (IGameObject)occupied;
 			Game.IEffectPlayer.PlayEffect(occStart);
+
+		}
+
+		public bool Contains(IGameObject igo) {
+			if (igo == target) {
+				return true;
+			}
+
+			return false;
+		}
+
+		public void AddGroup(GroupMovables group) {
+			GroupManager groupMgr = Game.GroupManager;
+			Game.IMoveManager.GoToTarget(group, target);
+			int groupCount = group.Count;
+			for (int i = 0; i < groupCount; i++) {
+				IMovableGameObject temp = group[0];
+				groupMgr.RemoveFromGroup(temp);
+				groupMgr.AddToGroup(attackers, temp);
+
+			}
+			attackers.Reselect();
+			groupMgr.SelectGroup(attackers);
 
 		}
 
@@ -73,7 +96,6 @@ namespace Strategy.FightMgr {
 				FinishOccupation();
 				return true;
 			} else {
-				Console.WriteLine(remaining);
 				remainingTime.Value = remaining;
 				return false;
 			}
@@ -108,7 +130,7 @@ namespace Strategy.FightMgr {
 
 			var squaredPickUpDist = maxDist * maxDist;
 
-			if (squaredDistance > (squaredPickUpDist * distanceConst)) {
+			if (squaredDistance > (squaredPickUpDist )) {
 				return false;
 			} else {
 				return true;

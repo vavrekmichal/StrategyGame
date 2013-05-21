@@ -353,7 +353,6 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			}
 			var gate = new Gate("Gate " + solarSystName,
 				"gate.mesh",
-				new Vector3(500, 0, -500),
 				teamDict[team]);
 			gate.Team.AddISGO(gate);
 			return gate;

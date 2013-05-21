@@ -71,6 +71,12 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		void GoToTarget(Vector3 placeToGo);
 
 		/// <summary>
+		/// Controled movement of object. When object reached position, must report to moveCntr.
+		/// </summary>
+		/// <param Name="objectToGo">IGameObject with position to go</param>
+		void GoToTarget(IGameObject objectToGo);
+
+		/// <summary>
 		/// Returns Property with given Name (base properties)
 		/// </summary>
 		/// <typeparam Name="T">Type</typeparam>
