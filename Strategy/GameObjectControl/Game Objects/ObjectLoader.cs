@@ -23,7 +23,6 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 		private XmlDocument xml;
 		private Dictionary<string, Team> teamDict;
-		private List<IMaterial> materialList;
 		private List<SolarSystem> solarSystemList;
 		private Dictionary<Team, List<Team>> teamRealationDict;
 		private XmlElement root;
@@ -37,12 +36,11 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		private List<string> isCompiled;
 
 		public ObjectLoader(string path, Dictionary<string, Team> teams,
-			List<IMaterial> materialList, List<SolarSystem> solarSystems) {
+			List<SolarSystem> solarSystems) {
 			teamRealationDict = new Dictionary<Team, List<Team>>();
 			usedNameDict = new Dictionary<string, int>();
 
 			this.teamDict = teams;
-			this.materialList = materialList;
 			this.solarSystemList = solarSystems;
 			xml = new XmlDocument();
 			xml.Load(path);
@@ -185,7 +183,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		private void LoadTeams(XmlNode teamsNode) {
 
 			// Add None team for suns and gates
-			var t = new Team("None", materialList);
+			var t = new Team("None");
 			var noneList = new List<Team>();
 			noneList.Add(t);
 			teamRealationDict.Add(t, noneList);
@@ -196,7 +194,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 					foreach (XmlNode att in teamName.Attributes) {
 						if (att.Name == "name") {
 
-							t = new Team(att.Value, materialList);
+							t = new Team(att.Value);
 							teamDict.Add(t.Name, t);
 							friends.Add(t);
 						}
@@ -383,8 +381,8 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 
-		private void RegisterSGOaction(StaticGameObject sgo, string action, string value) {
-			sgo.registerExecuter(action, sgo.Team.GetMaterials(), value);
+		private void RegisterSGOaction(IStaticGameObject isgo, string action, string value) {
+			//isgo.registerExecuter(action, isgo.Team.GetMaterials(), value);
 		}
 
 		private void ReadSGOActions(XmlNodeList actionList, StaticGameObject sgo) {

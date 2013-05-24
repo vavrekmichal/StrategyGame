@@ -113,17 +113,7 @@ namespace Strategy.FightMgr {
 			}
 
 			if (offensiveActionDict[onWayCopy[imgo]] == ActionAnswer.Attack) {
-				//TODO attack
-				//gameObject.TakeDamage(1000);
-
-				// List with GameObject in gameObject's ShoutDistance and recursively called to the other
-				//var objectsInShoutDistance = new List<IGameObject>();
-				//gameObject.Shout(objectsInShoutDistance);
-				//var groupDeff = Game.GroupManager.CreateSelectedGroup(objectsInShoutDistance);
-
-				// zkontroluj jestli se na to uz nejak neutoci a kdyztak jen addToGroup a bude hotovo.
 				fightList.Add(new Fight(group, gameObject));
-
 			} else {
 				occupationList.Add(new Occupation(group, gameObject));
 			}

@@ -12,7 +12,6 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 	public class ObjectCreator {
 
-		protected List<IMaterial> materialList;
 		protected List<SolarSystem> solarSystems;
 		protected Dictionary<string, Team> teams;
 
@@ -35,9 +34,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// <param Name="mission">Name of mission</param>
 		public void InitializeWorld(string mission) {
 
-			createMaterials();
-
-			loader = new ObjectLoader("../../Media/Mission/MyMission.xml", teams, materialList, solarSystems);
+			loader = new ObjectLoader("../../Media/Mission/MyMission.xml", teams, solarSystems);
 			loader.Load(mission);
 
 			solarSystems[0].ShowSolarSystem();
@@ -68,12 +65,6 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 		public Dictionary<Team, List<Team>> GetTeamsRelations() {
 			return loader.GetTeamsRelations();
-		}
-
-
-		//TODO TOTO TU NESMI ZUSTAT*/
-		private void createMaterials() {
-			materialList = new List<IMaterial>() { new Wolenium(), new Wolenarium(), new Class1() };
 		}
 
 	}

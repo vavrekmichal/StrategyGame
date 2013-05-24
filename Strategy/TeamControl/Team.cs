@@ -9,8 +9,6 @@ using Strategy.GameMaterial;
 namespace Strategy.TeamControl {
     public class Team {
 
-        //TODO: Production 
-        // Ideas List<IMateria> Netreba jen jmeno...v sesite popsano.
         protected Dictionary<string, IMaterial> materialsStates;
 
         protected List<IMovableGameObject> imgoObjects;
@@ -86,16 +84,21 @@ namespace Strategy.TeamControl {
 			return Name;
 		}
 
-        public void SetMaterials(List<IMaterial> materials) {
+        private void SetMaterials(List<IMaterial> materials) {
             foreach (IMaterial mat in materials) {
                 materialsStates.Add(mat.Name, mat);
             }
         }
 
-        public void AddMaterial(string materialName, double materialQuantity){
-            materialsStates[materialName].AddQuantity(materialQuantity);
-        }
+		private void AddMaterial(string materialName, double materialQuantity) { //TODO divne
+			materialsStates[materialName].AddQuantity(materialQuantity);
+		}
 
+		public void Produce(IMaterial material, int quantity) {
+			if (materialsStates.ContainsKey(material.Name)) {
+				materialsStates[material.Name].AddQuantity(quantity);
+			}
+		}
 
         public Dictionary<string, IMaterial> GetMaterials() {
             return materialsStates;

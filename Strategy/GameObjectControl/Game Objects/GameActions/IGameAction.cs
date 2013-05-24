@@ -6,10 +6,11 @@ using Strategy.TeamControl;
 
 namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 	public interface IGameAction {
-        void Execute(object executer, Team team);
 
-		string Name {
-			get;
-		}
+		void Update(float delay);
+		string OnMouseClick();
+
+		string IconPath();
+		//Todo neco na zobrazeni
 	}
 }

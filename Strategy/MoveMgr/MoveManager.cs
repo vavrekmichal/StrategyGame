@@ -70,21 +70,9 @@ namespace Strategy.MoveMgr {
 			}
 
 			if (imgo.Visible) {
-
 				imgo.Stop();
-				ActionReaction answer;
-				//if (gameObject is IStaticGameObject) {
-				//	answer = ((IStaticGameObject)gameObject).ReactToInitiative(ActionReason.TargetInDistance, imgo);
-				//} else {
-				//	answer = ((IMovableGameObject)gameObject).ReactToInitiative(ActionReason.TargetInDistance, imgo);
-				//}
+				gameObject.ReactToInitiative(ActionReason.TargetInDistance, imgo);
 
-				answer = gameObject.ReactToInitiative(ActionReason.TargetInDistance, imgo);
-
-				switch (answer) { //TODO nejak to domyslet
-					default:
-						break;
-				}
 			}
 
 			

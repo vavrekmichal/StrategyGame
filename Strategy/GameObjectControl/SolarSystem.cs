@@ -117,7 +117,7 @@ namespace Strategy.GameObjectControl {
 		public void ShowSolarSystem() {
 			if (!active) {
 
-				Game.GUIManager.SetSolarSystemName(name);
+				Game.IGameGUI.SetSolarSystemName(name);
 
 				foreach (var isgoPair in isgoObjectDict) {
 					isgoPair.Value.ChangeVisible(true);

@@ -105,6 +105,15 @@ namespace Strategy.GameObjectControl {
 			}
 		}
 
+		public TeamManager TeamManager {
+			get {
+				if (teamMgr == null) {
+					throw new NullReferenceException("TeamManager is not initialized.");
+				}
+				return teamMgr;
+			}
+		}
+
 		#region private
 
 		#endregion
@@ -123,6 +132,7 @@ namespace Strategy.GameObjectControl {
 		private void OnDieEvent(IGameObject igo, MyDieArgs m) {
 			Console.WriteLine(
 				"Object Hp is lower then 0.");
+			Game.PrintToGameConsole(igo.Name+" destroyed (Team "+igo.Team.Name+").");
 			RemoveObject(igo);
 		} 
 
@@ -159,7 +169,7 @@ namespace Strategy.GameObjectControl {
 		/// Inicialization of managers, hittest...
 		/// </summary>
 		/// <param Name="missionName">Name of choosen mission</param>
-		public void Inicialization(string missionName, GUIControler guiControler) {
+		public void Inicialization(string missionName) {
 			objectCreator.InitializeWorld(missionName);
 
 			foreach (var solarSys in objectCreator.GetInicializedSolarSystems()) {
@@ -173,9 +183,8 @@ namespace Strategy.GameObjectControl {
 
 			groupMgr.CreateSolarSystems(objectCreator.GetInicializedSolarSystems());
 			hitTest.CreateHitTestMap(objectCreator.GetInicializedSolarSystems());
-			teamMgr.SetGUI(guiControler);
 			teamMgr.Inicialization(objectCreator.GetTeams(), objectCreator.GetTeamsRelations());
-			guiControler.Inicialization(teamMgr.playerTeam.GetMaterials());
+			Game.IGameGUI.Inicialization();
 			groupMgr.DeselectGroup();
 		}
 
@@ -243,6 +252,7 @@ namespace Strategy.GameObjectControl {
 
 			switch (answer) {
 				case ActionAnswer.Move:
+					Game.PrintToGameConsole("Group from team " + groupMgr.GetActiveMovableGroup().OwnerTeam.Name + " moving to " + clickedPoint.ToString()); //todo delete
 					moveMgr.GoToLocation(groupMgr.GetActiveMovableGroup(), clickedPoint);
 					break;
 				case ActionAnswer.MoveTo:

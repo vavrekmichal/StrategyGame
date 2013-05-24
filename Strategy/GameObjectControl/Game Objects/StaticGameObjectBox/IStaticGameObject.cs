@@ -9,8 +9,6 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		void Rotate(float f);
         void NonActiveRotate(float f);
 
-		
-        bool TryExecute(string executingAction);
-
+	
 	}
 }

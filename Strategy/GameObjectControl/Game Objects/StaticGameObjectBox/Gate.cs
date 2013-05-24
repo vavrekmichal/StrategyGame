@@ -86,7 +86,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		}
 
 		public void ShowTravelDestinations(IMovableGameObject imgo) {
-			var gui = Game.GUIManager;
+			var gui = Game.IGameGUI;
 			var groupMgr = Game.GroupManager;
 			gui.ShowSolarSystSelectionPanel(groupMgr.GetAllSolarSystemNames(), "Choose where you'll travel", imgo);
 

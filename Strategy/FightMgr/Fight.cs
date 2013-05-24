@@ -76,7 +76,7 @@ namespace Strategy.FightMgr {
 			if (groupAttackers.Count == 0 || (imgoDeffenders.Count == 0 && isgoDeffenders.Count == 0)) {
 				// Fight ends
 				EndFight();
-				return null; //TODO destroy Fight
+				return null;
 			}
 			if (team == groupAttackers.OwnerTeam) {
 				// It is attacker

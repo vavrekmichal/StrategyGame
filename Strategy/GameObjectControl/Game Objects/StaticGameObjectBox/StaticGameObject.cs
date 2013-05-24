@@ -12,31 +12,7 @@ using Strategy.Exceptions;
 namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 	public abstract class StaticGameObject : GameObject, IStaticGameObject {
 
-		protected static Dictionary<string, IGameAction> gameActions;
-		protected static Dictionary<string, List<IStaticGameObject>> gameActionsPermitions;
-
-
-		//Look here create file Load file
-		static StaticGameObject() {
-			gameActionsPermitions = new Dictionary<string, List<IStaticGameObject>>();
-			gameActions = new Dictionary<string, IGameAction>();
-			IGameAction o = (IGameAction)Assembly.GetExecutingAssembly().CreateInstance("Strategy.GameObjectControl.Game_Objects.GameActions.Produce"); //TODO delete
-
-			gameActions.Add(o.Name, o);
-			gameActionsPermitions.Add(o.Name, new List<IStaticGameObject>());
-		}
-
-		public void registerExecuter(string nameOfAction, Dictionary<string, IMaterial> materials, string material) {
-			if (gameActionsPermitions.ContainsKey(nameOfAction)) {
-				gameActionsPermitions[nameOfAction].Add(this);
-			}
-			registerProducer(materials[material], 0.01);
-		}
-
-		private void registerProducer(IMaterial specificType, double value) {
-			((Produce)gameActions["Produce"]).RegisterExecuter(this, specificType, value);
-		}
-
+		protected  Dictionary<string, IGameAction> gameActions;
 
 		/// <summary>
 		/// Rotating function 
@@ -52,16 +28,6 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// <param Name="f">Deley of frames</param>
 		public virtual void NonActiveRotate(float f) {
 		}
-
-
-		public bool TryExecute(string executingAction) {
-			if (gameActionsPermitions.ContainsKey(executingAction) && gameActionsPermitions[executingAction].Contains(this)) {
-				gameActions[executingAction].Execute(this, Team);
-				return true;
-			}
-			return false;
-		}
-
 
 
 		/// <summary>

@@ -48,7 +48,6 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// </summary>
 		/// <param name="f">delay between frames</param>
 		public override void Rotate(float f) {
-			TryExecute("Produce");
 			sceneNode.Roll(new Mogre.Degree((float)(GetProperty<float>(PropertyEnum.Speed).Value * GetProperty<float>(PropertyEnum.Rotate).Value * f)));
 			//position in LinkedList now moving
 			if (!mFlying) {
@@ -80,7 +79,6 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// </summary>
 		/// <param name="f">delay between frames</param>
 		public override void NonActiveRotate(float f) {
-			TryExecute("Produce");
 			if (!mFlying) {
 				if (NextLocation()) {
 					mFlying = true;

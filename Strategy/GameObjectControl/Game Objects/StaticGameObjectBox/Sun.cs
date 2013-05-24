@@ -124,10 +124,6 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			}
 		}
 
-		public bool TryExecute(string executingAction) {
-			throw new NotImplementedException();
-		}
-
 		private DieEventHandler die = null;
 		public DieEventHandler DieHandler {
 			get { return die; }

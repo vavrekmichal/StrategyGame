@@ -13,10 +13,6 @@ using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 
 namespace Strategy.TeamControl {
     public class TeamManager {
-        //TODO: ProduceManager
-        // Protected List<IMaterial> materials; //will be singleton and shared with this and GUI to show State
-
-        protected GUIControler guiControler;
 
         protected Dictionary<string, Team> teamDict; // Implementation in mybook think about delete. MUST delete from team and group
 
@@ -51,15 +47,10 @@ namespace Strategy.TeamControl {
             }
         }
 
-        //TODO think about me- remove
-        public void SetGUI(GUIControler gui) {
-            guiControler = gui;
-        }
-
         public void Update() {
-            foreach (KeyValuePair<string, IMaterial> k in playerTeam.GetMaterials()) {
-                guiControler.SetMaterialState(k.Key, k.Value.State);
-            }
+			//foreach (KeyValuePair<string, IMaterial> k in playerTeam.GetMaterials()) {
+			//	guiControler.SetMaterialState(k.Key, k.Value.State);
+			//}
         }
 
 		public bool AreFriendly(Team t1, Team t2) {
@@ -86,6 +77,10 @@ namespace Strategy.TeamControl {
 
 		public void RemoveFromOwnTeam(IMovableGameObject imgo) {
 			imgo.Team.RemoveIMGO(imgo);
+		}
+
+		public Dictionary<string, IMaterial> GetPlayersMaterials() {
+			return playerTeam.GetMaterials();
 		}
         // Private
     }

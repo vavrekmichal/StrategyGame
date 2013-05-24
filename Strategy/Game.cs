@@ -28,7 +28,7 @@ namespace Strategy {
 
 		protected static SoundPlayer soundPlayer; // Background music
 		protected static GameObjectManager gameObjectMgr;
-		protected static GUIControler guiControler;
+		protected static IGameGUI gameGUI;
 		protected static SceneManager sceneMgr;
 		#region Singleton and constructor
 		private static Game instance;
@@ -43,18 +43,19 @@ namespace Strategy {
 		private Game(SceneManager sceneManager, CameraMan c, RenderWindow mWindow, Mouse mouse, Keyboard keyboard) {
 			sceneMgr = sceneManager;
 			gameObjectMgr = GameObjectManager.GetInstance(sceneManager, mouse, keyboard, mWindow);
-			guiControler = new GUIControler(mWindow, mouse, keyboard);
-			mouseControl = MouseControl.GetInstance(c, sceneManager, guiControler);
+			gameGUI = new MyGUI((int)mWindow.Width, (int)mWindow.Height, mouse, keyboard);
+			//guiControler = new GUIControler(mWindow, mouse, keyboard);
+			mouseControl = MouseControl.GetInstance(c, sceneManager);
 			gamePaused = false;
 			soundPlayer = new SoundPlayer(mWindow); //music player
 		}
 
-		public static GUIControler GUIManager {
+		public static IGameGUI IGameGUI {
 			get {
-				if (guiControler == null) {
-					throw new NullReferenceException("GUIManager is not initialized.");
+				if (gameGUI == null) {
+					throw new NullReferenceException("IGameGUI is not initialized.");
 				}
-				return guiControler;
+				return gameGUI;
 			}
 		}
 
@@ -82,6 +83,12 @@ namespace Strategy {
 			}
 		}
 
+		public static TeamManager TeamManager {
+			get {
+				return gameObjectMgr.TeamManager;
+			}
+		}
+
 		public static IEffectPlayer IEffectPlayer {
 			get {
 				return soundPlayer;
@@ -104,6 +111,10 @@ namespace Strategy {
 			get { return sceneMgr; }
 		}
 
+		public static void PrintToGameConsole(string text){
+			gameGUI.PrintToGameConsole(text);
+		}
+
 		#endregion
 
 
@@ -116,7 +127,7 @@ namespace Strategy {
 		}
 
 		public void Update(float delay) {
-			guiControler.Update();
+			gameGUI.Update();
 			soundPlayer.HideBox(delay);
 			if (!gamePaused) {
 				gameObjectMgr.Update(delay);
@@ -125,8 +136,9 @@ namespace Strategy {
 
 
 		public void Inicialization() {
-			gameObjectMgr.Inicialization("StartMission", guiControler);
-			guiControler.SetSolarSystemName(Game.GroupManager.GetSolarSystemName(0));
+			gameObjectMgr.Inicialization("StartMission");
+			gameGUI.SetSolarSystemName(Game.GroupManager.GetSolarSystemName(0));
+			PrintToGameConsole("Game loaded");
 		}
 
 		// Get
@@ -136,7 +148,7 @@ namespace Strategy {
 
 		// Quit
 		public void Quit() {
-			guiControler.Dispose();
+			gameGUI.Dispose();
 		}
 
 		// Pause

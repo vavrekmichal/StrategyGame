@@ -13,7 +13,6 @@ namespace Strategy.MogreControl {
 	public class MouseControl {
 		protected static Mogre.TutorialFramework.CameraMan cameraMan;
 		protected SceneManager sceneMgr;
-		protected GUIControler guiControl; //TODO:mys nebude mit guicko
 
 		protected int changeMe = 1;
 
@@ -29,17 +28,16 @@ namespace Strategy.MogreControl {
 		bool bSelecting;
 
 
-		public static MouseControl GetInstance(CameraMan c, SceneManager m, GUIControler guiControl) {
+		public static MouseControl GetInstance(CameraMan c, SceneManager m) {
 			if (instance == null) {
-				instance = new MouseControl(c, m, guiControl);
+				instance = new MouseControl(c, m);
 			}
 			return instance;
 		}
 
-		private MouseControl(CameraMan c, SceneManager m, GUIControler guiControl) {
+		private MouseControl(CameraMan c, SceneManager m) {
 			cameraMan = c;
 			sceneMgr = m;
-			this.guiControl = guiControl;
 			mRect = new SelectionRectangle("RectangularSelect");
 			sceneMgr.RootSceneNode.CreateChildSceneNode().AttachObject(mRect);
 		}

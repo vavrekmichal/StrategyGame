@@ -10,6 +10,7 @@ namespace Strategy.GameGUI {
 		protected int numberOfItem;
 		protected Panel panelToClose;
 		protected object storedObject;
+		protected BoolWrapper isClosed;
 
 		public SelectionLabel(int position, Panel panel)
 			: base() {
@@ -17,9 +18,16 @@ namespace Strategy.GameGUI {
 			panelToClose = panel;
 		}
 
+		public SelectionLabel(int position, object objectRef, Panel panel, BoolWrapper isClosed)
+			: this(position, panel) {
+			storedObject = objectRef;
+			this.isClosed = isClosed;
+		}
+
 		public SelectionLabel(int position, object objectRef, Panel panel)
 			: this(position, panel) {
 			storedObject = objectRef;
+			this.isClosed = new BoolWrapper();
 		}
 
 		public int NumberOfItem {
@@ -28,6 +36,11 @@ namespace Strategy.GameGUI {
 
 		public Panel PanelToClose {
 			get { return panelToClose; }
+		}
+
+		public void ClosePanel() {
+			panelToClose.Dispose();
+			isClosed.Value = true;
 		}
 
 		public object StoredObject {

@@ -372,9 +372,9 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 		public void ShowSelectedInfoGroup() {
 			if (isMovableGroupActive) {
-				Game.GUIManager.ShowTargeted(selectedGroupM);
+				Game.IGameGUI.ShowTargeted(selectedGroupM);
 			} else {
-				Game.GUIManager.ShowTargeted(selectedGroupS);
+				Game.IGameGUI.ShowTargeted(selectedGroupS);
 			}
 		}
 
