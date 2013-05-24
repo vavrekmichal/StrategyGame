@@ -401,6 +401,12 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		public ActionAnswer SelectInfoGroup(Mogre.Vector3 clickedPoint, MovableObject hitObject, bool isFriendly, bool isImgo) {
 			if (isMovableGroupActive && selectedGroupM.OwnerTeam.Name == Game.playerName) {
 
+				// All members of group can die so movable group is deactive.
+				if (selectedGroupM.Count == 0) {
+					isMovableGroupActive = false;
+					return ActionAnswer.None;
+				}
+
 				// Check if actual group is selectedGroupM
 				if (!(imgoGroupDict.ContainsKey(selectedGroupM[0]) && selectedGroupM == imgoGroupDict[selectedGroupM[0]])) {
 
@@ -446,7 +452,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			selectedGroupM = group;
 			isMovableGroupActive = true;
 			ShowSelectedInfoGroup();
-			
+
 		}
 
 		public void SelectGroup(GroupStatics group) {

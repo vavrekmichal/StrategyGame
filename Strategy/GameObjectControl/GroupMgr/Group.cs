@@ -14,7 +14,7 @@ using Strategy.GameObjectControl.Game_Objects;
 
 namespace Strategy.GameObjectControl.GroupMgr {
 	public abstract class IGroup<T> : IEnumerable
-		where T : class, IGameObject{
+		where T : class, IGameObject {
 
 		protected List<T> groupMembers;
 		protected Property<Team> owner;
@@ -273,7 +273,8 @@ namespace Strategy.GameObjectControl.GroupMgr {
 	public class GroupStatics : IGroup<IStaticGameObject> {
 		public GroupStatics() : base(new Team("None")) { }
 
-		public GroupStatics(TeamControl.Team own) : base(own) {
+		public GroupStatics(TeamControl.Team own)
+			: base(own) {
 			groupIGameActionList.Add(new DieGameAction<IStaticGameObject>(groupMembers));
 		}
 
