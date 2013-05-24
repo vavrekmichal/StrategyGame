@@ -308,12 +308,12 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		/// Function remove objects from their group and creates new one.
 		/// List can contains some IStaticGameObjects so they must be removed.
 		/// </summary>
-		/// <param name="igos">List with IStaticGameObjects and IMovableGameObjects</param>
+		/// <param name="igoList">List with IStaticGameObjects and IMovableGameObjects</param>
 		/// <returns>Created group with IMovableGameObjects from igos List</returns>
-		public GroupMovables CreateSelectedGroupMovable(List<IGameObject> igos) {
+		public GroupMovables CreateSelectedGroupMovable(List<IGameObject> igoList) {
 			var toRecount = new List<GroupMovables>();
-			var group = new GroupMovables(igos[0].Team);
-			foreach (var igo in igos) {
+			var group = new GroupMovables(igoList[0].Team);
+			foreach (var igo in igoList) {
 				var imgo = igo as IMovableGameObject;
 				if (imgo != null) {
 					group.InsertMemeber(imgo);
@@ -344,11 +344,11 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		/// Function remove objects from their group and creates new one.
 		/// List can contains some IMovableGameObjects so they must be removed.
 		/// </summary>
-		/// <param name="igos">List with IStaticGameObjects and IMovableGameObjects</param>
+		/// <param name="igoList">List with IStaticGameObjects and IMovableGameObjects</param>
 		/// <returns>Created group with IStaticGameObjects from igos List</returns>
-		public GroupStatics CreateSelectedGroupStatic(List<IGameObject> igos) {
-			var group = new GroupStatics(igos[0].Team);
-			foreach (var igo in igos) {
+		public GroupStatics CreateSelectedGroupStatic(List<IGameObject> igoList) {
+			var group = new GroupStatics(igoList[0].Team);
+			foreach (var igo in igoList) {
 				var imgo = igo as IStaticGameObject;
 				if (imgo != null) {
 					group.InsertMemeber(imgo);

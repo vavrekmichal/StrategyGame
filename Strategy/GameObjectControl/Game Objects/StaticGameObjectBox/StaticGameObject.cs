@@ -12,7 +12,15 @@ using Strategy.Exceptions;
 namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 	public abstract class StaticGameObject : GameObject, IStaticGameObject {
 
-		protected  Dictionary<string, IGameAction> gameActions;
+		protected const int startHP = 1000;
+
+		public StaticGameObject() {
+			isVisible = false;
+			propertyDict = new Dictionary<PropertyEnum, object>();
+			propertyDictUserDefined = new Dictionary<string, object>();
+			propertyDict.Add(PropertyEnum.Hp, new Property<int>(startHP));
+		}
+
 
 		/// <summary>
 		/// Rotating function 
@@ -52,5 +60,18 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			get { return 20; }
 		}
 
+
+		public override int Hp {
+			get { return ((Property<int>)propertyDict[PropertyEnum.Hp]).Value; }
+		}
+
+		public override void TakeDamage(int damage) {
+			var hpProp = (Property<int>)propertyDict[PropertyEnum.Hp];
+			var actualHp = hpProp.Value - damage;
+			hpProp.Value = actualHp;
+			if (actualHp < 0) {
+				RaiseDie();
+			}
+		}
 	}
 }

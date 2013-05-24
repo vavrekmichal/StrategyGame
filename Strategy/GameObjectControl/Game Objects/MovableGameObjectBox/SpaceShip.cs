@@ -40,7 +40,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 					if (isMovableGameObject) {
 						return ActionAnswer.Attack;
 					} else {
-						return ActionAnswer.Occupy;
+						return ActionAnswer.Attack;
 					}
 				}
 			}

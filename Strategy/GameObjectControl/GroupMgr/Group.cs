@@ -9,16 +9,26 @@ using Mogre;
 using Strategy.TeamControl;
 using Strategy.GameObjectControl.RuntimeProperty;
 using System.Reflection;
+using Strategy.GameObjectControl.Game_Objects.GameActions;
+using Strategy.GameObjectControl.Game_Objects;
 
 namespace Strategy.GameObjectControl.GroupMgr {
-	public abstract class IGroup<T> : IEnumerable where T : class {
+	public abstract class IGroup<T> : IEnumerable
+		where T : class, IGameObject{
 
 		protected List<T> groupMembers;
 		protected Property<Team> owner;
+		protected List<IGameAction> groupIGameActionList;
 
 		public IGroup(Team own) {
 			groupMembers = new List<T>();
 			owner = new Property<Team>(own);
+			groupIGameActionList = new List<IGameAction>();
+			groupIGameActionList.Add(new DoNothingJustPrintText(null));
+		}
+
+		public List<IGameAction> GetGroupIGameActions() {
+			return groupIGameActionList;
 		}
 
 		public int Count {
@@ -108,6 +118,9 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		public GroupMovables(TeamControl.Team own)
 			: base(own) {
 			CountBasicBonuses();
+			groupIGameActionList.Add(new DieGameAction<IMovableGameObject>(groupMembers));
+			groupIGameActionList.Add(new StopMoveAction(groupMembers));
+
 		}
 
 		private object CallPropertyMathViaReflection(Property<object>.Operator op, object p1, object p2) {
@@ -260,7 +273,9 @@ namespace Strategy.GameObjectControl.GroupMgr {
 	public class GroupStatics : IGroup<IStaticGameObject> {
 		public GroupStatics() : base(new Team("None")) { }
 
-		public GroupStatics(TeamControl.Team own) : base(own) { }
+		public GroupStatics(TeamControl.Team own) : base(own) {
+			groupIGameActionList.Add(new DieGameAction<IStaticGameObject>(groupMembers));
+		}
 
 		public override Dictionary<string, object> GetPropertyToDisplay() {
 			var propDict = new Dictionary<string, object>();

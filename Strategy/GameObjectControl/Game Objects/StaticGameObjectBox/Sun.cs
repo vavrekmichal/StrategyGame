@@ -159,5 +159,12 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		public void StartAttack(Strategy.FightMgr.Fight fight) { }
 
 		public void StopAttack() {}
+
+
+		public void AddIGameAction(IGameAction gameAction) {}
+
+		public List<IGameAction> GetIGameActions() {
+			return new List<IGameAction>();
+		}
 	}
 }

@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 	class DoNothingJustPrintText : IGameAction {
-	
+
+		private IGameObject gameObject;
+
+		public DoNothingJustPrintText(IGameObject igo) {
+			gameObject = igo;
+		}
 
 		public void Update(float delay) {
 			

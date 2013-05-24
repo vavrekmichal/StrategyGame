@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Strategy.FightMgr;
+using Strategy.GameObjectControl.Game_Objects.GameActions;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.TeamControl;
@@ -100,5 +101,10 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// <param name="objectsInDistance">Objects in ShoutDistance are inserted in the List</param>
 		void Shout(List<IGameObject> objectsInDistance);
 
+
+		//developing
+		void AddIGameAction(IGameAction gameAction);
+
+		List<IGameAction> GetIGameActions();
 	}
 }

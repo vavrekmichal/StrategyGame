@@ -258,6 +258,15 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			attack = false;
 			fight = null;
 		}
+
+
+		public void AddIGameAction(GameActions.IGameAction gameAction) {
+			throw new NotImplementedException();
+		}
+
+		public List<GameActions.IGameAction> GetIGameActions() {
+			throw new NotImplementedException();
+		}
 	}
 
 

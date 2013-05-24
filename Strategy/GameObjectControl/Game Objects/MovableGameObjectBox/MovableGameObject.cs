@@ -19,7 +19,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		protected Dictionary<string, object> propertyBonusDict;
 		protected List<IGameAction> listOfAction; //TODO not implemented
 
-
+		protected const int startHP = 100;
 
 		public MovableGameObject() {
 			isVisible = false;
@@ -27,7 +27,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			listOfAction = new List<IGameAction>();
 			propertyDict = new Dictionary<PropertyEnum, object>();
 			propertyDictUserDefined = new Dictionary<string, object>();
-			propertyDict.Add(PropertyEnum.Hp, new Property<int>(100));
+			propertyDict.Add(PropertyEnum.Hp, new Property<int>(startHP));
 			propertyBonusDict = new Dictionary<string, object>();
 		}
 

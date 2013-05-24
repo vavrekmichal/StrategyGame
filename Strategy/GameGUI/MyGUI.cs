@@ -219,7 +219,7 @@ namespace Strategy.GameGUI {
 		/// </summary>
 		/// <param Name="group">Showing group with IMovableGameObjects</param>
 		public void ShowTargeted(GroupMovables group) {
-			ClearStatPanelProp();
+			ClearGroupPanels();
 
 			if (group.Count == 1) { // Just one object
 				statPanelName.Text = group[0].Name;
@@ -228,6 +228,9 @@ namespace Strategy.GameGUI {
 			}
 			ShowGroupProperties(group.GetPropertyToDisplay());
 
+			if (group.OwnerTeam.Name == Game.playerName) {
+				ShowIGameActionIcons(group.GetGroupIGameActions());
+			}
 		}
 
 
@@ -238,7 +241,7 @@ namespace Strategy.GameGUI {
 		/// <param Name="group"></param>
 		public void ShowTargeted(GroupStatics group) {
 
-			ClearStatPanelProp();
+			ClearGroupPanels();
 			if (group == null || group.Count == 0) {
 				statPanelName.Text = nothingSelected;
 				propertyPanel.Controls.Add(new Label() {
@@ -250,7 +253,9 @@ namespace Strategy.GameGUI {
 			}
 
 			ShowGroupProperties(group.GetPropertyToDisplay());
-
+			if (group.OwnerTeam.Name == Game.playerName) {
+				ShowIGameActionIcons(group.GetGroupIGameActions());
+			}
 			if (group.Count == 1) { // Just one object
 				var isgo = group[0];
 				statPanelName.Text = isgo.Name;
@@ -459,10 +464,11 @@ namespace Strategy.GameGUI {
 		}
 
 		/// <summary>
-		/// Clear panel with descriptions
+		/// Clear panel with descriptions (properties) and with actions
 		/// </summary>
-		private void ClearStatPanelProp() {
+		private void ClearGroupPanels() {
 			propertyPanel.Controls.Clear();
+			gameActionPanel.Controls.Clear();
 		}
 
 		/// <summary>
@@ -479,14 +485,6 @@ namespace Strategy.GameGUI {
 			//});
 			gameActionPanel = CreateInnerScrollablePanel(5, actionPanel.Width - 30, actionPanel.Height / 2 - 10);
 			gameActionPanel.Padding = new Thickness(2, 2, 0, 0);
-
-			var v = new List<IGameAction>();
-			for (int i = 0; i < 40; i++) {
-				v.Add(new DoNothingJustPrintText());
-			}
-
-
-			SetGameActionIcons(v);
 
 			actionPanel.Controls.Add(gameActionPanel);
 			console = CreateInnerScrollablePanel(actionPanel.Height / 2 + 1, actionPanel.Width - 30, actionPanel.Height / 2 - 10);
@@ -918,7 +916,8 @@ namespace Strategy.GameGUI {
 			console.ScrollToBottom();
 		}
 
-		public void SetGameActionIcons(List<IGameAction> actionList) {
+		public void ShowIGameActionIcons(List<IGameAction> actionList) {
+
 			var maxLineWidth = gameActionPanel.Width - 25; // Padding and Scroll bar fix
 			var actualLineWidth = 0;
 			var lineCount = 0;

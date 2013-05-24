@@ -57,6 +57,7 @@ namespace Strategy.FightMgr {
 			damageCounter = new DamageCounter();
 
 			var objectsInShoutDistance = new List<IGameObject>();
+			objectsInShoutDistance.Add(deffender);
 			deffender.Shout(objectsInShoutDistance);
 			imgoDeffenders = Game.GroupManager.CreateSelectedGroupMovable(objectsInShoutDistance);
 			isgoDeffenders = Game.GroupManager.CreateSelectedGroupStatic(objectsInShoutDistance);
