@@ -12,6 +12,7 @@
   <usedObjects>
     <ibullets>
       <ibullet name="Missile" path="Bullet/Missile.cs" fullName="Strategy.GameObjectControl.Game_Objects.Bullet.Missile"/>
+      <ibullet name="Missile2" path="Bullet/Missile2.cs" fullName="Strategy.GameObjectControl.Game_Objects.Bullet.Missile2"/>
     </ibullets>
     <isgos>
       <gameObject name="Planet" path="StaticGameObjectBox/Planet.cs" fullName="Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox.Planet"/>

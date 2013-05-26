@@ -9,6 +9,7 @@ using Roslyn.Compilers;
 using Roslyn.Compilers.CSharp;
 using Strategy.Exceptions;
 using Strategy.GameMaterial;
+using Strategy.GameObjectControl.Game_Objects.Bullet;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 using Strategy.GameObjectControl.GroupMgr;
@@ -64,6 +65,8 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			metadataRef.Add(new MetadataFileReference(typeof(ActionReason).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(ActionAnswer).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(PropertyEnum).Assembly.Location));
+			//metadataRef.Add(new MetadataFileReference(typeof(Missile2).Assembly.Location));
+
 
 			comilationOption = new CompilationOptions(OutputKind.DynamicallyLinkedLibrary);
 
@@ -71,7 +74,46 @@ namespace Strategy.GameObjectControl.Game_Objects {
 				AppDomain.CurrentDomain.DefineDynamicAssembly(new AssemblyName("DynamicAssembly" + Guid.NewGuid()),
 															  AssemblyBuilderAccess.RunAndCollect);
 			moduleBuilder = assemblyBuilder.DefineDynamicModule("DynamicModule");
+
 		}
+
+		/// <summary>
+		/// Compiles all given classes in xml file.
+		/// </summary>
+		/// <param name="root">XmlNode with names and paths to compiling classes</param>
+		private void CompileUsedObjects(XmlNode root) {
+			var synatexTreeList = new List<SyntaxTree>();
+
+			foreach (XmlNode bullets in root.ChildNodes) {
+
+				foreach (XmlNode bullet in bullets) {
+					string fullPath = bullet.Attributes["path"].InnerText;
+					string type = bullet.Attributes["name"].InnerText; ;
+					if (!isCompiled.Contains(type)) {
+						isCompiled.Add(type);
+						var syntaxTree = SyntaxTree.ParseFile("../../GameObjectControl/Game Objects/" + fullPath);
+
+						synatexTreeList.Add(syntaxTree);
+					}
+				}
+			} 
+			var comp = Compilation.Create("Test.dll"
+							 , syntaxTrees: synatexTreeList
+							 , references: metadataRef
+							 , options: comilationOption
+							 );
+
+			// Runtime compilation and check errors
+			var result = comp.Emit(moduleBuilder);
+
+			if (!result.Success) {
+				foreach (var d in result.Diagnostics) {
+					Console.WriteLine(d);
+				}
+				throw new XmlLoadException("Compilation failed ");
+			}
+		}
+
 
 		public void Load(string missionName) {
 			//TODO thinks about try-block
@@ -84,8 +126,12 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 			LoadTeams(missionNode.SelectNodes("teams[1]")[0]);
 
+
+			//pokus
+			CompileUsedObjects(missionNode.SelectNodes("usedObjects[1]")[0]);
+
 			// Load IBullets
-			CompileIBullets(missionNode.SelectNodes("usedObjects//ibullets[1]")[0]);
+			//CompileIBullets(missionNode.SelectNodes("usedObjects//ibullets[1]")[0]);
 
 			// Load every IGameObject
 			XmlNode missionSolarSystemNode = missionNode.SelectNodes("solarSystems[1]")[0];
@@ -149,33 +195,6 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			}
 		}
 
-		private void CompileIBullets(XmlNode bullets) {
-			foreach (XmlNode bullet in bullets) {
-				string fullPath = bullet.Attributes["path"].InnerText;
-				string type = bullet.Attributes["name"].InnerText; ;
-				if (!isCompiled.Contains(type)) {
-					isCompiled.Add(type);
-					var syntaxTree = SyntaxTree.ParseFile("../../GameObjectControl/Game Objects/" + fullPath);
-
-					var comp = Compilation.Create("Test.dll"
-						, syntaxTrees: new[] { syntaxTree }
-						, references: metadataRef
-						, options: comilationOption
-						);
-
-					// Runtime compilation and check errors
-					var result = comp.Emit(moduleBuilder);
-					if (!result.Success) {
-						foreach (var d in result.Diagnostics) {
-							Console.WriteLine(d);
-						}
-						throw new XmlLoadException("Class not found " + fullPath);
-					}
-				}
-			}
-		}
-
-
 		/// <summary>
 		/// Function Load names of teams from XML file
 		/// </summary>
@@ -231,23 +250,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 
 			if (!isCompiled.Contains(type)) {
-				isCompiled.Add(type);
-				var syntaxTree = SyntaxTree.ParseFile("../../GameObjectControl/Game Objects/" + fullPath);
-
-				var comp = Compilation.Create("Test.dll"
-					, syntaxTrees: new[] { syntaxTree }
-					, references: metadataRef
-					, options: comilationOption
-					);
-
-				// Runtime compilation and check errors
-				var result = comp.Emit(moduleBuilder);
-				if (!result.Success) {
-					foreach (var d in result.Diagnostics) {
-						Console.WriteLine(d);
-					}
-					throw new XmlLoadException("Class not found " + fullPath);
-				}
+				throw new XmlLoadException("Unknown type " + fullPath);
 			}
 			var o = moduleBuilder.GetType(fullName);
 

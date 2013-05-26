@@ -9,3 +9,7 @@ float planetPickUpDistance = 90f;
 
 int basicAttack = 1;
 int basicDeff = 1;
+
+int missilePower = 7;
+int missilePower2 = 70;
+int missileDistance2 = 250;

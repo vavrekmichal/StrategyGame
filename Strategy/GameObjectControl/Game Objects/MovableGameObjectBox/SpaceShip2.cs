@@ -7,6 +7,7 @@ using Strategy.TeamControl;
 using Strategy.GameObjectControl;
 using Strategy.GameObjectControl.GroupMgr;
 using Strategy.GameObjectControl.RuntimeProperty;
+using Strategy.GameObjectControl.Game_Objects.Bullet;
 
 namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 	public class SpaceShip2 : MovableGameObject {
@@ -38,6 +39,23 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			var dict = new Dictionary<string, object>();
 			dict.Add(PropertyEnum.Speed.ToString(), new Property<float>(200));
 			return dict;
+		}
+
+		protected override Type GetIBulletType() {
+			return typeof(Missile2);
+		}
+
+		protected override int GetIBulletAttackDistance() {
+			return Missile2.AttackDistance;
+		}
+
+		protected override TimeSpan GetIBulletAttackCooldown() {
+			return Missile2.Cooldown;
+		}
+
+		protected override IBullet CreateIBullet() {
+			var solS = Game.GroupManager.GetSolarSystem(Game.GroupManager.GetSolarSystemsNumber(this));
+			return new Missile2(position, solS, target.Value.Position, fight);
 		}
 	}
 }

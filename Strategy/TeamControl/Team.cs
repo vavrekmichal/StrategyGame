@@ -94,9 +94,9 @@ namespace Strategy.TeamControl {
 			materialsStates[materialName].AddQuantity(materialQuantity);
 		}
 
-		public void Produce(IMaterial material, int quantity) {
-			if (materialsStates.ContainsKey(material.Name)) {
-				materialsStates[material.Name].AddQuantity(quantity);
+		public void Produce(string material, int quantity) {
+			if (materialsStates.ContainsKey(material)) {
+				materialsStates[material].AddQuantity(quantity);
 			}
 		}
 

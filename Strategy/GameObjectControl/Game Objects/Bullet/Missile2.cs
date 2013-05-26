@@ -8,7 +8,7 @@ using Strategy.FightMgr;
 using Strategy.GameObjectControl.RuntimeProperty;
 
 namespace Strategy.GameObjectControl.Game_Objects.Bullet {
-	public class Missile : IBullet {
+	public class Missile2 : IBullet {
 
 		protected SceneNode sceneNode;
 		protected Entity entity;
@@ -19,7 +19,7 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		private float distance = 0.0f;              //The distance the object has left to travel
 		private Vector3 direction = Vector3.ZERO;   // The direction the object is moving
 		private SolarSystem solarSystem;
-		private const string mesh = "missile.mesh";
+		private const string mesh = "robot1.mesh";
 		private string name;
 
 		private IGameObject hittedObject;
@@ -30,13 +30,16 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		private float c;
 		private float destinationDevider;
 
-		private Property<int> power;
+		private const string missilePowerString = "missilePower2";
+		private const string missileDistanceString = "missileDistance2";
+
+		private static Property<int> missilePower = Game.PropertyManager.GetProperty<int>(missilePowerString);
+		private static Property<int> missileDistance = Game.PropertyManager.GetProperty<int>(missileDistanceString);
 
 		IBulletStopReciever reciever;
 
-		private const string missilePower = "missilePower";
-
-		public Missile(Vector3 position, SolarSystem solSystem, Vector3 targetPosition, IBulletStopReciever rec) {
+		
+		public Missile2(Vector3 position, SolarSystem solSystem, Vector3 targetPosition, IBulletStopReciever rec) {
 			this.position = position;
 			this.name = GetUniqueName();
 			this.solarSystem = solSystem;
@@ -44,15 +47,13 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 
 			solarSystem.AddIBullet(this);
 
-			power = Game.PropertyManager.GetProperty<int>(missilePower);
+			
 
 			direction = targetPosition - position;
 			distance = direction.Normalise();
 
 			ChangeVisible(true);
-			//Vector2 v = new Vector2(-(targetPosition.z - position.z), targetPosition.x - position.x); // Directional vector
 
-			//var c = -(v.x*position.x - v.y*position.z);
 			a = -(targetPosition.z - position.z);
 			b = (targetPosition.x - position.x);
 			c = -a * targetPosition.x - b * targetPosition.z;
@@ -63,12 +64,12 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		private static int uniquNameNumber;
 		private static string GetUniqueName() {
 			uniquNameNumber++;
-			return typeof(Missile).ToString() + uniquNameNumber;
+			return typeof(Missile2).ToString() + uniquNameNumber;
 		}
 
 
 		public int Attack {
-			get { return power.Value; }
+			get { return missilePower.Value; }
 		}
 
 		public string Name {
@@ -76,7 +77,7 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		}
 
 		public static int AttackDistance {
-			get { return 200; }
+			get { return missileDistance.Value; }
 		}
 
 		public static TimeSpan Cooldown {

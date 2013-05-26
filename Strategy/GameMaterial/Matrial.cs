@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 
 namespace Strategy.GameMaterial {
-    class Wolenium :IMaterial{
-
+    class Matrial :IMaterial{
         private string myName;
         private double actualQuantity;
 
-
-        public Wolenium() {
-            myName = "Wolenium";
+        public Matrial() {
+            myName = "Wolenarium";
         }
 
         public string Name {

@@ -326,8 +326,8 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 		#region Attack
 
-		private Property<IGameObject> target;
-		private Dictionary<Type, TimeSpan> coolDownList = new Dictionary<Type, TimeSpan>();
+		protected Property<IGameObject> target;
+		protected Dictionary<Type, TimeSpan> coolDownList = new Dictionary<Type, TimeSpan>();
 
 		protected virtual void Attack() {
 			if (target == null || target.Value == null || target.Value.Hp <= 0) {
