@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Mogre;
 using Strategy.Exceptions;
+using Strategy.GameObjectControl.Game_Objects.GameActions;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.TeamControl;
@@ -18,6 +19,8 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 		protected Dictionary<PropertyEnum, object> propertyDict = new Dictionary<PropertyEnum, object>();
 		protected Dictionary<string, object> propertyDictUserDefined = new Dictionary<string, object>();
+
+		protected List<IGameAction> gameActionList = new List<IGameAction>();
 
 		protected Team team;
 		protected string name;
@@ -69,7 +72,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 
 		/// <summary>
-		/// Calls when object is showed by SolarSystem
+		/// Calls when object is showed by SolarSystem. This function do nothing.
 		/// </summary>
 		protected virtual void OnDisplayed() { }
 
@@ -252,6 +255,8 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			return squaredDistance < (ShoutDistance * ShoutDistance);
 		}
 
+		
+
 		public void StartAttack(Strategy.FightMgr.Fight fight){
 			attack = true;
 			this.fight = fight;
@@ -264,15 +269,17 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 
 		public void AddIGameAction(GameActions.IGameAction gameAction) {
-			throw new NotImplementedException();
+			gameActionList.Add(gameAction);
 		}
 
 		public List<GameActions.IGameAction> GetIGameActions() {
-			throw new NotImplementedException();
+			return gameActionList;
+		}
+
+		protected virtual void Update(float delay) {
+			foreach (var action in gameActionList) {
+				action.Update(delay);
+			}
 		}
 	}
-
-
-
-
 }

@@ -94,9 +94,14 @@ namespace Strategy.TeamControl {
 			materialsStates[materialName].AddQuantity(materialQuantity);
 		}
 
-		public void Produce(string material, int quantity) {
+		public void Produce(string material, double quantity) {
 			if (materialsStates.ContainsKey(material)) {
 				materialsStates[material].AddQuantity(quantity);
+			} else {
+				materialsStates.Add(material, new GameMaterial.Matrial(material));
+				if (name==Game.playerName) {
+					Game.IGameGUI.UpdatePlayerMaterialDict(materialsStates);
+				}
 			}
 		}
 

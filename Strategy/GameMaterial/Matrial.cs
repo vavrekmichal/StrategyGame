@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Strategy.GameObjectControl.RuntimeProperty;
 
 namespace Strategy.GameMaterial {
     class Matrial :IMaterial{
         private string myName;
-        private double actualQuantity;
+        private Property<int> actualQuantity;
+		double remain;
 
-        public Matrial() {
-            myName = "Wolenarium";
+        public Matrial(string name) {
+            myName = name;
+			actualQuantity = new Property<int>(0);
         }
 
         public string Name {
@@ -20,8 +23,8 @@ namespace Strategy.GameMaterial {
             throw new NotImplementedException();
         }
 
-        public int GetQuantityOfMaterial() {
-            throw new NotImplementedException();
+		public Property<int> GetQuantityOfMaterial() {
+			return actualQuantity;
         }
 
         public bool TryBuild(int wantedQuantity) {
@@ -29,11 +32,16 @@ namespace Strategy.GameMaterial {
         }
 
         public int State {
-            get { return (int)actualQuantity; }
+            get { return (int)actualQuantity.Value; }
         }
 
         public void AddQuantity(double quantity) {
-            actualQuantity += quantity;
+			remain += quantity;
+			if (remain>1) {
+				remain -= 1;
+				actualQuantity.Value++;
+			}
+          
         }
     }
 }

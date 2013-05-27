@@ -79,17 +79,12 @@
     <Compile Include="FightMgr\Occupation.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameGUI\CloseButton.cs" />
-    <Compile Include="GameGUI\MaterialPair.cs" />
     <Compile Include="GameGUI\PropertyLabel.cs" />
     <Compile Include="GameGUI\SelectionLabel.cs" />
-    <Compile Include="GameMaterial\Class1.cs" />
     <Compile Include="GameMaterial\IMaterial.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GameMaterial\Wolenarium.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GameMaterial\Wolenium.cs">
+    <Compile Include="GameMaterial\Matrial.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GameObjectControl\Action.cs" />

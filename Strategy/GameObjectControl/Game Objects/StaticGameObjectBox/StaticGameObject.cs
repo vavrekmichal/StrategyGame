@@ -23,18 +23,20 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 
 
 		/// <summary>
-		/// Rotating function 
+		/// Rotates SceneNode
 		/// </summary>
-		/// <param Name="f">Deley of frames</param>
-		public virtual void Rotate(float f) {
-			sceneNode.Roll(new Mogre.Degree(50 * f));
+		/// <param Name="delay">Deley between last two frames</param>
+		public virtual void Rotate(float delay) {
+			Update(delay);
+			sceneNode.Roll(new Mogre.Degree(50 * delay));
 		}
 
 		/// <summary>
-		/// StaticGameObject doesn't move in non-active mode but child can override.
+		/// Does not move with object, just updates gameActions.
 		/// </summary>
-		/// <param Name="f">Deley of frames</param>
-		public virtual void NonActiveRotate(float f) {
+		/// <param Name="delay">Deley of frames</param>
+		public virtual void NonActiveRotate(float delay) {
+			Update(delay);
 		}
 
 

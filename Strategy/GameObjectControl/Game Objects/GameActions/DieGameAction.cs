@@ -25,7 +25,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 		}
 
 		public string IconPath() {
-			return "../../media/icons/skull.gif";
+			return "../../media/icons/skull.png";
 		}
 	}
 }

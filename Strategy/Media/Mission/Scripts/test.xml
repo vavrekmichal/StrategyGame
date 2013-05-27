@@ -12,5 +12,6 @@
     <property name="missilePower"/>
     <property name="missilePower2"/>
     <property name="missileDistance2"/>
+    <property name="baseProduction"/>
   </runTimeProperty>
 </Properties>

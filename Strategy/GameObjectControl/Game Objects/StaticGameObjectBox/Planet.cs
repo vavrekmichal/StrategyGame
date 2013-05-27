@@ -46,9 +46,10 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// <summary>
 		/// Rotating in visible mood, it means when planet is in active solar system
 		/// </summary>
-		/// <param name="f">delay between frames</param>
-		public override void Rotate(float f) {
-			sceneNode.Roll(new Mogre.Degree((float)(GetProperty<float>(PropertyEnum.Speed).Value * GetProperty<float>(PropertyEnum.Rotate).Value * f)));
+		/// <param name="delay">Delay between last two frames</param>
+		public override void Rotate(float delay) {
+			Update(delay);
+			sceneNode.Roll(new Mogre.Degree((float)(GetProperty<float>(PropertyEnum.Speed).Value * GetProperty<float>(PropertyEnum.Rotate).Value * delay)));
 			//position in LinkedList now moving
 			if (!mFlying) {
 				if (NextLocation()) {
@@ -61,7 +62,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 				} else {
 				}//nothing to do so stay in position    
 			} else {
-				double move = GetProperty<float>(PropertyEnum.Speed).Value * f;
+				double move = GetProperty<float>(PropertyEnum.Speed).Value * delay;
 				mDistance -= move;
 				if (mDistance <= .0f) { //reach destination
 					travelledInvisible = 0;
@@ -77,8 +78,9 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// <summary>
 		/// Function calculate moves in invisible mode
 		/// </summary>
-		/// <param name="f">delay between frames</param>
-		public override void NonActiveRotate(float f) {
+		/// <param name="delay">Delay between last two frames</param>
+		public override void NonActiveRotate(float delay) {
+			Update(delay);
 			if (!mFlying) {
 				if (NextLocation()) {
 					mFlying = true;
@@ -88,7 +90,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 				} else {
 				}
 			} else {
-				double move = GetProperty<float>(PropertyEnum.Speed).Value * f;
+				double move = GetProperty<float>(PropertyEnum.Speed).Value * delay;
 				mDistance -= move;
 				if (mDistance <= .0f) { //reach destination
 					travelledInvisible = 0;

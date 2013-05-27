@@ -123,7 +123,6 @@ namespace Strategy.GameObjectControl {
 		#region public
 
 		public void Update(float delay) {
-			teamMgr.Update();
 			fightMgr.Update(delay);
 			groupMgr.Update(delay);
 			moveMgr.Update();
@@ -184,7 +183,6 @@ namespace Strategy.GameObjectControl {
 			groupMgr.CreateSolarSystems(objectCreator.GetInicializedSolarSystems());
 			hitTest.CreateHitTestMap(objectCreator.GetInicializedSolarSystems());
 			teamMgr.Inicialization(objectCreator.GetTeams(), objectCreator.GetTeamsRelations());
-			Game.IGameGUI.Inicialization();
 			groupMgr.DeselectGroup();
 		}
 

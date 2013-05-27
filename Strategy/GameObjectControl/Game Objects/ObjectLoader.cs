@@ -10,6 +10,7 @@ using Roslyn.Compilers.CSharp;
 using Strategy.Exceptions;
 using Strategy.GameMaterial;
 using Strategy.GameObjectControl.Game_Objects.Bullet;
+using Strategy.GameObjectControl.Game_Objects.GameActions;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 using Strategy.GameObjectControl.GroupMgr;
@@ -65,8 +66,6 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			metadataRef.Add(new MetadataFileReference(typeof(ActionReason).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(ActionAnswer).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(PropertyEnum).Assembly.Location));
-			//metadataRef.Add(new MetadataFileReference(typeof(Missile2).Assembly.Location));
-
 
 			comilationOption = new CompilationOptions(OutputKind.DynamicallyLinkedLibrary);
 
@@ -96,7 +95,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 						synatexTreeList.Add(syntaxTree);
 					}
 				}
-			} 
+			}
 			var comp = Compilation.Create("Test.dll"
 							 , syntaxTrees: synatexTreeList
 							 , references: metadataRef
@@ -167,8 +166,9 @@ namespace Strategy.GameObjectControl.Game_Objects {
 								IStaticGameObject isgo = CreateISGO(gameObject, t);
 								isgo.Team.AddISGO(isgo);
 								isgos.Add(isgo);
-								//here register
-								ReadSGOActions(gameObject.SelectNodes("gameAction"), (StaticGameObject)isgo);
+
+								// Create IGameAction for created object
+								ReadGameActions(gameObject.SelectNodes("gameAction"), (StaticGameObject)isgo);
 								break;
 							}
 							break;
@@ -244,7 +244,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// <param Name="args">Class arguments for constructor</param>
 		/// <returns></returns>
 		private object CreateGameObject(string type, object[] args) {
-			XmlNode gameObjectPath = GetTypeNode(type);
+			XmlNode gameObjectPath = GetGameObjectTypeNode(type);
 			string fullPath = gameObjectPath.Attributes["path"].InnerText;
 			string fullName = gameObjectPath.Attributes["fullName"].InnerText;
 
@@ -378,20 +378,50 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			return sSys;
 		}
 
-		private XmlNode GetTypeNode(string typeName) {
+		private XmlNode GetGameObjectTypeNode(string typeName) {
 			var node = missionNode.SelectNodes("usedObjects//gameObject[@name='" + typeName + "']")[0];
 			return node;
 		}
 
-
-		private void RegisterSGOaction(IStaticGameObject isgo, string action, string value) {
-			//isgo.registerExecuter(action, isgo.Team.GetMaterials(), value);
+		private XmlNode GetGameActionTypeNode(string typeName) {
+			var node = missionNode.SelectNodes("usedObjects//gameAction[@name='" + typeName + "']")[0];
+			return node;
 		}
 
-		private void ReadSGOActions(XmlNodeList actionList, StaticGameObject sgo) {
-			foreach (XmlNode action in actionList) {
-				RegisterSGOaction(sgo, action.Attributes["name"].Value, action.Attributes["value"].Value);
+
+		private IGameAction CreateIGameAction(XmlNode gameActionNode, object[] args) {
+			var gameActionName = gameActionNode.Attributes["name"].InnerText;
+			var gameActionFullName = gameActionNode.Attributes["fullName"].InnerText;
+			if (!isCompiled.Contains(gameActionName)) {
+				throw new XmlLoadException("Unknown type " + gameActionName);
 			}
+			var o = moduleBuilder.GetType(gameActionFullName);
+
+			IGameAction runTimeObject;
+			runTimeObject = (IGameAction)Activator.CreateInstance(o, args);
+			return runTimeObject;
+
+		}
+
+		private void ReadGameActions(XmlNodeList actionList, IGameObject gameObject) {
+			foreach (XmlNode action in actionList) {
+				object[] args = new object[2];
+				args[0] = gameObject;
+				args[1] = LoadArguments(action).ToArray();
+
+				Console.WriteLine();
+				var gameActionNode = GetGameActionTypeNode(action.Attributes["name"].InnerText);
+				gameObject.AddIGameAction(CreateIGameAction(gameActionNode, args));
+			}
+		}
+
+		private List<object> LoadArguments(XmlNode gameObjectNode) {
+			var selectedArguments = gameObjectNode.SelectNodes(".//argument");
+			var result = new List<object>();
+			foreach (XmlNode item in selectedArguments) {
+				result.Add(item.InnerText);
+			}
+			return result;
 		}
 
 		/// <summary>

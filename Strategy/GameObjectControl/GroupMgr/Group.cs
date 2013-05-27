@@ -24,10 +24,14 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			groupMembers = new List<T>();
 			owner = new Property<Team>(own);
 			groupIGameActionList = new List<IGameAction>();
-			groupIGameActionList.Add(new DoNothingJustPrintText(null));
 		}
 
 		public List<IGameAction> GetGroupIGameActions() {
+			if (groupMembers.Count ==1) {
+				foreach (var action in groupMembers[0].GetIGameActions()) {
+					groupIGameActionList.Add(action);
+				}
+			}
 			return groupIGameActionList;
 		}
 

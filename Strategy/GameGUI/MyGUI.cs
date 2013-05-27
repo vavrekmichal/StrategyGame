@@ -31,6 +31,8 @@ namespace Strategy.GameGUI {
 
 		private Panel gameActionPanel;
 
+		private Panel materialPanel;
+
 		private Panel console;
 		private int consoleLinesNumber;
 
@@ -42,7 +44,6 @@ namespace Strategy.GameGUI {
 		private const string nothingSelected = "	Nothing selected";
 		private const int textHeight = 18;
 
-		protected Dictionary<string, MaterialGUIPair> materialList;
 
 		/// <summary>
 		/// Constructor initializes GUI systrem for Mogre and Load fonts, skins and create control panel.
@@ -52,11 +53,8 @@ namespace Strategy.GameGUI {
 		/// <param Name="height">Window height</param>
 		/// <param Name="mouse">Mogre mouse input</param>
 		/// <param Name="keyboard">Mogre keyboard input</param>
-		/// <param Name="materials">Names and values of user materials</param>
 		/// <param Name="groupMgr">GroupManager instance</param>
 		public MyGUI(int width, int height, MOIS.Mouse mouse, MOIS.Keyboard keyboard) {
-
-			materialList = new Dictionary<string, MaterialGUIPair>();
 			screenHeight = height;
 			screenWidth = width;
 
@@ -92,10 +90,6 @@ namespace Strategy.GameGUI {
 			CreateTopMenu();
 
 			CreateCameraBounds();				// Create bounds around screen to move the camera
-		}
-
-		public void Inicialization() {
-			LoadMaterials(Game.TeamManager.GetPlayersMaterials());
 		}
 
 		/// <summary>
@@ -292,9 +286,9 @@ namespace Strategy.GameGUI {
 		/// <summary>
 		/// Creates top bar
 		/// </summary>
-		/// <param Name="materials">Players materials</param>
 		private void CreateTopMenu() {
-			upperMenu = new FlowLayoutPanel() {				//create top panel (empty blue box)
+			// Create top panel
+			upperMenu = new FlowLayoutPanel() {
 				Size = new Size(screenWidth * textHeight / 20, screenHeight * 2 / 30),
 				Location = new Point(screenWidth / 20, 0),
 				Skin = skinDict["Panel"],
@@ -302,7 +296,8 @@ namespace Strategy.GameGUI {
 			};
 			gui.Controls.Add(upperMenu);
 
-			Label label1 = new Label() {					//Left Label with text "Current solar system:"
+			// Left Label with text "Current solar system:"
+			Label label1 = new Label() {
 				Name = "nameOfSolarSystem",
 				Size = new Size(upperMenu.Width / 6, upperMenu.Height * 4 / 5),
 				Text = "Current solar system: ",
@@ -314,7 +309,8 @@ namespace Strategy.GameGUI {
 			};
 			upperMenu.Controls.Add(label1);
 
-			nameOfSolarSystem = new Label() {				//Label to show actual solar system Name
+			// Label to show actual solar system Name
+			nameOfSolarSystem = new Label() {
 				Name = "nameOfSolarSystem",
 				Size = new Size(upperMenu.Width / 5, upperMenu.Height * 4 / 5),
 				Text = "Booted system ",
@@ -326,7 +322,8 @@ namespace Strategy.GameGUI {
 			};
 			upperMenu.Controls.Add(nameOfSolarSystem);
 
-			Label materialIntro = new Label() {				//Right Label with text "Material State:"
+			// Right Label with text "Material State:"
+			Label materialIntro = new Label() {
 				Name = "MaterialState",
 				Size = new Size(upperMenu.Width / 6, upperMenu.Height * 4 / 5),
 				Text = "Material State: ",
@@ -337,12 +334,10 @@ namespace Strategy.GameGUI {
 				Padding = new Thickness(1)
 			};
 			upperMenu.Controls.Add(materialIntro);
-		}
 
-		public void LoadMaterials(Dictionary<string, IMaterial> materials) {
-			//Material Load - create one line with Name of IMaterial and value
-			var materialBox = new Panel() {
-				Size = new Size(upperMenu.Width / 3, upperMenu.Height),
+			// Create materialBox - ScrollablePanel
+			materialPanel = new Panel() {
+				Size = new Size(upperMenu.Width * 2 / 5, upperMenu.Height),
 				ResizeMode = ResizeModes.None,
 				Skin = skinDict["PanelSkin"],
 				Opacity = 0.5f,
@@ -370,21 +365,7 @@ namespace Strategy.GameGUI {
 				}
 
 			};
-
-			int row = 0;
-			foreach (KeyValuePair<string, IMaterial> k in materials) {			//creates pair Name - value
-				materialList.Add(k.Key, new MaterialGUIPair(k.Key, k.Value.State, materialBox.Width, row));
-				row++;
-			}
-
-			row = 0;
-			foreach (KeyValuePair<string, MaterialGUIPair> valuePair in materialList) {		//Set pairs into GUI
-				materialBox.Controls.Add(valuePair.Value.name);
-				materialBox.Controls.Add(valuePair.Value.value);
-				row++;
-			}
-
-			upperMenu.Controls.Add(materialBox);
+			upperMenu.Controls.Add(materialPanel);
 		}
 
 		#endregion
@@ -932,8 +913,6 @@ namespace Strategy.GameGUI {
 				}
 				gameActionPanel.Controls.Add(icon);
 			}
-
-
 		}
 
 		///
@@ -948,5 +927,30 @@ namespace Strategy.GameGUI {
 		//		throw new Strategy.Exceptions.MissingMaterialException("This Material is not in your list. You can not set value to nonexist material.");
 		//	}
 		//}
+
+
+		public void UpdatePlayerMaterialDict(Dictionary<string, IMaterial> materialDict) {
+
+			int row = 0;
+
+			foreach (var materialPair in materialDict) {
+				var nameLabel = CreateLabel(row * (textHeight + 1), materialPanel.Width / 3, textHeight, materialPair.Key);
+				var valueLabel = CreatePropertyLabelAsLabel<int>(materialPanel.Width / 2, row * (textHeight + 1),
+					materialPanel.Width / 3, textHeight, materialPair.Value.GetQuantityOfMaterial());
+
+				valueLabel.TextStyle = new TextStyle {
+					Alignment = Miyagi.Common.Alignment.MiddleRight,
+					ForegroundColour = Colours.White
+				};
+
+				materialPanel.Controls.Add(nameLabel);
+				materialPanel.Controls.Add(valueLabel);
+				row++;
+			}
+
+			//for (int i = 0; i < materialDict.Count; i++) {
+			//	var nameLabel= CreateLabel(i*(textHeight+1), materialPanel/3, text, materialDict[i]. 
+			//}
+		}
 	}
 }

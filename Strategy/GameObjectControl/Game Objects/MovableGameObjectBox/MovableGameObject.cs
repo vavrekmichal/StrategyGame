@@ -136,11 +136,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// </summary>
 		/// <param Name="delay">Delay between frames</param>
 		public virtual void Move(float delay) {
-			TryAttack(delay);
-			if (follow) {
-				direction = followTarget.Position - sceneNode.Position;
-				distance = direction.Normalise();
-			}
+			Update(delay);
 			if (!moving) {
 				if (NextLocation()) {
 
@@ -213,7 +209,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// </summary>
 		/// <param Name="delay">Delay between last two frames</param>
 		public virtual void NonActiveMove(float delay) {
-			TryAttack(delay);
+			Update(delay);
 			if (!moving) {
 				if (NextLocation()) {
 					moving = true;
@@ -237,6 +233,15 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 					position = position + (direction * move);
 
 				}
+			}
+		}
+
+		protected override void Update(float delay) {
+			base.Update(delay);
+			TryAttack(delay);
+			if (follow) {
+				direction = followTarget.Position - sceneNode.Position;
+				distance = direction.Normalise();
 			}
 		}
 

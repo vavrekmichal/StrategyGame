@@ -24,7 +24,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 		}
 
 		public string IconPath() {
-			return "../../media/icons/stop.gif";
+			return "../../media/icons/stop.png";
 		}
 	}
 }

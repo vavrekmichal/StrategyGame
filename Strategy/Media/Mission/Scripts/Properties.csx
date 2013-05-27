@@ -13,3 +13,5 @@ int basicDeff = 1;
 int missilePower = 7;
 int missilePower2 = 70;
 int missileDistance2 = 250;
+
+double baseProduction = 50;

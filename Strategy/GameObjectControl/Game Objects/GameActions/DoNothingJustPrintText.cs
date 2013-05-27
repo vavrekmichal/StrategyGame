@@ -9,23 +9,23 @@ namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 
 		private IGameObject gameObject;
 
-		public DoNothingJustPrintText(IGameObject igo) {
-			gameObject = igo;
+		public DoNothingJustPrintText(IGameObject gameObject, object[] args) {
+			this.gameObject = gameObject;
 		}
 
+
 		public void Update(float delay) {
-			
 		}
 
 		public string OnMouseClick() {
-			Game.PrintToGameConsole("Neklikej na me blbecku.");
+			Game.PrintToGameConsole("Neklikej na me blbecku. "+ gameObject.Name);
 			return "Myslim to vazne.";
 		}
 
 
 
 		public string IconPath() {
-			return "../../media/icons/Pokus.jpg";
+			return "../../media/icons/write.png";
 		}
 	}
 }

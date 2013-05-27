@@ -47,11 +47,6 @@ namespace Strategy.TeamControl {
             }
         }
 
-        public void Update() {
-			//foreach (KeyValuePair<string, IMaterial> k in playerTeam.GetMaterials()) {
-			//	guiControler.SetMaterialState(k.Key, k.Value.State);
-			//}
-        }
 
 		public bool AreFriendly(Team t1, Team t2) {
 			if (friendlyTeamDict[t1].Contains(t2)) {
