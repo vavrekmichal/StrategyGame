@@ -10,7 +10,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 	enum IsgoType { StaticObject, Sun }
 
-	public class ObjectCreator {
+	public class ObjectCreator : IGameObjectCreator {
 
 		protected List<SolarSystem> solarSystems;
 		protected Dictionary<string, Team> teams;
@@ -42,16 +42,22 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 
-		public IStaticGameObject CreateIsgo(string typeName, object[] args) {	// prepared...never used
+		public IStaticGameObject CreateIsgo(string typeName, object[] args, SolarSystem solSyst) {	// prepared...never used
 			var isgo =  loader.CreateISGO(typeName, args);
+			solSyst.AddISGO(isgo);
 			Game.HitTest.RegisterISGO(isgo);
 			return isgo;
 		}
 
-		public IMovableGameObject CreateImgo(string typeName, object[] args) {	// prepared...never used
+		public IMovableGameObject CreateImgo(string typeName, object[] args, SolarSystem solSyst) {	// prepared...never used
 			var imgo = loader.CreateIMGO(typeName, args);
+			solSyst.AddIMGO(imgo);
 			Game.HitTest.RegisterIMGO(imgo);
 			return imgo;
+		}
+
+		public string GetUnusedName(string name) {
+			return loader.GetUnusedName(name);
 		}
 
 		

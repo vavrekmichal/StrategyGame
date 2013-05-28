@@ -7,11 +7,11 @@ using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 
 namespace Strategy.GameObjectControl.Game_Objects.GameActions {
-	class DieGameAction<T> : IGameAction where T: IGameObject {
+	class DieAction<T> : IGameAction where T: IGameObject {
 
 		List<T> gameObjectList;
 
-		public DieGameAction(List<T> objectList) {
+		public DieAction(List<T> objectList) {
 			gameObjectList = objectList;
 		}
 

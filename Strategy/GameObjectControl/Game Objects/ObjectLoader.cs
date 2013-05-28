@@ -66,6 +66,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			metadataRef.Add(new MetadataFileReference(typeof(ActionReason).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(ActionAnswer).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(PropertyEnum).Assembly.Location));
+			metadataRef.Add(new MetadataFileReference(typeof(XmlLoadException).Assembly.Location));
 
 			comilationOption = new CompilationOptions(OutputKind.DynamicallyLinkedLibrary);
 
@@ -440,7 +441,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			return v;
 		}
 
-		private string GetUnusedName(string name) {
+		public string GetUnusedName(string name) {
 			if (usedNameDict.ContainsKey(name)) {
 				usedNameDict[name]++;
 				return name + usedNameDict[name];

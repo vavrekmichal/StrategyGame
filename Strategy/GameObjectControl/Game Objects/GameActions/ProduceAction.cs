@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 using Strategy.GameObjectControl.RuntimeProperty;
 
 namespace Strategy.GameObjectControl.Game_Objects.GameActions {
-	class ProduceGameAction : IGameAction {
+	class ProduceAction : IGameAction {
 		private IGameObject gameObject;
 
 		private Property<double> production;
 		private string produceMaterial;
 
-		public ProduceGameAction(IGameObject gameObject, object[] args) {
+		public ProduceAction(IGameObject gameObject, object[] args) {
 			this.gameObject = gameObject;
 			produceMaterial = (string)args[0];
 			production = Game.PropertyManager.GetProperty<double>("baseProduction");

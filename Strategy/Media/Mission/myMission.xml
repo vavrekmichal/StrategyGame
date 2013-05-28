@@ -24,7 +24,8 @@
     </imgos>
     <gameActions>
       <gameAction name="DoNothingJustPrintText" path="GameActions/DoNothingJustPrintText.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.DoNothingJustPrintText"/>
-      <gameAction name="ProduceGameAction" path="GameActions/ProduceGameAction.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.ProduceGameAction"/>      
+      <gameAction name="ProduceAction" path="GameActions/ProduceAction.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.ProduceAction"/>
+      <gameAction name="CreateSpaceShipAction" path="GameActions/CreateSpaceShipAction.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.CreateSpaceShipAction"/>
     </gameActions>
   </usedObjects>
   <solarSystems >
@@ -35,28 +36,33 @@
         <gameAction name="DoNothingJustPrintText">
           <argument>Todle napis</argument>
         </gameAction>
-        <gameAction name="ProduceGameAction">
+        <gameAction name="ProduceAction">
           <argument>Stone</argument>
+        </gameAction>
+        <gameAction name="CreateSpaceShipAction">
+          <argument>SpaceShip</argument>
+          <argument>Wolenium</argument>
+          <argument>50</argument>
         </gameAction>
       </isgo>
       <isgo type="Planet" name="Venus" mesh="venus.mesh" team="Fun" position="0,0,0" distance="1500">
-        <gameAction name="ProduceGameAction">
+        <gameAction name="ProduceAction">
           <argument>Wolenium</argument>
         </gameAction>
       </isgo>
       <isgo type="Planet" name="Earth" mesh="earth.mesh" team="Fun" position="0,0,0" distance="2500">
-        <gameAction name="ProduceGameAction">
+        <gameAction name="ProduceAction">
           <argument>Wolen</argument>
         </gameAction>
       </isgo>
-  
+
       <isgo type="Planet" name="Mars" mesh="mars.mesh" team="Player" position="0,0,0" distance="3500">
-        <gameAction name="ProduceGameAction">
-          <argument>Wolenium2</argument>
+        <gameAction name="ProduceAction">
+          <argument>Wolenium</argument>
         </gameAction>
       </isgo>
       <isgo type="Planet" name="Jupiter" mesh="jupiter.mesh" team="Player" position="0,0,0" distance="6000">
-        <gameAction name="ProduceGameAction">
+        <gameAction name="ProduceAction">
           <argument>Wolenium3</argument>
         </gameAction>
       </isgo>
@@ -72,8 +78,8 @@
       <imgo type="SpaceShip2" name="Ship" mesh="SpaceShip2.mesh" team="Player" position="450,0,550"/>
       <imgo type="SpaceShip" name="ShipD" mesh="SpaceShip2.mesh" team="Devastator" position="600,0,600"/>
       <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,600"/>
-    
-      
+
+
     </solarSystem>
     <solarSystem name="FunnySystem" position="300,500,3000">
       <isgo type="Sun" name="FunnyThings" mesh="jupiter.mesh"  team="None" position="0,0,0" distance="0"/>

@@ -27,12 +27,13 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		}
 
 		public List<IGameAction> GetGroupIGameActions() {
+			var result = new List<IGameAction>(groupIGameActionList);
 			if (groupMembers.Count ==1) {
 				foreach (var action in groupMembers[0].GetIGameActions()) {
-					groupIGameActionList.Add(action);
+					result.Add(action);
 				}
 			}
-			return groupIGameActionList;
+			return result;
 		}
 
 		public int Count {
@@ -80,7 +81,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			var result = new Dictionary<string, object>();
 			var notEveryone = new List<string>();
 			foreach (KeyValuePair<object, EditablePair<string, int>> propPair in summaryDict) {
-				//PropertyEnum Name = isgoPropDict.FirstOrDefault(x => x.Value == propPair.Key).Key; //gets string Name searched by object
+				// PropertyEnum Name = isgoPropDict.FirstOrDefault(x => x.Value == propPair.Key).Key; //gets string Name searched by object
 				string name = propPair.Value.Item1;
 				if (groupCount == propPair.Value.Item2) {
 					result.Add(name, propPair.Key);
@@ -122,7 +123,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		public GroupMovables(TeamControl.Team own)
 			: base(own) {
 			CountBasicBonuses();
-			groupIGameActionList.Add(new DieGameAction<IMovableGameObject>(groupMembers));
+			groupIGameActionList.Add(new DieAction<IMovableGameObject>(groupMembers));
 			groupIGameActionList.Add(new StopMoveAction(groupMembers));
 
 		}
@@ -279,7 +280,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 		public GroupStatics(TeamControl.Team own)
 			: base(own) {
-			groupIGameActionList.Add(new DieGameAction<IStaticGameObject>(groupMembers));
+			groupIGameActionList.Add(new DieAction<IStaticGameObject>(groupMembers));
 		}
 
 		public override Dictionary<string, object> GetPropertyToDisplay() {

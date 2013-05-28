@@ -393,7 +393,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		}
 
 		protected virtual IBullet CreateIBullet() {
-			var solS = Game.GroupManager.GetSolarSystem(Game.GroupManager.GetSolarSystemsNumber(this));
+			var solS = Game.GroupManager.GetSolarSystem(this);
 			return new Missile(position, solS, target.Value.Position, fight);
 		}
 

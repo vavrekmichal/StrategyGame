@@ -65,6 +65,12 @@ namespace Strategy {
 			}
 		}
 
+		public static IGameObjectCreator IGameObjectCreator {
+			get {
+				return gameObjectMgr.IGameObjectCreator;
+			}
+		}
+
 		public static IFightManager IFightManager {
 			get {
 				return gameObjectMgr.IFightManager;

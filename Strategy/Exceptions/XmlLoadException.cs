@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Strategy.Exceptions {
-	class XmlLoadException : System.Exception {
+	public class XmlLoadException : System.Exception {
 		public XmlLoadException() {
         }
 

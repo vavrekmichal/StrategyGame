@@ -173,6 +173,10 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			return solarSystemDict[numberOfSolarSystem];
 		}
 
+		public SolarSystem GetSolarSystem(IGameObject igo) {
+			return solarSystemDict[GetSolarSystemsNumber(igo)];
+		}
+
 		#endregion
 
 		/// <summary>

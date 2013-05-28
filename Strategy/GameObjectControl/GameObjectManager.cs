@@ -69,6 +69,15 @@ namespace Strategy.GameObjectControl {
 			}
 		}
 
+		public IGameObjectCreator IGameObjectCreator {
+			get {
+				if (objectCreator == null) {
+					throw new NullReferenceException("IGameObjectCreator is not initialized.");
+				}
+				return objectCreator; ;
+			}
+		}
+
 		public HitTest HitTest {
 			get {
 				if (hitTest == null) {

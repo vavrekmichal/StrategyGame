@@ -228,8 +228,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 		public void Shout(List<IGameObject> objectsInDistance) {
 
-			int solarSystemNumber = Game.GroupManager.GetSolarSystemsNumber(this);
-			var solarSystem = Game.GroupManager.GetSolarSystem(solarSystemNumber);
+			var solarSystem = Game.GroupManager.GetSolarSystem(this);
 
 			foreach (var imgoPair in solarSystem.GetIMGOs()) {
 				if (IsTargetInShoutDistance(imgoPair.Value.Position) && !objectsInDistance.Contains(imgoPair.Value) &&
