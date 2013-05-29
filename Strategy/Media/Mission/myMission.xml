@@ -25,10 +25,14 @@
     <gameActions>
       <gameAction name="DoNothingJustPrintText" path="GameActions/DoNothingJustPrintText.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.DoNothingJustPrintText"/>
       <gameAction name="ProduceAction" path="GameActions/ProduceAction.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.ProduceAction"/>
+      <gameAction name="PortalAction" path="GameActions/PortalAction.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.PortalAction"/>
       <gameAction name="CreateSpaceShipAction" path="GameActions/CreateSpaceShipAction.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.CreateSpaceShipAction"/>
     </gameActions>
+    <gameTargets>
+      <gameTarget name="SurviveGivenTimeTarget" path="GameTargets/SurviveGivenTimeTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.SurviveGivenTimeTarget"/>
+    </gameTargets>
   </usedObjects>
-  <solarSystems >
+  <solarSystems>
     <solarSystem name="This is my" position="3000,0,3000" gate="true">
 
       <isgo type="Sun" name="Sun" mesh="sun.mesh"  team="None" position="0,0,0" distance="0"/>
@@ -70,7 +74,9 @@
       <isgo type="Planet" name="Uranus" mesh="uranus.mesh" team="Player" position="0,0,0" distance="10000"/>
       <isgo type="Planet" name="Neptune" mesh="neptune.mesh" team="Fun" position="0,0,0" distance="12000"/>
 
-      <imgo type="SpaceShip" name="Mothership" mesh="missile.mesh" team="Player" position="300,0,300"/>
+      <imgo type="SpaceShip" name="Mothership" mesh="missile.mesh" team="Player" position="300,0,300">
+        <gameAction name="PortalAction"/>
+      </imgo>
       <imgo type="SpaceShip" name="Ship" mesh="SpaceShip2.mesh" team="Player" position="350,0,350"/>
       <imgo type="SpaceShip" name="Ship" mesh="SpaceShip2.mesh" team="Player" position="400,0,400"/>
       <imgo type="SpaceShip" name="Ship" mesh="SpaceShip2.mesh" team="Player" position="450,0,450"/>
@@ -112,6 +118,17 @@
       <isgo type="Sun" name="s17" mesh="gate.mesh"  team="None" position="0,0,0" distance="0"/>
     </solarSystem>
   </solarSystems>
+  <missionTargets>
+    <target name="SurviveGivenTimeTarget">
+      <argument>50</argument>
+    </target>
+    <target name="SurviveGivenTimeTarget">
+      <argument>5</argument>
+    </target>
+    <target name="SurviveGivenTimeTarget">
+      <argument>500</argument>
+    </target>
+  </missionTargets>
 </mission>
 <!--
   <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="800,0,600"/>

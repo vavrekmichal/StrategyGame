@@ -91,18 +91,16 @@
     <Compile Include="GameObjectControl\Game Objects\Bullet\Missile.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GameObjectControl\Game Objects\GameActions\CreateSpaceShipAction.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameActions\DieAction.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GameObjectControl\Game Objects\GameActions\IGameAction.cs" />
-    <Compile Include="GameObjectControl\Game Objects\GameActions\ProduceAction.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="GameObjectControl\Game Objects\GameActions\StopMoveAction.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GameObjectControl\Game Objects\GameObject.cs" />
+    <Compile Include="GameObjectControl\Game Objects\GameTargets\ITarget.cs" />
+    <Compile Include="GameObjectControl\Game Objects\GameTargets\SurviveGivenTimeTarget.cs" />
     <Compile Include="GameObjectControl\Game Objects\IGameObject.cs" />
     <Compile Include="GameObjectControl\Game Objects\HitTest.cs" />
     <Compile Include="GameObjectControl\Game Objects\IGameObjectCreator.cs" />
@@ -126,6 +124,7 @@
     <Compile Include="GameObjectControl\RuntimeProperty\Property.cs" />
     <Compile Include="GameObjectControl\RuntimeProperty\PropertyManager.cs" />
     <Compile Include="GameObjectControl\SolarSystem.cs" />
+    <Compile Include="MissionControl\Mission.cs" />
     <Compile Include="MogreControl\MouseControl.cs" />
     <Compile Include="GameGUI\MyGUI.cs" />
     <Compile Include="MoveMgr\IFinishMovementReciever.cs" />

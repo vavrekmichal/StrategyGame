@@ -274,7 +274,6 @@ namespace Strategy.GameObjectControl {
 
 			}
 			groupMgr.ShowSelectedInfoGroup();
-
 		}
 
 

@@ -16,6 +16,7 @@ namespace Strategy.GameGUI {
 		void PrintToGameConsole(string text);
 		void ShowSolarSystSelectionPanel(List<string> possibilities, string topic, object gameObject);
 		void UpdatePlayerMaterialDict(Dictionary<string, IMaterial> materialDict);
+		void End(string printText);
 	}
 }
 

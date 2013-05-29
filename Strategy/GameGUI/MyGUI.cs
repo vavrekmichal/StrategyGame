@@ -38,7 +38,7 @@ namespace Strategy.GameGUI {
 
 		Dictionary<string, Skin> skinDict;
 		Dictionary<string, Font> fonts;
-		MiyagiSystem system;
+		MiyagiSystem guiSystem;
 		GUI gui;
 
 		private const string nothingSelected = "	Nothing selected";
@@ -59,15 +59,15 @@ namespace Strategy.GameGUI {
 			screenWidth = width;
 
 			// Set Miyagi to Mogre
-			system = new MiyagiSystem("Mogre");
+			guiSystem = new MiyagiSystem("Mogre");
 			gui = new GUI();
-			system.GUIManager.GUIs.Add(gui);
-			system.PluginManager.LoadPlugin(@"Miyagi.Plugin.Input.Mois.dll", mouse, keyboard);
+			guiSystem.GUIManager.GUIs.Add(gui);
+			guiSystem.PluginManager.LoadPlugin(@"Miyagi.Plugin.Input.Mois.dll", mouse, keyboard);
 
 
 			// Font loading from xml file
 			fonts = new Dictionary<string, Font>();
-			foreach (Font font in TrueTypeFont.CreateFromXml("../../Media/TrueTypeFonts.xml", system))
+			foreach (Font font in TrueTypeFont.CreateFromXml("../../Media/TrueTypeFonts.xml", guiSystem))
 				fonts.Add(font.Name, font);
 			Font.Default = fonts["BlueHighway"];
 
@@ -84,7 +84,7 @@ namespace Strategy.GameGUI {
 			Skin cursorSkin = Skin.CreateFromXml("../../Media/cursorSkin.xml")[0];
 			Cursor cursor = new Cursor(cursorSkin, new Size(30, 30), new Point(0, 0), true);
 
-			system.GUIManager.Cursor = cursor;   // Set cursor
+			guiSystem.GUIManager.Cursor = cursor;   // Set cursor
 
 			CreateMainMenu();
 			CreateTopMenu();
@@ -398,19 +398,29 @@ namespace Strategy.GameGUI {
 			int buttonMarginLeft = buttonsPanel.Width / 4;
 			int buttonMarginTop = buttonsPanel.Height * 6 / 25;
 			int row = buttonsPanel.Height / 5 + 5;
-			Button b = CreateButton(buttonsPanel.Width / 2, buttonsPanel.Height / 5, "  Pause BUTTON", new Point(buttonMarginLeft, 0));
+
+			Button b = CreateButton(buttonsPanel.Width / 2, buttonsPanel.Height / 5, "Pause BUTTON", new Point(buttonMarginLeft, 0));
 			buttonsPanel.Controls.Add(b);
 			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(Pause);
-			b = CreateButton(buttonsPanel.Width / 2, buttonsPanel.Height / 5, "  Solar systems", new Point(buttonMarginLeft, buttonMarginTop));
+
+			b = CreateButton(buttonsPanel.Width / 2, buttonsPanel.Height / 5, "Mission info", new Point(buttonMarginLeft, buttonMarginTop));
+			buttonsPanel.Controls.Add(b);
+			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(ShowMissionInfo);
+
+			b = CreateButton(buttonsPanel.Width / 2, buttonsPanel.Height / 5, "Solar systems", new Point(buttonMarginLeft, buttonMarginTop * 2));
 			buttonsPanel.Controls.Add(b);
 			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(ShowSolarSystems);
 
-			b = CreateButton(buttonsPanel.Width / 2, buttonsPanel.Height / 5, "  Exit BUTTON", new Point(buttonMarginLeft, buttonMarginTop * 2));
+			b = CreateExitButton(buttonsPanel.Width / 2, buttonsPanel.Height / 5, new Point(buttonMarginLeft, buttonMarginTop * 3));
 			buttonsPanel.Controls.Add(b);
-			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(QuitOnClick);
-
 
 			return buttonsPanel;
+		}
+
+		private Button CreateExitButton(int width, int height, Point location) {
+			var button = CreateButton(width, height, "Exit", location);
+			button.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(QuitOnClick);
+			return button;
 		}
 
 		/// <summary>
@@ -507,7 +517,7 @@ namespace Strategy.GameGUI {
 
 		private void QuitOnClick(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
 			// Function closes application (throw ShutdownException)
-			system.Dispose();
+			guiSystem.Dispose();
 			throw new Strategy.Exceptions.ShutdownException();
 		}
 
@@ -538,6 +548,10 @@ namespace Strategy.GameGUI {
 			// Shows Panel with SolarSystems and travelers
 			CreateSolarSystemPanel();
 		}
+		private void ShowMissionInfo(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
+			// Shows Panel with Mission info
+			CreateMissionPanel();
+		}
 		#endregion
 
 
@@ -556,6 +570,34 @@ namespace Strategy.GameGUI {
 		}
 
 
+		private BoolWrapper missionPanelIsClosed = new BoolWrapper();
+
+		private void CreateMissionPanel() {
+			if (!missionPanelIsClosed.Value) {
+				return;
+			}
+			missionPanelIsClosed.Value = false;
+			var panel = CreatePopUpPanel("Mission Info:", missionPanelIsClosed);
+
+			var innerScrollablePanel = CreateInnerScrollablePanel(textHeight + 6, panel.Width * 30 / 31, panel.Height * 37 / 48);
+
+
+			panel.Controls.Add(innerScrollablePanel);
+			var targetList = Game.Mission.GetMissionInfo();
+
+			int row = 0;
+			foreach (var target in targetList) {
+				innerScrollablePanel.Controls.Add(CreatePropertyLabel<string>(innerScrollablePanel.Width - 10, textHeight, "Target " + row+ ": ",
+					new Point(0, row * (textHeight + 1)), target));
+				row++;
+			}
+
+
+
+			gui.Controls.Add(panel);
+		}
+
+
 		private BoolWrapper solarSystPanelIsClosed = new BoolWrapper();
 
 		/// <summary>
@@ -566,24 +608,12 @@ namespace Strategy.GameGUI {
 				return;
 			}
 			solarSystPanelIsClosed.Value = false;
-			var panel = CreatePopUpPanel();
-			panel.Padding = new Thickness(5, 5, 0, 0);
-
-			// Title label
-			var label = new Label() {
-				Size = new Size(panel.Width / 2, textHeight + 1),
-				Text = " Select solar system:",
-				Location = new Point(panel.Width / 4, 0),
-				TextStyle = {
-					Alignment = Miyagi.Common.Alignment.TopCenter
-				}
-			};
-			panel.Controls.Add(label);
+			var panel = CreatePopUpPanel(" Select solar system:", solarSystPanelIsClosed);
 
 			List<string> solarSystList = Game.GroupManager.GetAllSolarSystemNames();
 
-			int marginTop = 5 + label.Height;
-			var innerScrollablePanel = CreateInnerScrollablePanel(marginTop, panel.Width - 28, panel.Height / 2 - (label.Height * 2));
+			int marginTop = 5 + textHeight + 1;
+			var innerScrollablePanel = CreateInnerScrollablePanel(marginTop, panel.Width - 28, panel.Height / 2 - ((textHeight + 1) * 2));
 
 			panel.Controls.Add(innerScrollablePanel);
 
@@ -607,7 +637,7 @@ namespace Strategy.GameGUI {
 			marginTop = panel.Height / 2;
 
 			// Title label
-			label = new Label() {
+			var label = new Label() {
 				Size = new Size(panel.Width / 2, textHeight + 1),
 				Text = " Travelers:",
 				Location = new Point(panel.Width / 4, marginTop),
@@ -632,14 +662,6 @@ namespace Strategy.GameGUI {
 				innerScrollablePanel.Controls.Add(testButton);
 			}
 
-
-			var closeButton = CreateCloseButton(panel.Width / 2,
-				panel.Height / 12,
-				"	Cancel",
-				new Point(panel.Width / 2, panel.Height * 9 / 10),
-					panel, solarSystPanelIsClosed);
-			closeButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(DisposePanel);
-			panel.Controls.Add(closeButton);
 			gui.Controls.Add(panel);
 		}
 
@@ -768,7 +790,10 @@ namespace Strategy.GameGUI {
 				Size = new Size(width, height),
 				Location = location,
 				Skin = skinDict["Button"],
-				Text = text
+				Text = text,
+				TextStyle = {
+					Alignment = Miyagi.Common.Alignment.MiddleCenter
+				}
 			};
 			return b;
 		}
@@ -786,15 +811,37 @@ namespace Strategy.GameGUI {
 			return label;
 		}
 
-		private Panel CreatePopUpPanel() {
-			// Background panel
+		private Panel CreatePopUpPanel(string text, BoolWrapper boolWrap) {
+
 			var panel = new Panel() {
 				Width = screenWidth / 2,
 				Height = screenHeight * 4 / 7,
 				Location = new Point(screenWidth / 4, screenHeight / 5),
 				Skin = skinDict["PanelR"],
-				ResizeMode = ResizeModes.None
+				ResizeMode = ResizeModes.None,
+				Padding = new Thickness(5, 5, 0, 0)
 			};
+
+			// Title label
+			var label = new Label() {
+				Size = new Size(panel.Width / 2, textHeight + 1),
+				Text = text,
+				Location = new Point(panel.Width / 4, 0),
+				TextStyle = {
+					Alignment = Miyagi.Common.Alignment.TopCenter
+				}
+			};
+
+			panel.Controls.Add(label);
+
+			var closeButton = CreateCloseButton(panel.Width / 3,
+				panel.Height / 12,
+				"Cancel",
+				new Point(panel.Width * 5 / 8, panel.Height * 7 / 8),
+					panel, boolWrap);
+			closeButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(DisposePanel);
+			panel.Controls.Add(closeButton);
+
 			return panel;
 		}
 
@@ -803,7 +850,10 @@ namespace Strategy.GameGUI {
 				Size = new Size(width, height),
 				Location = location,
 				Skin = skinDict["Button"],
-				Text = text
+				Text = text,
+				TextStyle = new TextStyle {
+					Alignment = Alignment.MiddleCenter
+				}
 			};
 			return b;
 		}
@@ -822,38 +872,26 @@ namespace Strategy.GameGUI {
 		/// Dispose GUI system
 		/// </summary>
 		public void Dispose() {
-			system.Dispose();
+			guiSystem.Dispose();
 		}
 
 		/// <summary>
 		/// Function updete GUI
 		/// </summary>
 		public void Update() {
-			system.Update();
+			guiSystem.Update();
 		}
 
 
 		public void ShowSolarSystSelectionPanel(List<string> possibilities, string topic, object gameObject) {
-			var panel = CreatePopUpPanel();
+			var panel = CreatePopUpPanel(" " + topic, new BoolWrapper()); // Don't need know if panel is closed or not
 			gui.Controls.Add(panel);
 
 			int marginTop = 10;
 
+			marginTop += textHeight + 1;
 
-			// Title label
-			var label = new Label() {
-				Size = new Size(panel.Width / 2, panel.Height / 10),
-				Text = " " + topic,
-				Location = new Point(panel.Width / 4, marginTop),
-				TextStyle = {
-					Alignment = Miyagi.Common.Alignment.TopCenter
-				}
-			};
-			panel.Controls.Add(label);
-
-			marginTop += label.Height;
-
-			var innerScrollablePanel = CreateInnerScrollablePanel(marginTop, panel.Width * 30 / 31, panel.Height - (marginTop * 2));
+			var innerScrollablePanel = CreateInnerScrollablePanel(marginTop, panel.Width * 30 / 31, panel.Height * 37 / 48);
 
 			panel.Controls.Add(innerScrollablePanel);
 
@@ -874,20 +912,16 @@ namespace Strategy.GameGUI {
 				selectionLabel.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(Travel);
 			}
 
-			var closeButton = CreateCloseButton(panel.Width / 2,
-				panel.Height / 12,
-				"	Cancel",
-				new Point(panel.Width / 2, panel.Height * 9 / 10),
-					panel);
-			closeButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(DisposePanel);
-			panel.Controls.Add(closeButton);
+
 
 		}
 
-
+		/// <summary>
+		/// Prints given text to panel in GUI.
+		/// </summary>
+		/// <param name="text">Text to be printed.</param>
 		public void PrintToGameConsole(string text) {
 			var label = new Label() {
-
 				Text = text,
 				Size = new Size(console.Width * 2, textHeight),
 				Location = new Point(5, consoleLinesNumber * (textHeight + 1))
@@ -897,8 +931,11 @@ namespace Strategy.GameGUI {
 			console.ScrollToBottom();
 		}
 
+		/// <summary>
+		/// Loads icons (GameActionIconBox) for each IGameAction in given List and insert them to gameActionPanel.
+		/// </summary>
+		/// <param name="actionList">List that contains the IGameAction to display.</param>
 		public void ShowIGameActionIcons(List<IGameAction> actionList) {
-
 			var maxLineWidth = gameActionPanel.Width - 25; // Padding and Scroll bar fix
 			var actualLineWidth = 0;
 			var lineCount = 0;
@@ -915,22 +952,11 @@ namespace Strategy.GameGUI {
 			}
 		}
 
-		///
-		///
-		///pokusy
-		///
-
-		//public void SetMaterialState(string material, int inc) {
-		//	if (materialList.ContainsKey(material)) {
-		//		materialList[material].value.Text = (inc).ToString();
-		//	} else {
-		//		throw new Strategy.Exceptions.MissingMaterialException("This Material is not in your list. You can not set value to nonexist material.");
-		//	}
-		//}
-
-
+		/// <summary>
+		/// Reloads materialPanel (adds names and values for each given material).
+		/// </summary>
+		/// <param name="materialDict">Dictionary that contains the IMaterials to display.</param>
 		public void UpdatePlayerMaterialDict(Dictionary<string, IMaterial> materialDict) {
-
 			int row = 0;
 
 			foreach (var materialPair in materialDict) {
@@ -947,10 +973,33 @@ namespace Strategy.GameGUI {
 				materialPanel.Controls.Add(valueLabel);
 				row++;
 			}
+		}
 
-			//for (int i = 0; i < materialDict.Count; i++) {
-			//	var nameLabel= CreateLabel(i*(textHeight+1), materialPanel/3, text, materialDict[i]. 
-			//}
+		/// <summary>
+		/// Clears mainMenu panel and creates new panel with information about the reason for the end of the game and with quit button.
+		/// </summary>
+		/// <param name="printText">Information about the reason for the end of the game</param>
+		public void End(string printText) {
+
+			Game.Pause(true);
+			buttonsPanel.Controls.Clear();
+			statPanel.Controls.Clear();
+			actionPanel.Controls.Clear();
+
+			var panel = new Panel() {
+				Size = new Size(screenWidth / 4, screenHeight / 5),
+				Location = new Point(screenWidth * 3 / 8, screenHeight * 2 / 5),
+				Text = "Game ends. " + printText,
+				Skin = skinDict["PanelR"],
+				ResizeMode = ResizeModes.None,
+				TextStyle = new TextStyle {
+					Alignment = Alignment.MiddleCenter
+				}
+			};
+			var button = CreateExitButton(panel.Width / 4, panel.Height / 6, new Point(panel.Width * 3 / 8, panel.Height * 3 / 4));
+			panel.Controls.Add(button);
+			gui.Controls.Add(panel);
+
 		}
 	}
 }

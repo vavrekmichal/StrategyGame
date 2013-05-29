@@ -11,6 +11,7 @@ using Strategy.Exceptions;
 using Strategy.GameMaterial;
 using Strategy.GameObjectControl.Game_Objects.Bullet;
 using Strategy.GameObjectControl.Game_Objects.GameActions;
+using Strategy.GameObjectControl.Game_Objects.GameTargets;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 using Strategy.GameObjectControl.GroupMgr;
@@ -126,12 +127,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 			LoadTeams(missionNode.SelectNodes("teams[1]")[0]);
 
-
-			//pokus
 			CompileUsedObjects(missionNode.SelectNodes("usedObjects[1]")[0]);
-
-			// Load IBullets
-			//CompileIBullets(missionNode.SelectNodes("usedObjects//ibullets[1]")[0]);
 
 			// Load every IGameObject
 			XmlNode missionSolarSystemNode = missionNode.SelectNodes("solarSystems[1]")[0];
@@ -169,7 +165,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 								isgos.Add(isgo);
 
 								// Create IGameAction for created object
-								ReadGameActions(gameObject.SelectNodes("gameAction"), (StaticGameObject)isgo);
+								ReadGameActions(gameObject.SelectNodes("gameAction"), isgo);
 								break;
 							}
 							break;
@@ -178,6 +174,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 							IMovableGameObject imgo = CreateIMGO(gameObject);
 							imgo.Team.AddIMGO(imgo);
 							imgos.Add(imgo);
+							ReadGameActions(gameObject.SelectNodes("gameAction"), imgo);
 							break;
 						default:
 							throw new XmlLoadException("Bad XML format. In SolarSystem cannot be node " + gameObject.Name);
@@ -194,10 +191,26 @@ namespace Strategy.GameObjectControl.Game_Objects {
 				}
 
 			}
+
+			// Finally load mission targets
+			LoadMissionTargets(missionNode.SelectNodes("missionTargets[1]")[0]);
+
 		}
 
 		/// <summary>
-		/// Function Load names of teams from XML file
+		/// Loads mission targets from Xml file (node missionTargets).
+		/// </summary>
+		/// <param name="targetNodeList">XmlNode of mission targets to load.</param>
+		private void LoadMissionTargets(XmlNode targetNodeList) {
+			foreach (XmlNode targetNode in targetNodeList) {
+				var typeName = targetNode.Attributes["name"].InnerText;
+				var o = CreateITarget(typeName, new object[1] { LoadArguments(targetNode).ToArray() });
+				Game.Mission.AddTarget(o);
+			}
+		}
+
+		/// <summary>
+		/// Loads names of teams from XML file
 		/// </summary>
 		/// <param Name="teamsNode">XML node with teams and frienships</param>
 		private void LoadTeams(XmlNode teamsNode) {
@@ -236,20 +249,18 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 		/// <summary>
-		/// Function runtime creates object with parameters and relative path from XML file.
-		/// The function also checks if class is already compiled or not. If not then function
-		/// compile it.
+		/// Runtime creates object with parameters and relative path from XML file.
+		/// Also checks if class is already compiled or not. If is not then function
+		/// throw exception.
 		/// </summary>
-		/// <param Name="gameObjectPath">XML node with object parameters</param>
-		/// <param Name="type">Class type in string (check if is compiled)</param>
-		/// <param Name="args">Class arguments for constructor</param>
+		/// <param Name="type">Type of compiling object.</param>
+		/// <param Name="args">Compiling object's argumentns.</param>
 		/// <returns></returns>
-		private object CreateGameObject(string type, object[] args) {
-			XmlNode gameObjectPath = GetGameObjectTypeNode(type);
-			string fullPath = gameObjectPath.Attributes["path"].InnerText;
-			string fullName = gameObjectPath.Attributes["fullName"].InnerText;
-
-
+		private object CreateObject(XmlNode objectPath, object[] args) {
+			//XmlNode objectPath = GetGameObjectTypeNode(type);
+			string type = objectPath.Attributes["name"].InnerText;
+			string fullPath = objectPath.Attributes["path"].InnerText;
+			string fullName = objectPath.Attributes["fullName"].InnerText;
 			if (!isCompiled.Contains(type)) {
 				throw new XmlLoadException("Unknown type " + fullPath);
 			}
@@ -290,7 +301,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// <param Name="args">arguments for object constructor</param>
 		/// <returns>Instance of IMovableGameObject (specific in type)</returns>
 		public IMovableGameObject CreateIMGO(string type, object[] args) {
-			IMovableGameObject imgo = (IMovableGameObject)CreateGameObject(type, args);
+			IMovableGameObject imgo = (IMovableGameObject)CreateObject(GetGameObjectTypeNode(type), args);
 			return imgo;
 		}
 
@@ -338,7 +349,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// <param Name="args">Arguments for object constructor</param>
 		/// <returns>Instance of IStaticGameObject (specific in type)</returns>
 		public IStaticGameObject CreateISGO(string type, object[] args) {
-			IStaticGameObject isgo = (IStaticGameObject)CreateGameObject(type, args);
+			IStaticGameObject isgo = (IStaticGameObject)CreateObject(GetGameObjectTypeNode(type), args);
 			return isgo;
 		}
 
@@ -379,6 +390,14 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			return sSys;
 		}
 
+		private IGameAction CreateIGameAction(string gameActionType, object[] args) {
+			return (IGameAction)CreateObject(GetGameActionTypeNode(gameActionType), args);
+		}
+
+		private ITarget CreateITarget(string gameTargetType, object[] args) {
+			return (ITarget)CreateObject(GetGameTargetTypeNode(gameTargetType), args);
+		}
+
 		private XmlNode GetGameObjectTypeNode(string typeName) {
 			var node = missionNode.SelectNodes("usedObjects//gameObject[@name='" + typeName + "']")[0];
 			return node;
@@ -389,20 +408,13 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			return node;
 		}
 
-
-		private IGameAction CreateIGameAction(XmlNode gameActionNode, object[] args) {
-			var gameActionName = gameActionNode.Attributes["name"].InnerText;
-			var gameActionFullName = gameActionNode.Attributes["fullName"].InnerText;
-			if (!isCompiled.Contains(gameActionName)) {
-				throw new XmlLoadException("Unknown type " + gameActionName);
-			}
-			var o = moduleBuilder.GetType(gameActionFullName);
-
-			IGameAction runTimeObject;
-			runTimeObject = (IGameAction)Activator.CreateInstance(o, args);
-			return runTimeObject;
-
+		private XmlNode GetGameTargetTypeNode(string typeName) {
+			var node = missionNode.SelectNodes("usedObjects//gameTarget[@name='" + typeName + "']")[0];
+			return node;
 		}
+
+
+		
 
 		private void ReadGameActions(XmlNodeList actionList, IGameObject gameObject) {
 			foreach (XmlNode action in actionList) {
@@ -411,8 +423,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 				args[1] = LoadArguments(action).ToArray();
 
 				Console.WriteLine();
-				var gameActionNode = GetGameActionTypeNode(action.Attributes["name"].InnerText);
-				gameObject.AddIGameAction(CreateIGameAction(gameActionNode, args));
+				gameObject.AddIGameAction(CreateIGameAction(action.Attributes["name"].InnerText, args));
 			}
 		}
 

@@ -15,6 +15,7 @@ using Strategy.GameGUI;
 using Strategy.GameObjectControl.Game_Objects;
 using Strategy.Sound;
 using Strategy.GameObjectControl.RuntimeProperty;
+using Strategy.MissionControl;
 
 namespace Strategy {
 	public class Game {
@@ -30,6 +31,9 @@ namespace Strategy {
 		protected static GameObjectManager gameObjectMgr;
 		protected static IGameGUI gameGUI;
 		protected static SceneManager sceneMgr;
+		protected static Mission mission;
+		
+
 		#region Singleton and constructor
 		private static Game instance;
 
@@ -44,10 +48,10 @@ namespace Strategy {
 			sceneMgr = sceneManager;
 			gameObjectMgr = GameObjectManager.GetInstance(sceneManager, mouse, keyboard, mWindow);
 			gameGUI = new MyGUI((int)mWindow.Width, (int)mWindow.Height, mouse, keyboard);
-			//guiControler = new GUIControler(mWindow, mouse, keyboard);
 			mouseControl = MouseControl.GetInstance(c, sceneManager);
 			gamePaused = false;
-			soundPlayer = new SoundPlayer(mWindow); //music player
+			soundPlayer = new SoundPlayer(mWindow); 
+			mission = new Mission();
 		}
 
 		public static IGameGUI IGameGUI {
@@ -113,12 +117,22 @@ namespace Strategy {
 			}
 		}
 
+		public static Mission Mission {
+			get {
+				return mission;
+			}
+		}
+
 		public static SceneManager SceneManager {
 			get { return sceneMgr; }
 		}
 
 		public static void PrintToGameConsole(string text){
 			gameGUI.PrintToGameConsole(text);
+		}
+
+		public static void EndGame(string printText) {
+			gameGUI.End(printText);
 		}
 
 		#endregion
@@ -137,6 +151,7 @@ namespace Strategy {
 			soundPlayer.HideBox(delay);
 			if (!gamePaused) {
 				gameObjectMgr.Update(delay);
+				mission.Update(delay);
 			}
 		}
 

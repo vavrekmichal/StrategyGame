@@ -116,7 +116,12 @@ namespace Strategy {
 		protected override void UpdateScene(Mogre.FrameEvent evt) {
 
 			float f = evt.timeSinceLastFrame;
-			myGame.Update(f);
+			try {
+				myGame.Update(f);
+			} catch (Exception e) {
+				Game.IGameGUI.Dispose();
+				throw e;
+			}
 			base.UpdateScene(evt);
 			if (mTimer > 0) { //if overlay showed
 				mTimer -= f;

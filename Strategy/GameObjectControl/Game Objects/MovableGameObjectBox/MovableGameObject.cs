@@ -186,7 +186,11 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 					}
 					moving = false;
 					if (collisionCount > 0 && !detourReached) {
-						flyList.RemoveFirst();
+						if (flyList.Count == 0) {
+							Stop();
+						} else {
+							flyList.RemoveFirst();
+						}
 					}
 					var r = new Random().Next(2);
 					if (r == 0) {
@@ -240,7 +244,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			base.Update(delay);
 			TryAttack(delay);
 			if (follow) {
-				direction = followTarget.Position - sceneNode.Position;
+				direction = followTarget.Position - position;
 				distance = direction.Normalise();
 			}
 		}
@@ -338,7 +342,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			if (target == null || target.Value == null || target.Value.Hp <= 0) {
 				target = fight.GetTarget(team);
 			}
-			if (target== null) {
+			if (target == null) {
 				StopAttack();
 				return;
 			}
