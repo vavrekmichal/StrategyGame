@@ -17,7 +17,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		public StaticGameObject() {
 			isVisible = false;
 			propertyDict = new Dictionary<PropertyEnum, object>();
-			propertyDictUserDefined = new Dictionary<string, object>();
+			userDefinedPropertyDict = new Dictionary<string, object>();
 			propertyDict.Add(PropertyEnum.Hp, new Property<int>(startHP));
 		}
 

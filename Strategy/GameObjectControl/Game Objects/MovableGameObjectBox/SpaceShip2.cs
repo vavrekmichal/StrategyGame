@@ -17,7 +17,9 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			this.mesh = mesh;
 			this.team = myTeam;
 
-			this.position = position;
+			this.position = new Property<Vector3>(position);
+
+			SetProperty(PropertyEnum.Position, this.position);
 			SetProperty(PropertyEnum.Speed, Game.PropertyManager.GetProperty<float>("speed2"));
 			SetProperty(PropertyEnum.Attack, Game.PropertyManager.GetProperty<int>("basicAttack"));
 			SetProperty(PropertyEnum.Deffence, Game.PropertyManager.GetProperty<int>("basicDeff"));
@@ -55,7 +57,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 		protected override IBullet CreateIBullet() {
 			var solS = Game.GroupManager.GetSolarSystem(this);
-			return new Missile2(position, solS, target.Value.Position, fight);
+			return new Missile2(position.Value, solS, target.Value.Position, fight);
 		}
 	}
 }

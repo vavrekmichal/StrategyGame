@@ -13,6 +13,7 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 		Rotate = 5,
 		PickUp = 6,
 		Team = 7,
+		Position = 8,
 		Occupation = 11
 	}
 }

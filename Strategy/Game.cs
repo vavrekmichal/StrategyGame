@@ -32,7 +32,7 @@ namespace Strategy {
 		protected static IGameGUI gameGUI;
 		protected static SceneManager sceneMgr;
 		protected static Mission mission;
-		
+
 
 		#region Singleton and constructor
 		private static Game instance;
@@ -50,7 +50,7 @@ namespace Strategy {
 			gameGUI = new MyGUI((int)mWindow.Width, (int)mWindow.Height, mouse, keyboard);
 			mouseControl = MouseControl.GetInstance(c, sceneManager);
 			gamePaused = false;
-			soundPlayer = new SoundPlayer(mWindow); 
+			soundPlayer = new SoundPlayer(mWindow);
 			mission = new Mission();
 		}
 
@@ -127,7 +127,16 @@ namespace Strategy {
 			get { return sceneMgr; }
 		}
 
-		public static void PrintToGameConsole(string text){
+		public static IGameObject GetIGameObject(string name) {
+			if (gameObjectMgr.HitTest.IsObjectControlable(name)) {
+				return gameObjectMgr.HitTest.GetGameObject(name);
+			} else {
+				return null;
+			}
+
+		}
+
+		public static void PrintToGameConsole(string text) {
 			gameGUI.PrintToGameConsole(text);
 		}
 
@@ -159,6 +168,7 @@ namespace Strategy {
 		public void Inicialization() {
 			gameObjectMgr.Inicialization("StartMission");
 			gameGUI.SetSolarSystemName(Game.GroupManager.GetSolarSystemName(0));
+			mission.Initialize();
 			PrintToGameConsole("Game loaded");
 		}
 

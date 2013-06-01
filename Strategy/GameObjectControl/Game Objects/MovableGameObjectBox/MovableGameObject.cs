@@ -17,16 +17,13 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		protected bool moving;
 
 		protected Dictionary<string, object> propertyBonusDict;
-		protected List<IGameAction> listOfAction; //TODO not implemented
 
 		protected const int startHP = 100;
 
 		public MovableGameObject() {
+			
 			isVisible = false;
 			flyList = new LinkedList<Vector3>();
-			listOfAction = new List<IGameAction>();
-			propertyDict = new Dictionary<PropertyEnum, object>();
-			propertyDictUserDefined = new Dictionary<string, object>();
 			propertyDict.Add(PropertyEnum.Hp, new Property<int>(startHP));
 			propertyBonusDict = new Dictionary<string, object>();
 		}
@@ -110,7 +107,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// <param Name="pointToGo">Position</param>
 		public virtual void JumpNextLocation(Vector3 pointToGo) {
 			if (sceneNode == null) {
-				position = pointToGo;
+				position.Value = pointToGo;
 			} else {
 				sceneNode.Position = pointToGo;
 			}
@@ -177,7 +174,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 							Quaternion quat = src.GetRotationTo(direction);
 							sceneNode.Rotate(quat);
 						}
-						position = sceneNode.Position;
+						position.Value = sceneNode.Position;
 					}
 				} else {
 					// Collision solver
@@ -220,7 +217,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 					// Update the destination using the walklist.
 					destination = flyList.First.Value; //get the next destination.
 					// Update the direction and the distance
-					direction = destination - position;
+					direction = destination - position.Value;
 					distance = direction.Normalise();
 				} else { // Nothing to do so stay in position
 
@@ -229,12 +226,12 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 				float move = GetPropertyValue<float>(PropertyEnum.Speed) * delay;
 				distance -= move;
 				if (distance <= .0f) { // Reach destination
-					position = destination;
+					position.Value = destination;
 					direction = Vector3.ZERO;
 					moving = false;
 					flyList.RemoveFirst(); // Remove that node from the front of the list
 				} else {
-					position = position + (direction * move);
+					position.Value = position.Value + (direction * move);
 
 				}
 			}
@@ -244,7 +241,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			base.Update(delay);
 			TryAttack(delay);
 			if (follow) {
-				direction = followTarget.Position - position;
+				direction = followTarget.Position - position.Value;
 				distance = direction.Normalise();
 			}
 		}
@@ -348,7 +345,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			}
 			if (!coolDownList.ContainsKey(GetIBulletType())) {
 				if (fight.TryAttack(this, target.Value, GetIBulletAttackDistance())) {
-					var attackDirection = target.Value.Position - position;
+					var attackDirection = target.Value.Position - position.Value;
 
 					if (sceneNode != null) {
 						Vector3 src = GetDirection(sceneNode.Orientation);
@@ -398,7 +395,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 		protected virtual IBullet CreateIBullet() {
 			var solS = Game.GroupManager.GetSolarSystem(this);
-			return new Missile(position, solS, target.Value.Position, fight);
+			return new Missile(position.Value, solS, target.Value.Position, fight);
 		}
 
 		#endregion

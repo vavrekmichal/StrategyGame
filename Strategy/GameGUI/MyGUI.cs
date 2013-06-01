@@ -269,13 +269,15 @@ namespace Strategy.GameGUI {
 		/// <param Name="property">Property </param>
 		/// <returns>PropertyLabel as object</returns>
 		private object CreatePropertyLabelAsObject(int marginLeft, int marginTop, object property) {
-			MethodInfo method = typeof(MyGUI).GetMethod("CreatePropertyLabelAsLabel", BindingFlags.NonPublic | BindingFlags.Instance); //CreatePropertyLabelAsLabel is private function
+			// CreatePropertyLabelAsLabel is private function
+			
+			MethodInfo method = typeof(MyGUI).GetMethod("CreatePropertyLabelAsLabel", BindingFlags.NonPublic | BindingFlags.Instance); 
 			var type = property.GetType().GetGenericArguments()[0];
 			MethodInfo generic = method.MakeGenericMethod(type);
 			List<object> args = new List<object>();
 			args.Add(marginLeft);
 			args.Add(marginTop);
-			args.Add(marginLeft);
+			args.Add(256);
 			args.Add(26);
 			args.Add(property);
 			var o = generic.Invoke(this, args.ToArray());

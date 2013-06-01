@@ -77,6 +77,15 @@ namespace Strategy.TeamControl {
 		public Dictionary<string, IMaterial> GetPlayersMaterials() {
 			return playerTeam.GetMaterials();
 		}
+
+		public Team GetTeam(string name) {
+			foreach (var team in teamDict) {
+				if (team.Key==name) {
+					return team.Value;
+				}
+			}
+			return null;
+		}
         // Private
     }
 }

@@ -22,13 +22,13 @@ namespace Strategy {
 		protected MOIS.InputManager mInputMgr; // Use for create control (mouse, keyborard) instance
 		protected float mTimer; // Float as timer to determine of duration overlay 
 		protected bool exit = false; // Controlor if player is alive
-		
+
 		protected Mogre.ColourValue fadeColour = new Mogre.ColourValue(0.05f, 0.05f, 0.05f); // Color of fog and shadow
 		protected static readonly Mogre.Vector3 cameraStart = new Mogre.Vector3(0, 1000, 1000);
-		
+
 		protected CameraMan cameraMan;
 
-        protected Game myGame;
+		protected Game myGame;
 
 
 		public static void Main() {
@@ -45,7 +45,7 @@ namespace Strategy {
 			//createBars();
 			#endregion
 
-            myGame.Inicialization();
+			myGame.Inicialization();
 
 			LoadFont();
 
@@ -57,7 +57,7 @@ namespace Strategy {
 
 			SetSky(); //Set sky texture
 
-	
+
 		}
 
 		/// <summary>
@@ -96,13 +96,13 @@ namespace Strategy {
 		/// </summary>
 		protected override void CreateFrameListeners() {
 			base.CreateFrameListeners();
-	
+
 		}
 
 		/// <summary>
 		/// Antibug
 		/// </summary>
-		private void LoadFont(){
+		private void LoadFont() {
 			Mogre.FontManager.Singleton.Load("BlueHighway", Mogre.ResourceGroupManager.DEFAULT_RESOURCE_GROUP_NAME);
 		}
 		#region Animation
@@ -116,12 +116,9 @@ namespace Strategy {
 		protected override void UpdateScene(Mogre.FrameEvent evt) {
 
 			float f = evt.timeSinceLastFrame;
-			try {
-				myGame.Update(f);
-			} catch (Exception e) {
-				Game.IGameGUI.Dispose();
-				throw e;
-			}
+
+			myGame.Update(f);
+
 			base.UpdateScene(evt);
 			if (mTimer > 0) { //if overlay showed
 				mTimer -= f;
@@ -130,7 +127,6 @@ namespace Strategy {
 					exit = false;
 				}
 			}
-
 		}
 		#endregion
 
@@ -144,10 +140,10 @@ namespace Strategy {
 			mWindow.GetCustomAttribute("WINDOW", out windowHandle);
 			mInputMgr = MOIS.InputManager.CreateInputSystem((uint)windowHandle);
 
-            myGame = Game.getInstance(mSceneMgr, cameraMan, mWindow, mMouse, mKeyboard);
+			myGame = Game.getInstance(mSceneMgr, cameraMan, mWindow, mMouse, mKeyboard);
 
 
-            mMouse.MousePressed += new MOIS.MouseListener.MousePressedHandler(myGame.GetMouseControl().OnMyMousePressed);
+			mMouse.MousePressed += new MOIS.MouseListener.MousePressedHandler(myGame.GetMouseControl().OnMyMousePressed);
 			mMouse.MouseReleased += new MOIS.MouseListener.MouseReleasedHandler(myGame.GetMouseControl().OnMyMouseReleased);
 			mMouse.MouseMoved += new MOIS.MouseListener.MouseMovedHandler(myGame.GetMouseControl().OnMyMouseMoved);
 		}
@@ -221,7 +217,7 @@ namespace Strategy {
 			throw new ShutdownException();
 		}
 
-		private void RestartCamera(){
+		private void RestartCamera() {
 			mCamera.Position = cameraStart;
 			mCamera.LookAt(Mogre.Vector3.ZERO);
 		}
@@ -234,7 +230,7 @@ namespace Strategy {
 		protected override bool Configure() {
 			Mogre.RenderSystem rs = mRoot.GetRenderSystemByName("OpenGL Rendering Subsystem");
 			rs.SetConfigOption("Full Screen", "No");
-            rs.SetConfigOption("Video Mode", "1280 x 720 @ 32-bit colour");
+			rs.SetConfigOption("Video Mode", "1280 x 720 @ 32-bit colour");
 			rs.SetConfigOption("FSAA", "0");
 			mRoot.RenderSystem = rs;
 			mWindow = mRoot.Initialise(true, "Render Window");
@@ -274,8 +270,8 @@ namespace Strategy {
 
 			Mogre.Light directionalLight = mSceneMgr.CreateLight("directionalLight");
 			directionalLight.Type = Mogre.Light.LightTypes.LT_DIRECTIONAL;
-			directionalLight.DiffuseColour =  Mogre.ColourValue.White;
-			directionalLight.SpecularColour =  Mogre.ColourValue.Blue;
+			directionalLight.DiffuseColour = Mogre.ColourValue.White;
+			directionalLight.SpecularColour = Mogre.ColourValue.Blue;
 			directionalLight.Direction = new Mogre.Vector3(0, -1000, 0);
 
 			Mogre.Light pointLight = mSceneMgr.CreateLight("pointLight");
@@ -283,13 +279,13 @@ namespace Strategy {
 			pointLight.DiffuseColour = Mogre.ColourValue.White;
 			pointLight.SpecularColour = Mogre.ColourValue.Blue;
 			pointLight.Position = new Mogre.Vector3(0, 0, 0);
-            
-            Mogre.Light spotLight = mSceneMgr.CreateLight("spotLight");
-            spotLight.Type = Mogre.Light.LightTypes.LT_SPOTLIGHT;
-            spotLight.DiffuseColour = Mogre.ColourValue.White;
-            spotLight.SpecularColour = Mogre.ColourValue.Blue;
-            spotLight.Direction = new Mogre.Vector3(-1, -1, 0);
-            spotLight.Position = new Mogre.Vector3(-50, 5000, -3000);
+
+			Mogre.Light spotLight = mSceneMgr.CreateLight("spotLight");
+			spotLight.Type = Mogre.Light.LightTypes.LT_SPOTLIGHT;
+			spotLight.DiffuseColour = Mogre.ColourValue.White;
+			spotLight.SpecularColour = Mogre.ColourValue.Blue;
+			spotLight.Direction = new Mogre.Vector3(-1, -1, 0);
+			spotLight.Position = new Mogre.Vector3(-50, 5000, -3000);
 
 		}
 

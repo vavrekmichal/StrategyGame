@@ -31,8 +31,10 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			this.name = name;
 			this.mesh = mesh;
 			this.team = team;
-			position = gatePosition;
+			position = new Property<Vector3>(gatePosition);
 			entity = Game.SceneManager.CreateEntity(name, mesh);
+
+			SetProperty(PropertyEnum.Position, position);
 
 			animationState = entity.GetAnimationState(animationPort);
 			animationState.Loop = true;
@@ -63,7 +65,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 					if (entity == null) {
 						entity = Game.SceneManager.CreateEntity(name, mesh);
 					}
-					sceneNode = Game.SceneManager.RootSceneNode.CreateChildSceneNode(name + "Node", position);
+					sceneNode = Game.SceneManager.RootSceneNode.CreateChildSceneNode(name + "Node", position.Value);
 
 					sceneNode.Pitch(new Degree(-90f));
 					sceneNode.AttachObject(entity);

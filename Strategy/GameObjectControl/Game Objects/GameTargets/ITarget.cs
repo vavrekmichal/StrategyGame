@@ -7,6 +7,8 @@ using Strategy.GameObjectControl.RuntimeProperty;
 
 namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 	public interface ITarget {
+
+		bool Initialize();
 		bool Check(float delay);
 		Property<string> GetTargetInfo();
 	}

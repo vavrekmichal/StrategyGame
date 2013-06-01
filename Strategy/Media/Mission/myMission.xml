@@ -7,11 +7,11 @@
     </friendlyTeams>
     <friendlyTeams>
       <team name="Fun"/>
+      <team name="Funny"/>
     </friendlyTeams>
   </teams>
   <usedObjects>
     <ibullets>
-      <ibullet name="Missile" path="Bullet/Missile.cs" fullName="Strategy.GameObjectControl.Game_Objects.Bullet.Missile"/>
       <ibullet name="Missile2" path="Bullet/Missile2.cs" fullName="Strategy.GameObjectControl.Game_Objects.Bullet.Missile2"/>
     </ibullets>
     <isgos>
@@ -29,7 +29,11 @@
       <gameAction name="CreateSpaceShipAction" path="GameActions/CreateSpaceShipAction.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.CreateSpaceShipAction"/>
     </gameActions>
     <gameTargets>
-      <gameTarget name="SurviveGivenTimeTarget" path="GameTargets/SurviveGivenTimeTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.SurviveGivenTimeTarget"/>
+      <gameTarget name="SurviveTimeTarget" path="GameTargets/SurviveTimeTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.SurviveTimeTarget"/>
+      <gameTarget name="KillTarget" path="GameTargets/KillTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.KillTarget"/>
+      <gameTarget name="OccupyTarget" path="GameTargets/OccupyTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.OccupyTarget"/>
+      <gameTarget name="EliminateTeamTarget" path="GameTargets/EliminateTeamTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.EliminateTeamTarget"/>
+      <gameTarget name="EscortTarget" path="GameTargets/EscortTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.EscortTarget"/>
     </gameTargets>
   </usedObjects>
   <solarSystems>
@@ -83,8 +87,9 @@
       <imgo type="SpaceShip2" name="Ship" mesh="SpaceShip2.mesh" team="Player" position="450,0,500"/>
       <imgo type="SpaceShip2" name="Ship" mesh="SpaceShip2.mesh" team="Player" position="450,0,550"/>
       <imgo type="SpaceShip" name="ShipD" mesh="SpaceShip2.mesh" team="Devastator" position="600,0,600"/>
-      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,600"/>
-
+      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Funny" position="750,0,600"/>
+      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,500"/>
+      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,450"/>
 
     </solarSystem>
     <solarSystem name="FunnySystem" position="300,500,3000">
@@ -119,14 +124,22 @@
     </solarSystem>
   </solarSystems>
   <missionTargets>
-    <target name="SurviveGivenTimeTarget">
+    <target name="SurviveTimeTarget">
       <argument>50</argument>
     </target>
-    <target name="SurviveGivenTimeTarget">
-      <argument>5</argument>
+    <target name="KillTarget">
+      <argument>ShipF</argument>
     </target>
-    <target name="SurviveGivenTimeTarget">
-      <argument>500</argument>
+    <target name="OccupyTarget">
+      <argument>Venusius</argument>
+    </target>
+    <target name="EliminateTeamTarget">
+      <argument>Funny</argument>
+    </target>
+    <target name="EscortTarget">
+      <argument>Mothership</argument>
+      <argument>s8</argument>
+      <argument>-1000,-200</argument>
     </target>
   </missionTargets>
 </mission>
@@ -134,8 +147,7 @@
   <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="800,0,600"/>
       <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,550"/>
       <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Devastator" position="700,0,550"/>
-      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,500"/>
-      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,450"/>
+      
       <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,400"/>
       <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,350"/>
 -->

@@ -18,7 +18,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 
 		protected Dictionary<PropertyEnum, object> propertyDict = new Dictionary<PropertyEnum, object>();
-		protected Dictionary<string, object> propertyDictUserDefined = new Dictionary<string, object>();
+		protected Dictionary<string, object> userDefinedPropertyDict = new Dictionary<string, object>();
 
 		protected List<IGameAction> gameActionList = new List<IGameAction>();
 
@@ -29,7 +29,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		protected Mogre.Entity entity;
 		protected Mogre.SceneNode sceneNode;
 		protected string mesh;
-		protected Mogre.Vector3 position;
+		protected Property<Mogre.Vector3> position = new Property<Vector3>(Vector3.ZERO);
 		protected bool attack;
 		protected Strategy.FightMgr.Fight fight;
 
@@ -47,13 +47,13 @@ namespace Strategy.GameObjectControl.Game_Objects {
 					entity = Game.SceneManager.CreateEntity(name, mesh);
 				}
 
-				sceneNode = Game.SceneManager.RootSceneNode.CreateChildSceneNode(name + "Node", position);
+				sceneNode = Game.SceneManager.RootSceneNode.CreateChildSceneNode(name + "Node", position.Value);
 				sceneNode.AttachObject(entity);
 				this.isVisible = true;
 				OnDisplayed();
 			} else {
 				if (this.isVisible) {
-					position = sceneNode.Position;
+					position.Value = sceneNode.Position;
 					Game.SceneManager.DestroySceneNode(sceneNode);
 					sceneNode = null;
 					isVisible = false;
@@ -62,7 +62,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 		public void Destroy() {
-			if (entity!= null) {
+			if (entity != null) {
 				Game.SceneManager.DestroySceneNode(sceneNode);
 				Game.SceneManager.DestroyEntity(entity);
 				sceneNode = null;
@@ -108,7 +108,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		public virtual Vector3 Position {
 			get {
 				if (sceneNode == null) {
-					return position;
+					return position.Value;
 				} else {
 					return sceneNode.Position;
 				}
@@ -121,13 +121,13 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			}
 		}
 		public void AddProperty<T>(string propertyName, Property<T> property) {
-			if (!propertyDictUserDefined.ContainsKey(propertyName)) {
-				propertyDictUserDefined.Add(propertyName, property);
+			if (!userDefinedPropertyDict.ContainsKey(propertyName)) {
+				userDefinedPropertyDict.Add(propertyName, property);
 			}
 		}
 		public void RemoveProperty(string propertyName) {
-			if (!propertyDictUserDefined.ContainsKey(propertyName)) {
-				propertyDictUserDefined.Remove(propertyName);
+			if (!userDefinedPropertyDict.ContainsKey(propertyName)) {
+				userDefinedPropertyDict.Remove(propertyName);
 				return;
 			}
 		}
@@ -149,10 +149,10 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 		public Property<T> GetProperty<T>(string propertyName) {
-			if (!propertyDictUserDefined.ContainsKey(propertyName)) {
+			if (!userDefinedPropertyDict.ContainsKey(propertyName)) {
 				throw new PropertyMissingException("Object " + Name + " doesn't have property " + propertyName + ".");
 			}
-			var prop = (Property<T>)propertyDictUserDefined[propertyName];
+			var prop = (Property<T>)userDefinedPropertyDict[propertyName];
 			return prop;
 		}
 
@@ -171,16 +171,16 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			if (!(prop.GetType().GetGenericTypeDefinition() == typeof(Property<>))) {
 				throw new ArgumentException("Given object is not Property<T>, it is " + prop.GetType());
 			}
-			if (propertyDictUserDefined.ContainsKey(name)) {
-				propertyDictUserDefined[name] = prop;
+			if (userDefinedPropertyDict.ContainsKey(name)) {
+				userDefinedPropertyDict[name] = prop;
 			} else {
-				propertyDictUserDefined.Add(name, prop);
+				userDefinedPropertyDict.Add(name, prop);
 			}
 		}
 
 
 		public Dictionary<string, object> GetPropertyToDisplay() {
-			var result = new Dictionary<string, object>(propertyDictUserDefined);
+			var result = new Dictionary<string, object>(userDefinedPropertyDict);
 			foreach (var property in propertyDict) {
 				result.Add(property.Key.ToString(), property.Value);
 			}
@@ -247,16 +247,16 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 		private bool IsTargetInShoutDistance(Vector3 targetPosition) {
-			var xd = targetPosition.x - position.x;
-			var yd = targetPosition.z - position.z;
+			var xd = targetPosition.x - position.Value.x;
+			var yd = targetPosition.z - position.Value.z;
 			var squaredDistance = xd * xd + yd * yd;
 
 			return squaredDistance < (ShoutDistance * ShoutDistance);
 		}
 
-		
 
-		public void StartAttack(Strategy.FightMgr.Fight fight){
+
+		public void StartAttack(Strategy.FightMgr.Fight fight) {
 			attack = true;
 			this.fight = fight;
 		}

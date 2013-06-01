@@ -65,6 +65,12 @@ namespace Strategy.TeamControl {
 			get { return name; }
 		}
 
+		public int Count {
+			get {
+				return imgoObjects.Count + isgoObjects.Count;
+			}
+		}
+
 		public string Print() {
 			StringBuilder s = new StringBuilder();
 			s.Append(name + "\n");
@@ -137,5 +143,7 @@ namespace Strategy.TeamControl {
 		public Dictionary<string, IMaterial> GetMaterials() {
 			return materialsStates;
 		}
+
+
 	}
 }

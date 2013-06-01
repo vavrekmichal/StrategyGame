@@ -12,9 +12,18 @@ namespace Strategy.MissionControl {
 		List<ITarget> targetList;
 
 		const string winText = "You are winner.";
+		const string targetCompEffect = "TargetComp.wav";
 
 		public Mission() {
 			targetList = new List<ITarget>();
+		}
+
+		public void Initialize() {
+			foreach (var target in new List<ITarget>(targetList)) {
+				if (!target.Initialize()) {
+					targetList.Remove(target);
+				}
+			}
 		}
 
 		public void Update(float delay) {
@@ -23,6 +32,8 @@ namespace Strategy.MissionControl {
 			}
 			foreach (var target in new List<ITarget>(targetList)) {
 				if (target.Check(delay)) {
+					Game.PrintToGameConsole(target.GetTargetInfo().Value);
+					Game.IEffectPlayer.PlayEffect(targetCompEffect);
 					targetList.Remove(target);
 				}
 			}
