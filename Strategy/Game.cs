@@ -16,6 +16,7 @@ using Strategy.GameObjectControl.Game_Objects;
 using Strategy.Sound;
 using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.MissionControl;
+using System.Xml.Linq;
 
 namespace Strategy {
 	public class Game {
@@ -133,7 +134,20 @@ namespace Strategy {
 			} else {
 				return null;
 			}
+		}
 
+		public static void Save(string name) {
+			Console.WriteLine(name);
+			new XDocument(
+				new XElement("root",
+					new XElement("someNode2", "someValue")
+				)
+			)
+			.Save("../../Media/Mission/Saves/foo.xml");
+		}
+
+		public static void Load(string name) {
+			Console.WriteLine(name);
 		}
 
 		public static void PrintToGameConsole(string text) {

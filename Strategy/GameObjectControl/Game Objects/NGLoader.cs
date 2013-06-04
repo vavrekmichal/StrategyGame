@@ -20,7 +20,7 @@ using Strategy.TeamControl;
 
 
 namespace Strategy.GameObjectControl.Game_Objects {
-	public class ObjectLoader {
+	public class NGLoader {
 
 		private Dictionary<string, int> usedNameDict;
 
@@ -38,7 +38,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		private CompilationOptions comilationOption;
 		private List<string> isCompiled;
 
-		public ObjectLoader(string path, Dictionary<string, Team> teams,
+		public NGLoader(string path, Dictionary<string, Team> teams,
 			List<SolarSystem> solarSystems) {
 			teamRealationDict = new Dictionary<Team, List<Team>>();
 			usedNameDict = new Dictionary<string, int>();

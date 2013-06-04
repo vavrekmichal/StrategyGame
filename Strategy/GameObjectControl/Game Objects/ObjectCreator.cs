@@ -15,7 +15,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		protected List<SolarSystem> solarSystems;
 		protected Dictionary<string, Team> teams;
 
-		protected ObjectLoader loader;
+		protected NGLoader loader;
 
 
 		/// <summary>
@@ -34,7 +34,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// <param Name="mission">Name of mission</param>
 		public void InitializeWorld(string mission) {
 
-			loader = new ObjectLoader("../../Media/Mission/MyMission.xml", teams, solarSystems);
+			loader = new NGLoader("../../Media/Mission/MyMission.xml", teams, solarSystems);
 			loader.Load(mission);
 
 			solarSystems[0].ShowSolarSystem();

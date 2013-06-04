@@ -270,8 +270,8 @@ namespace Strategy.GameGUI {
 		/// <returns>PropertyLabel as object</returns>
 		private object CreatePropertyLabelAsObject(int marginLeft, int marginTop, object property) {
 			// CreatePropertyLabelAsLabel is private function
-			
-			MethodInfo method = typeof(MyGUI).GetMethod("CreatePropertyLabelAsLabel", BindingFlags.NonPublic | BindingFlags.Instance); 
+
+			MethodInfo method = typeof(MyGUI).GetMethod("CreatePropertyLabelAsLabel", BindingFlags.NonPublic | BindingFlags.Instance);
 			var type = property.GetType().GetGenericArguments()[0];
 			MethodInfo generic = method.MakeGenericMethod(type);
 			List<object> args = new List<object>();
@@ -397,24 +397,43 @@ namespace Strategy.GameGUI {
 		/// <returns>Miyagi Panel</returns>
 		private Panel CreateButtonPanel() {
 			buttonsPanel = CreateMainmenuSubpanel();
-			int buttonMarginLeft = buttonsPanel.Width / 4;
+			int buttonMarginLeft = buttonsPanel.Width / 9;
+			int buttonMarginLeftSecond = buttonsPanel.Width / 2 + buttonMarginLeft / 2;
 			int buttonMarginTop = buttonsPanel.Height * 6 / 25;
-			int row = buttonsPanel.Height / 5 + 5;
+			int row = 0;
 
-			Button b = CreateButton(buttonsPanel.Width / 2, buttonsPanel.Height / 5, "Pause BUTTON", new Point(buttonMarginLeft, 0));
+			int buttonWidth = buttonsPanel.Width / 3;
+
+			Button b = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Pause BUTTON", new Point(buttonMarginLeft, buttonMarginTop * row));
 			buttonsPanel.Controls.Add(b);
 			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(Pause);
+			row++;
 
-			b = CreateButton(buttonsPanel.Width / 2, buttonsPanel.Height / 5, "Mission info", new Point(buttonMarginLeft, buttonMarginTop));
+			b = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Save", new Point(buttonMarginLeft, buttonMarginTop * row));
+			buttonsPanel.Controls.Add(b);
+			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(SaveClicked);
+			row++;
+
+			b = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Load", new Point(buttonMarginLeft, buttonMarginTop * row));
+			buttonsPanel.Controls.Add(b);
+			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(LoadClicked);
+			row++;
+
+			b = CreateExitButton(buttonWidth, buttonsPanel.Height / 5, new Point(buttonMarginLeft, buttonMarginTop * row));
+			buttonsPanel.Controls.Add(b);
+
+			row = 0;
+			b = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Mission info", new Point(buttonMarginLeftSecond, buttonMarginTop * row));
 			buttonsPanel.Controls.Add(b);
 			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(ShowMissionInfo);
+			row++;
 
-			b = CreateButton(buttonsPanel.Width / 2, buttonsPanel.Height / 5, "Solar systems", new Point(buttonMarginLeft, buttonMarginTop * 2));
+			b = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Solar systems", new Point(buttonMarginLeftSecond, buttonMarginTop * row));
 			buttonsPanel.Controls.Add(b);
 			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(ShowSolarSystems);
+			row++;
 
-			b = CreateExitButton(buttonsPanel.Width / 2, buttonsPanel.Height / 5, new Point(buttonMarginLeft, buttonMarginTop * 3));
-			buttonsPanel.Controls.Add(b);
+
 
 			return buttonsPanel;
 		}
@@ -497,6 +516,14 @@ namespace Strategy.GameGUI {
 			if (icon != null) {
 				icon.MouseClicked();
 			}
+		}
+
+		private void SaveClicked(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
+			Game.Save("MissionSave");
+		}
+
+		private void LoadClicked(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
+			Game.Load("MissionSave");
 		}
 
 		private void SelectSolarSystem(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
@@ -589,7 +616,7 @@ namespace Strategy.GameGUI {
 
 			int row = 0;
 			foreach (var target in targetList) {
-				innerScrollablePanel.Controls.Add(CreatePropertyLabel<string>(innerScrollablePanel.Width - 10, textHeight, "Target " + row+ ": ",
+				innerScrollablePanel.Controls.Add(CreatePropertyLabel<string>(innerScrollablePanel.Width - 10, textHeight, "Target " + row + ": ",
 					new Point(0, row * (textHeight + 1)), target));
 				row++;
 			}
