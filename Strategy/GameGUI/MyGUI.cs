@@ -26,6 +26,10 @@ namespace Strategy.GameGUI {
 		private Panel statPanel;
 		private Panel actionPanel;
 
+		private bool enable;
+		private Button pauseButton;
+		private Button loadButton;
+
 		private Label statPanelName;
 		private Panel propertyPanel;
 
@@ -404,19 +408,20 @@ namespace Strategy.GameGUI {
 
 			int buttonWidth = buttonsPanel.Width / 3;
 
-			Button b = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Pause BUTTON", new Point(buttonMarginLeft, buttonMarginTop * row));
-			buttonsPanel.Controls.Add(b);
-			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(Pause);
+			pauseButton = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Pause BUTTON", new Point(buttonMarginLeft, buttonMarginTop * row));
+			buttonsPanel.Controls.Add(pauseButton);
+			pauseButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(Pause);
+			pauseButton.Enabled = false;
 			row++;
 
-			b = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Save", new Point(buttonMarginLeft, buttonMarginTop * row));
+			Button b = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Save", new Point(buttonMarginLeft, buttonMarginTop * row));
 			buttonsPanel.Controls.Add(b);
 			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(SaveClicked);
 			row++;
 
-			b = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Load", new Point(buttonMarginLeft, buttonMarginTop * row));
-			buttonsPanel.Controls.Add(b);
-			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(LoadClicked);
+			loadButton = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Load", new Point(buttonMarginLeft, buttonMarginTop * row));
+			buttonsPanel.Controls.Add(loadButton);
+			loadButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(LoadClicked);
 			row++;
 
 			b = CreateExitButton(buttonWidth, buttonsPanel.Height / 5, new Point(buttonMarginLeft, buttonMarginTop * row));
@@ -1001,6 +1006,15 @@ namespace Strategy.GameGUI {
 				materialPanel.Controls.Add(nameLabel);
 				materialPanel.Controls.Add(valueLabel);
 				row++;
+			}
+		}
+
+		public bool Enable {
+			get { return enable; }
+			set {
+				pauseButton.Enabled = value;
+				loadButton.Enabled = !value;
+				enable = value;
 			}
 		}
 

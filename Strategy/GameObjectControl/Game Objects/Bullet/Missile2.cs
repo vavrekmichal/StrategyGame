@@ -19,7 +19,7 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		private float distance = 0.0f;              //The distance the object has left to travel
 		private Vector3 direction = Vector3.ZERO;   // The direction the object is moving
 		private SolarSystem solarSystem;
-		private const string mesh = "robot1.mesh";
+		private const string mesh = "Bullet.mesh";
 		private string name;
 
 		private IGameObject hittedObject;

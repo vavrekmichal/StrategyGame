@@ -50,7 +50,7 @@ namespace Strategy {
 			gameObjectMgr = GameObjectManager.GetInstance(sceneManager, mouse, keyboard, mWindow);
 			gameGUI = new MyGUI((int)mWindow.Width, (int)mWindow.Height, mouse, keyboard);
 			mouseControl = MouseControl.GetInstance(c, sceneManager);
-			gamePaused = false;
+			gamePaused = true;
 			soundPlayer = new SoundPlayer(mWindow);
 			mission = new Mission();
 		}
@@ -148,6 +148,7 @@ namespace Strategy {
 
 		public static void Load(string name) {
 			Console.WriteLine(name);
+			Inicialization();
 		}
 
 		public static void PrintToGameConsole(string text) {
@@ -179,12 +180,15 @@ namespace Strategy {
 		}
 
 
-		public void Inicialization() {
+		private static void Inicialization() {
 			gameObjectMgr.Inicialization("StartMission");
-			gameGUI.SetSolarSystemName(Game.GroupManager.GetSolarSystemName(0));
+			gameGUI.SetSolarSystemName(GroupManager.GetSolarSystemName(0));
 			mission.Initialize();
+			gameGUI.Enable = true;
+			gamePaused = false;
 			PrintToGameConsole("Game loaded");
 		}
+
 
 		// Get
 		public MouseControl GetMouseControl() {

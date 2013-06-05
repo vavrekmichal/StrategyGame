@@ -41,11 +41,8 @@ namespace Strategy {
 		/// This overriden class inicializes whole world (objects, mission, sounds, camera)
 		/// </summary>
 		protected override void CreateScene() {
-			#region BAD MIY..
-			//createBars();
-			#endregion
 
-			myGame.Inicialization();
+			//myGame.Inicialization();
 
 			LoadFont();
 
