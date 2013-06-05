@@ -11,14 +11,15 @@ using Strategy.GameObjectControl.RuntimeProperty;
 namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 	public class SpaceShip : MovableGameObject {
 
+		private const string meshConst = "SpaceShip2.mesh";
 
-		public SpaceShip(string name, string mesh, Team myTeam, Vector3 position) {
+		public SpaceShip(string name, Team myTeam, object[] args) {
 			this.name = name;
-			this.mesh = mesh;
+			this.mesh = meshConst;
 			this.team = myTeam;
 
-			this.position = new Property<Vector3>(position);
-
+			this.position = new Property<Vector3>(ParseStringToVector3((string)args[0]));
+			Console.WriteLine(position.Value);
 			base.SetProperty(PropertyEnum.Position, this.position);
 			base.SetProperty(PropertyEnum.Speed, Game.PropertyManager.GetProperty<float>("speed"));
 			base.SetProperty(PropertyEnum.Attack, Game.PropertyManager.GetProperty<int>("basicAttack"));

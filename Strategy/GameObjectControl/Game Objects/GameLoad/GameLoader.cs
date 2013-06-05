@@ -5,6 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
-	class NewGameLoader {
+	class GameLoader {
 	}
 }

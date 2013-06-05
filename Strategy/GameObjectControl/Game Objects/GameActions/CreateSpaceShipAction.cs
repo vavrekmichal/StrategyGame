@@ -9,7 +9,6 @@ namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 	class CreateSpaceShipAction : IGameAction {
 
 		private string creatingObject;
-		private const string mesh = "SpaceShip1.mesh";
 		IGameObject gameObject;
 		Dictionary<string, int> neededMaterials;
 
@@ -34,13 +33,15 @@ namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 				gameObject.Team.UseMaterials(neededMaterials);
 				var args = new List<object>();
 				args.Add(Game.IGameObjectCreator.GetUnusedName("Wolen"));
-				args.Add(mesh);
 				args.Add(gameObject.Team);
-				var position = new Mogre.Vector3(100, 0, 100) + gameObject.Position;
-				args.Add(gameObject.Position);
+
+				string objectPosToString = gameObject.Position.x.ToString() + ';' + gameObject.Position.z.ToString();
+				args.Add(new object[] { objectPosToString });
 
 				var solSyst = Game.GroupManager.GetSolarSystem(gameObject);
 				var createdGameObject = Game.IGameObjectCreator.CreateImgo(creatingObject, args.ToArray(), solSyst);
+
+				var position = new Mogre.Vector3(100, 0, 100) + gameObject.Position;
 				Game.IMoveManager.GoToLocation(createdGameObject, position);
 				gameObject.Team.AddIMGO(createdGameObject);
 

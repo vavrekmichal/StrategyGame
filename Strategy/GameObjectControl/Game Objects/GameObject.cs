@@ -280,5 +280,22 @@ namespace Strategy.GameObjectControl.Game_Objects {
 				action.Update(delay);
 			}
 		}
+
+		/// <summary>
+		/// Parse Mogre.Vector3 from string
+		/// </summary>
+		/// <param Name="input">String with vector</param>
+		/// <returns>Mogre.Vector3 parsed from given string</returns>
+		protected static Mogre.Vector3 ParseStringToVector3(string input) {
+			string[] splitted = input.Split(';');
+			Mogre.Vector3 v;
+			Console.WriteLine(input);
+			try {
+				v = new Vector3(Single.Parse(splitted[0]), 0, Single.Parse(splitted[1]));
+			} catch (Exception) {
+				throw new FormatException("Cannot parse string " + input + " to Mogre.Vector3. Given string was in a bad format (right format: \"x;y\")");
+			}
+			return v;
+		}
 	}
 }

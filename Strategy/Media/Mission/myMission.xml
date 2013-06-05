@@ -37,10 +37,15 @@
     </gameTargets>
   </usedObjects>
   <solarSystems>
-    <solarSystem name="This is my" position="3000,0,3000" gate="true">
+    <solarSystem name="This is my" position="3000;0;3000" gate="true">
 
-      <isgo type="Sun" name="Sun" mesh="sun.mesh"  team="None" position="0,0,0" distance="0"/>
-      <isgo type="Planet" name="Mercury" mesh="mercury.mesh" team="Player" position="200,0,200" distance="500">
+      <isgo type="Sun" name="Sun" team="None">
+        <argument>sun.mesh</argument>
+      </isgo>
+      <isgo type="Planet" name="Mercury" team="Player">
+        <argument>mercury.mesh</argument>
+        <argument>200;200</argument>
+        <argument>500</argument>
         <gameAction name="DoNothingJustPrintText">
           <argument>Todle napis</argument>
         </gameAction>
@@ -53,74 +58,147 @@
           <argument>50</argument>
         </gameAction>
       </isgo>
-      <isgo type="Planet" name="Venus" mesh="venus.mesh" team="Fun" position="0,0,0" distance="1500">
+      <isgo type="Planet" name="Venus" team="Fun">
+        <argument>venus.mesh</argument>
+        <argument>0;0</argument>
+        <argument>1500</argument>
         <gameAction name="ProduceAction">
           <argument>Wolenium</argument>
         </gameAction>
       </isgo>
-      <isgo type="Planet" name="Earth" mesh="earth.mesh" team="Fun" position="0,0,0" distance="2500">
+      <isgo type="Planet" name="Earth" team="Fun">
+        <argument>earth.mesh</argument>
+        <argument>0;0</argument>
+        <argument>2500</argument>
         <gameAction name="ProduceAction">
           <argument>Wolen</argument>
         </gameAction>
       </isgo>
 
-      <isgo type="Planet" name="Mars" mesh="mars.mesh" team="Player" position="0,0,0" distance="3500">
+      <isgo type="Planet" name="Mars" team="Player">
+        <argument>mars.mesh</argument>
+        <argument>0;0</argument>
+        <argument>3500</argument>
         <gameAction name="ProduceAction">
           <argument>Wolenium</argument>
         </gameAction>
       </isgo>
-      <isgo type="Planet" name="Jupiter" mesh="jupiter.mesh" team="Player" position="0,0,0" distance="6000">
+      <isgo type="Planet" name="Jupiter" team="Player">
+        <argument>jupiter.mesh</argument>
+        <argument>0;0</argument>
+        <argument>6000</argument>
         <gameAction name="ProduceAction">
           <argument>Wolenium3</argument>
         </gameAction>
       </isgo>
-      <isgo type="Planet" name="Saturn" mesh="saturn.mesh" team="Player" position="0,0,0" distance="8000"/>
-      <isgo type="Planet" name="Uranus" mesh="uranus.mesh" team="Player" position="0,0,0" distance="10000"/>
-      <isgo type="Planet" name="Neptune" mesh="neptune.mesh" team="Fun" position="0,0,0" distance="12000"/>
+      <isgo type="Planet" name="Saturn" team="Player">
+        <argument>saturn.mesh</argument>
+        <argument>0;0</argument>
+        <argument>8000</argument>
+      </isgo>
+      <isgo type="Planet" name="Uranus" team="Player" >
+        <argument>uranus.mesh</argument>
+        <argument>0;0</argument>
+        <argument>10000</argument>
+      </isgo>
+      <isgo type="Planet" name="Neptune" team="Fun">
+        <argument>neptune.mesh</argument>
+        <argument>0;0</argument>
+        <argument>12000</argument>
+      </isgo>
 
-      <imgo type="SpaceShip" name="Mothership" mesh="missile.mesh" team="Player" position="300,0,300">
+      <imgo type="SpaceShip" name="Mothership" team="Player">
+         <argument>300;300</argument>
         <gameAction name="PortalAction"/>
       </imgo>
-      <imgo type="SpaceShip" name="Ship" mesh="SpaceShip2.mesh" team="Player" position="350,0,350"/>
-      <imgo type="SpaceShip" name="Ship" mesh="SpaceShip2.mesh" team="Player" position="400,0,400"/>
-      <imgo type="SpaceShip" name="Ship" mesh="SpaceShip2.mesh" team="Player" position="450,0,450"/>
-      <imgo type="SpaceShip2" name="Ship" mesh="SpaceShip2.mesh" team="Player" position="450,0,500"/>
-      <imgo type="SpaceShip2" name="Ship" mesh="SpaceShip2.mesh" team="Player" position="450,0,550"/>
-      <imgo type="SpaceShip" name="ShipD" mesh="SpaceShip2.mesh" team="Devastator" position="600,0,600"/>
-      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Funny" position="750,0,600"/>
-      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,500"/>
-      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,450"/>
+      <imgo type="SpaceShip" name="Ship" team="Player">
+        <argument>350;350</argument>
+      </imgo>
+      <imgo type="SpaceShip" name="Ship" team="Player">
+        <argument>400;400</argument>
+      </imgo>
+      <imgo type="SpaceShip" name="Ship" team="Player">
+        <argument>450;450</argument>
+      </imgo>
+      <imgo type="SpaceShip2" name="Ship" team="Player">
+        <argument>450;500</argument>
+      </imgo>
+      <imgo type="SpaceShip2" name="Ship" team="Player">
+        <argument>450;550</argument>
+      </imgo>
+      <imgo type="SpaceShip" name="ShipD" team="Devastator">
+        <argument>600;600</argument>
+      </imgo>
+      <imgo type="SpaceShip" name="ShipF" team="Funny">
+        <argument>750;600</argument>
+      </imgo>
+      <imgo type="SpaceShip" name="ShipF" team="Fun">
+        <argument>750;500</argument>
+      </imgo>
+      <imgo type="SpaceShip" name="ShipF" team="Fun">
+        <argument>750;450</argument>
+      </imgo>
 
     </solarSystem>
-    <solarSystem name="FunnySystem" position="300,500,3000">
-      <isgo type="Sun" name="FunnyThings" mesh="jupiter.mesh"  team="None" position="0,0,0" distance="0"/>
-      <isgo type="Planet" name="FunnyThings1" mesh="mercury.mesh" team="Fun" position="0,0,0" distance="1000"/>
-      <isgo type="Planet" name="FunnyThings2" mesh="venus.mesh" team="Fun" position="0,0,0" distance="2000"/>
-      <isgo type="Planet" name="FunnyThings3" mesh="earth.mesh" team="Fun" position="0,0,0" distance="4000"/>
+    <solarSystem name="FunnySystem" position="300;500;3000">
+      <isgo type="Sun" name="FunnyThings" team="None">
+        <argument>jupiter.mesh</argument>
+      </isgo>
+      <isgo type="Planet" name="FunnyThings1" team="Fun">
+        <argument>mercury.mesh</argument>
+        <argument>0;0</argument>
+        <argument>1000</argument>
+      </isgo>
+      <isgo type="Planet" name="FunnyThings2" team="Fun">
+        <argument>venus.mesh</argument>
+        <argument>0;0</argument>
+        <argument>2000</argument>
+      </isgo>
+      <isgo type="Planet" name="FunnyThings3" team="Fun">
+        <argument>earth.mesh</argument>
+        <argument>0;0</argument>
+        <argument>4000</argument>
+      </isgo>
     </solarSystem>
-    <solarSystem name="s1" position="30,0,100">
-      <isgo type="Sun" name="s10" mesh="jupiter.mesh"  team="None" position="0,0,0" distance="0"/>
+    <solarSystem name="s1" position="30;0;100">
+      <isgo type="Sun" name="s10"  team="None">
+        <argument>jupiter.mesh</argument>
+      </isgo>
     </solarSystem>
-    <solarSystem name="s2" position="300,0,3000">
-      <isgo type="Sun" name="s11" mesh="mars.mesh"  team="None" position="0,0,0" distance="0"/>
+    <solarSystem name="s2" position="300;0;3000">
+      <isgo type="Sun" name="s11" team="None">
+        <argument>mars.mesh</argument>
+      </isgo>
     </solarSystem>
-    <solarSystem name="s3" position="3600,0,3000">
-      <isgo type="Sun" name="s12" mesh="SpaceShip2.mesh"  team="None" position="0,0,0" distance="0"/>
+    <solarSystem name="s3" position="3600;0;3000">
+      <isgo type="Sun" name="s12" team="None">
+        <argument>SpaceShip2.mesh</argument>
+      </isgo>
     </solarSystem>
-    <solarSystem name="s4" position="3000,0,0">
-      <isgo type="Sun" name="s13" mesh="SpaceShip1.mesh"  team="None" position="0,0,0" distance="0"/>
+    <solarSystem name="s4" position="3000;0;0">
+      <isgo type="Sun" name="s13" team="None">
+        <argument>SpaceShip1.mesh</argument>
+      </isgo>
     </solarSystem>
-    <solarSystem name="Dalsi z mnoha" position="20,0,3000">
-      <isgo type="Sun" name="s14" mesh="earth.mesh"  team="None" position="0,0,0" distance="0"/>
+    <solarSystem name="Dalsi z mnoha" position="20;0;3000">
+      <isgo type="Sun" name="s14" team="None">
+        <argument>earth.mesh</argument>
+      </isgo>
     </solarSystem>
-    <solarSystem name="s6" position="3000,0,600">
-      <isgo type="Sun" name="s15" mesh="neptune.mesh"  team="None" position="0,0,0" distance="0"/>
+    <solarSystem name="s6" position="3000;0;600">
+      <isgo type="Sun" name="s15" team="None">
+        <argument>neptune.mesh</argument>
+      </isgo>
     </solarSystem>
-    <solarSystem name="s7" position="3000,5,1000" gate="true">
-      <isgo type="Sun" name="s16" mesh="uranus.mesh"  team="None" position="0,0,0" distance="0"/>
+    <solarSystem name="s7" position="3000;5;1000" gate="true">
+      <isgo type="Sun" name="s16" team="None">
+        <argument>uranus.mesh</argument>
+      </isgo>
     </solarSystem>
-    <solarSystem name="s8" position="3000,0,250">
-      <isgo type="Sun" name="s17" mesh="gate.mesh"  team="None" position="0,0,0" distance="0"/>
+    <solarSystem name="s8" position="3000;0;250">
+      <isgo type="Sun" name="s17" team="None">
+        <argument>gate.mesh</argument>
+      </isgo>
     </solarSystem>
   </solarSystems>
   <missionTargets>
@@ -139,15 +217,15 @@
     <target name="EscortTarget">
       <argument>Mothership</argument>
       <argument>s8</argument>
-      <argument>-1000,-200</argument>
+      <argument>-1000;-200</argument>
     </target>
   </missionTargets>
 </mission>
 <!--
-  <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="800,0,600"/>
-      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,550"/>
-      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Devastator" position="700,0,550"/>
+  <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="800;0;600"/>
+      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750;0;550"/>
+      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Devastator" position="700;0;550"/>
       
-      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,400"/>
-      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750,0,350"/>
+      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750;0;400"/>
+      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750;0;350"/>
 -->

@@ -24,9 +24,9 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// <param name="mesh">mesh of this sun</param>
 		/// <param name="solarSystem">number of solar system</param>
 		/// <param name="manager">Mogre SceneManager</param>
-		public Sun(string name, string mesh, Team team) {
+		public Sun(string name, Team team, object[] args) {
 			this.name = name;
-			this.mesh = mesh;
+			this.mesh = (string)args[0];
 			this.Team = team;
 			entity = Game.SceneManager.CreateEntity(name, mesh);
 		}

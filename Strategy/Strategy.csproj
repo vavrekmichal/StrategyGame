@@ -91,6 +91,9 @@
     <Compile Include="GameObjectControl\Game Objects\Bullet\Missile.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GameObjectControl\Game Objects\GameActions\CreateSpaceShipAction.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="GameObjectControl\Game Objects\GameActions\DieAction.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -98,9 +101,7 @@
     <Compile Include="GameObjectControl\Game Objects\GameActions\StopMoveAction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GameObjectControl\Game Objects\GameLoad\IGameLoader.cs" />
-    <Compile Include="GameObjectControl\Game Objects\GameLoad\NewGameLoader.cs" />
-    <Compile Include="GameObjectControl\Game Objects\GameLoad\SavedGameLoader.cs" />
+    <Compile Include="GameObjectControl\Game Objects\GameLoad\GameLoader.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameObject.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameTargets\ITarget.cs" />
     <Compile Include="GameObjectControl\Game Objects\IGameObject.cs" />

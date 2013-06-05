@@ -12,12 +12,14 @@ using Strategy.GameObjectControl.Game_Objects.Bullet;
 namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 	public class SpaceShip2 : MovableGameObject {
 
-		public SpaceShip2(string name, string mesh, Team myTeam, Vector3 position) {
+		private const string meshConst = "SpaceShip1.mesh";
+
+		public SpaceShip2(string name, Team myTeam, object[] args) {
 			this.name = name;
-			this.mesh = mesh;
+			this.mesh = meshConst;
 			this.team = myTeam;
 
-			this.position = new Property<Vector3>(position);
+			this.position = new Property<Vector3>(ParseStringToVector3((string)args[0]));
 
 			SetProperty(PropertyEnum.Position, this.position);
 			SetProperty(PropertyEnum.Speed, Game.PropertyManager.GetProperty<float>("speed2"));

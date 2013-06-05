@@ -17,6 +17,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		private const float portTime = 3.4483f;
 		private float portTimeDuration;
 
+		private const string meshConst = "gate.mesh";
 		private const string animationPort = "funcionando3_eani_Clip";
 		private const string animationStay = "abrirse_eani_Clip";
 		private readonly Vector3 gatePosition = new Vector3(1000, 0, 1000);
@@ -27,12 +28,11 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 
 		protected static Team gateTeam;
 
-		public Gate(string name, string mesh, Team team) {
+		public Gate(string name, Team team) {
 			this.name = name;
-			this.mesh = mesh;
 			this.team = team;
 			position = new Property<Vector3>(gatePosition);
-			entity = Game.SceneManager.CreateEntity(name, mesh);
+			entity = Game.SceneManager.CreateEntity(name, meshConst);
 
 			SetProperty(PropertyEnum.Position, position);
 
@@ -63,7 +63,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			if (visible) {
 				if (sceneNode == null) {
 					if (entity == null) {
-						entity = Game.SceneManager.CreateEntity(name, mesh);
+						entity = Game.SceneManager.CreateEntity(name, meshConst);
 					}
 					sceneNode = Game.SceneManager.RootSceneNode.CreateChildSceneNode(name + "Node", position.Value);
 

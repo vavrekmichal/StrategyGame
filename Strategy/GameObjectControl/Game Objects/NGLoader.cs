@@ -281,7 +281,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 			List<object> args = new List<object>();
 			args.Add(GetUnusedName(gameObject.Attributes["name"].InnerText));
-			args.Add(gameObject.Attributes["mesh"].InnerText);
+			//args.Add(gameObject.Attributes["mesh"].InnerText);
 
 			string team = gameObject.Attributes["team"].InnerText;
 			string type = gameObject.Attributes["type"].InnerText;
@@ -289,7 +289,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 				throw new XmlException("Undefined Team " + team + " .");
 			}
 			args.Add(teamDict[team]);
-			args.Add(ParseStringToVector3(gameObject.Attributes["position"].InnerText));
+			args.Add((LoadArguments(gameObject).ToArray()));
 
 			return CreateIMGO(type, args.ToArray());
 		}
@@ -318,25 +318,24 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		private IStaticGameObject CreateISGO(XmlNode gameObject, IsgoType isgoType, int pointsOnCircle = 30) {
 			string type;
 			List<object> args = new List<object>();
+
 			args.Add(GetUnusedName(gameObject.Attributes["name"].InnerText));
-			args.Add(gameObject.Attributes["mesh"].InnerText);
+			//args.Add(gameObject.Attributes["mesh"].InnerText);
 			string team = gameObject.Attributes["team"].InnerText;
+
 			if (!teamDict.ContainsKey(team)) {
 				throw new XmlException("Undefined Team " + team + " .");
 			}
+
+			args.Add(teamDict[team]);
+			var argList = LoadArguments(gameObject);
+			args.Add(argList.ToArray());
+
 			if (isgoType == IsgoType.Sun) {
-				type = IsgoType.Sun.ToString();
-				args.Add(teamDict[team]);
+				type = IsgoType.Sun.ToString();		
 			} else {
 				type = gameObject.Attributes["type"].InnerText;
-				args.Add(teamDict[team]);
-				string distance = gameObject.Attributes["distance"].InnerText;
-				args.Add(Int32.Parse(distance));
-				args.Add(ParseStringToVector3(gameObject.Attributes["position"].InnerText));
-				args.Add(pointsOnCircle);
-
 			}
-
 			var isgo = CreateISGO(type, args.ToArray());
 
 			return isgo;
@@ -365,7 +364,6 @@ namespace Strategy.GameObjectControl.Game_Objects {
 				throw new XmlException("Undefined Team " + team + " .");
 			}
 			var gate = new Gate("Gate " + solarSystName,
-				"gate.mesh",
 				teamDict[team]);
 			gate.Team.AddISGO(gate);
 			return gate;
@@ -428,7 +426,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 		private List<object> LoadArguments(XmlNode gameObjectNode) {
-			var selectedArguments = gameObjectNode.SelectNodes(".//argument");
+			var selectedArguments = gameObjectNode.SelectNodes("./argument");
 			var result = new List<object>();
 			foreach (XmlNode item in selectedArguments) {
 				result.Add(item.InnerText);
@@ -441,13 +439,13 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// </summary>
 		/// <param Name="input">String with vector</param>
 		/// <returns>Mogre.Vector3 parsed from given string</returns>
-		private Mogre.Vector3 ParseStringToVector3(string input) {
-			string[] splitted = input.Split(',');
+		private static Mogre.Vector3 ParseStringToVector3(string input) {
+			string[] splitted = input.Split(';');
 			Mogre.Vector3 v;
 			try {
 				v = new Vector3(Int32.Parse(splitted[0]), Int32.Parse(splitted[1]), Int32.Parse(splitted[2]));
 			} catch (Exception) {
-				throw new FormatException("Cannot parse string " + input + " to Mogre.Vector3. Given string was in a bad format (right format: \"x,y,z\")");
+				throw new FormatException("Cannot parse string " + input + " to Mogre.Vector3. Given string was in a bad format (right format: \"x;y;z\")");
 			}
 			return v;
 		}

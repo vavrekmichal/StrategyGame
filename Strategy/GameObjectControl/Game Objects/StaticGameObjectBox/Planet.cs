@@ -24,28 +24,35 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 
 		private static Random random = new Random();
 
-
-		public Planet(string name, string mesh, Team myTeam, double distanceFromCenter,
-			Vector3 center, int circularNum = 30) {
+		public Planet(string name, Team myTeam, object[] args) {
 			this.name = name;
-			this.mesh = mesh;
+			this.mesh = (string)args[0];
 			this.team = myTeam;
 
+			this.position = new Property<Vector3>(Vector3.ZERO);
 
-			//base.SetProperty(PropertyEnum.Position, position);
+			SetProperty(PropertyEnum.Position, this.position);
 			base.SetProperty(PropertyEnum.Speed, Game.PropertyManager.GetProperty<float>("speed3"));
 			base.SetProperty(PropertyEnum.Position, position);
 			base.SetProperty(PropertyEnum.Rotate, Game.PropertyManager.GetProperty<float>("planetRotateSpeed"));
 			base.SetProperty(PropertyEnum.PickUp, Game.PropertyManager.GetProperty<float>("planetPickUpDistance"));
 
+			int circularNum;
+			if (args.Count() == 4) {
+				circularNum = Convert.ToInt32(args[3]);
+			} else {
+				circularNum = 30;
+			}
+
 			//prepare list of positions
-			circularPositions = CalculatePositions(circularNum, distanceFromCenter, center);
+			circularPositions = CalculatePositions(circularNum, Convert.ToInt32(args[2]), ParseStringToVector3((string)args[1]));
 			RandomizeStartPosition(circularNum); // randomize start position
 			position.Value = circularPositions.First();
 
 			//Mogre inicialization of object
 			entity = Game.SceneManager.CreateEntity(name, mesh);
 		}
+
 
 		/// <summary>
 		/// Rotating in visible mood, it means when planet is in active solar system
@@ -75,6 +82,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 					mFlying = false;
 				} else {
 					sceneNode.Translate(mDirection * (float)move);
+					position.Value = sceneNode.Position;
 				}
 			}
 		}

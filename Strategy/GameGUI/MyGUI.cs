@@ -29,6 +29,7 @@ namespace Strategy.GameGUI {
 		private bool enable;
 		private Button pauseButton;
 		private Button loadButton;
+		private Button saveButton;
 
 		private Label statPanelName;
 		private Panel propertyPanel;
@@ -414,17 +415,17 @@ namespace Strategy.GameGUI {
 			pauseButton.Enabled = false;
 			row++;
 
-			Button b = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Save", new Point(buttonMarginLeft, buttonMarginTop * row));
-			buttonsPanel.Controls.Add(b);
-			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(SaveClicked);
-			row++;
+			saveButton = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Save", new Point(buttonMarginLeft, buttonMarginTop * row));
+			buttonsPanel.Controls.Add(saveButton);
+			saveButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(SaveClicked);
+			saveButton.Visible = false;
 
 			loadButton = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Load", new Point(buttonMarginLeft, buttonMarginTop * row));
 			buttonsPanel.Controls.Add(loadButton);
 			loadButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(LoadClicked);
 			row++;
 
-			b = CreateExitButton(buttonWidth, buttonsPanel.Height / 5, new Point(buttonMarginLeft, buttonMarginTop * row));
+			Button b = CreateExitButton(buttonWidth, buttonsPanel.Height / 5, new Point(buttonMarginLeft, buttonMarginTop * row));
 			buttonsPanel.Controls.Add(b);
 
 			row = 0;
@@ -1013,7 +1014,8 @@ namespace Strategy.GameGUI {
 			get { return enable; }
 			set {
 				pauseButton.Enabled = value;
-				loadButton.Enabled = !value;
+				loadButton.Visible = !value;
+				saveButton.Visible = value;
 				enable = value;
 			}
 		}
