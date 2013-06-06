@@ -108,7 +108,8 @@
       </isgo>
 
       <imgo type="SpaceShip" name="Mothership" team="Player">
-         <argument>300;300</argument>
+        <argument>300;300</argument>
+        <argument>25</argument>
         <gameAction name="PortalAction"/>
       </imgo>
       <imgo type="SpaceShip" name="Ship" team="Player">
@@ -220,6 +221,14 @@
       <argument>-1000;-200</argument>
     </target>
   </missionTargets>
+  <materials>
+    <material name="Wolenium" team="Player">
+      <argument>600</argument>
+    </material>
+    <material name="Wolenium2" team="Player">
+      <argument>600</argument>
+    </material>
+  </materials>
 </mission>
 <!--
   <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="800;0;600"/>

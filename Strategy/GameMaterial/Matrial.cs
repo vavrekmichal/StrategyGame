@@ -38,8 +38,9 @@ namespace Strategy.GameMaterial {
         public void AddQuantity(double quantity) {
 			remain += quantity;
 			if (remain>1) {
-				remain -= 1;
-				actualQuantity.Value++;
+				int increment = (int)Math.Truncate(remain);
+				remain -= increment;
+				actualQuantity.Value += increment;
 			}
           
         }

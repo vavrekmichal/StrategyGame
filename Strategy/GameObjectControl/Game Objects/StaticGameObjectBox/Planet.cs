@@ -23,6 +23,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		protected LinkedList<Mogre.Vector3> circularPositions;
 
 		private static Random random = new Random();
+		private static int circularNum = 30;
 
 		public Planet(string name, Team myTeam, object[] args) {
 			this.name = name;
@@ -37,12 +38,9 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			base.SetProperty(PropertyEnum.Rotate, Game.PropertyManager.GetProperty<float>("planetRotateSpeed"));
 			base.SetProperty(PropertyEnum.PickUp, Game.PropertyManager.GetProperty<float>("planetPickUpDistance"));
 
-			int circularNum;
 			if (args.Count() == 4) {
-				circularNum = Convert.ToInt32(args[3]);
-			} else {
-				circularNum = 30;
-			}
+				setHp(Convert.ToInt32(args[3]));
+			} 
 
 			//prepare list of positions
 			circularPositions = CalculatePositions(circularNum, Convert.ToInt32(args[2]), ParseStringToVector3((string)args[1]));

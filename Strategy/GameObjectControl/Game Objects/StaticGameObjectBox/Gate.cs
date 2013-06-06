@@ -28,7 +28,10 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 
 		protected static Team gateTeam;
 
-		public Gate(string name, Team team) {
+		public Gate(string name, Team team) : this(name, team, new object[]{startHP}) { }
+
+		public Gate(string name, Team team, object[] args) {
+			setHp(Convert.ToInt32(args[0]));
 			this.name = name;
 			this.team = team;
 			position = new Property<Vector3>(gatePosition);

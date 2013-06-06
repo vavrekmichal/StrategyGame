@@ -130,14 +130,14 @@ namespace Strategy.TeamControl {
 		}
 
 		public void Produce(string material, double quantity) {
-			if (materialsStates.ContainsKey(material)) {
-				materialsStates[material].AddQuantity(quantity);
-			} else {
+			if (!materialsStates.ContainsKey(material)) {
 				materialsStates.Add(material, new GameMaterial.Matrial(material));
 				if (name == Game.playerName) {
 					Game.IGameGUI.UpdatePlayerMaterialDict(materialsStates);
 				}
 			}
+			materialsStates[material].AddQuantity(quantity);
+
 		}
 
 		public Dictionary<string, IMaterial> GetMaterials() {

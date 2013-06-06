@@ -194,7 +194,23 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 			// Finally load mission targets
 			LoadMissionTargets(missionNode.SelectNodes("missionTargets[1]")[0]);
+			LoadMaterials(missionNode.SelectNodes("materials[1]")[0]);
+		}
 
+		/// <summary>
+		/// Loads the starting quantity of materials
+		/// </summary>
+		/// <param name="materialNodeList">XmlNode of materials to load.</param>
+		private void LoadMaterials(XmlNode materialNodeList) {
+			if (materialNodeList==null) {
+				return;
+			}
+			foreach (XmlNode materialNode in materialNodeList) {
+				var materialName = materialNode.Attributes["name"].InnerText;
+				var team = materialNode.Attributes["team"].InnerText;
+				var quantity = Convert.ToInt32( LoadArguments(materialNode)[0]);
+				teamDict[team].Produce(materialName, quantity);
+			}
 		}
 
 		/// <summary>

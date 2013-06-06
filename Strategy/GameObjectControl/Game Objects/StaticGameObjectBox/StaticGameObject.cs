@@ -67,6 +67,10 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			get { return ((Property<int>)propertyDict[PropertyEnum.Hp]).Value; }
 		}
 
+		protected void setHp(int hp) {
+			((Property<int>)propertyDict[PropertyEnum.Hp]).Value = hp;
+		}
+
 		public override void TakeDamage(int damage) {
 			var hpProp = (Property<int>)propertyDict[PropertyEnum.Hp];
 			var actualHp = hpProp.Value - damage;

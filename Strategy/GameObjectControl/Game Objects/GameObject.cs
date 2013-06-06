@@ -297,5 +297,6 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			}
 			return v;
 		}
+
 	}
 }

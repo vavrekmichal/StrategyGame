@@ -21,6 +21,10 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 			this.position = new Property<Vector3>(ParseStringToVector3((string)args[0]));
 
+			if (args.Count() == 2) {
+				setHp(Convert.ToInt32(args[1]));
+			} 
+
 			SetProperty(PropertyEnum.Position, this.position);
 			SetProperty(PropertyEnum.Speed, Game.PropertyManager.GetProperty<float>("speed2"));
 			SetProperty(PropertyEnum.Attack, Game.PropertyManager.GetProperty<int>("basicAttack"));

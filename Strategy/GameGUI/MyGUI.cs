@@ -646,15 +646,22 @@ namespace Strategy.GameGUI {
 
 			for (int i = 0; i < savePaths.Length; i++) {
 				var splited = savePaths[i].Split('\\');
-				var label = CreateLabel(i * (textHeight + 1), innerScrollablePanel.Width, textHeight, splited[splited.Length - 1]);
+				var label = CreateLabel(i * (textHeight + 1), 
+					innerScrollablePanel.Width, textHeight, 
+					splited[splited.Length - 1].Substring(0, splited[splited.Length - 1].Length-5)
+					);
 				innerScrollablePanel.Controls.Add(label);
 			}
 			panel.Controls.Add(innerScrollablePanel);
 
 			var textArea = new TextBox() {
-				Size = new Size(panel.Width - 28, textHeight + 1),
+				Size = new Size(panel.Width - 28, panel.Height * 3 / 32),
 				Location = new Point(10, panel.Height * 3 / 4),
-				Skin = skinDict["PanelSkin"]
+				Skin = skinDict["PanelSkin"],
+				TextStyle = new TextStyle {
+					Alignment = Alignment.MiddleCenter
+				},
+ 				Padding = new Thickness(10, 0, 0, 0)
 			};
 
 			textArea.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(CaptureKeyboard);

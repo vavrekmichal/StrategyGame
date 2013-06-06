@@ -17,6 +17,8 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		protected List<IGameAction> listOfAction = new List<IGameAction>();
 
 		protected static Team sunTeam;
+
+
 		/// <summary>
 		/// Public constructor. Detect active solar system (0)
 		/// </summary>
