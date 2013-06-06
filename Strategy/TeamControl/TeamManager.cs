@@ -40,7 +40,7 @@ namespace Strategy.TeamControl {
         public void Inicialization(Dictionary<string,Team> settingTeam, Dictionary<Team, List<Team>> friendlyDict) {
 			friendlyTeamDict = friendlyDict;
             teamDict = settingTeam;
-            playerTeam = teamDict[Game.playerName];
+            playerTeam = teamDict[Game.PlayerName];
             Console.WriteLine("Team print at Start of the Game:");
             foreach(KeyValuePair<string,Team> team in teamDict){
                 Console.WriteLine(team.Value.Print());

@@ -228,7 +228,7 @@ namespace Strategy.GameGUI {
 			}
 			ShowGroupProperties(group.GetPropertyToDisplay());
 
-			if (group.OwnerTeam.Name == Game.playerName) {
+			if (group.OwnerTeam.Name == Game.PlayerName) {
 				ShowIGameActionIcons(group.GetGroupIGameActions());
 			}
 		}
@@ -253,7 +253,7 @@ namespace Strategy.GameGUI {
 			}
 
 			ShowGroupProperties(group.GetPropertyToDisplay());
-			if (group.OwnerTeam.Name == Game.playerName) {
+			if (group.OwnerTeam.Name == Game.PlayerName) {
 				ShowIGameActionIcons(group.GetGroupIGameActions());
 			}
 			if (group.Count == 1) { // Just one object
@@ -424,7 +424,6 @@ namespace Strategy.GameGUI {
 			loadButton = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Load", new Point(buttonMarginLeft, buttonMarginTop * row));
 			buttonsPanel.Controls.Add(loadButton);
 			loadButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(ShowLoadPanel);
-			loadButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(LoadClicked);
 			row++;
 
 			Button b = CreateExitButton(buttonWidth, buttonsPanel.Height / 5, new Point(buttonMarginLeft, buttonMarginTop * row));
@@ -543,8 +542,13 @@ namespace Strategy.GameGUI {
 
 		}
 
-		private void LoadClicked(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
-			Game.Load("../../Media/Mission/myMission.xml");
+		private void SelectLoadMission(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
+			// Button Action for SelectionLabel calls Game.Load and load given mission
+			var selectionLabel = sender as SelectionLabel;
+			if (selectionLabel != null) {
+				selectionLabel.ClosePanel();
+				Game.Load((string)selectionLabel.StoredObject);
+			}
 		}
 
 		private void SelectSolarSystem(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
@@ -646,7 +650,7 @@ namespace Strategy.GameGUI {
 			var panel = CreatePopUpPanel("Saves:", savePanelIsClosed);
 
 			var innerScrollablePanel = CreateInnerScrollablePanel(textHeight + 6, panel.Width - 28, panel.Height * 11 / 16);
-			var savePaths = Directory.GetFiles(Game.savesGamePath, "*.save");
+			var savePaths = Directory.GetFiles(Game.SavesGamePath, "*.save");
 
 			for (int i = 0; i < savePaths.Length; i++) {
 				var splited = savePaths[i].Split('\\');
@@ -689,57 +693,56 @@ namespace Strategy.GameGUI {
 			gui.Controls.Add(panel);
 		}
 
+
+		private PopUpPanelControl loadPanelIsClosed = new PopUpPanelControl(true);
 
 		private void CreateLoadPanel() {
-			if (!savePanelIsClosed.Value) {
+			if (!loadPanelIsClosed.Value) {
 				return;
 			}
-			savePanelIsClosed.Value = false;
-			var panel = CreatePopUpPanel("Saves:", savePanelIsClosed);
+			loadPanelIsClosed.Value = false;
+			var panel = CreatePopUpPanel("Load new mission:", loadPanelIsClosed);
 
-			var innerScrollablePanel = CreateInnerScrollablePanel(textHeight + 6, panel.Width - 28, panel.Height * 11 / 16);
-			var savePaths = Directory.GetFiles(Game.savesGamePath, "*.save");
+			var innerScrollablePanel = CreateInnerScrollablePanel(textHeight + 6, panel.Width - 28, panel.Height / 3);
+			var missionPaths = Directory.GetFiles(Game.SavesGamePath, "*.save");
 
-			for (int i = 0; i < savePaths.Length; i++) {
-				var splited = savePaths[i].Split('\\');
-				var label = CreateLabel(i * (textHeight + 1),
-					innerScrollablePanel.Width, textHeight,
-					splited[splited.Length - 1].Substring(0, splited[splited.Length - 1].Length - 5)
-					);
+			for (int i = 0; i < missionPaths.Length; i++) {
+				var splited = missionPaths[i].Split('\\');
+
+				var label = CreateSelectionLabel(panel.Width, textHeight + 1, splited[splited.Length - 1].Substring(0, splited[splited.Length - 1].Length - 5),
+					new Point(0, i * (textHeight + 1)), i, panel, loadPanelIsClosed, missionPaths[i]);
+				label.TextStyle = new TextStyle {
+					Alignment = Miyagi.Common.Alignment.TopCenter
+				};
+				label.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(SelectLoadMission);
 				innerScrollablePanel.Controls.Add(label);
 			}
 			panel.Controls.Add(innerScrollablePanel);
 
-			var textArea = new TextBox() {
-				Size = new Size(panel.Width - 28, panel.Height * 3 / 32),
-				Location = new Point(10, panel.Height * 3 / 4),
-				Skin = skinDict["PanelSkin"],
-				TextStyle = new TextStyle {
-					Alignment = Alignment.MiddleCenter
-				},
-				Padding = new Thickness(10, 0, 0, 0)
-			};
+			var labelSave = CreateLabel(panel.Height / 2 - textHeight - 10, panel.Width, textHeight, "Load saved mission:");
 
-			textArea.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(CaptureKeyboard);
-			textArea.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(ReleaseKeyboard);
+			panel.Controls.Add(labelSave);
 
-			panel.Controls.Add(textArea);
+			innerScrollablePanel = CreateInnerScrollablePanel(panel.Height / 2, panel.Width - 28, panel.Height / 3);
+			missionPaths = Directory.GetFiles(Game.NewGamePath, "*.mission");
 
-			var button = new SaveGameButton(panel, textArea, savePanelIsClosed) {
-				Location = new Point(panel.Width / 4, panel.Height * 7 / 8),
-				Skin = skinDict["Button"],
-				Text = "Ok",
-				TextStyle = new TextStyle {
-					Alignment = Alignment.MiddleCenter
-				},
-				Size = new Size(panel.Width / 3, panel.Height / 12)
-			};
-			button.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(SaveGame);
+			for (int i = 0; i < missionPaths.Length; i++) {
+				var splited = missionPaths[i].Split('\\');
 
-			panel.Controls.Add(button);
+				var label = CreateSelectionLabel(panel.Width, textHeight + 1, splited[splited.Length - 1].Substring(0, splited[splited.Length - 1].Length - 8),
+					 new Point(0, i * (textHeight + 1)), i, panel, loadPanelIsClosed, missionPaths[i]);
+				label.TextStyle = new TextStyle {
+					Alignment = Miyagi.Common.Alignment.TopCenter
+				};
+				label.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(SelectLoadMission);
+				innerScrollablePanel.Controls.Add(label);
+			}
+			panel.Controls.Add(innerScrollablePanel);
 
 			gui.Controls.Add(panel);
 		}
+
+
 		private PopUpPanelControl missionPanelIsClosed = new PopUpPanelControl(true);
 
 		private void CreateMissionPanel() {
@@ -888,26 +891,26 @@ namespace Strategy.GameGUI {
 			return selectLabel;
 		}
 
-		/// <summary>
-		/// Create SelectionLabel - on click Select positon and can close setted panel
-		/// </summary>
-		/// <param Name="width">Width of Label</param>
-		/// <param Name="height">Height of Label</param>
-		/// <param Name="text">Text in Label</param>
-		/// <param Name="location">Relative position in Panel</param>
-		/// <param Name="order">Number of choice</param>
-		/// <param Name="panelToClose">Closing Panel</param>
-		/// <returns></returns>
-		private SelectionLabel CreateSelectionLabel(int width, int height, string text, Point location, int order, Panel panelToClose,
-			object objectRef = null) {
-			var selectLabel = new SelectionLabel(order, objectRef, panelToClose) {
-				Size = new Size(width, height),
-				Text = text,
-				Location = location
+		///// <summary>
+		///// Create SelectionLabel - on click Select positon and can close setted panel
+		///// </summary>
+		///// <param Name="width">Width of Label</param>
+		///// <param Name="height">Height of Label</param>
+		///// <param Name="text">Text in Label</param>
+		///// <param Name="location">Relative position in Panel</param>
+		///// <param Name="order">Number of choice</param>
+		///// <param Name="panelToClose">Closing Panel</param>
+		///// <returns></returns>
+		//private SelectionLabel CreateSelectionLabel(int width, int height, string text, Point location, int order, Panel panelToClose, PopUpPanelControl controler,
+		//	object objectRef = null) {
+		//	var selectLabel = new SelectionLabel(order, objectRef, panelToClose, controler) {
+		//		Size = new Size(width, height),
+		//		Text = text,
+		//		Location = location
 
-			};
-			return selectLabel;
-		}
+		//	};
+		//	return selectLabel;
+		//}
 
 		/// <summary>
 		/// Strange Name for runtime generic calling (unique Name)
@@ -973,7 +976,10 @@ namespace Strategy.GameGUI {
 			var label = new Label() {
 				Text = text,
 				Size = new Size(width, height),
-				Location = new Point(marginLeft, marginTop)
+				Location = new Point(marginLeft, marginTop),
+				TextStyle = {
+					Alignment = Miyagi.Common.Alignment.MiddleCenter
+				}
 			};
 			return label;
 		}
@@ -986,7 +992,7 @@ namespace Strategy.GameGUI {
 				Location = new Point(screenWidth / 4, screenHeight / 5),
 				Skin = skinDict["PanelR"],
 				ResizeMode = ResizeModes.None,
-				Padding = new Thickness(5, 5, 0, 0)
+				Padding = new Thickness(5, 10, 0, 0)
 			};
 
 			// Title label
@@ -1074,7 +1080,7 @@ namespace Strategy.GameGUI {
 
 				SelectionLabel selectionLabel = CreateSelectionLabel(
 					selectionLabelWidth, 25, possibilities[i],
-					new Point(0, i * selectionLabelMarginTop), i, panel, gameObject
+					new Point(0, i * selectionLabelMarginTop), i, panel, captureMouse, gameObject
 					);
 
 				innerScrollablePanel.Controls.Add(selectionLabel);

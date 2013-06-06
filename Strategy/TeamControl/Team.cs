@@ -132,7 +132,7 @@ namespace Strategy.TeamControl {
 		public void Produce(string material, double quantity) {
 			if (!materialsStates.ContainsKey(material)) {
 				materialsStates.Add(material, new GameMaterial.Matrial(material));
-				if (name == Game.playerName) {
+				if (name == Game.PlayerName) {
 					Game.IGameGUI.UpdatePlayerMaterialDict(materialsStates);
 				}
 			}

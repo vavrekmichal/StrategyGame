@@ -24,9 +24,9 @@ namespace Strategy {
 		protected MouseControl mouseControl;
 
 
-		public static string playerName = "Player";
-		public static string savesGamePath = "../../Media/Mission/Saves";
-		public static string newGamePath = "../../Media/Mission";
+		public static string PlayerName = "Player";
+		public static string SavesGamePath = "../../Media/Mission/Saves";
+		public static string NewGamePath = "../../Media/Mission";
 
 		private static bool gamePaused;
 		private static bool keyboardIsCaptured;

@@ -206,10 +206,10 @@ namespace Strategy.GameObjectControl.GroupMgr {
 				var inGroup = isgoList[0];
 				if (isgoList.Count > 1) {		// Check if there is more object
 					for (int i = 1; i < isgoList.Count; i++) {
-						if (inGroup.Team.Name == Game.playerName && inGroup.Team == isgoList[i].Team) {
+						if (inGroup.Team.Name == Game.PlayerName && inGroup.Team == isgoList[i].Team) {
 							group.InsertMemeber(isgoList[i]); // Insert player's isgo	
 						} else {
-							if (isgoList[i].Team.Name == Game.playerName) { // In some of elements in isgoList is players's -> has greater priority
+							if (isgoList[i].Team.Name == Game.PlayerName) { // In some of elements in isgoList is players's -> has greater priority
 								group = new GroupStatics(isgoList[i].Team);
 								group.InsertMemeber(isgoList[i]);	// Insert firt
 								inGroup = isgoList[i];
@@ -255,11 +255,11 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 				if (imgoList.Count > 1) {		// Check if there is more object
 					for (int i = 1; i < imgoList.Count; i++) {
-						if (group.OwnerTeam.Name == Game.playerName && group.OwnerTeam == imgoList[i].Team) {
+						if (group.OwnerTeam.Name == Game.PlayerName && group.OwnerTeam == imgoList[i].Team) {
 							group.InsertMemeber(imgoList[i]); // Insert player's imgo	
 						} else {
 							// Element of isgoList is in players's Team => has greater priority and must be selected
-							if (imgoList[i].Team.Name == Game.playerName) {
+							if (imgoList[i].Team.Name == Game.PlayerName) {
 								group = new GroupMovables(imgoList[i].Team);
 								group.InsertMemeber(imgoList[i]);	// Insert firt
 							}
@@ -300,7 +300,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			var resultList = new List<IMovableGameObject>();
 
 			foreach (var imgo in imgoList) {
-				if (imgo.Team.Name == Game.playerName) {
+				if (imgo.Team.Name == Game.PlayerName) {
 					resultList.Add(imgo);
 				}
 			}
@@ -407,7 +407,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		/// <param Name="isImgo">If HitTest returns object => MovableTest result</param>
 		/// <returns>Returns group answer collected from each member of group</returns>
 		public ActionAnswer SelectInfoGroup(Mogre.Vector3 clickedPoint, MovableObject hitObject, bool isFriendly, bool isImgo) {
-			if (isMovableGroupActive && selectedGroupM.OwnerTeam.Name == Game.playerName) {
+			if (isMovableGroupActive && selectedGroupM.OwnerTeam.Name == Game.PlayerName) {
 
 				// All members of group can die so movable group is deactive.
 				if (selectedGroupM.Count == 0) {

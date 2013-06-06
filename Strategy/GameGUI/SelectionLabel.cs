@@ -24,11 +24,11 @@ namespace Strategy.GameGUI {
 			this.isClosed = isClosed;
 		}
 
-		public SelectionLabel(int position, object objectRef, Panel panel)
-			: this(position, panel) {
-			storedObject = objectRef;
-			this.isClosed = new PopUpPanelControl(false);
-		}
+		//public SelectionLabel(int position, object objectRef, Panel panel)
+		//	: this(position, panel) {
+		//	storedObject = objectRef;
+		//	this.isClosed = new PopUpPanelControl(false);
+		//}
 
 		public int NumberOfItem {
 			get { return numberOfItem; }

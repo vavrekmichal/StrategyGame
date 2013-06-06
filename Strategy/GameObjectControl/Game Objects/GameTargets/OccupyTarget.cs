@@ -21,7 +21,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 		}
 
 		public bool Check(float delay) {
-			if (gameObject.Team.Name == Game.playerName) {
+			if (gameObject.Team.Name == Game.PlayerName) {
 				targetInfo.Value = text2 + targetName;
 				return true;
 			} else {

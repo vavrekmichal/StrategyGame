@@ -11,7 +11,7 @@ namespace Strategy.GameGUI {
 		public bool Value {
 			get { return value; }
 			set {
-				setValue(!value);
+				setValue(value);
 			}
 		}
 
@@ -25,7 +25,7 @@ namespace Strategy.GameGUI {
 
 		private void setValue(bool value) {
 			this.value = value;
-			Game.MouseCaptured = value;
+			Game.MouseCaptured = !value;
 		}
 	}
 }
