@@ -11,6 +11,7 @@ using Strategy.GameObjectControl.GroupMgr;
 using Strategy.GameObjectControl.RuntimeProperty;
 using System.Reflection;
 using Strategy.GameObjectControl.Game_Objects.GameActions;
+using System.IO;
 
 namespace Strategy.GameGUI {
 	public class MyGUI : IGameGUI {
@@ -417,7 +418,7 @@ namespace Strategy.GameGUI {
 
 			saveButton = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Save", new Point(buttonMarginLeft, buttonMarginTop * row));
 			buttonsPanel.Controls.Add(saveButton);
-			saveButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(SaveClicked);
+			saveButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(ShowSavePanel);
 			saveButton.Visible = false;
 
 			loadButton = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Load", new Point(buttonMarginLeft, buttonMarginTop * row));
@@ -524,8 +525,18 @@ namespace Strategy.GameGUI {
 			}
 		}
 
-		private void SaveClicked(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
+		private void ShowSavePanel(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
 			Game.Save("MissionSave");
+			CreateSavePanel();
+		}
+
+		private void SaveGame(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
+
+			var casted = sender as SaveGameButton;
+			if (casted != null) {
+				casted.SaveGame();
+			}
+
 		}
 
 		private void LoadClicked(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
@@ -555,6 +566,23 @@ namespace Strategy.GameGUI {
 			guiSystem.Dispose();
 			throw new Strategy.Exceptions.ShutdownException();
 		}
+
+		private void CaptureKeyboard(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
+			var casted = sender as TextBox;
+			if (casted != null) {
+				casted.Focused = true;
+			}
+			Game.KeyboardCaptured = true;
+		}
+
+		private void ReleaseKeyboard(object sender, Miyagi.Common.Events.MouseEventArgs e) {
+			var casted = sender as TextBox;
+			if (casted != null) {
+				casted.Focused = false;
+			}
+			Game.KeyboardCaptured = false;
+		}
+
 
 		private void Pause(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
 			Game.Pause(!Game.GameStatus);
@@ -604,6 +632,51 @@ namespace Strategy.GameGUI {
 			return p;
 		}
 
+		private BoolWrapper savePanelIsClosed = new BoolWrapper();
+
+		private void CreateSavePanel() {
+			if (!savePanelIsClosed.Value) {
+				return;
+			}
+			savePanelIsClosed.Value = false;
+			var panel = CreatePopUpPanel("Saves:", savePanelIsClosed);
+
+			var innerScrollablePanel = CreateInnerScrollablePanel(textHeight + 6, panel.Width - 28, panel.Height * 11 / 16);
+			var savePaths = Directory.GetFiles(Game.savesGamePath, "*.save");
+
+			for (int i = 0; i < savePaths.Length; i++) {
+				var splited = savePaths[i].Split('\\');
+				var label = CreateLabel(i * (textHeight + 1), innerScrollablePanel.Width, textHeight, splited[splited.Length - 1]);
+				innerScrollablePanel.Controls.Add(label);
+			}
+			panel.Controls.Add(innerScrollablePanel);
+
+			var textArea = new TextBox() {
+				Size = new Size(panel.Width - 28, textHeight + 1),
+				Location = new Point(10, panel.Height * 3 / 4),
+				Skin = skinDict["PanelSkin"]
+			};
+
+			textArea.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(CaptureKeyboard);
+			textArea.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(ReleaseKeyboard);
+
+			panel.Controls.Add(textArea);
+
+			var button = new SaveGameButton(panel, textArea, savePanelIsClosed) {
+				Location = new Point(panel.Width  / 4, panel.Height * 7 / 8),
+				Skin = skinDict["Button"],
+				Text = "Ok",
+				TextStyle = new TextStyle {
+					Alignment = Alignment.MiddleCenter
+				},
+				Size = new Size(panel.Width / 3, panel.Height / 12)
+			};
+			button.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(SaveGame);
+
+			panel.Controls.Add(button);
+
+			gui.Controls.Add(panel);
+		}
 
 		private BoolWrapper missionPanelIsClosed = new BoolWrapper();
 
@@ -614,7 +687,7 @@ namespace Strategy.GameGUI {
 			missionPanelIsClosed.Value = false;
 			var panel = CreatePopUpPanel("Mission Info:", missionPanelIsClosed);
 
-			var innerScrollablePanel = CreateInnerScrollablePanel(textHeight + 6, panel.Width * 30 / 31, panel.Height * 37 / 48);
+			var innerScrollablePanel = CreateInnerScrollablePanel(textHeight + 6, panel.Width - 28, panel.Height * 37 / 48);
 
 
 			panel.Controls.Add(innerScrollablePanel);
@@ -626,9 +699,6 @@ namespace Strategy.GameGUI {
 					new Point(0, row * (textHeight + 1)), target));
 				row++;
 			}
-
-
-
 			gui.Controls.Add(panel);
 		}
 
@@ -926,7 +996,7 @@ namespace Strategy.GameGUI {
 
 			marginTop += textHeight + 1;
 
-			var innerScrollablePanel = CreateInnerScrollablePanel(marginTop, panel.Width * 30 / 31, panel.Height * 37 / 48);
+			var innerScrollablePanel = CreateInnerScrollablePanel(marginTop, panel.Width - 28, panel.Height * 37 / 48);
 
 			panel.Controls.Add(innerScrollablePanel);
 

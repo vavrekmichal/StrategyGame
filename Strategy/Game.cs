@@ -25,8 +25,10 @@ namespace Strategy {
 
 
 		public static string playerName = "Player";
+		public static string savesGamePath = "../../Media/Mission/Saves";
 
 		private static bool gamePaused;
+		private static bool keyboardIsCaptured;
 
 		protected static SoundPlayer soundPlayer; // Background music
 		protected static GameObjectManager gameObjectMgr;
@@ -188,9 +190,7 @@ namespace Strategy {
 			gamePaused = false;
 			PrintToGameConsole("Game loaded");
 		}
-
-
-		// Get
+		
 		public MouseControl GetMouseControl() {
 			return mouseControl;
 		}
@@ -207,6 +207,11 @@ namespace Strategy {
 
 		public static bool GameStatus {
 			get { return gamePaused; }
+		}
+
+		public static bool KeyboardCaptured {
+			get { return keyboardIsCaptured; }
+			set { keyboardIsCaptured = value; }
 		}
 	}
 }

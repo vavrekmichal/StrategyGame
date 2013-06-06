@@ -14,4 +14,4 @@ int missilePower = 7;
 int missilePower2 = 70;
 int missileDistance2 = 250;
 
-double baseProduction = 50;
+double baseProduction = 1;
