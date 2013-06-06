@@ -26,9 +26,11 @@ namespace Strategy {
 
 		public static string playerName = "Player";
 		public static string savesGamePath = "../../Media/Mission/Saves";
+		public static string newGamePath = "../../Media/Mission";
 
 		private static bool gamePaused;
 		private static bool keyboardIsCaptured;
+		private static int mouseIsCaptured;
 
 		protected static SoundPlayer soundPlayer; // Background music
 		protected static GameObjectManager gameObjectMgr;
@@ -150,7 +152,7 @@ namespace Strategy {
 
 		public static void Load(string name) {
 			Console.WriteLine(name);
-			Inicialization();
+			Inicialization(name);
 		}
 
 		public static void PrintToGameConsole(string text) {
@@ -174,6 +176,7 @@ namespace Strategy {
 
 		public void Update(float delay) {
 			gameGUI.Update();
+
 			soundPlayer.HideBox(delay);
 			if (!gamePaused) {
 				gameObjectMgr.Update(delay);
@@ -182,15 +185,15 @@ namespace Strategy {
 		}
 
 
-		private static void Inicialization() {
-			gameObjectMgr.Inicialization("StartMission");
+		private static void Inicialization(string missionFileName) {
+			gameObjectMgr.Inicialization(missionFileName);
 			gameGUI.SetSolarSystemName(GroupManager.GetSolarSystemName(0));
 			mission.Initialize();
 			gameGUI.Enable = true;
 			gamePaused = false;
 			PrintToGameConsole("Game loaded");
 		}
-		
+
 		public MouseControl GetMouseControl() {
 			return mouseControl;
 		}
@@ -212,6 +215,18 @@ namespace Strategy {
 		public static bool KeyboardCaptured {
 			get { return keyboardIsCaptured; }
 			set { keyboardIsCaptured = value; }
+		}
+
+		public static bool MouseCaptured {
+			get { return mouseIsCaptured >0; }
+			set {
+				if (!value) {
+					mouseIsCaptured--;
+				} else {
+					mouseIsCaptured++;
+				}
+				Console.WriteLine("capture state "+mouseIsCaptured);
+			}
 		}
 	}
 }

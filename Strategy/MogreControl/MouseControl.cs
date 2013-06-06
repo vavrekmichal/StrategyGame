@@ -18,7 +18,8 @@ namespace Strategy.MogreControl {
 
 		private static MouseControl instance;
 
-		private static float mouseBoundY = BaseApplication.getRenderWindow().Height * 8 / 10;
+		private static float mouseBoundY1 = BaseApplication.getRenderWindow().Height * 8 / 10;
+		private static float mouseBoundY2 = BaseApplication.getRenderWindow().Height / 15;
 
 		// Rectangular Select items
 		bool isRectagularSelect;
@@ -50,7 +51,7 @@ namespace Strategy.MogreControl {
 		/// <param Name="id">Pressed button</param>
 		/// <returns>True</returns>
 		public bool OnMyMousePressed(MouseEvent arg, MouseButtonID id) {
-			if (arg.state.Y.abs > mouseBoundY) {
+			if (arg.state.Y.abs > mouseBoundY1 || arg.state.Y.abs < mouseBoundY2 || Game.MouseCaptured) {
 				return true;
 			}
 			switch (id) {
@@ -89,7 +90,7 @@ namespace Strategy.MogreControl {
 		/// <param Name="id">Released button</param>
 		/// <returns>True</returns>
 		public bool OnMyMouseReleased(MouseEvent arg, MouseButtonID id) {
-			if (arg.state.Y.abs > mouseBoundY) {
+			if (arg.state.Y.abs > mouseBoundY1 || arg.state.Y.abs < mouseBoundY2 || Game.MouseCaptured) {
 				return true;
 			}
 			switch (id) {
@@ -121,7 +122,7 @@ namespace Strategy.MogreControl {
 
 
 		public bool OnMyMouseMoved(MouseEvent arg) {
-			if (arg.state.Y.abs > mouseBoundY) {
+			if (arg.state.Y.abs > mouseBoundY1 || arg.state.Y.abs < mouseBoundY2 || Game.MouseCaptured) {
 				return true;
 			}
 			if (bSelecting) {

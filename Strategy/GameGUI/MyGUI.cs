@@ -297,7 +297,7 @@ namespace Strategy.GameGUI {
 		private void CreateTopMenu() {
 			// Create top panel
 			upperMenu = new FlowLayoutPanel() {
-				Size = new Size(screenWidth * textHeight / 20, screenHeight * 2 / 30),
+				Size = new Size(screenWidth * textHeight / 20, screenHeight / 15),
 				Location = new Point(screenWidth / 20, 0),
 				Skin = skinDict["Panel"],
 				Opacity = 0.5f
@@ -423,6 +423,7 @@ namespace Strategy.GameGUI {
 
 			loadButton = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Load", new Point(buttonMarginLeft, buttonMarginTop * row));
 			buttonsPanel.Controls.Add(loadButton);
+			loadButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(ShowLoadPanel);
 			loadButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(LoadClicked);
 			row++;
 
@@ -526,8 +527,11 @@ namespace Strategy.GameGUI {
 		}
 
 		private void ShowSavePanel(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
-			Game.Save("MissionSave");
 			CreateSavePanel();
+		}
+
+		private void ShowLoadPanel(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
+			CreateLoadPanel();
 		}
 
 		private void SaveGame(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
@@ -540,7 +544,7 @@ namespace Strategy.GameGUI {
 		}
 
 		private void LoadClicked(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
-			Game.Load("MissionSave");
+			Game.Load("../../Media/Mission/myMission.xml");
 		}
 
 		private void SelectSolarSystem(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
@@ -632,7 +636,7 @@ namespace Strategy.GameGUI {
 			return p;
 		}
 
-		private BoolWrapper savePanelIsClosed = new BoolWrapper();
+		private PopUpPanelControl savePanelIsClosed = new PopUpPanelControl(true);
 
 		private void CreateSavePanel() {
 			if (!savePanelIsClosed.Value) {
@@ -646,9 +650,9 @@ namespace Strategy.GameGUI {
 
 			for (int i = 0; i < savePaths.Length; i++) {
 				var splited = savePaths[i].Split('\\');
-				var label = CreateLabel(i * (textHeight + 1), 
-					innerScrollablePanel.Width, textHeight, 
-					splited[splited.Length - 1].Substring(0, splited[splited.Length - 1].Length-5)
+				var label = CreateLabel(i * (textHeight + 1),
+					innerScrollablePanel.Width, textHeight,
+					splited[splited.Length - 1].Substring(0, splited[splited.Length - 1].Length - 5)
 					);
 				innerScrollablePanel.Controls.Add(label);
 			}
@@ -661,7 +665,7 @@ namespace Strategy.GameGUI {
 				TextStyle = new TextStyle {
 					Alignment = Alignment.MiddleCenter
 				},
- 				Padding = new Thickness(10, 0, 0, 0)
+				Padding = new Thickness(10, 0, 0, 0)
 			};
 
 			textArea.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(CaptureKeyboard);
@@ -670,7 +674,7 @@ namespace Strategy.GameGUI {
 			panel.Controls.Add(textArea);
 
 			var button = new SaveGameButton(panel, textArea, savePanelIsClosed) {
-				Location = new Point(panel.Width  / 4, panel.Height * 7 / 8),
+				Location = new Point(panel.Width / 4, panel.Height * 7 / 8),
 				Skin = skinDict["Button"],
 				Text = "Ok",
 				TextStyle = new TextStyle {
@@ -685,7 +689,58 @@ namespace Strategy.GameGUI {
 			gui.Controls.Add(panel);
 		}
 
-		private BoolWrapper missionPanelIsClosed = new BoolWrapper();
+
+		private void CreateLoadPanel() {
+			if (!savePanelIsClosed.Value) {
+				return;
+			}
+			savePanelIsClosed.Value = false;
+			var panel = CreatePopUpPanel("Saves:", savePanelIsClosed);
+
+			var innerScrollablePanel = CreateInnerScrollablePanel(textHeight + 6, panel.Width - 28, panel.Height * 11 / 16);
+			var savePaths = Directory.GetFiles(Game.savesGamePath, "*.save");
+
+			for (int i = 0; i < savePaths.Length; i++) {
+				var splited = savePaths[i].Split('\\');
+				var label = CreateLabel(i * (textHeight + 1),
+					innerScrollablePanel.Width, textHeight,
+					splited[splited.Length - 1].Substring(0, splited[splited.Length - 1].Length - 5)
+					);
+				innerScrollablePanel.Controls.Add(label);
+			}
+			panel.Controls.Add(innerScrollablePanel);
+
+			var textArea = new TextBox() {
+				Size = new Size(panel.Width - 28, panel.Height * 3 / 32),
+				Location = new Point(10, panel.Height * 3 / 4),
+				Skin = skinDict["PanelSkin"],
+				TextStyle = new TextStyle {
+					Alignment = Alignment.MiddleCenter
+				},
+				Padding = new Thickness(10, 0, 0, 0)
+			};
+
+			textArea.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(CaptureKeyboard);
+			textArea.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(ReleaseKeyboard);
+
+			panel.Controls.Add(textArea);
+
+			var button = new SaveGameButton(panel, textArea, savePanelIsClosed) {
+				Location = new Point(panel.Width / 4, panel.Height * 7 / 8),
+				Skin = skinDict["Button"],
+				Text = "Ok",
+				TextStyle = new TextStyle {
+					Alignment = Alignment.MiddleCenter
+				},
+				Size = new Size(panel.Width / 3, panel.Height / 12)
+			};
+			button.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(SaveGame);
+
+			panel.Controls.Add(button);
+
+			gui.Controls.Add(panel);
+		}
+		private PopUpPanelControl missionPanelIsClosed = new PopUpPanelControl(true);
 
 		private void CreateMissionPanel() {
 			if (!missionPanelIsClosed.Value) {
@@ -710,7 +765,7 @@ namespace Strategy.GameGUI {
 		}
 
 
-		private BoolWrapper solarSystPanelIsClosed = new BoolWrapper();
+		private PopUpPanelControl solarSystPanelIsClosed = new PopUpPanelControl(true);
 
 		/// <summary>
 		/// Creates top bar with info about current SolarSystem and players materials
@@ -822,7 +877,7 @@ namespace Strategy.GameGUI {
 		/// <param Name="order">Number of choice</param>
 		/// <param Name="panelToClose">Closing Panel</param>
 		/// <returns></returns>
-		private SelectionLabel CreateSelectionLabel(int width, int height, string text, Point location, int order, Panel panelToClose, BoolWrapper isClosed,
+		private SelectionLabel CreateSelectionLabel(int width, int height, string text, Point location, int order, Panel panelToClose, PopUpPanelControl isClosed,
 			object objectRef = null) {
 			var selectLabel = new SelectionLabel(order, objectRef, panelToClose, isClosed) {
 				Size = new Size(width, height),
@@ -923,7 +978,7 @@ namespace Strategy.GameGUI {
 			return label;
 		}
 
-		private Panel CreatePopUpPanel(string text, BoolWrapper boolWrap) {
+		private Panel CreatePopUpPanel(string text, PopUpPanelControl boolWrap) {
 
 			var panel = new Panel() {
 				Width = screenWidth / 2,
@@ -957,7 +1012,7 @@ namespace Strategy.GameGUI {
 			return panel;
 		}
 
-		private CloseButton CreateCloseButton(int width, int height, string text, Point location, Panel panelToClose, BoolWrapper isClosed) {
+		private CloseButton CreateCloseButton(int width, int height, string text, Point location, Panel panelToClose, PopUpPanelControl isClosed) {
 			var b = new CloseButton(panelToClose, isClosed) {
 				Size = new Size(width, height),
 				Location = location,
@@ -996,7 +1051,9 @@ namespace Strategy.GameGUI {
 
 
 		public void ShowSolarSystSelectionPanel(List<string> possibilities, string topic, object gameObject) {
-			var panel = CreatePopUpPanel(" " + topic, new BoolWrapper()); // Don't need know if panel is closed or not
+			var captureMouse = new PopUpPanelControl(false);
+			captureMouse.CaptureMouse();
+			var panel = CreatePopUpPanel(" " + topic, captureMouse); // Don't need know if panel is closed or not
 			gui.Controls.Add(panel);
 
 			int marginTop = 10;

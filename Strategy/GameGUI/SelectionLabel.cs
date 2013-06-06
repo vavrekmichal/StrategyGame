@@ -10,7 +10,7 @@ namespace Strategy.GameGUI {
 		protected int numberOfItem;
 		protected Panel panelToClose;
 		protected object storedObject;
-		protected BoolWrapper isClosed;
+		protected PopUpPanelControl isClosed;
 
 		public SelectionLabel(int position, Panel panel)
 			: base() {
@@ -18,7 +18,7 @@ namespace Strategy.GameGUI {
 			panelToClose = panel;
 		}
 
-		public SelectionLabel(int position, object objectRef, Panel panel, BoolWrapper isClosed)
+		public SelectionLabel(int position, object objectRef, Panel panel, PopUpPanelControl isClosed)
 			: this(position, panel) {
 			storedObject = objectRef;
 			this.isClosed = isClosed;
@@ -27,7 +27,7 @@ namespace Strategy.GameGUI {
 		public SelectionLabel(int position, object objectRef, Panel panel)
 			: this(position, panel) {
 			storedObject = objectRef;
-			this.isClosed = new BoolWrapper();
+			this.isClosed = new PopUpPanelControl(false);
 		}
 
 		public int NumberOfItem {

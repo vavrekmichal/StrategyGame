@@ -20,13 +20,17 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 		private static Session session;
 		private static DateTime lastRead;
 
-		private XmlNode root;
-		private XmlNode missionPropertyNode;
+
+		private List<string> propertiesNameList;
+		//private XmlNode root;
+		//private XmlNode missionPropertyNode;
 
 
-		public PropertyManager(string missionName) {
+		public PropertyManager() {
 			instance = this;
 			baseDict = new Dictionary<Type, object>();
+
+			propertiesNameList = new List<string>();
 
 			FileSystemWatcher watcher = new FileSystemWatcher();
 			watcher.Path = "../../Media/Mission/Scripts/";
@@ -43,11 +47,6 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 			session = scriptEngine.CreateSession();
 			session.AddReference("System");
 			session.AddReference("System.Core");
-
-			// Create start properties - Load XML file with used ones
-			XmlDocument xml = new XmlDocument();
-			xml.Load("../../Media/Mission/Scripts/test.xml");
-			root = xml.DocumentElement;
 
 		}
 
@@ -103,9 +102,8 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 		/// Function loads properties for given mission from Property file
 		/// </summary>
 		/// <param Name="missionName">Mission Name</param>
-		public void LoadPropertyToMission(string missionName) {
-			session.ExecuteFile("../../Media/Mission/Scripts/Properties.csx");
-			missionPropertyNode = root.SelectNodes("runTimeProperty[@missionName='" + missionName + "'][1]")[0];
+		public void LoadPropertyToMission(string missionPropFilePath) {
+			session.ExecuteFile(missionPropFilePath);
 			LoadProperties();
 		}
 
@@ -116,6 +114,14 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 		/// <param Name="key">Property Name</param>
 		/// <returns>Generic instance of Property found by key </returns>
 		public Property<T> GetProperty<T>(string key) {
+			if (!propertiesNameList.Contains(key)) {
+				try {
+					LoadProperty(key);
+				}catch(Exception){
+					throw new PropertyMissingException("Missing property " + key);
+				}
+			}
+
 			Type type = typeof(T);
 			Dictionary<string, Property<T>> subDict;
 			if (baseDict.ContainsKey(type)) {
@@ -125,6 +131,24 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 				}
 			}
 			throw new PropertyMissingException("Missing property " + key);
+			
+		}
+
+		private void LoadProperty(string name) {
+
+			// Reflection is used because here is needed runtime generic add is private function
+			MethodInfo method = typeof(PropertyManager).GetMethod("Add", BindingFlags.NonPublic | BindingFlags.Instance);
+			// Property from a script (int,float...)
+			object d = session.Execute(name);
+			Type type = d.GetType();
+
+			MethodInfo generic = method.MakeGenericMethod(type);
+			List<object> args = new List<object>();
+			args.Add(name);
+			args.Add(d);
+
+			//  Calls add with type of property from script
+			generic.Invoke(this, args.ToArray());
 		}
 
 		/// <summary>
@@ -132,23 +156,8 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 		/// </summary>
 		public void LoadProperties() {
 
-			// Reflection is used because here is needed runtime generic add is private function
-			MethodInfo method = typeof(PropertyManager).GetMethod("Add", BindingFlags.NonPublic | BindingFlags.Instance);
-			foreach (XmlNode property in missionPropertyNode.ChildNodes) {
-				string propertyName = property.Attributes["name"].InnerText;
-
-				// Property from a script (int,float...)
-				object d = session.Execute(propertyName);					
-				Type type = d.GetType();
-
-				MethodInfo generic = method.MakeGenericMethod(type);		
-				List<object> args = new List<object>();
-				args.Add(propertyName);
-				args.Add(d);
-
-				//  Calls add with type of property from script
-				generic.Invoke(this, args.ToArray());						
-
+			foreach (var property in propertiesNameList) {
+				LoadProperty(property);
 			}
 		}
 

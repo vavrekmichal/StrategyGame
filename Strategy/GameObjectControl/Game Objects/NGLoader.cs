@@ -38,6 +38,8 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		private CompilationOptions comilationOption;
 		private List<string> isCompiled;
 
+		//private string missionName;
+
 		public NGLoader(string path, Dictionary<string, Team> teams,
 			List<SolarSystem> solarSystems) {
 			teamRealationDict = new Dictionary<Team, List<Team>>();
@@ -116,14 +118,16 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 
-		public void Load(string missionName) {
+		public void Load(string missionPropFileName) {
 			//TODO thinks about try-block
-			Game.PropertyManager.LoadPropertyToMission(missionName);
+			
 			bool hasSun = false;
 			IStaticGameObject sun = null;
 
 			// Load mission (first of given Name)
-			missionNode = root.SelectNodes("/mission[@name='" + missionName + "'][1]")[0];
+			missionNode = root.SelectNodes("/mission[1]")[0];
+
+			Game.PropertyManager.LoadPropertyToMission(missionNode.Attributes["propertyFilePath"].InnerText);
 
 			LoadTeams(missionNode.SelectNodes("teams[1]")[0]);
 

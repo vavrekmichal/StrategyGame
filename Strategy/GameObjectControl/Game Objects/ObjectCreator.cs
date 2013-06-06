@@ -31,11 +31,11 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// <summary>
 		/// Inicialization of game World
 		/// </summary>
-		/// <param Name="mission">Name of mission</param>
-		public void InitializeWorld(string mission) {
+		/// <param Name="missionFilePath">Path to file with mission data</param>
+		public void InitializeWorld(string missionFilePath) {
 
-			loader = new NGLoader("../../Media/Mission/MyMission.xml", teams, solarSystems);
-			loader.Load(mission);
+			loader = new NGLoader(missionFilePath, teams, solarSystems);
+			loader.Load(missionFilePath);
 
 			solarSystems[0].ShowSolarSystem();
 

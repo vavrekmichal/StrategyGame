@@ -7,8 +7,6 @@ using Strategy.GameObjectControl.RuntimeProperty;
 
 namespace Strategy.GameMaterial {
     public interface IMaterial {
-  
-        double DisplayChangees();
         Property<int> GetQuantityOfMaterial();
         bool TryBuild(int wantedQuantity);
         void AddQuantity(double quantity);

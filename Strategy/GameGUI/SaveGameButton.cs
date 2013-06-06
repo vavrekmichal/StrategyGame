@@ -10,7 +10,7 @@ namespace Strategy.GameGUI {
 
 		TextBox textBox;
 
-		public SaveGameButton(Panel panel, TextBox textBox, BoolWrapper isClosed) :base(panel,isClosed){
+		public SaveGameButton(Panel panel, TextBox textBox, PopUpPanelControl isClosed) :base(panel,isClosed){
 			this.textBox = textBox;
 		}
 

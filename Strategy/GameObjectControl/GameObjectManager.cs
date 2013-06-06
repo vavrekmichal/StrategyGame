@@ -55,7 +55,7 @@ namespace Strategy.GameObjectControl {
 			moveMgr = new MoveManager();
 			fightMgr = new FightManager();
 			groupMgr = new GroupManager();
-			propertyMgr = new PropertyManager("StartMission");
+			propertyMgr = new PropertyManager();
 			hitTest = new HitTest();
 		}
 		#endregion

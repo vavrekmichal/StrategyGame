@@ -19,10 +19,6 @@ namespace Strategy.GameMaterial {
             get { return myName; }
         }
 
-        public double DisplayChangees() {
-            throw new NotImplementedException();
-        }
-
 		public Property<int> GetQuantityOfMaterial() {
 			return actualQuantity;
         }

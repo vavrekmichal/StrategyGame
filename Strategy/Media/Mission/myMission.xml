@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<mission name="StartMission">
+<mission propertyFilePath="../../Media/Mission/Scripts/Properties2.csx">
   <teams>
     <friendlyTeams>
       <team name="Player"/>

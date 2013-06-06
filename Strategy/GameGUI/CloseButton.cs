@@ -6,15 +6,16 @@ using System.Threading.Tasks;
 using Miyagi.UI.Controls;
 
 namespace Strategy.GameGUI {
-	class CloseButton:Button {
+	class CloseButton : Button {
 		protected Panel panelToClose;
-		protected BoolWrapper isClosed;
+		protected PopUpPanelControl isClosed;
 
-		public CloseButton(Panel panel) : base(){
+		public CloseButton(Panel panel)
+			: base() {
 			panelToClose = panel;
 		}
 
-		public CloseButton(Panel panel, BoolWrapper isClosed)
+		public CloseButton(Panel panel, PopUpPanelControl isClosed)
 			: base() {
 			panelToClose = panel;
 			this.isClosed = isClosed;
@@ -29,10 +30,5 @@ namespace Strategy.GameGUI {
 			isClosed.Value = true;
 		}
 
-	}
-
-	class BoolWrapper {
-		public bool Value { get; set; }
-		public BoolWrapper() { this.Value = true; }
 	}
 }
