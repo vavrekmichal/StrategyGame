@@ -46,9 +46,16 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		}
 
 
+
 		public void Destroy() {
-			Game.SceneManager.DestroySceneNode(sceneNode);
-			Game.SceneManager.DestroyEntity(entity);
+			if (sceneNode != null) {
+				Game.SceneManager.DestroySceneNode(sceneNode);
+				sceneNode = null;
+			}
+			if (entity != null) {	
+				Game.SceneManager.DestroyEntity(entity);
+				entity = null;
+			}
 		}
 
 

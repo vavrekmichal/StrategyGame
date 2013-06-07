@@ -173,6 +173,21 @@ namespace Strategy.GameObjectControl {
 			}
 		}
 
+		public void DestroyGame() {
+			//TODO destroy solar systems
+			foreach (var item in objectCreator.GetInicializedSolarSystems()) {
+				item.Destroy();
+			}
+
+			teamMgr = TeamManager.GetInstance();
+			objectCreator = new ObjectCreator();
+			moveMgr = new MoveManager();
+			fightMgr = new FightManager();
+			groupMgr = new GroupManager();
+			propertyMgr = new PropertyManager();
+			hitTest = new HitTest();
+		}
+
 		/// <summary>
 		/// Inicialization of managers, hittest...
 		/// </summary>

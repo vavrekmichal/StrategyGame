@@ -139,6 +139,23 @@ namespace Strategy.GameObjectControl {
 			}
 		}
 
+		public void Destroy() {
+			if (sun != null) {
+				sun.Destroy();
+			}
+
+			foreach (var isgoPair in isgoObjectDict) {
+				isgoPair.Value.Destroy();
+			}
+			foreach (var imgoPair in imgoObjectDict) {
+				imgoPair.Value.Destroy();
+			}
+			foreach (var bullet in bulletDict) {
+				bullet.Value.Destroy();
+			}
+
+		}
+
 		/// <summary>
 		/// Function update all objects in SolarSystem in visible or invisible mode.
 		/// The function is using shallow copies for removing from original Dictionaries.
@@ -146,13 +163,13 @@ namespace Strategy.GameObjectControl {
 		/// <param name="delay">Deley between last two frames</param>
 		public void Update(float delay) {
 			if (active) {
-				foreach (var isgoPair in new Dictionary<string,IStaticGameObject>(isgoObjectDict)) {
+				foreach (var isgoPair in new Dictionary<string, IStaticGameObject>(isgoObjectDict)) {
 					isgoPair.Value.Rotate(delay);
 				}
-				foreach (var imgoPair in new Dictionary<string,IMovableGameObject>(imgoObjectDict)) {
+				foreach (var imgoPair in new Dictionary<string, IMovableGameObject>(imgoObjectDict)) {
 					imgoPair.Value.Move(delay);
 				}
-				foreach (var bullet in new Dictionary<string,IBullet>(bulletDict)) {
+				foreach (var bullet in new Dictionary<string, IBullet>(bulletDict)) {
 					bullet.Value.Update(delay);
 				}
 				if (sun != null) {

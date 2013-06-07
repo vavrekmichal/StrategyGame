@@ -18,6 +18,7 @@ namespace Strategy.GameGUI {
 		void UpdatePlayerMaterialDict(Dictionary<string, IMaterial> materialDict);
 		void End(string printText);
 		bool Enable { get; set; }
+		void ClearMissionData();
 	}
 }
 

@@ -13,5 +13,7 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		void HiddenUpdate(float delay);
 
 		void ChangeVisible(bool visible);
+
+		void Destroy();
 	}
 }

@@ -260,5 +260,14 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 			}
 			Game.SceneManager.DestroyEntity(entity);
 		}
+
+		void IBullet.Destroy() {
+			if (entity != null) {
+				Game.SceneManager.DestroySceneNode(sceneNode);
+				Game.SceneManager.DestroyEntity(entity);
+				sceneNode = null;
+				entity = null;
+			}
+		}
 	}
 }

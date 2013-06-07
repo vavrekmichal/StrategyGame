@@ -47,7 +47,6 @@ namespace Strategy.TeamControl {
             }
         }
 
-
 		public bool AreFriendly(Team t1, Team t2) {
 			if (friendlyTeamDict[t1].Contains(t2)) {
 				return true;

@@ -62,10 +62,12 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 		public void Destroy() {
-			if (entity != null) {
+			if (sceneNode != null) {
 				Game.SceneManager.DestroySceneNode(sceneNode);
-				Game.SceneManager.DestroyEntity(entity);
 				sceneNode = null;
+			}
+			if (entity != null) {	
+				Game.SceneManager.DestroyEntity(entity);
 				entity = null;
 			}
 		}

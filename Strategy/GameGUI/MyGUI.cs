@@ -31,6 +31,8 @@ namespace Strategy.GameGUI {
 		private Button pauseButton;
 		private Button loadButton;
 		private Button saveButton;
+		private Button missionButton;
+		private Button travelButton;
 
 		private Label statPanelName;
 		private Panel propertyPanel;
@@ -430,14 +432,16 @@ namespace Strategy.GameGUI {
 			buttonsPanel.Controls.Add(b);
 
 			row = 0;
-			b = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Mission info", new Point(buttonMarginLeftSecond, buttonMarginTop * row));
-			buttonsPanel.Controls.Add(b);
-			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(ShowMissionInfo);
+			missionButton = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Mission info", new Point(buttonMarginLeftSecond, buttonMarginTop * row));
+			buttonsPanel.Controls.Add(missionButton);
+			missionButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(ShowMissionInfo);
+			missionButton.Visible = false;
 			row++;
 
-			b = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Solar systems", new Point(buttonMarginLeftSecond, buttonMarginTop * row));
-			buttonsPanel.Controls.Add(b);
-			b.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(ShowSolarSystems);
+			travelButton = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Solar systems", new Point(buttonMarginLeftSecond, buttonMarginTop * row));
+			buttonsPanel.Controls.Add(travelButton);
+			travelButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(ShowSolarSystems);
+			travelButton.Visible = false;
 			row++;
 
 
@@ -526,7 +530,8 @@ namespace Strategy.GameGUI {
 		}
 
 		private void ShowSavePanel(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
-			CreateSavePanel();
+			Game.DestroyGame();
+			//CreateSavePanel();
 		}
 
 		private void ShowLoadPanel(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
@@ -756,13 +761,16 @@ namespace Strategy.GameGUI {
 
 
 			panel.Controls.Add(innerScrollablePanel);
-			var targetList = Game.Mission.GetMissionInfo();
+			var mission = Game.Mission;
+			if (mission != null) {
+				var targetList = mission.GetMissionInfo();
 
-			int row = 0;
-			foreach (var target in targetList) {
-				innerScrollablePanel.Controls.Add(CreatePropertyLabel<string>(innerScrollablePanel.Width - 10, textHeight, "Target " + row + ": ",
-					new Point(0, row * (textHeight + 1)), target));
-				row++;
+				int row = 0;
+				foreach (var target in targetList) {
+					innerScrollablePanel.Controls.Add(CreatePropertyLabel<string>(innerScrollablePanel.Width - 10, textHeight, "Target " + row + ": ",
+						new Point(0, row * (textHeight + 1)), target));
+					row++;
+				}
 			}
 			gui.Controls.Add(panel);
 		}
@@ -1156,6 +1164,8 @@ namespace Strategy.GameGUI {
 				pauseButton.Enabled = value;
 				loadButton.Visible = !value;
 				saveButton.Visible = value;
+				travelButton.Visible = value;
+				missionButton.Visible = value;
 				enable = value;
 			}
 		}
@@ -1167,9 +1177,12 @@ namespace Strategy.GameGUI {
 		public void End(string printText) {
 
 			Game.Pause(true);
-			buttonsPanel.Controls.Clear();
-			statPanel.Controls.Clear();
-			actionPanel.Controls.Clear();
+			//buttonsPanel.Controls.Clear();
+			//statPanel.Controls.Clear();
+			//actionPanel.Controls.Clear();
+
+			ClearMissionData();
+			DisableAll();
 
 			var panel = new Panel() {
 				Size = new Size(screenWidth / 4, screenHeight / 5),
@@ -1185,6 +1198,19 @@ namespace Strategy.GameGUI {
 			panel.Controls.Add(button);
 			gui.Controls.Add(panel);
 
+		}
+
+		private void DisableAll() {
+			pauseButton.Enabled = false;
+			saveButton.Enabled = false;
+			travelButton.Visible = false;
+			missionButton.Visible = false;
+		}
+
+		public void ClearMissionData() {
+			materialPanel.Controls.Clear();
+			console.Controls.Clear();
+			consoleLinesNumber = 0;
 		}
 	}
 }

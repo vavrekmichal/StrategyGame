@@ -185,6 +185,15 @@ namespace Strategy {
 		}
 
 
+		public static void DestroyGame() {
+
+			gameGUI.ClearMissionData();
+			gameGUI.Enable = false;
+			gamePaused = true;
+			mission = new Mission();
+			gameObjectMgr.DestroyGame();
+		}
+
 		private static void Inicialization(string missionFileName) {
 			gameObjectMgr.Inicialization(missionFileName);
 			gameGUI.SetSolarSystemName(GroupManager.GetSolarSystemName(0));
