@@ -14,9 +14,11 @@ namespace Strategy.GameGUI {
 			this.action = action;
 			Load(action.IconPath());
 			Size = new Miyagi.Common.Data.Size(25, 25);
+			MouseClick += GameActionClicked;
 		}
 
-		public void MouseClicked() {
+
+		private void GameActionClicked(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
 			Game.PrintToGameConsole(action.OnMouseClick());
 		}
 	}

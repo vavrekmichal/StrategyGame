@@ -71,7 +71,6 @@
     <Compile Include="FightMgr\IBulletStopReciever.cs" />
     <Compile Include="GameGUI\GameActionIconBox.cs" />
     <Compile Include="GameGUI\IGameGUI.cs" />
-    <Compile Include="GameGUI\PopUpPanelControl.cs" />
     <Compile Include="GameGUI\SaveGameButton.cs" />
     <Compile Include="GameObjectControl\Game Objects\Bullet\IBullet.cs" />
     <Compile Include="FightMgr\DamageCounter.cs" />

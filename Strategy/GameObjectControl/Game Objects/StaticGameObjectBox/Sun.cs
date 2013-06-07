@@ -45,15 +45,15 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 
 		}
 
-
-
 		public void Destroy() {
 			if (sceneNode != null) {
 				Game.SceneManager.DestroySceneNode(sceneNode);
+				Console.WriteLine("Node mrtvej");
 				sceneNode = null;
 			}
 			if (entity != null) {	
 				Game.SceneManager.DestroyEntity(entity);
+				Console.WriteLine("Entita mrtva");
 				entity = null;
 			}
 		}
@@ -78,6 +78,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 				sceneNode.AttachObject(entity);
 			} else {
 				Game.SceneManager.DestroySceneNode(sceneNode);
+				sceneNode = null;
 			}
 		}
 

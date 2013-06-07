@@ -9,18 +9,27 @@ namespace Strategy.GameGUI {
 	class SaveGameButton : CloseButton{
 
 		TextBox textBox;
+		PanelType panelToClose;
 
-		public SaveGameButton(Panel panel, TextBox textBox, PopUpPanelControl isClosed) :base(panel,isClosed){
+
+		public SaveGameButton(PanelType panel, TextBox textBox) :base(panel){
 			this.textBox = textBox;
+			panelToClose = panel;
+			MouseClick += SaveGame;
 		}
 
-		public void SaveGame() {
-			var saveName = textBox.Text;
-			if (saveName=="") {
-				saveName = "NoName";
+
+		private void SaveGame(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
+
+			var casted = sender as SaveGameButton;
+			if (casted != null) {
+				var saveName = textBox.Text;
+				if (saveName == "") {
+					saveName = "NoName";
+				}
+				Game.Save(saveName + ".save");
+				Game.IGameGUI.ClosePanel(panelToClose);
 			}
-			Game.Save(saveName + ".save");
-			ClosePanel();
 		}
 	}
 }

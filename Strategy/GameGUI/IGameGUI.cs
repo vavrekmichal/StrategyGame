@@ -14,11 +14,13 @@ namespace Strategy.GameGUI {
 		void ShowTargeted(GroupMovables group);
 		void SetSolarSystemName(string name);
 		void PrintToGameConsole(string text);
-		void ShowSolarSystSelectionPanel(List<string> possibilities, string topic, object gameObject);
+		void ShowTravelSelectionPanel(List<string> possibilities, string topic, object gameObject);
 		void UpdatePlayerMaterialDict(Dictionary<string, IMaterial> materialDict);
 		void End(string printText);
 		bool Enable { get; set; }
 		void ClearMissionData();
+		void ClosePanel(PanelType type);
+		int NumberOfPopUpPanels { get; }
 	}
 }
 

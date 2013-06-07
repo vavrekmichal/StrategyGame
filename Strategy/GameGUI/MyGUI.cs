@@ -14,8 +14,14 @@ using Strategy.GameObjectControl.Game_Objects.GameActions;
 using System.IO;
 
 namespace Strategy.GameGUI {
+
+	public enum PanelType { MissionInfoPanel, LoadPanel, SavePanel, SolarSystemPanel, TravelPanel, MissionEndPanel }
+
+
 	public class MyGUI : IGameGUI {
-		//TODO: udelat dictionary s string a label pro nastavovani stavu surovin.
+
+		Dictionary<PanelType, Panel> openedPanelDict;
+
 		protected int screenWidth;
 		protected int screenHeight;
 
@@ -66,6 +72,8 @@ namespace Strategy.GameGUI {
 			screenHeight = height;
 			screenWidth = width;
 
+			openedPanelDict = new Dictionary<PanelType, Panel>();
+
 			// Set Miyagi to Mogre
 			guiSystem = new MiyagiSystem("Mogre");
 			gui = new GUI();
@@ -111,8 +119,8 @@ namespace Strategy.GameGUI {
 				Location = new Point(screenWidth / 15, screenHeight * 2 / 30),
 				Name = "topSection"
 			};
-			topSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseOver);
-			topSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseLeave);
+			topSection.MouseHover += MouseOver;
+			topSection.MouseLeave += MouseLeave;
 			gui.Controls.Add(topSection);
 
 			// Botton bound
@@ -121,8 +129,8 @@ namespace Strategy.GameGUI {
 				Location = new Point(screenWidth / 15, screenHeight * 7 / 10),
 				Name = "backSection"
 			};
-			backSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseOver);
-			backSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseLeave);
+			backSection.MouseHover += MouseOver;
+			backSection.MouseLeave += MouseLeave;
 			gui.Controls.Add(backSection);
 
 			// Left bound
@@ -131,8 +139,8 @@ namespace Strategy.GameGUI {
 				Location = new Point(0, screenHeight / 10),
 				Name = "leftSection"
 			};
-			leftSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseOver);
-			leftSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseLeave);
+			leftSection.MouseHover += MouseOver;
+			leftSection.MouseLeave += MouseLeave;
 			gui.Controls.Add(leftSection);
 
 			// Right bound
@@ -141,8 +149,8 @@ namespace Strategy.GameGUI {
 				Location = new Point(screenWidth * 14 / 15, screenHeight / 10),
 				Name = "rightSection"
 			};
-			rightSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseOver);
-			rightSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseLeave);
+			rightSection.MouseHover += MouseOver;
+			rightSection.MouseLeave += MouseLeave;
 			gui.Controls.Add(rightSection);
 
 			// Rigth-up corner bound
@@ -151,8 +159,8 @@ namespace Strategy.GameGUI {
 				Location = new Point(screenWidth * 14 / 15, 0),
 				Name = "rightUpSection"
 			};
-			rightUpSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseOver);
-			rightUpSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseLeave);
+			rightUpSection.MouseHover += MouseOver;
+			rightUpSection.MouseLeave += MouseLeave;
 			gui.Controls.Add(rightUpSection);
 
 			// Right-down corner bound
@@ -161,8 +169,8 @@ namespace Strategy.GameGUI {
 				Location = new Point(screenWidth * 14 / 15, screenHeight * 7 / 10),
 				Name = "rightDownSection"
 			};
-			rightDownSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseOver);
-			rightDownSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseLeave);
+			rightDownSection.MouseHover += MouseOver;
+			rightDownSection.MouseLeave += MouseLeave;
 			gui.Controls.Add(rightDownSection);
 
 			// Left-down corner bound
@@ -171,8 +179,8 @@ namespace Strategy.GameGUI {
 				Location = new Point(0, screenHeight * 7 / 10),
 				Name = "leftDownSection"
 			};
-			leftDownSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseOver);
-			leftDownSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseLeave);
+			leftDownSection.MouseHover += MouseOver;
+			leftDownSection.MouseLeave += MouseLeave;
 			gui.Controls.Add(leftDownSection);
 
 			// Left-up corner bound
@@ -181,8 +189,8 @@ namespace Strategy.GameGUI {
 				Location = new Point(0, 0),
 				Name = "leftUpSection"
 			};
-			leftUpSection.MouseHover += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseOver);
-			leftUpSection.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(MouseLeave);
+			leftUpSection.MouseHover += MouseOver;
+			leftUpSection.MouseLeave += MouseLeave;
 			gui.Controls.Add(leftUpSection);
 		}
 
@@ -414,33 +422,38 @@ namespace Strategy.GameGUI {
 
 			pauseButton = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Pause BUTTON", new Point(buttonMarginLeft, buttonMarginTop * row));
 			buttonsPanel.Controls.Add(pauseButton);
-			pauseButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(Pause);
+			pauseButton.MouseClick += Pause;
 			pauseButton.Enabled = false;
 			row++;
 
 			saveButton = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Save", new Point(buttonMarginLeft, buttonMarginTop * row));
 			buttonsPanel.Controls.Add(saveButton);
-			saveButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(ShowSavePanel);
+			saveButton.MouseClick += ShowSavePanel;
 			saveButton.Visible = false;
 
 			loadButton = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Load", new Point(buttonMarginLeft, buttonMarginTop * row));
 			buttonsPanel.Controls.Add(loadButton);
-			loadButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(ShowLoadPanel);
+			loadButton.MouseClick += ShowLoadPanel;
 			row++;
 
-			Button b = CreateExitButton(buttonWidth, buttonsPanel.Height / 5, new Point(buttonMarginLeft, buttonMarginTop * row));
+			Button b = CreateButton(buttonWidth, buttonsPanel.Height / 5, "End Mission", new Point(buttonMarginLeft, buttonMarginTop * row));
+			buttonsPanel.Controls.Add(b);
+			b.MouseClick += EndMission;
+			row++;
+
+			b = CreateExitButton(buttonWidth, buttonsPanel.Height / 5, new Point(buttonMarginLeft, buttonMarginTop * row));
 			buttonsPanel.Controls.Add(b);
 
 			row = 0;
 			missionButton = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Mission info", new Point(buttonMarginLeftSecond, buttonMarginTop * row));
 			buttonsPanel.Controls.Add(missionButton);
-			missionButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(ShowMissionInfo);
+			missionButton.MouseClick += ShowMissionInfo;
 			missionButton.Visible = false;
 			row++;
 
 			travelButton = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Solar systems", new Point(buttonMarginLeftSecond, buttonMarginTop * row));
 			buttonsPanel.Controls.Add(travelButton);
-			travelButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(ShowSolarSystems);
+			travelButton.MouseClick += ShowSolarSystems;
 			travelButton.Visible = false;
 			row++;
 
@@ -451,7 +464,7 @@ namespace Strategy.GameGUI {
 
 		private Button CreateExitButton(int width, int height, Point location) {
 			var button = CreateButton(width, height, "Exit", location);
-			button.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(QuitOnClick);
+			button.MouseClick += QuitOnClick;
 			return button;
 		}
 
@@ -522,57 +535,50 @@ namespace Strategy.GameGUI {
 
 		#region Button Actions
 
-		private void GameActionClicked(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
-			var icon = sender as GameActionIconBox;
-			if (icon != null) {
-				icon.MouseClicked();
-			}
-		}
 
 		private void ShowSavePanel(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
-			Game.DestroyGame();
-			//CreateSavePanel();
+			CreateSavePanel();
 		}
 
 		private void ShowLoadPanel(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
 			CreateLoadPanel();
 		}
 
-		private void SaveGame(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
-
-			var casted = sender as SaveGameButton;
-			if (casted != null) {
-				casted.SaveGame();
+		private void EndMission(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
+			foreach (var item in new Dictionary<PanelType, Panel>(openedPanelDict)) {
+				item.Value.Dispose();
+				openedPanelDict.Remove(item.Key);
 			}
-
+			Game.DestroyGame();
 		}
 
-		private void SelectLoadMission(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
-			// Button Action for SelectionLabel calls Game.Load and load given mission
-			var selectionLabel = sender as SelectionLabel;
-			if (selectionLabel != null) {
-				selectionLabel.ClosePanel();
-				Game.Load((string)selectionLabel.StoredObject);
-			}
-		}
 
-		private void SelectSolarSystem(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
-			// Button Action for SelectionLabel calls GroupManager function ChangeSolarSystem and close Panel
-			var selectionLabel = sender as SelectionLabel;
-			if (selectionLabel != null) {
-				Game.GroupManager.ChangeSolarSystem(selectionLabel.NumberOfItem);
-				selectionLabel.ClosePanel();
-			}
-		}
+		//private void SelectLoadMission(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
+		//	// Button Action for SelectionLabel calls Game.Load and load given mission
+		//	var selectionLabel = sender as SelectionLabel;
+		//	if (selectionLabel != null) {
+		//		selectionLabel.ClosePanel();
+		//		Game.Load((string)selectionLabel.StoredObject);
+		//	}
+		//}
 
-		private void Travel(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
-			// Function calls CreateTraveler with selected number of SolarSystem and traveler(IMovableGameObject)
-			var selectionLabel = sender as SelectionLabel;
-			if (selectionLabel != null) {
-				Game.GroupManager.CreateTraveler(selectionLabel.NumberOfItem, selectionLabel.StoredObject);
-				selectionLabel.ClosePanel();
-			}
-		}
+		//private void SelectSolarSystem(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
+		//	// Button Action for SelectionLabel calls GroupManager function ChangeSolarSystem and close Panel
+		//	var selectionLabel = sender as SelectionLabel;
+		//	if (selectionLabel != null) {
+		//		Game.GroupManager.ChangeSolarSystem(selectionLabel.NumberOfItem);
+		//		selectionLabel.ClosePanel();
+		//	}
+		//}
+
+		//private void Travel(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
+		//	// Function calls CreateTraveler with selected number of SolarSystem and traveler(IMovableGameObject)
+		//	var selectionLabel = sender as SelectionLabel;
+		//	if (selectionLabel != null) {
+		//		Game.GroupManager.CreateTraveler(selectionLabel.NumberOfItem, selectionLabel.StoredObject);
+		//		selectionLabel.ClosePanel();
+		//	}
+		//}
 
 		private void QuitOnClick(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
 			// Function closes application (throw ShutdownException)
@@ -612,14 +618,6 @@ namespace Strategy.GameGUI {
 			MogreControl.MouseControl.MoveStop(((Button)sender).Name);
 		}
 
-		private void DisposePanel(object sender, Miyagi.Common.Events.MouseEventArgs e) {
-			// On click button Dispose the panel 
-			var closeButton = sender as CloseButton;
-			if (closeButton != null) {
-				closeButton.ClosePanel();
-			}
-		}
-
 		private void ShowSolarSystems(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
 			// Shows Panel with SolarSystems and travelers
 			CreateSolarSystemPanel();
@@ -645,14 +643,13 @@ namespace Strategy.GameGUI {
 			return p;
 		}
 
-		private PopUpPanelControl savePanelIsClosed = new PopUpPanelControl(true);
+		//private PopUpPanelControl savePanelIsClosed = new PopUpPanelControl(true);
 
 		private void CreateSavePanel() {
-			if (!savePanelIsClosed.Value) {
+			if (openedPanelDict.ContainsKey(PanelType.SavePanel)) {
 				return;
 			}
-			savePanelIsClosed.Value = false;
-			var panel = CreatePopUpPanel("Saves:", savePanelIsClosed);
+			var panel = CreatePopUpPanel("Saves:", PanelType.SavePanel);
 
 			var innerScrollablePanel = CreateInnerScrollablePanel(textHeight + 6, panel.Width - 28, panel.Height * 11 / 16);
 			var savePaths = Directory.GetFiles(Game.SavesGamePath, "*.save");
@@ -677,12 +674,12 @@ namespace Strategy.GameGUI {
 				Padding = new Thickness(10, 0, 0, 0)
 			};
 
-			textArea.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(CaptureKeyboard);
-			textArea.MouseLeave += new EventHandler<Miyagi.Common.Events.MouseEventArgs>(ReleaseKeyboard);
+			textArea.MouseClick += CaptureKeyboard;
+			textArea.MouseLeave += ReleaseKeyboard;
 
 			panel.Controls.Add(textArea);
 
-			var button = new SaveGameButton(panel, textArea, savePanelIsClosed) {
+			var button = new SaveGameButton(PanelType.SavePanel, textArea) {
 				Location = new Point(panel.Width / 4, panel.Height * 7 / 8),
 				Skin = skinDict["Button"],
 				Text = "Ok",
@@ -691,22 +688,21 @@ namespace Strategy.GameGUI {
 				},
 				Size = new Size(panel.Width / 3, panel.Height / 12)
 			};
-			button.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(SaveGame);
 
 			panel.Controls.Add(button);
-
+			openedPanelDict.Add(PanelType.SavePanel, panel);
 			gui.Controls.Add(panel);
 		}
 
 
-		private PopUpPanelControl loadPanelIsClosed = new PopUpPanelControl(true);
+		//private PopUpPanelControl loadPanelIsClosed = new PopUpPanelControl(true);
 
 		private void CreateLoadPanel() {
-			if (!loadPanelIsClosed.Value) {
+			if (openedPanelDict.ContainsKey(PanelType.LoadPanel)) {
 				return;
 			}
-			loadPanelIsClosed.Value = false;
-			var panel = CreatePopUpPanel("Load new mission:", loadPanelIsClosed);
+
+			var panel = CreatePopUpPanel("Load new mission:", PanelType.LoadPanel);
 
 			var innerScrollablePanel = CreateInnerScrollablePanel(textHeight + 6, panel.Width - 28, panel.Height / 3);
 			var missionPaths = Directory.GetFiles(Game.SavesGamePath, "*.save");
@@ -715,11 +711,10 @@ namespace Strategy.GameGUI {
 				var splited = missionPaths[i].Split('\\');
 
 				var label = CreateSelectionLabel(panel.Width, textHeight + 1, splited[splited.Length - 1].Substring(0, splited[splited.Length - 1].Length - 5),
-					new Point(0, i * (textHeight + 1)), i, panel, loadPanelIsClosed, missionPaths[i]);
+					new Point(0, i * (textHeight + 1)), i, PanelType.LoadPanel, missionPaths[i]);
 				label.TextStyle = new TextStyle {
 					Alignment = Miyagi.Common.Alignment.TopCenter
 				};
-				label.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(SelectLoadMission);
 				innerScrollablePanel.Controls.Add(label);
 			}
 			panel.Controls.Add(innerScrollablePanel);
@@ -735,27 +730,25 @@ namespace Strategy.GameGUI {
 				var splited = missionPaths[i].Split('\\');
 
 				var label = CreateSelectionLabel(panel.Width, textHeight + 1, splited[splited.Length - 1].Substring(0, splited[splited.Length - 1].Length - 8),
-					 new Point(0, i * (textHeight + 1)), i, panel, loadPanelIsClosed, missionPaths[i]);
+					 new Point(0, i * (textHeight + 1)), i, PanelType.LoadPanel, missionPaths[i]);
 				label.TextStyle = new TextStyle {
 					Alignment = Miyagi.Common.Alignment.TopCenter
 				};
-				label.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(SelectLoadMission);
 				innerScrollablePanel.Controls.Add(label);
 			}
 			panel.Controls.Add(innerScrollablePanel);
-
+			openedPanelDict.Add(PanelType.LoadPanel, panel);
 			gui.Controls.Add(panel);
 		}
 
 
-		private PopUpPanelControl missionPanelIsClosed = new PopUpPanelControl(true);
 
 		private void CreateMissionPanel() {
-			if (!missionPanelIsClosed.Value) {
+			if (openedPanelDict.ContainsKey(PanelType.MissionInfoPanel)) {
 				return;
 			}
-			missionPanelIsClosed.Value = false;
-			var panel = CreatePopUpPanel("Mission Info:", missionPanelIsClosed);
+
+			var panel = CreatePopUpPanel("Mission Info:", PanelType.MissionInfoPanel);
 
 			var innerScrollablePanel = CreateInnerScrollablePanel(textHeight + 6, panel.Width - 28, panel.Height * 37 / 48);
 
@@ -772,21 +765,21 @@ namespace Strategy.GameGUI {
 					row++;
 				}
 			}
+			openedPanelDict.Add(PanelType.MissionInfoPanel, panel);
 			gui.Controls.Add(panel);
 		}
 
 
-		private PopUpPanelControl solarSystPanelIsClosed = new PopUpPanelControl(true);
+		//private PopUpPanelControl solarSystPanelIsClosed = new PopUpPanelControl(true);
 
 		/// <summary>
 		/// Creates top bar with info about current SolarSystem and players materials
 		/// </summary>
 		private void CreateSolarSystemPanel() {
-			if (!solarSystPanelIsClosed.Value) {
+			if (openedPanelDict.ContainsKey(PanelType.SolarSystemPanel)) {
 				return;
 			}
-			solarSystPanelIsClosed.Value = false;
-			var panel = CreatePopUpPanel(" Select solar system:", solarSystPanelIsClosed);
+			var panel = CreatePopUpPanel(" Select solar system:", PanelType.SolarSystemPanel);
 
 			List<string> solarSystList = Game.GroupManager.GetAllSolarSystemNames();
 
@@ -804,12 +797,10 @@ namespace Strategy.GameGUI {
 			for (int i = 0; i < solarSystList.Count; i++) {
 				var selectionLabel = CreateSelectionLabel(
 					selectionLabelWidth, textHeight, solarSystList[i],
-					new Point(0, i * selectionLabelMarginTop), i, panel,
-					solarSystPanelIsClosed
+					new Point(0, i * selectionLabelMarginTop), i, PanelType.SolarSystemPanel
 					);
 
 				innerScrollablePanel.Controls.Add(selectionLabel);
-				selectionLabel.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(SelectSolarSystem);
 			}
 
 			marginTop = panel.Height / 2;
@@ -839,7 +830,7 @@ namespace Strategy.GameGUI {
 					new Point(0, i * selectionLabelMarginTop), travList[i].TimeProperty);
 				innerScrollablePanel.Controls.Add(testButton);
 			}
-
+			openedPanelDict.Add(PanelType.SolarSystemPanel, panel);
 			gui.Controls.Add(panel);
 		}
 
@@ -888,9 +879,9 @@ namespace Strategy.GameGUI {
 		/// <param Name="order">Number of choice</param>
 		/// <param Name="panelToClose">Closing Panel</param>
 		/// <returns></returns>
-		private SelectionLabel CreateSelectionLabel(int width, int height, string text, Point location, int order, Panel panelToClose, PopUpPanelControl isClosed,
+		private SelectionLabel CreateSelectionLabel(int width, int height, string text, Point location, int order, PanelType panelToClose,
 			object objectRef = null) {
-			var selectLabel = new SelectionLabel(order, objectRef, panelToClose, isClosed) {
+			var selectLabel = new SelectionLabel(order, objectRef, panelToClose) {
 				Size = new Size(width, height),
 				Text = text,
 				Location = location
@@ -950,7 +941,6 @@ namespace Strategy.GameGUI {
 
 		public PictureBox CreateGameActionIcon(IGameAction action) {
 			var icon = new GameActionIconBox(action);
-			icon.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(GameActionClicked);
 			return icon;
 		}
 
@@ -992,7 +982,7 @@ namespace Strategy.GameGUI {
 			return label;
 		}
 
-		private Panel CreatePopUpPanel(string text, PopUpPanelControl boolWrap) {
+		private Panel CreatePopUpPanel(string text, PanelType type) {
 
 			var panel = new Panel() {
 				Width = screenWidth / 2,
@@ -1019,15 +1009,14 @@ namespace Strategy.GameGUI {
 				panel.Height / 12,
 				"Cancel",
 				new Point(panel.Width * 5 / 8, panel.Height * 7 / 8),
-					panel, boolWrap);
-			closeButton.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(DisposePanel);
+					type);
 			panel.Controls.Add(closeButton);
 
 			return panel;
 		}
 
-		private CloseButton CreateCloseButton(int width, int height, string text, Point location, Panel panelToClose, PopUpPanelControl isClosed) {
-			var b = new CloseButton(panelToClose, isClosed) {
+		private CloseButton CreateCloseButton(int width, int height, string text, Point location, PanelType panelToClose) {
+			var b = new CloseButton(panelToClose) {
 				Size = new Size(width, height),
 				Location = location,
 				Skin = skinDict["Button"],
@@ -1039,14 +1028,8 @@ namespace Strategy.GameGUI {
 			return b;
 		}
 
-		private CloseButton CreateCloseButton(int width, int height, string text, Point location, Panel panelToClose) {
-			var b = new CloseButton(panelToClose) {
-				Size = new Size(width, height),
-				Location = location,
-				Skin = skinDict["Button"],
-				Text = text
-			};
-			return b;
+		public int NumberOfPopUpPanels {
+			get { return openedPanelDict.Count; }
 		}
 
 		/// <summary>
@@ -1064,10 +1047,9 @@ namespace Strategy.GameGUI {
 		}
 
 
-		public void ShowSolarSystSelectionPanel(List<string> possibilities, string topic, object gameObject) {
-			var captureMouse = new PopUpPanelControl(false);
-			captureMouse.CaptureMouse();
-			var panel = CreatePopUpPanel(" " + topic, captureMouse); // Don't need know if panel is closed or not
+		public void ShowTravelSelectionPanel(List<string> possibilities, string topic, object gameObject) {
+
+			var panel = CreatePopUpPanel(" " + topic, PanelType.TravelPanel); // Don't need know if panel is closed or not
 			gui.Controls.Add(panel);
 
 			int marginTop = 10;
@@ -1088,11 +1070,10 @@ namespace Strategy.GameGUI {
 
 				SelectionLabel selectionLabel = CreateSelectionLabel(
 					selectionLabelWidth, 25, possibilities[i],
-					new Point(0, i * selectionLabelMarginTop), i, panel, captureMouse, gameObject
+					new Point(0, i * selectionLabelMarginTop), i, PanelType.TravelPanel, gameObject
 					);
 
 				innerScrollablePanel.Controls.Add(selectionLabel);
-				selectionLabel.MouseClick += new EventHandler<Miyagi.Common.Events.MouseButtonEventArgs>(Travel);
 			}
 
 
@@ -1170,16 +1151,13 @@ namespace Strategy.GameGUI {
 			}
 		}
 
-		/// <summary>
-		/// Clears mainMenu panel and creates new panel with information about the reason for the end of the game and with quit button.
-		/// </summary>
-		/// <param name="printText">Information about the reason for the end of the game</param>
 		public void End(string printText) {
 
+			if (openedPanelDict.ContainsKey(PanelType.MissionEndPanel)) {
+				return;
+			}
+
 			Game.Pause(true);
-			//buttonsPanel.Controls.Clear();
-			//statPanel.Controls.Clear();
-			//actionPanel.Controls.Clear();
 
 			ClearMissionData();
 			DisableAll();
@@ -1194,8 +1172,10 @@ namespace Strategy.GameGUI {
 					Alignment = Alignment.MiddleCenter
 				}
 			};
-			var button = CreateExitButton(panel.Width / 4, panel.Height / 6, new Point(panel.Width * 3 / 8, panel.Height * 3 / 4));
+			var button = CreateCloseButton(panel.Width / 4, panel.Height / 6, "Ok", new Point(panel.Width * 3 / 8, panel.Height * 3 / 4), PanelType.MissionEndPanel);
+			button.MouseClick += EndMission;
 			panel.Controls.Add(button);
+			openedPanelDict.Add(PanelType.MissionEndPanel, panel);
 			gui.Controls.Add(panel);
 
 		}
@@ -1211,6 +1191,13 @@ namespace Strategy.GameGUI {
 			materialPanel.Controls.Clear();
 			console.Controls.Clear();
 			consoleLinesNumber = 0;
+		}
+
+		public void ClosePanel(PanelType type) {
+			if (openedPanelDict.ContainsKey(type)) {
+				openedPanelDict[type].Dispose();
+				openedPanelDict.Remove(type);
+			}
 		}
 	}
 }

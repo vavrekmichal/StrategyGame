@@ -150,7 +150,7 @@
   </solarSystems>
   <missionTargets>
     <target name="SurviveTimeTarget">
-      <argument>50</argument>
+      <argument>10</argument>
     </target>
     <target name="KillTarget">
       <argument>ShipF</argument>

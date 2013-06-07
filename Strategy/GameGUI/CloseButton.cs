@@ -7,27 +7,18 @@ using Miyagi.UI.Controls;
 
 namespace Strategy.GameGUI {
 	class CloseButton : Button {
-		protected Panel panelToClose;
-		protected PopUpPanelControl isClosed;
 
-		public CloseButton(Panel panel)
+		private PanelType panelToClose;
+
+		public CloseButton(PanelType type)
 			: base() {
-			panelToClose = panel;
+			MouseClick += DisposePanel;
+			panelToClose = type;
 		}
 
-		public CloseButton(Panel panel, PopUpPanelControl isClosed)
-			: base() {
-			panelToClose = panel;
-			this.isClosed = isClosed;
-		}
-
-		public Panel PanelToClose {
-			get { return panelToClose; }
-		}
-
-		public void ClosePanel() {
-			panelToClose.Dispose();
-			isClosed.Value = true;
+		private void DisposePanel(object sender, Miyagi.Common.Events.MouseEventArgs e) {
+			// On click button Dispose the panel 
+			Game.IGameGUI.ClosePanel(panelToClose);
 		}
 
 	}

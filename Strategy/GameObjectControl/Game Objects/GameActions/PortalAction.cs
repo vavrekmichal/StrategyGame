@@ -16,7 +16,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 		public void Update(float delay) {}
 
 		public string OnMouseClick() {
-			Game.IGameGUI.ShowSolarSystSelectionPanel(Game.GroupManager.GetAllSolarSystemNames(), "Choose where you'll travel", gameObject);
+			Game.InterstellarTravel(gameObject);
 			return "Portal is open.";
 		}
 

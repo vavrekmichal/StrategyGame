@@ -30,7 +30,6 @@ namespace Strategy {
 
 		private static bool gamePaused;
 		private static bool keyboardIsCaptured;
-		private static int mouseIsCaptured;
 
 		protected static SoundPlayer soundPlayer; // Background music
 		protected static GameObjectManager gameObjectMgr;
@@ -159,6 +158,10 @@ namespace Strategy {
 			gameGUI.PrintToGameConsole(text);
 		}
 
+		public static void InterstellarTravel(IGameObject gameObject) {
+			gameGUI.ShowTravelSelectionPanel(gameObjectMgr.GroupManager.GetAllSolarSystemNames(), "Choose where you'll travel", gameObject);
+		}
+
 		public static void EndGame(string printText) {
 			gameGUI.End(printText);
 		}
@@ -227,15 +230,7 @@ namespace Strategy {
 		}
 
 		public static bool MouseCaptured {
-			get { return mouseIsCaptured >0; }
-			set {
-				if (!value) {
-					mouseIsCaptured--;
-				} else {
-					mouseIsCaptured++;
-				}
-				Console.WriteLine("capture state "+mouseIsCaptured);
-			}
+			get { return gameGUI.NumberOfPopUpPanels > 0; }
 		}
 	}
 }
