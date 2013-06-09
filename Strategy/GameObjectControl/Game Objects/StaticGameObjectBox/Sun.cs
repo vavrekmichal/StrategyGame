@@ -7,6 +7,7 @@ using Strategy.TeamControl;
 using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.GameObjectControl.Game_Objects.GameActions;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
+using Strategy.Exceptions;
 
 namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 	class Sun : IStaticGameObject {
@@ -17,7 +18,9 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		protected List<IGameAction> listOfAction = new List<IGameAction>();
 
 		protected static Team sunTeam;
+		private readonly Property<Vector3> position = new Property<Vector3>(new Vector3(0, 0, 0));
 
+		protected Dictionary<PropertyEnum, object> propertyDict;
 
 		/// <summary>
 		/// Public constructor. Detect active solar system (0)
@@ -27,10 +30,12 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// <param name="solarSystem">number of solar system</param>
 		/// <param name="manager">Mogre SceneManager</param>
 		public Sun(string name, Team team, object[] args) {
+			propertyDict = new Dictionary<PropertyEnum, object>();
 			this.name = name;
 			this.mesh = (string)args[0];
 			this.Team = team;
 			entity = Game.SceneManager.CreateEntity(name, mesh);
+			propertyDict.Add(PropertyEnum.Position, position);
 		}
 
 		/// <summary>
@@ -83,8 +88,11 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		}
 
 		public Dictionary<string, object> GetPropertyToDisplay() {
-			var propToDisp = new Dictionary<string, object>();
-			return propToDisp;
+			var result = new Dictionary<string, object>();
+			foreach (var property in propertyDict) {
+				result.Add(property.Key.ToString(), property.Value);
+			}
+			return result;
 		}
 
 		/// <summary>
@@ -107,10 +115,6 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			get { return mesh; }
 		}
 
-		public Vector3 getPosition() {
-			return Vector3.ZERO;
-		}
-
 		public float PickUpDistance {
 			get { return 250; }
 		}
@@ -123,14 +127,27 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			get { return -1; }
 		}
 
-		public void AddProperty<T>(PropertyEnum name, Property<T> property) { }
+		public Property<T> GetProperty<T>(PropertyEnum propertyName) {
+			if (!propertyDict.ContainsKey(propertyName)) {
+				return null;
+			}
+			var prop = (Property<T>)propertyDict[propertyName];
+			return prop;
+		}
+
+		public Property<T> GetProperty<T>(string name) { return null; }
+		public void AddProperty<T>(PropertyEnum propertyName, Property<T> property) {
+			if (!propertyDict.ContainsKey(propertyName)) {
+				propertyDict.Add(propertyName, property);
+			}
+		}
 		public void AddProperty<T>(string name, Property<T> property) { }
 		public void RemoveProperty(PropertyEnum name) { }
 		public void RemoveProperty(string name) { }
 
 		public Vector3 Position {
 			get {
-				return Vector3.ZERO;
+				return position.Value;
 			}
 		}
 

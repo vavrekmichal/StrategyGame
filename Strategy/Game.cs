@@ -41,7 +41,7 @@ namespace Strategy {
 		#region Singleton and constructor
 		private static Game instance;
 
-		public static Game getInstance(SceneManager sceneManager, CameraMan c, RenderWindow mWindow, Mouse mouse, Keyboard keyboard) {
+		public static Game GetInstance(SceneManager sceneManager, CameraMan c, RenderWindow mWindow, Mouse mouse, Keyboard keyboard) {
 			if (instance == null) {
 				instance = new Game(sceneManager, c, mWindow, mouse, keyboard);
 			}

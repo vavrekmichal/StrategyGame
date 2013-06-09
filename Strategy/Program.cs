@@ -137,7 +137,7 @@ namespace Strategy {
 			mWindow.GetCustomAttribute("WINDOW", out windowHandle);
 			mInputMgr = MOIS.InputManager.CreateInputSystem((uint)windowHandle);
 
-			myGame = Game.getInstance(mSceneMgr, cameraMan, mWindow, mMouse, mKeyboard);
+			myGame = Game.GetInstance(mSceneMgr, cameraMan, mWindow, mMouse, mKeyboard);
 
 
 			mMouse.MousePressed += new MOIS.MouseListener.MousePressedHandler(myGame.GetMouseControl().OnMyMousePressed);

@@ -77,22 +77,6 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		void GoToTarget(IGameObject objectToGo);
 
 		/// <summary>
-		/// Returns Property with given Name (base properties)
-		/// </summary>
-		/// <typeparam Name="T">Type</typeparam>
-		/// <param Name="propertyName">Name of property from Enum (base properties)</param>
-		/// <returns>Instance of Property</returns>
-		Property<T> GetProperty<T>(PropertyEnum propertyName);
-
-		/// <summary>
-		/// Returns Property with given Name (user defined properties)
-		/// </summary>
-		/// <typeparam Name="T">Type</typeparam>
-		/// <param Name="propertyName">Name of property (user defined properties)</param>
-		/// <returns>Instance of Property</returns>
-		Property<T> GetProperty<T>(string propertyName);
-
-		/// <summary>
 		/// BunusDict contains bonuses from group and members of group. Object can use them to count his properties.
 		/// </summary>
 		/// <param Name="bonusDict">Dictionary with Property as object (runtime generic)</param>

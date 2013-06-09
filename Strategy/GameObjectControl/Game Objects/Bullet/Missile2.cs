@@ -41,13 +41,11 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		
 		public Missile2(Vector3 position, SolarSystem solSystem, Vector3 targetPosition, IBulletStopReciever rec) {
 			this.position = position;
-			this.name = GetUniqueName();
+			this.name = Game.IGameObjectCreator.GetUnusedName(typeof(Missile2).ToString());
 			this.solarSystem = solSystem;
 			this.reciever = rec;
 
 			solarSystem.AddIBullet(this);
-
-			
 
 			direction = targetPosition - position;
 			distance = direction.Normalise();
@@ -60,13 +58,6 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 			destinationDevider = (float)System.Math.Sqrt(a * a + b * b);
 
 		}
-
-		private static int uniquNameNumber;
-		private static string GetUniqueName() {
-			uniquNameNumber++;
-			return typeof(Missile2).ToString() + uniquNameNumber;
-		}
-
 
 		public int Attack {
 			get { return missilePower.Value; }

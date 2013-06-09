@@ -132,7 +132,6 @@ namespace Strategy.FightMgr {
 		private bool CheckActionPossibility(GroupMovables group, IGameObject gameObject) {
 			foreach (var item in fightList) {
 				if (item.ContainsAttackingGroup(group, gameObject)) {
-					Console.WriteLine("Presne je to ona");
 					return false;
 				}
 				if (item.Contains(gameObject)) {

@@ -92,6 +92,7 @@
     <Compile Include="GameObjectControl\Game Objects\Bullet\Missile.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GameObjectControl\Game Objects\Bullet\Missile2.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameActions\CreateSpaceShipAction.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -116,6 +117,8 @@
     <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\IStaticGameObject.cs" />
     <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\Planet.cs" />
     <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\Sun.cs" />
+    <Compile Include="GameObjectControl\GroupMgr\TargetedGroupManager.cs" />
+    <Compile Include="GameObjectControl\GroupMgr\TargetPointer.cs" />
     <Compile Include="GameObjectControl\GroupMgr\Traveler.cs" />
     <Compile Include="GameObjectControl\GameObjectManager.cs" />
     <Compile Include="GameObjectControl\RuntimeProperty\EditablePair.cs" />

@@ -473,6 +473,9 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		public string GetUnusedName(string name) {
 			if (usedNameDict.ContainsKey(name)) {
 				usedNameDict[name]++;
+				if (usedNameDict.ContainsKey(name + usedNameDict[name])) {
+					return GetUnusedName(name + usedNameDict[name]);
+				}
 				return name + usedNameDict[name];
 			} else {
 				usedNameDict.Add(name, 0);

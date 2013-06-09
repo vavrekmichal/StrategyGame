@@ -39,6 +39,22 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		Mogre.Vector3 Position { get; }
 
 		/// <summary>
+		/// Returns Property with given Name (base properties)
+		/// </summary>
+		/// <typeparam Name="T">Type</typeparam>
+		/// <param Name="propertyName">Name of property from Enum (base properties)</param>
+		/// <returns>Instance of Property</returns>
+		Property<T> GetProperty<T>(PropertyEnum propertyName);
+
+		/// <summary>
+		/// Returns Property with given Name (user defined properties)
+		/// </summary>
+		/// <typeparam Name="T">Type</typeparam>
+		/// <param Name="propertyName">Name of property (user defined properties)</param>
+		/// <returns>Instance of Property</returns>
+		Property<T> GetProperty<T>(string propertyName);
+
+		/// <summary>
 		/// AddProperty inserts given Property in IGameObject's container.
 		/// </summary>
 		/// <typeparam Name="T">Type of inserted Property</typeparam>

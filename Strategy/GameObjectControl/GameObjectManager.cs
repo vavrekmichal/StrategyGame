@@ -92,7 +92,7 @@ namespace Strategy.GameObjectControl {
 				if (moveMgr == null) {
 					throw new NullReferenceException("MoveManager is not initialized.");
 				}
-				return moveMgr; 
+				return moveMgr;
 			}
 		}
 
@@ -140,9 +140,9 @@ namespace Strategy.GameObjectControl {
 		private void OnDieEvent(IGameObject igo, MyDieArgs m) {
 			Console.WriteLine(
 				"Object Hp is lower then 0.");
-			Game.PrintToGameConsole(igo.Name+" destroyed (Team "+igo.Team.Name+").");
+			Game.PrintToGameConsole(igo.Name + " destroyed (Team " + igo.Team.Name + ").");
 			RemoveObject(igo);
-		} 
+		}
 
 
 		public void RemoveObject(IGameObject gameObject) {
@@ -174,7 +174,9 @@ namespace Strategy.GameObjectControl {
 		}
 
 		public void DestroyGame() {
-			//TODO destroy solar systems
+
+			groupMgr.DeselectGroup();
+
 			foreach (var item in objectCreator.GetInicializedSolarSystems()) {
 				item.Destroy();
 			}
@@ -220,7 +222,7 @@ namespace Strategy.GameObjectControl {
 			List<IStaticGameObject> isgoList = new List<IStaticGameObject>();
 
 			foreach (var gameObject in selectedObjects) {
-				if (!hitTest.IsObjectControlable(gameObject.Name)) return;
+				if (!hitTest.IsObjectControlable(gameObject.Name)) continue;
 				if (hitTest.IsObjectMovable(gameObject.Name)) {
 					isMovableSelected = true;
 					imgoList.Add(hitTest.GetIMGO(gameObject.Name));
@@ -236,7 +238,6 @@ namespace Strategy.GameObjectControl {
 			} else {
 				groupMgr.CreateInfoGroup(isgoList);
 			}
-			groupMgr.ShowSelectedInfoGroup();
 		}
 
 		/// <summary>
@@ -288,7 +289,7 @@ namespace Strategy.GameObjectControl {
 					break;
 
 			}
-			groupMgr.ShowSelectedInfoGroup();
+			//groupMgr.ShowSelectedInfoGroup();
 		}
 
 

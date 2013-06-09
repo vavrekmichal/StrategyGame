@@ -15,10 +15,11 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		protected Dictionary<int, SolarSystem> solarSystemDict;
 		protected int lastSolarSystem = 0;
 
-		public bool isMovableGroupActive; // Active is movable group
+		private TargetedGroupManager targetedMgr;
+		//private bool isMovableGroupActive; // Active is movable group
 
-		private GroupMovables selectedGroupM; //not implemented ...will be actual selected group - need rectangular Select
-		private GroupStatics selectedGroupS;
+		//private GroupMovables selectedGroupM; //not implemented ...will be actual selected group - need rectangular Select
+		//private GroupStatics selectedGroupS;
 
 		private int activeSolarSystem = 0; // Now active solarSystem
 
@@ -26,6 +27,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		/// Public constructor
 		/// </summary>
 		public GroupManager() {
+			targetedMgr = new TargetedGroupManager();
 			solarSystemDict = new Dictionary<int, SolarSystem>();
 			imgoGroupDict = new Dictionary<IMovableGameObject, GroupMovables>();
 		}
@@ -39,6 +41,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			foreach (KeyValuePair<int, SolarSystem> solarSys in solarSystemDict) {
 				solarSys.Value.Update(delay);
 			}
+			targetedMgr.Update(delay);
 			Gate.UpdateTravelers(delay);
 		}
 
@@ -73,20 +76,24 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 
 		/// <summary>
-		/// Function attempts to remove IStaticGameObject from selectedGroup
+		/// Attempts to remove IStaticGameObject from selectedGroup
 		/// </summary>
 		/// <param Name="isgo">IStaticGameObject to remove from the group</param>
 		public void RemoveFromGroup(IStaticGameObject isgo) {
-			if ((!isMovableGroupActive) && selectedGroupS.HasMember(isgo)) {
-				selectedGroupS.RemoveMember(isgo);
-				if (selectedGroupS.Count == 0) {
-					selectedGroupS = new GroupStatics();
+			if (!targetedMgr.TargetedIsMovable) {
+				GroupStatics group = targetedMgr.GetAtctiveStaticGroup();
+
+				if (group.HasMember(isgo)) {
+					group.RemoveMember(isgo);
+					if (group.Count == 0) {
+						group = new GroupStatics();
+					}
 				}
 			}
 		}
 
 		/// <summary>
-		/// Function attempts to remove IMovableGameObject from its group
+		///Attempts to remove IMovableGameObject from its group
 		/// </summary>
 		/// <param Name="imgo">IMovableGameObject to remove from the group</param>
 		public void RemoveFromGroup(IMovableGameObject imgo) {
@@ -95,6 +102,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 				imgoGroupDict.Remove(imgo);
 			}
 		}
+
 		public void CreateTraveler(int solarSystemNumberTo, object imgo) {
 			Gate.CreateTraveler(GetActiveSolarSystem(), GetSolarSystem(solarSystemNumberTo), imgo);
 		}
@@ -175,7 +183,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 		public SolarSystem GetSolarSystem(IGameObject igo) {
 			var number = GetSolarSystemsNumber(igo);
-			if (number == -1 ) {
+			if (number == -1) {
 				return null;
 			}
 			return solarSystemDict[number];
@@ -187,10 +195,8 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		/// Set all Select group as new empty
 		/// </summary>
 		public void DeselectGroup() {
-			GroupMovables groupM = new GroupMovables();
-			GroupStatics groupS = new GroupStatics();
-			isMovableGroupActive = false;
-			ShowSelectedInfoGroup();
+			targetedMgr.Clear();
+			targetedMgr.ShowTargetedGroup();
 		}
 
 		/// <summary>
@@ -199,7 +205,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		/// </summary>
 		/// <param Name="isgoList">List with IStaticGameObject</param>
 		public void CreateInfoGroup(List<IStaticGameObject> isgoList) {
-			isMovableGroupActive = false;
+
 			if (isgoList.Count > 0) {
 				var group = new GroupStatics(isgoList[0].Team);
 				group.InsertMemeber(isgoList[0]);	// Insert first
@@ -217,10 +223,11 @@ namespace Strategy.GameObjectControl.GroupMgr {
 						}
 					}
 				}
-				selectedGroupS = group;
+				targetedMgr.TargetGroup(group);
 			} else {
-				selectedGroupS = new GroupStatics();
+				targetedMgr.TargetGroup(new GroupStatics());
 			}
+			targetedMgr.ShowTargetedGroup();
 
 		}
 
@@ -231,7 +238,6 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		/// <param Name="isgoList">List with IMovableGameObject</param>
 		public void CreateInfoGroup(List<IMovableGameObject> imgoList) {
 			bool inSameGroup = true;
-			isMovableGroupActive = true;
 
 			imgoList = checkPlayersObjects(imgoList);
 
@@ -255,24 +261,23 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 				if (imgoList.Count > 1) {		// Check if there is more object
 					for (int i = 1; i < imgoList.Count; i++) {
-						if (group.OwnerTeam.Name == Game.PlayerName && group.OwnerTeam == imgoList[i].Team) {
-							group.InsertMemeber(imgoList[i]); // Insert player's imgo	
+						if (imgoList[i].Team.Name == Game.PlayerName && group.OwnerTeam.Name != Game.PlayerName) {
+							group = new GroupMovables(imgoList[i].Team);
+							group.InsertMemeber(imgoList[i]);	// Insert first
 						} else {
-							// Element of isgoList is in players's Team => has greater priority and must be selected
-							if (imgoList[i].Team.Name == Game.PlayerName) {
-								group = new GroupMovables(imgoList[i].Team);
-								group.InsertMemeber(imgoList[i]);	// Insert firt
+							if ( group.OwnerTeam == imgoList[i].Team) {
+								group.InsertMemeber(imgoList[i]);
 							}
 						}
 					}
 				}
-				selectedGroupM = group;
+				targetedMgr.TargetGroup(group);
 			} else {
 
 				// Objects are in same group. Now must be checked if group is complete.
 				if (firstGroup.Count == imgoList.Count) {
-					// Absolutly sam group just selected the group
-					selectedGroupM = firstGroup;
+					// Absolutly same group just selected the group
+					targetedMgr.TargetGroup(firstGroup);
 				} else {
 					// Subset of group => copy parameters (group is not selected, parameters will only be showed)
 					var group = new GroupMovables(imgoList.First().Team);
@@ -282,10 +287,10 @@ namespace Strategy.GameObjectControl.GroupMgr {
 					foreach (var imgo in imgoList) {
 						group.InsertMemeber(imgo);
 					}
-					selectedGroupM = group;
+					targetedMgr.TargetGroup(group);
 				}
-
 			}
+			targetedMgr.ShowTargetedGroup();
 		}
 
 		/// <summary>
@@ -378,21 +383,9 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		}
 
 
-		public void ShowSelectedInfoGroup() {
-			if (isMovableGroupActive) {
-				Game.IGameGUI.ShowTargeted(selectedGroupM);
-			} else {
-				Game.IGameGUI.ShowTargeted(selectedGroupS);
-			}
-		}
-
 		public Team ActiveTeam {
 			get {
-				if (isMovableGroupActive) {
-					return selectedGroupM.OwnerTeam;
-				} else {
-					return selectedGroupS.OwnerTeam;
-				}
+				return targetedMgr.ActiveTeam;
 			}
 		}
 
@@ -407,66 +400,66 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		/// <param Name="isImgo">If HitTest returns object => MovableTest result</param>
 		/// <returns>Returns group answer collected from each member of group</returns>
 		public ActionAnswer SelectInfoGroup(Mogre.Vector3 clickedPoint, MovableObject hitObject, bool isFriendly, bool isImgo) {
-			if (isMovableGroupActive && selectedGroupM.OwnerTeam.Name == Game.PlayerName) {
+			if (targetedMgr.TargetedIsMovable) {
+				GroupMovables group = targetedMgr.GetActiveMovableGroup();
 
-				// All members of group can die so movable group is deactive.
-				if (selectedGroupM.Count == 0) {
-					isMovableGroupActive = false;
-					return ActionAnswer.None;
-				}
+				if (group.OwnerTeam.Name == Game.PlayerName) {
 
-				// Check if actual group is selectedGroupM
-				if (!(imgoGroupDict.ContainsKey(selectedGroupM[0]) && selectedGroupM == imgoGroupDict[selectedGroupM[0]])) {
+					// All members of group can die so movable group is deactive.
+					if (group.Count == 0) {
+						targetedMgr.Clear();
+						return ActionAnswer.None;
+					}
 
-					// Group is unselect
-					var toRecount = new List<GroupMovables>();
-					foreach (IMovableGameObject imgo in selectedGroupM) {
-						if (imgoGroupDict.ContainsKey(imgo)) {
+					// Check if actual group is selectedGroupM
+					if (!(imgoGroupDict.ContainsKey(group[0]) && group == imgoGroupDict[group[0]])) {
 
-							// Add object to toRecount 
-							if (!toRecount.Contains(imgoGroupDict[imgo])) {
-								toRecount.Add(imgoGroupDict[imgo]);
+						// Group is unselect
+						var toRecount = new List<GroupMovables>();
+						foreach (IMovableGameObject imgo in group) {
+							if (imgoGroupDict.ContainsKey(imgo)) {
+
+								// Add object to toRecount 
+								if (!toRecount.Contains(imgoGroupDict[imgo])) {
+									toRecount.Add(imgoGroupDict[imgo]);
+								}
+
+								// Remove from old group and set new oneto Dict
+								imgoGroupDict[imgo].RemoveMember(imgo);
+								imgoGroupDict[imgo] = group;
+							} else {
+								imgoGroupDict.Add(imgo, group);
 							}
-
-							// Remove from old group and set new oneto Dict
-							imgoGroupDict[imgo].RemoveMember(imgo);
-							imgoGroupDict[imgo] = selectedGroupM;
-						} else {
-							imgoGroupDict.Add(imgo, selectedGroupM);
 						}
-					}
 
-					// Recount all modified groups
-					foreach (var group in toRecount) {
-						// Recount just basic bonuses, others are removed when the source of them is removed.
-						group.CountBasicBonuses();
+						// Recount all modified groups
+						foreach (var groupRec in toRecount) {
+							// Recount just basic bonuses, others are removed when the source of them is removed.
+							groupRec.CountBasicBonuses();
+						}
+						group.Select();
 					}
-					selectedGroupM.Select();
+					return group.OnMouseAction(clickedPoint, hitObject, isFriendly, isImgo);
+
 				}
-				return selectedGroupM.OnMouseAction(clickedPoint, hitObject, isFriendly, isImgo);
-
-			} else {
-				return ActionAnswer.None;
 			}
-
+			return ActionAnswer.None;
 		}
 
 
 		public GroupMovables GetActiveMovableGroup() {
-			return selectedGroupM;
+			return targetedMgr.GetActiveMovableGroup();
 		}
 
 		public void SelectGroup(GroupMovables group) {
-			selectedGroupM = group;
-			isMovableGroupActive = true;
-			ShowSelectedInfoGroup();
+			targetedMgr.TargetGroup(group);
+			targetedMgr.ShowTargetedGroup();
 
 		}
 
 		public void SelectGroup(GroupStatics group) {
-			selectedGroupS = group;
-			isMovableGroupActive = false;
-			ShowSelectedInfoGroup();
+			targetedMgr.TargetGroup(group);
+			targetedMgr.ShowTargetedGroup();
 		}
 
 		/// <summary>
