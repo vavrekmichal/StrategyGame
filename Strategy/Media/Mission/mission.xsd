@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="windows-1250"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="mission" >
+    <xs:complexType>
+      <xs:sequence>
+
+        <xs:element name="teams" >
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="friendlyTeams" minOccurs="1" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element minOccurs="1" maxOccurs="unbounded" ref="team"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+          <!--Element team must be unique-->
+          <xs:unique name="teamUnique">
+            <xs:selector xpath=".//team"/>
+            <xs:field xpath="./@name"/>
+          </xs:unique>
+        </xs:element>
+
+        <xs:element name ="usedObjects">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ibullets">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" ref="gameObject"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="isgos">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" ref="gameObject"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="imgos">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" ref="gameObject"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="gameActions">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" ref="gameObject"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="gameTargets">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element maxOccurs="unbounded" ref="gameObject"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+          <!--Element team must be unique-->
+          <xs:unique name="gameObjectUnique">
+            <xs:selector xpath=".//gameObject"/>
+            <xs:field xpath="./@name"/>
+          </xs:unique>
+        </xs:element>
+
+        <xs:element name="solarSystems" >
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="solarSystem" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="isgo" minOccurs="0" maxOccurs="unbounded" type="gameObject" />
+                     
+                    <xs:element name="imgo" minOccurs="0" maxOccurs="unbounded" type="gameObject" />
+                  </xs:sequence>
+                  <xs:attribute name="name" use="required" type="xs:string"/>
+                  <xs:attribute name="position" use="required" type="Vector3"/>
+                  <xs:attribute name="gate" use="optional" type="xs:boolean"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+
+
+          </xs:complexType>
+        </xs:element>
+
+        <xs:element name="missionTargets" >
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="target" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element ref="argument" minOccurs="0" maxOccurs="unbounded"/>
+                  </xs:sequence>
+                  <xs:attribute name="name" type="xs:string" />
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+
+        <xs:element name="materials" >
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name ="material" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element ref="argument"/>
+                  </xs:sequence>
+                  <xs:attribute name="name" use="required" type="xs:string"/>
+                  <xs:attribute name="team" use="required" type="xs:string"/>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+
+      </xs:sequence>
+      <xs:attribute name="propertyFilePath" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <!--Keys-->
+    <!--Team Keys-->
+    <xs:key name="teamKey">
+      <xs:selector xpath="./teams/friendlyTeams/team"/>
+      <xs:field xpath="./@name"/>
+    </xs:key>
+
+    <xs:keyref name="teamKeyRef1" refer="teamKey">
+      <xs:selector xpath="./materials/material"/>
+      <xs:field xpath="./@team"/>
+    </xs:keyref>
+
+    <xs:keyref name="teamKeyRef2" refer="teamKey">
+      <xs:selector xpath="./solarSystems/solarSystem/isgo|./solarSystems/solarSystem/imgo"/>
+      <xs:field xpath="./@team"/>
+    </xs:keyref>
+
+    <!--Type Keys-->
+
+    <xs:key name="typeKey">
+      <xs:selector xpath="./usedObjects/isgos/gameObject|./usedObjects/imgos/gameObject"/>
+      <xs:field xpath="./@name"/>
+    </xs:key>
+
+    <xs:keyref name="typeKeyRef" refer="typeKey">
+      <xs:selector xpath="./solarSystems/solarSystem/isgo|./solarSystems/solarSystem/imgo"/>
+      <xs:field xpath="./@type"/>
+    </xs:keyref>
+
+    
+    <!--GameAction keys-->
+    <xs:key name="gameActionKey">
+      <xs:selector xpath="./usedObjects/gameActions/gameObject"/>
+      <xs:field xpath="./@name"/>
+    </xs:key>
+
+    <xs:keyref name="gameActionKeyRef" refer="gameActionKey">
+      <xs:selector xpath="./solarSystems/solarSystem/isgo/gameAction|./solarSystems/solarSystem/imgo/gameAction"/>
+      <xs:field xpath="./@name"/>
+    </xs:keyref>
+
+    <!--Target keys-->
+    <xs:key name="targetKey">
+      <xs:selector xpath="./usedObjects/gameTargets/gameObject"/>
+      <xs:field xpath="./@name"/>
+    </xs:key>
+
+    <xs:keyref name="targetKeyRef" refer="targetKey">
+      <xs:selector xpath="./missionTargets/target"/>
+      <xs:field xpath="./@name"/>
+    </xs:keyref>
+  </xs:element>
+
+  <xs:element name="argument" type="xs:string"/>
+
+
+  <xs:element name="gameObject">
+    <xs:complexType>
+      <xs:attribute name="name" use="required" type="xs:string"/>
+      <xs:attribute name="path" use="required" type="xs:string"/>
+      <xs:attribute name="fullName" use="required" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="team">
+    <xs:complexType>
+      <xs:attribute name="name" type="xs:string"/>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:simpleType name="Vector3">
+    <xs:restriction base="xs:string">
+      <!---->
+      <xs:pattern value="-?[0-9]+;-?[0-9]+;-?[0-9]+"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="gameObject">
+    <xs:sequence>
+      <xs:element ref="argument" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="gameAction" minOccurs="0" maxOccurs="unbounded">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element ref ="argument" minOccurs="0" maxOccurs="unbounded"/>
+          </xs:sequence>
+          <xs:attribute name="name" type="xs:string"/>
+        </xs:complexType>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="type" type="xs:string" use="required"/>
+    <xs:attribute name="name" type="xs:string" use="required"  />
+    <xs:attribute name="team" type="xs:string" use="optional"/>
+  </xs:complexType>
+
+</xs:schema>

@@ -1,4 +1,4 @@
-<?xml version="1.0" ?>
+<?xml version="1.0" encoding="utf-8"  ?>
 <mission propertyFilePath="../../Media/Mission/Scripts/Properties2.csx">
   <teams>
     <friendlyTeams>
@@ -12,7 +12,7 @@
   </teams>
   <usedObjects>
     <ibullets>
-      <ibullet name="Missile2" path="Bullet/Missile2.cs" fullName="Strategy.GameObjectControl.Game_Objects.Bullet.Missile2"/>
+      <gameObject name="Missile2" path="Bullet/Missile2.cs" fullName="Strategy.GameObjectControl.Game_Objects.Bullet.Missile2"/>
     </ibullets>
     <isgos>
       <gameObject name="Planet" path="StaticGameObjectBox/Planet.cs" fullName="Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox.Planet"/>
@@ -23,23 +23,23 @@
       <gameObject name="SpaceShip2" path="MovableGameObjectBox/SpaceShip2.cs" fullName="Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox.SpaceShip2"/>
     </imgos>
     <gameActions>
-      <gameAction name="DoNothingJustPrintText" path="GameActions/DoNothingJustPrintText.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.DoNothingJustPrintText"/>
-      <gameAction name="ProduceAction" path="GameActions/ProduceAction.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.ProduceAction"/>
-      <gameAction name="PortalAction" path="GameActions/PortalAction.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.PortalAction"/>
-      <gameAction name="CreateSpaceShipAction" path="GameActions/CreateSpaceShipAction.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.CreateSpaceShipAction"/>
+      <gameObject name="DoNothingJustPrintText" path="GameActions/DoNothingJustPrintText.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.DoNothingJustPrintText"/>
+      <gameObject name="ProduceAction" path="GameActions/ProduceAction.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.ProduceAction"/>
+      <gameObject name="PortalAction" path="GameActions/PortalAction.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.PortalAction"/>
+      <gameObject name="CreateSpaceShipAction" path="GameActions/CreateSpaceShipAction.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.CreateSpaceShipAction"/>
     </gameActions>
     <gameTargets>
-      <gameTarget name="SurviveTimeTarget" path="GameTargets/SurviveTimeTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.SurviveTimeTarget"/>
-      <gameTarget name="KillTarget" path="GameTargets/KillTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.KillTarget"/>
-      <gameTarget name="OccupyTarget" path="GameTargets/OccupyTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.OccupyTarget"/>
-      <gameTarget name="EliminateTeamTarget" path="GameTargets/EliminateTeamTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.EliminateTeamTarget"/>
-      <gameTarget name="EscortTarget" path="GameTargets/EscortTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.EscortTarget"/>
+      <gameObject name="SurviveTimeTarget" path="GameTargets/SurviveTimeTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.SurviveTimeTarget"/>
+      <gameObject name="KillTarget" path="GameTargets/KillTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.KillTarget"/>
+      <gameObject name="OccupyTarget" path="GameTargets/OccupyTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.OccupyTarget"/>
+      <gameObject name="EliminateTeamTarget" path="GameTargets/EliminateTeamTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.EliminateTeamTarget"/>
+      <gameObject name="EscortTarget" path="GameTargets/EscortTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.EscortTarget"/>
     </gameTargets>
   </usedObjects>
   <solarSystems>
     <solarSystem name="This is my" position="3000;0;3000" gate="true">
 
-      <isgo type="Sun" name="Sun" team="None">
+      <isgo type="Sun" name="Sun">
         <argument>sun.mesh</argument>
       </isgo>
       <isgo type="Planet" name="Mercury" team="Player">
@@ -123,7 +123,7 @@
       </imgo>
     </solarSystem>
     <solarSystem name="FunnySystem" position="300;500;3000">
-      <isgo type="Sun" name="FunnyThings" team="None">
+      <isgo type="Sun" name="FunnyThings">
         <argument>jupiter.mesh</argument>
       </isgo>
       <isgo type="Planet" name="FunnyThings1" team="Fun">
@@ -143,7 +143,7 @@
       </isgo>
     </solarSystem>
     <solarSystem name="s1" position="30;0;100">
-      <isgo type="Sun" name="s10"  team="None">
+      <isgo type="Sun" name="s10">
         <argument>jupiter.mesh</argument>
       </isgo>
     </solarSystem>

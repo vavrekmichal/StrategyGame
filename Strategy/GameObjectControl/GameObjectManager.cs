@@ -51,9 +51,9 @@ namespace Strategy.GameObjectControl {
 		/// </summary>
 		private GameObjectManager(SceneManager sceneMgr, Mouse m, Keyboard k, RenderWindow mWindow) {
 			teamMgr = TeamManager.GetInstance();
-			objectCreator = new ObjectCreator();
-			moveMgr = new MoveManager();
 			fightMgr = new FightManager();
+			objectCreator = new ObjectCreator();
+			moveMgr = new MoveManager();	
 			groupMgr = new GroupManager();
 			propertyMgr = new PropertyManager();
 			hitTest = new HitTest();
@@ -182,9 +182,9 @@ namespace Strategy.GameObjectControl {
 			}
 
 			teamMgr = TeamManager.GetInstance();
+			fightMgr = new FightManager();
 			objectCreator = new ObjectCreator();
 			moveMgr = new MoveManager();
-			fightMgr = new FightManager();
 			groupMgr = new GroupManager();
 			propertyMgr = new PropertyManager();
 			hitTest = new HitTest();

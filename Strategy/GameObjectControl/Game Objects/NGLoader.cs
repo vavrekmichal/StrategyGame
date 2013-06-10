@@ -48,6 +48,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			this.teamDict = teams;
 			this.solarSystemList = solarSystems;
 			xml = new XmlDocument();
+//TODO pridej tu sracku
 			xml.Load(path);
 			root = xml.DocumentElement;
 
@@ -277,7 +278,6 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// <param Name="args">Compiling object's argumentns.</param>
 		/// <returns></returns>
 		private object CreateObject(XmlNode objectPath, object[] args) {
-			//XmlNode objectPath = GetGameObjectTypeNode(type);
 			string type = objectPath.Attributes["name"].InnerText;
 			string fullPath = objectPath.Attributes["path"].InnerText;
 			string fullName = objectPath.Attributes["fullName"].InnerText;
@@ -340,22 +340,25 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			List<object> args = new List<object>();
 
 			args.Add(GetUnusedName(gameObject.Attributes["name"].InnerText));
-			//args.Add(gameObject.Attributes["mesh"].InnerText);
-			string team = gameObject.Attributes["team"].InnerText;
-
-			if (!teamDict.ContainsKey(team)) {
-				throw new XmlException("Undefined Team " + team + " .");
+			var teamNode = gameObject.Attributes["team"];
+			string team = "Sun";
+			if (teamNode !=null) {
+				team = gameObject.Attributes["team"].InnerText;
 			}
-
-			args.Add(teamDict[team]);
-			var argList = LoadArguments(gameObject);
-			args.Add(argList.ToArray());
-
+			
 			if (isgoType == IsgoType.Sun) {
 				type = IsgoType.Sun.ToString();		
 			} else {
+				if (!teamDict.ContainsKey(team)) {
+					throw new XmlException("Undefined Team " + team + " .");
+				}
+				args.Add(teamDict[team]);
 				type = gameObject.Attributes["type"].InnerText;
 			}
+
+			var argList = LoadArguments(gameObject);
+			args.Add(argList.ToArray());
+
 			var isgo = CreateISGO(type, args.ToArray());
 
 			return isgo;
@@ -417,17 +420,20 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 		private XmlNode GetGameObjectTypeNode(string typeName) {
-			var node = missionNode.SelectNodes("usedObjects//gameObject[@name='" + typeName + "']")[0];
+			var node = missionNode.SelectNodes("usedObjects/isgos//gameObject[@name='" + typeName + "']")[0];
+			if (node == null) {
+				node = missionNode.SelectNodes("usedObjects/imgos//gameObject[@name='" + typeName + "']")[0];
+			}
 			return node;
 		}
 
 		private XmlNode GetGameActionTypeNode(string typeName) {
-			var node = missionNode.SelectNodes("usedObjects//gameAction[@name='" + typeName + "']")[0];
+			var node = missionNode.SelectNodes("usedObjects/gameActions//gameObject[@name='" + typeName + "']")[0];
 			return node;
 		}
 
 		private XmlNode GetGameTargetTypeNode(string typeName) {
-			var node = missionNode.SelectNodes("usedObjects//gameTarget[@name='" + typeName + "']")[0];
+			var node = missionNode.SelectNodes("usedObjects/gameTargets//gameObject[@name='" + typeName + "']")[0];
 			return node;
 		}
 

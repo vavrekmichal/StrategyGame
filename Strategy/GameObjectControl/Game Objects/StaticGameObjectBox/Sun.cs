@@ -17,7 +17,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		protected string mesh;
 		protected List<IGameAction> listOfAction = new List<IGameAction>();
 
-		protected static Team sunTeam;
+		protected static Team sunTeam= new Team("Sun");
 		private readonly Property<Vector3> position = new Property<Vector3>(new Vector3(0, 0, 0));
 
 		protected Dictionary<PropertyEnum, object> propertyDict;
@@ -29,11 +29,11 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// <param name="mesh">mesh of this sun</param>
 		/// <param name="solarSystem">number of solar system</param>
 		/// <param name="manager">Mogre SceneManager</param>
-		public Sun(string name, Team team, object[] args) {
+		public Sun(string name, object[] args) {
 			propertyDict = new Dictionary<PropertyEnum, object>();
 			this.name = name;
 			this.mesh = (string)args[0];
-			this.Team = team;
+
 			entity = Game.SceneManager.CreateEntity(name, mesh);
 			propertyDict.Add(PropertyEnum.Position, position);
 		}
