@@ -4,7 +4,11 @@ using System.Linq;
 using System.Text;
 
 namespace Strategy.Exceptions {
-    class MissingMaterialException : System.Exception {
+	/// <summary>
+	/// Exception is thorwn when a team doesn't have the necessary amount of material.
+	/// Class inherits from ShutdownException to allow shutdown the program.
+	/// </summary>
+    class MissingMaterialException : ShutdownException {
         public MissingMaterialException() {
         }
 

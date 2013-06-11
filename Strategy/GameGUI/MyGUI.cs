@@ -513,12 +513,7 @@ namespace Strategy.GameGUI {
 		/// <returns>Miyagi Panel</returns>
 		private Panel CreateActionPanel() {
 			actionPanel = CreateMainmenuSubpanel();
-			//actionPanel.Controls.Add(new Label() {
-			//	Size = new Size(140, 50),
-			//	Text = " Developing",
-			//	Padding = new Thickness(5)
 
-			//});
 			gameActionPanel = CreateInnerScrollablePanel(5, actionPanel.Width - 30, actionPanel.Height / 2 - 10);
 			gameActionPanel.Padding = new Thickness(2, 2, 0, 0);
 
@@ -551,34 +546,6 @@ namespace Strategy.GameGUI {
 			}
 			Game.DestroyGame();
 		}
-
-
-		//private void SelectLoadMission(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
-		//	// Button Action for SelectionLabel calls Game.Load and load given mission
-		//	var selectionLabel = sender as SelectionLabel;
-		//	if (selectionLabel != null) {
-		//		selectionLabel.ClosePanel();
-		//		Game.Load((string)selectionLabel.StoredObject);
-		//	}
-		//}
-
-		//private void SelectSolarSystem(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
-		//	// Button Action for SelectionLabel calls GroupManager function ChangeSolarSystem and close Panel
-		//	var selectionLabel = sender as SelectionLabel;
-		//	if (selectionLabel != null) {
-		//		Game.GroupManager.ChangeSolarSystem(selectionLabel.NumberOfItem);
-		//		selectionLabel.ClosePanel();
-		//	}
-		//}
-
-		//private void Travel(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
-		//	// Function calls CreateTraveler with selected number of SolarSystem and traveler(IMovableGameObject)
-		//	var selectionLabel = sender as SelectionLabel;
-		//	if (selectionLabel != null) {
-		//		Game.GroupManager.CreateTraveler(selectionLabel.NumberOfItem, selectionLabel.StoredObject);
-		//		selectionLabel.ClosePanel();
-		//	}
-		//}
 
 		private void QuitOnClick(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
 			// Function closes application (throw ShutdownException)

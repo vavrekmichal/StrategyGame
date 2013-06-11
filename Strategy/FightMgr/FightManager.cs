@@ -9,17 +9,30 @@ using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 using Strategy.GameObjectControl.GroupMgr;
 
 namespace Strategy.FightMgr {
+
+	/// <summary>
+	/// Controls every fight and occupation. Creating them, updating them and ending them.
+	/// </summary>
 	class FightManager : IFightManager {
 
-		private Dictionary<GroupMovables, ActionAnswer> offensiveActionDict; // Dictionary with information about group action (Occupy/Attack)
+		// Dictionary with information about group action (Occupy/Attack)
+		private Dictionary<GroupMovables, ActionAnswer> offensiveActionDict; 
 
-		private List<Occupation> occupationList; // Every occupation 
+		// Occupations
+		private List<Occupation> occupationList;
+ 
+		// Fights
 		private List<Fight> fightList;
 
-		private Dictionary<IMovableGameObject, GroupMovables> onWayToTargetDict; // Dictionary with object on the way
+		// Objects on the way
+		private Dictionary<IMovableGameObject, GroupMovables> onWayToTargetDict;
 
-		private Dictionary<IMovableGameObject, IGameObject> attackersTarget; // Dictionary with information about witch obejct attack an other
+		// Informations about whitch object attack an other
+		private Dictionary<IMovableGameObject, IGameObject> attackersTarget; 
 
+		/// <summary>
+		/// Creates instance of FightManager and initializes objects.
+		/// </summary>
 		public FightManager() {
 			attackersTarget = new Dictionary<IMovableGameObject, IGameObject>();
 			onWayToTargetDict = new Dictionary<IMovableGameObject, GroupMovables>();
@@ -28,6 +41,12 @@ namespace Strategy.FightMgr {
 			fightList = new List<Fight>();
 		}
 
+		#region public 
+
+		/// <summary>
+		/// Updates all fights and occupations.
+		/// </summary>
+		/// <param name="delay">The delay between last two frames.</param>
 		public void Update(float delay) {
 			var occupCopy = new List<Occupation>(occupationList);
 			foreach (var occ in occupCopy) {
@@ -38,24 +57,21 @@ namespace Strategy.FightMgr {
 
 			var fightCopy = new List<Fight>(fightList);
 			foreach (var fight in fightCopy) {
-				if (fight.Check(delay)) {
+				if (fight.CheckDistance()) {
 					fightList.Remove(fight);
 				}
 			}
 		}
 
+		/// <summary>
+		/// Send attacker to fight destiantion when it is possible (CheckActionPossibility).
+		/// </summary>
+		/// <param name="group">The attacking group.</param>
+		/// <param name="gameObject">The attacked object.</param>
 		public void Attack(GroupMovables group, IGameObject gameObject) {
-			if (gameObject is IStaticGameObject) {
-				Console.WriteLine("Utocis na static");
-			}
-			if (gameObject is IMovableGameObject) {
-				Console.WriteLine("Utocis na movable");
-			}
 
-			if (fightList.Count>5) {
-				Console.WriteLine("Kurva");
-			}
-
+			// Check if target is already under attack of this group or if the target is under attack so
+			// group is added to deffenders.
 			if (!CheckActionPossibility(group, gameObject)) {
 				return;
 			}
@@ -70,20 +86,21 @@ namespace Strategy.FightMgr {
 		}
 
 		/// <summary>
-		/// Occupy controls if target can be occupied or if is now currently occupied.
+		/// Controls if target can be occupied or if is now currently occupied.
 		/// If it is possible so attackers are sent to the destination and are registered.
 		/// </summary>
-		/// <param name="group">Attackers</param>
-		/// <param name="gameObject">Target</param>
+		/// <param name="group">The attacking group.</param>
+		/// <param name="gameObject">The occupation target.</param>
 		public void Occupy(GroupMovables group, IGameObject gameObject) {
 
 			if (gameObject.OccupyTime < 0) {
-				Console.WriteLine("Nelze obsadit");
 				return;
 			}
 
 			// The object is already occupied by this group 
-			if (offensiveActionDict.ContainsKey(group) && offensiveActionDict[group] == ActionAnswer.Occupy && attackersTarget[group[0]] == gameObject) {
+			if (offensiveActionDict.ContainsKey(group) && 
+				offensiveActionDict[group] == ActionAnswer.Occupy && 
+				attackersTarget[group[0]] == gameObject) {
 				return;
 			}
 
@@ -101,11 +118,17 @@ namespace Strategy.FightMgr {
 			}
 		}
 
+		/// <summary>
+		/// Recieves information when object reached the destination. Checks if object attacking or occupying and 
+		/// creates the appropriate class.
+		/// </summary>
+		/// <param name="imgo">The object in destiantion.</param>
 		public void MovementFinished(IMovableGameObject imgo) {
 			var onWayCopy = new Dictionary<IMovableGameObject, GroupMovables>(onWayToTargetDict);
 			var group = onWayCopy[imgo];
 			var gameObject = attackersTarget[imgo];
 			var moveMgr = Game.IMoveManager;
+			// Remove all object whitch goint to same target from watch lists.
 			foreach (IMovableGameObject item in onWayCopy[imgo]) {
 				onWayToTargetDict.Remove(item);
 				attackersTarget.Remove(item);
@@ -113,22 +136,34 @@ namespace Strategy.FightMgr {
 			}
 
 			if (offensiveActionDict[onWayCopy[imgo]] == ActionAnswer.Attack) {
+				// Create Fight
 				fightList.Add(new Fight(group, gameObject));
 			} else {
+				// Create Occupation
 				occupationList.Add(new Occupation(group, gameObject));
 			}
 			offensiveActionDict.Remove(onWayCopy[imgo]);
 		}
 
+		/// <summary>
+		/// Unlogs given object from watch lists.
+		/// </summary>
+		/// <param name="imgo">The object which interrupted the movement.</param>
 		public void MovementInterupted(IMovableGameObject imgo) {
-
 			if (onWayToTargetDict.ContainsKey(imgo)) {
 				offensiveActionDict.Remove(onWayToTargetDict[imgo]);
 				onWayToTargetDict.Remove(imgo);
 				attackersTarget.Remove(imgo);
 			}
 		}
-
+		#endregion
+		
+		/// <summary>
+		/// Checks if given group already fighting or occupying given object.
+		/// </summary>
+		/// <param name="group">The checking group.</param>
+		/// <param name="gameObject">The target of the given group</param>
+		/// <returns>Return if the group can do its action.</returns>
 		private bool CheckActionPossibility(GroupMovables group, IGameObject gameObject) {
 			foreach (var item in fightList) {
 				if (item.ContainsAttackingGroup(group, gameObject)) {

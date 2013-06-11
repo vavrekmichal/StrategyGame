@@ -11,23 +11,30 @@ using Strategy.GameObjectControl.GroupMgr;
 using Strategy.GameObjectControl.RuntimeProperty;
 
 namespace Strategy.FightMgr {
+	/// <summary>
+	/// Represents occupying of the target by the attackers. Class controls distance between target and attackers
+	/// and occupying time.
+	/// </summary>
 	class Occupation {
 		private string name;
 		private GroupMovables attackers;
 		private IGameObject target;
 		private Property<TimeSpan> remainingTime;
 
-		const float distanceConst = 1.2f;	// Occupy-distance is increased by this constant.
-		const string occStart = "OccBegan1.wav"; // Sound of start the occupation
-		const string occEnd = "OccSucc1.wav";  // Sound of end the occupation
+		// Occupy-distance is increased by this constant.
+		const float distanceConst = 1.2f;
+		// Sound of start the occupation
+		const string occStart = "OccBegan1.wav";
+		// Sound of end the occupation
+		const string occEnd = "OccSucc1.wav";  
 
 		/// <summary>
-		/// Constructor creates Property with remaining time to end of the occupation.
-		/// This Property is added to occupied object (time is displayed in GUI - object's properties).
-		/// It also runs the sound of the occupation. 
+		/// Creates Property with remaining time to end of the occupying.
+		/// This Property is added to occupied object (to objects properties).
+		/// Also runs the sound of the occupation. 
 		/// </summary>
-		/// <param name="occupier">Attacking group</param>
-		/// <param name="occupied">Occupied group</param>
+		/// <param name="occupier">The attacking group.</param>
+		/// <param name="occupied">The target of the occupation.</param>
 		public Occupation(GroupMovables occupier, IGameObject occupied) {
 			var time = TimeSpan.FromSeconds(occupied.OccupyTime);
 
@@ -39,18 +46,30 @@ namespace Strategy.FightMgr {
 
 			this.attackers = occupier;
 			this.target = (IGameObject)occupied;
+			// Play occupation sound
 			Game.IEffectPlayer.PlayEffect(occStart);
 
 		}
 
+		#region public 
+
+		/// <summary>
+		/// Checks if occupation contains given object.
+		/// </summary>
+		/// <param name="igo">The testing object.</param>
+		/// <returns>Returns if occupation contains given object.</returns>
 		public bool Contains(IGameObject igo) {
 			if (igo == target) {
 				return true;
 			}
-
 			return false;
 		}
 
+		/// <summary>
+		/// Inserts given group to attacker's group and sends it
+		/// to target's destination and recalculates group. 
+		/// </summary>
+		/// <param name="group">The inserting group.</param>
 		public void AddGroup(GroupMovables group) {
 			GroupManager groupMgr = Game.GroupManager;
 			Game.IMoveManager.GoToTarget(group, target);
@@ -59,19 +78,16 @@ namespace Strategy.FightMgr {
 				IMovableGameObject temp = group[0];
 				groupMgr.RemoveFromGroup(temp);
 				groupMgr.AddToGroup(attackers, temp);
-
 			}
 			attackers.Reselect();
 			groupMgr.SelectGroup(attackers);
-
 		}
 
 		/// <summary>
-		/// Function is checking if occupation is done or if is canceled
+		/// Checks if occupation continues, is done or if is canceled.
 		/// </summary>
-		/// <param Name="delay">Delay between last two frames</param>
-		/// <returns>Returns true when occupation is done (object is occupated or occupation
-		/// is canceled) and false when </returns>
+		/// <param Name="delay">The delay between last two frames</param>
+		/// <returns>Returns true when occupation is done (object is occupated or occupation is canceled)</returns>
 		public bool Check(float delay) {
 
 			bool noOneInDist = true;
@@ -101,6 +117,12 @@ namespace Strategy.FightMgr {
 			}
 		}
 
+		#endregion
+		
+		/// <summary>
+		/// Removes property with occupation time from target's properties, play finish occupation sound 
+		/// and finally change target's team to attacker's team.
+		/// </summary>
 		private void FinishOccupation() {
 
 			target.RemoveProperty(PropertyEnum.Occupation);
@@ -111,11 +133,10 @@ namespace Strategy.FightMgr {
 		}
 
 		/// <summary>
-		/// Function check distance between attacker and target. Distance is compare with occupyDistance
-		/// (IMGO/ISGO)
+		/// Check distance between the attacker's position and the target's position. Distance is compare with occupyDistance.
 		/// </summary>
-		/// <param Name="attackerPostion">Attacker's position</param>
-		/// <returns>Returns false when distance is too long else returns true</returns>
+		/// <param Name="attackerPostion">The attacker's position</param>
+		/// <returns>Returns if attacker is in occupyDistance of target.</returns>
 		private bool CheckDistance(Mogre.Vector3 attackerPostion) {
 			float maxDist;
 			Mogre.Vector3 targetPosition;
@@ -135,7 +156,6 @@ namespace Strategy.FightMgr {
 			} else {
 				return true;
 			}
-
 		}
 	}
 }

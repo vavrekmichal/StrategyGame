@@ -113,7 +113,6 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 
 			if (distance <= -100f) {
 				// In destination
-				reciever.BulletMiss(this);
 				Destroy();
 			} else {
 				if (!Collision()) {
@@ -132,7 +131,6 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		public void HiddenUpdate(float delay) {
 			if (distance <= -100f) {
 				// In destination
-				reciever.BulletMiss(this);
 				Destroy();
 			} else {
 				if (!HiddenCollision(delay)) {

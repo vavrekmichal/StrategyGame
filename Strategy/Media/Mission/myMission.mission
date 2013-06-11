@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"  ?>
 
-<mission  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Media/Mission/mission.xsd"
-         propertyFilePath="../../Media/Mission/Scripts/Properties2.csx">
+<mission propertyFilePath="../../Media/Mission/Scripts/Properties2.csx">
   <teams>
     <friendlyTeams>
       <team name="Player"/>

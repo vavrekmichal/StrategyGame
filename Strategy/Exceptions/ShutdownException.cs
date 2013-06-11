@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 
 namespace Strategy.Exceptions {
-	class ShutdownException : System.Exception {
+	/// <summary>
+	/// Exception is catched at OnFrameRenderingQueued (BaseApplication) and ends program. 
+	/// </summary>
+	public class ShutdownException : System.Exception {
         public ShutdownException() {
         }
 

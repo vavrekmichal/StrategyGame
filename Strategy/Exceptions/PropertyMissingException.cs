@@ -5,7 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Strategy.Exceptions {
-	class PropertyMissingException : System.Exception {
+	/// <summary>
+	/// Exception is thorwn when any object requires Property<> whitch is not in a compiling script .
+	/// Class inherits from ShutdownException to allow shutdown the program.
+	/// </summary>
+	class PropertyMissingException : ShutdownException {
 		public PropertyMissingException() {
 		}
 

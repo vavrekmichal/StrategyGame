@@ -4,17 +4,15 @@ using System.IO;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Xml;
+using System.Xml.Schema;
 using Mogre;
 using Roslyn.Compilers;
 using Roslyn.Compilers.CSharp;
 using Strategy.Exceptions;
-using Strategy.GameMaterial;
-using Strategy.GameObjectControl.Game_Objects.Bullet;
 using Strategy.GameObjectControl.Game_Objects.GameActions;
 using Strategy.GameObjectControl.Game_Objects.GameTargets;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
-using Strategy.GameObjectControl.GroupMgr;
 using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.TeamControl;
 
@@ -38,6 +36,8 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		private CompilationOptions comilationOption;
 		private List<string> isCompiled;
 
+		private const string schemaPath = "../../Media/Mission/mission.xsd";
+
 		//private string missionName;
 
 		public NGLoader(string path, Dictionary<string, Team> teams,
@@ -48,8 +48,23 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			this.teamDict = teams;
 			this.solarSystemList = solarSystems;
 			xml = new XmlDocument();
-//TODO pridej tu sracku
+			//TODO pridej tu sracku
+
+			XmlSchemaSet schemas = new XmlSchemaSet();
+			schemas.Add("", schemaPath);
+
 			xml.Load(path);
+			xml.Schemas.Add(schemas);
+			string msg = "";
+			xml.Validate((o, err) => {
+				msg = err.Message;
+			});
+
+			if (msg == "") {
+				Console.WriteLine("Document is valid");
+			} else {
+				throw new XmlLoadException("Document invalid: " + msg);
+			}
 			root = xml.DocumentElement;
 
 			// Set reference to runtime compiling
@@ -121,7 +136,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 		public void Load(string missionPropFileName) {
 			//TODO thinks about try-block
-			
+
 			bool hasSun = false;
 			IStaticGameObject sun = null;
 
@@ -207,13 +222,13 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// </summary>
 		/// <param name="materialNodeList">XmlNode of materials to load.</param>
 		private void LoadMaterials(XmlNode materialNodeList) {
-			if (materialNodeList==null) {
+			if (materialNodeList == null) {
 				return;
 			}
 			foreach (XmlNode materialNode in materialNodeList) {
 				var materialName = materialNode.Attributes["name"].InnerText;
 				var team = materialNode.Attributes["team"].InnerText;
-				var quantity = Convert.ToInt32( LoadArguments(materialNode)[0]);
+				var quantity = Convert.ToInt32(LoadArguments(materialNode)[0]);
 				teamDict[team].Produce(materialName, quantity);
 			}
 		}
@@ -342,12 +357,12 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			args.Add(GetUnusedName(gameObject.Attributes["name"].InnerText));
 			var teamNode = gameObject.Attributes["team"];
 			string team = "Sun";
-			if (teamNode !=null) {
+			if (teamNode != null) {
 				team = gameObject.Attributes["team"].InnerText;
 			}
-			
+
 			if (isgoType == IsgoType.Sun) {
-				type = IsgoType.Sun.ToString();		
+				type = IsgoType.Sun.ToString();
 			} else {
 				if (!teamDict.ContainsKey(team)) {
 					throw new XmlException("Undefined Team " + team + " .");
@@ -438,7 +453,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 
-		
+
 
 		private void ReadGameActions(XmlNodeList actionList, IGameObject gameObject) {
 			foreach (XmlNode action in actionList) {

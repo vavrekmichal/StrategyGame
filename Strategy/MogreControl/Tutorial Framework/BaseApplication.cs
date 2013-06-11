@@ -196,7 +196,8 @@ namespace Mogre.TutorialFramework {
                 mCameraMan.UpdateCamera(evt.timeSinceLastFrame);
 
                 return true;
-            } catch (ShutdownException) {
+            } catch (ShutdownException e) {
+				Console.WriteLine(e.Message);
                 mShutDown = true;
                 return false;
             }

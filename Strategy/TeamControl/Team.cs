@@ -110,7 +110,7 @@ namespace Strategy.TeamControl {
 					materialsStates[materialPair.Key].GetQuantityOfMaterial().Value < materialPair.Value) {
 					// Team does not have the necessary quantity of material 
 					return false;
-				} 
+				}
 			}
 			return true;
 		}
@@ -123,7 +123,7 @@ namespace Strategy.TeamControl {
 				if (!materialsStates.ContainsKey(materialPair.Key) ||
 					materialsStates[materialPair.Key].GetQuantityOfMaterial().Value < materialPair.Value) {
 					// Team does not have the necessary quantity of material 
-						throw new MissingMaterialException("You can not use "+ materialsStates[materialPair.Key].Name+", because you do not have enough material.");
+					throw new MissingMaterialException("You can not use " + materialsStates[materialPair.Key].Name + ", because you do not have enough material.");
 				}
 				materialsStates[materialPair.Key].GetQuantityOfMaterial().Value -= materialPair.Value;
 			}

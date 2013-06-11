@@ -9,18 +9,15 @@ using Strategy.GameObjectControl.Game_Objects.Bullet;
 namespace Strategy.FightMgr {
 	class DamageCounter {
 
-		public DamageCounter() {
-
-		}
-
 		/// <summary>
-		/// Function randomize bullet's attack power and count real damage. The result is returned if it is greater than 0.
+		/// Randomize bullet's attack power and count real damage. The result is returned if it is greater than 0. When the result 
+		/// is lower then 0 so function returns 0 (attack cannot "heal").
 		/// </summary>
-		/// <param name="gameObject">Deffending object</param>
-		/// <param name="bullet">Attacking bullet</param>
-		/// <returns>Calculated damage when it is greater then 0</returns>
+		/// <param name="gameObject">The object which defends itself.</param>
+		/// <param name="bullet">The bullet that hit the object.</param>
+		/// <returns>Calculated damage when it is greater then 0.</returns>
 		public int CountDamage(IGameObject gameObject, IBullet bullet) {
-			var damage = bullet.Attack + GetRandomNumberFromInterval(bullet.Attack) - gameObject.DeffPower;
+			var damage = GetRandomizeAttack(bullet.Attack) - gameObject.DeffPower;
 			return damage > 0 ? damage : 0;
 		}
 
@@ -28,13 +25,13 @@ namespace Strategy.FightMgr {
 		private static Random random = new Random();
 
 		/// <summary>
-		/// Function returns a random number from interval [-bulletPower/4, bulletPower/4].
+		/// Returns a random number from interval [-bulletPower/4, bulletPower/4].
 		/// </summary>
 		/// <param name="bulletPower">Power of IBullet</param>
 		/// <returns>Random number from interval [-bulletPower/4, bulletPower/4]</returns>
-		private static int GetRandomNumberFromInterval(int bulletPower) {
+		private static int GetRandomizeAttack(int bulletPower) {
 			int r = random.Next(bulletPower / 2);
-			return r - bulletPower / 4;
+			return bulletPower + r - bulletPower / 4;
 		}
 	}
 }
