@@ -11,7 +11,7 @@ namespace Strategy.FightMgr {
 		/// <summary>
 		/// Calls when bullet hit the object.
 		/// </summary>
-		/// <param name="bullet">The bullet whitch hitted the object.</param>
+		/// <param name="bullet">The bullet which hitted the object.</param>
 		/// <param name="hittedObject">The hitted object.</param>
 		void BulletHit(IBullet bullet, IGameObject hittedObject);
 	}

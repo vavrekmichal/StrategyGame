@@ -27,7 +27,7 @@ namespace Strategy.FightMgr {
 		// Objects on the way
 		private Dictionary<IMovableGameObject, GroupMovables> onWayToTargetDict;
 
-		// Informations about whitch object attack an other
+		// Informations about which object attack an other
 		private Dictionary<IMovableGameObject, IGameObject> attackersTarget; 
 
 		/// <summary>
@@ -128,7 +128,7 @@ namespace Strategy.FightMgr {
 			var group = onWayCopy[imgo];
 			var gameObject = attackersTarget[imgo];
 			var moveMgr = Game.IMoveManager;
-			// Remove all object whitch goint to same target from watch lists.
+			// Remove all object which goint to same target from watch lists.
 			foreach (IMovableGameObject item in onWayCopy[imgo]) {
 				onWayToTargetDict.Remove(item);
 				attackersTarget.Remove(item);
