@@ -23,8 +23,3 @@ namespace Strategy.GameGUI {
 		int NumberOfPopUpPanels { get; }
 	}
 }
-
-
-/*
-		//material update, set materials
-*/

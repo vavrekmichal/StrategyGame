@@ -6,12 +6,19 @@ using System.Threading.Tasks;
 using Miyagi.UI.Controls;
 
 namespace Strategy.GameGUI {
+	/// <summary>
+	/// Extension of the Label which has panelType to close (works like CloseButton), stored object and the order of object.
+	/// </summary>
 	class SelectionLabel : Label {
 		protected int numberOfItem;
 		protected PanelType panelToClose;
 		protected object storedObject;
 
-
+		/// <summary>
+		/// Creates instance of Label and stored an order and a panelType. Also adds MouseClick action depending on the panelType.
+		/// </summary>
+		/// <param name="position">The order of object.</param>
+		/// <param name="panel">The type of closing panel.</param>
 		public SelectionLabel(int position, PanelType panel)
 			: base() {
 			numberOfItem = position;
@@ -31,46 +38,48 @@ namespace Strategy.GameGUI {
 			}
 		}
 
+		/// <summary>
+		/// Creates instance of Label and stored an order, a object to store and a panelType. 
+		/// Also adds MouseClick action depending on the panelType.
+		/// </summary>
+		/// <param name="position">The order of object.</param>
+		/// <param name="objectRef">The object to store.</param>
+		/// <param name="panel">The type of closing panel.</param>
 		public SelectionLabel(int position, object objectRef, PanelType panel)
 			: this(position, panel) {
 			storedObject = objectRef;
 		}
 
-
-		public int NumberOfItem {
-			get { return numberOfItem; }
-		}
-
-		public object StoredObject {
-			get { return storedObject; }
-		}
-
-
+		/// <summary>
+		/// Calls Game.Load and load given mission from stored game mission path. Also closes the panel type.
+		/// </summary>
+		/// <param name="sender">The sender of action.</param>
+		/// <param name="e">The arguments of action.</param>
 		private void SelectLoadMission(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
-			// Button Action for SelectionLabel calls Game.Load and load given mission
-			var selectionLabel = sender as SelectionLabel;
-			if (selectionLabel != null) {
-				Game.IGameGUI.ClosePanel(panelToClose);
-				Game.Load((string)selectionLabel.StoredObject);
-			}
+			Game.IGameGUI.ClosePanel(panelToClose);
+			Game.Load((string)storedObject);
 		}
 
+		/// <summary>
+		/// Calls GroupManager function ChangeSolarSystem and closes the panel type
+		/// </summary>
+		/// <param name="sender">The sender of action.</param>
+		/// <param name="e">The arguments of action.</param>
 		private void SelectSolarSystem(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
-			// Button Action for SelectionLabel calls GroupManager function ChangeSolarSystem and close Panel
-			var selectionLabel = sender as SelectionLabel;
-			if (selectionLabel != null) {
-				Game.GroupManager.ChangeSolarSystem(selectionLabel.NumberOfItem);
-				Game.IGameGUI.ClosePanel(panelToClose);
-			}
+			Game.GroupManager.ChangeSolarSystem(numberOfItem);
+			Game.IGameGUI.ClosePanel(panelToClose);
+
 		}
 
+		/// <summary>
+		/// Calls CreateTraveler with selected number of SolarSystem (numberOfItem) and traveler(storedObject)
+		/// </summary>
+		/// <param name="sender">The sender of action.</param>
+		/// <param name="e">The arguments of action.</param>
 		private void Travel(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
-			// Function calls CreateTraveler with selected number of SolarSystem and traveler(IMovableGameObject)
-			var selectionLabel = sender as SelectionLabel;
-			if (selectionLabel != null) {
-				Game.GroupManager.CreateTraveler(selectionLabel.NumberOfItem, selectionLabel.StoredObject);
-				Game.IGameGUI.ClosePanel(panelToClose);
-			}
+			Game.GroupManager.CreateTraveler(numberOfItem, storedObject);
+			Game.IGameGUI.ClosePanel(panelToClose);
+
 		}
 	}
 }
