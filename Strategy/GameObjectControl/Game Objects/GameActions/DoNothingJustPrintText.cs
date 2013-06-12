@@ -5,6 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Strategy.GameObjectControl.Game_Objects.GameActions {
+	/// <summary>
+	/// Prints text. Prototyp game action.
+	/// </summary>
 	class DoNothingJustPrintText : IGameAction {
 
 		private IGameObject gameObject;
