@@ -7,6 +7,9 @@ using Strategy.GameObjectControl.GroupMgr;
 using Strategy.MoveMgr;
 
 namespace Strategy.FightMgr {
+	/// <summary>
+	/// Controls all fights and occupations.
+	/// </summary>
 	public interface IFightManager : IFinishMovementReciever{
 		/// <summary>
 		/// Registers the attacking group. Sends it to the specified position and start attack if it is possible.
