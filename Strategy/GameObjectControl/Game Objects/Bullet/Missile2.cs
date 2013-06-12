@@ -175,7 +175,7 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 					Destroy();
 				}
 			}
-		
+		}
 
 		/// <summary>
 		/// Calculates collistion from Rays and check distance between bullet and object gets from the Ray result.

@@ -109,7 +109,12 @@
     </Compile>
     <Compile Include="GameObjectControl\Game Objects\GameLoad\GameLoader.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameObject.cs" />
+    <Compile Include="GameObjectControl\Game Objects\GameTargets\EliminateTeamTarget.cs" />
+    <Compile Include="GameObjectControl\Game Objects\GameTargets\EscortTarget.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameTargets\ITarget.cs" />
+    <Compile Include="GameObjectControl\Game Objects\GameTargets\KillTarget.cs" />
+    <Compile Include="GameObjectControl\Game Objects\GameTargets\OccupyTarget.cs" />
+    <Compile Include="GameObjectControl\Game Objects\GameTargets\SurviveTimeTarget.cs" />
     <Compile Include="GameObjectControl\Game Objects\IGameObject.cs" />
     <Compile Include="GameObjectControl\Game Objects\HitTest.cs" />
     <Compile Include="GameObjectControl\Game Objects\IGameObjectCreator.cs" />
