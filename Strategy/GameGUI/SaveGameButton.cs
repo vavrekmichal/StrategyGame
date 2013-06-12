@@ -13,17 +13,17 @@ namespace Strategy.GameGUI {
 	class SaveGameButton : CloseButton {
 
 		TextBox textBox;
-		PanelType panelToClose;
+		string panelToClose;
 
 		/// <summary>
 		/// Creates instance of CloseButton and stored textBox reference. Also adds MouseClick action SaveGame.
 		/// </summary>
 		/// <param name="panel">The panel type to close.</param>
 		/// <param name="textBox">The text box with name of save game.</param>
-		public SaveGameButton(PanelType panel, TextBox textBox)
-			: base(panel) {
+		public SaveGameButton(string name, TextBox textBox)
+			: base(name) {
 			this.textBox = textBox;
-			panelToClose = panel;
+			panelToClose = name;
 			MouseClick += SaveGame;
 		}
 

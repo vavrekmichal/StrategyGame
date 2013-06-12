@@ -12,6 +12,7 @@ using Strategy.GameObjectControl.RuntimeProperty;
 using System.Reflection;
 using Strategy.GameObjectControl.Game_Objects.GameActions;
 using System.IO;
+using Strategy.Exceptions;
 
 namespace Strategy.GameGUI {
 
@@ -20,7 +21,7 @@ namespace Strategy.GameGUI {
 
 	public class MyGUI : IGameGUI {
 
-		Dictionary<PanelType, Panel> openedPanelDict;
+		Dictionary<string, Panel> openedPanelDict;
 
 		protected int screenWidth;
 		protected int screenHeight;
@@ -72,7 +73,7 @@ namespace Strategy.GameGUI {
 			screenHeight = height;
 			screenWidth = width;
 
-			openedPanelDict = new Dictionary<PanelType, Panel>();
+			openedPanelDict = new Dictionary<string, Panel>();
 
 			// Set Miyagi to Mogre
 			guiSystem = new MiyagiSystem("Mogre");
@@ -540,7 +541,7 @@ namespace Strategy.GameGUI {
 		}
 
 		private void EndMission(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
-			foreach (var item in new Dictionary<PanelType, Panel>(openedPanelDict)) {
+			foreach (var item in new Dictionary<string, Panel>(openedPanelDict)) {
 				item.Value.Dispose();
 				openedPanelDict.Remove(item.Key);
 			}
@@ -613,10 +614,10 @@ namespace Strategy.GameGUI {
 		//private PopUpPanelControl savePanelIsClosed = new PopUpPanelControl(true);
 
 		private void CreateSavePanel() {
-			if (openedPanelDict.ContainsKey(PanelType.SavePanel)) {
+			if (openedPanelDict.ContainsKey(PanelType.SavePanel.ToString())) {
 				return;
 			}
-			var panel = CreatePopUpPanel("Saves:", PanelType.SavePanel);
+			var panel = CreatePopUpPanel("Saves:", PanelType.SavePanel, true);
 
 			var innerScrollablePanel = CreateInnerScrollablePanel(textHeight + 6, panel.Width - 28, panel.Height * 11 / 16);
 			var savePaths = Directory.GetFiles(Game.SavesGamePath, "*.save");
@@ -646,7 +647,7 @@ namespace Strategy.GameGUI {
 
 			panel.Controls.Add(textArea);
 
-			var button = new SaveGameButton(PanelType.SavePanel, textArea) {
+			var button = new SaveGameButton(PanelType.SavePanel.ToString(), textArea) {
 				Location = new Point(panel.Width / 4, panel.Height * 7 / 8),
 				Skin = skinDict["Button"],
 				Text = "Ok",
@@ -657,7 +658,6 @@ namespace Strategy.GameGUI {
 			};
 
 			panel.Controls.Add(button);
-			openedPanelDict.Add(PanelType.SavePanel, panel);
 			gui.Controls.Add(panel);
 		}
 
@@ -665,11 +665,11 @@ namespace Strategy.GameGUI {
 		//private PopUpPanelControl loadPanelIsClosed = new PopUpPanelControl(true);
 
 		private void CreateLoadPanel() {
-			if (openedPanelDict.ContainsKey(PanelType.LoadPanel)) {
+			if (openedPanelDict.ContainsKey(PanelType.LoadPanel.ToString())) {
 				return;
 			}
 
-			var panel = CreatePopUpPanel("Load new mission:", PanelType.LoadPanel);
+			var panel = CreatePopUpPanel("Load new mission:", PanelType.LoadPanel, true);
 
 			var innerScrollablePanel = CreateInnerScrollablePanel(textHeight + 6, panel.Width - 28, panel.Height / 3);
 			var missionPaths = Directory.GetFiles(Game.SavesGamePath, "*.save");
@@ -678,7 +678,7 @@ namespace Strategy.GameGUI {
 				var splited = missionPaths[i].Split('\\');
 
 				var label = CreateSelectionLabel(panel.Width, textHeight + 1, splited[splited.Length - 1].Substring(0, splited[splited.Length - 1].Length - 5),
-					new Point(0, i * (textHeight + 1)), i, PanelType.LoadPanel, missionPaths[i]);
+					new Point(0, i * (textHeight + 1)), i, panel.Name, missionPaths[i]);
 				label.TextStyle = new TextStyle {
 					Alignment = Miyagi.Common.Alignment.TopCenter
 				};
@@ -697,25 +697,22 @@ namespace Strategy.GameGUI {
 				var splited = missionPaths[i].Split('\\');
 
 				var label = CreateSelectionLabel(panel.Width, textHeight + 1, splited[splited.Length - 1].Substring(0, splited[splited.Length - 1].Length - 8),
-					 new Point(0, i * (textHeight + 1)), i, PanelType.LoadPanel, missionPaths[i]);
+					 new Point(0, i * (textHeight + 1)), i, panel.Name, missionPaths[i]);
 				label.TextStyle = new TextStyle {
 					Alignment = Miyagi.Common.Alignment.TopCenter
 				};
 				innerScrollablePanel.Controls.Add(label);
 			}
 			panel.Controls.Add(innerScrollablePanel);
-			openedPanelDict.Add(PanelType.LoadPanel, panel);
 			gui.Controls.Add(panel);
 		}
 
-
-
 		private void CreateMissionPanel() {
-			if (openedPanelDict.ContainsKey(PanelType.MissionInfoPanel)) {
+			if (openedPanelDict.ContainsKey(PanelType.MissionInfoPanel.ToString())) {
 				return;
 			}
 
-			var panel = CreatePopUpPanel("Mission Info:", PanelType.MissionInfoPanel);
+			var panel = CreatePopUpPanel("Mission Info:", PanelType.MissionInfoPanel, true);
 
 			var innerScrollablePanel = CreateInnerScrollablePanel(textHeight + 6, panel.Width - 28, panel.Height * 37 / 48);
 
@@ -732,7 +729,6 @@ namespace Strategy.GameGUI {
 					row++;
 				}
 			}
-			openedPanelDict.Add(PanelType.MissionInfoPanel, panel);
 			gui.Controls.Add(panel);
 		}
 
@@ -743,10 +739,10 @@ namespace Strategy.GameGUI {
 		/// Creates top bar with info about current SolarSystem and players materials
 		/// </summary>
 		private void CreateSolarSystemPanel() {
-			if (openedPanelDict.ContainsKey(PanelType.SolarSystemPanel)) {
+			if (openedPanelDict.ContainsKey(PanelType.SolarSystemPanel.ToString())) {
 				return;
 			}
-			var panel = CreatePopUpPanel(" Select solar system:", PanelType.SolarSystemPanel);
+			var panel = CreatePopUpPanel(" Select solar system:", PanelType.SolarSystemPanel, true);
 
 			List<string> solarSystList = Game.GroupManager.GetAllSolarSystemNames();
 
@@ -764,7 +760,7 @@ namespace Strategy.GameGUI {
 			for (int i = 0; i < solarSystList.Count; i++) {
 				var selectionLabel = CreateSelectionLabel(
 					selectionLabelWidth, textHeight, solarSystList[i],
-					new Point(0, i * selectionLabelMarginTop), i, PanelType.SolarSystemPanel
+					new Point(0, i * selectionLabelMarginTop), i, panel.Name
 					);
 
 				innerScrollablePanel.Controls.Add(selectionLabel);
@@ -797,7 +793,6 @@ namespace Strategy.GameGUI {
 					new Point(0, i * selectionLabelMarginTop), travList[i].TimeProperty);
 				innerScrollablePanel.Controls.Add(testButton);
 			}
-			openedPanelDict.Add(PanelType.SolarSystemPanel, panel);
 			gui.Controls.Add(panel);
 		}
 
@@ -846,9 +841,9 @@ namespace Strategy.GameGUI {
 		/// <param Name="order">Number of choice</param>
 		/// <param Name="panelToClose">Closing Panel</param>
 		/// <returns></returns>
-		private SelectionLabel CreateSelectionLabel(int width, int height, string text, Point location, int order, PanelType panelToClose,
+		private SelectionLabel CreateSelectionLabel(int width, int height, string text, Point location, int order, string panelName,
 			object objectRef = null) {
-			var selectLabel = new SelectionLabel(order, objectRef, panelToClose) {
+				var selectLabel = new SelectionLabel(order, objectRef, panelName) {
 				Size = new Size(width, height),
 				Text = text,
 				Location = location
@@ -856,27 +851,6 @@ namespace Strategy.GameGUI {
 			};
 			return selectLabel;
 		}
-
-		///// <summary>
-		///// Create SelectionLabel - on click Select positon and can close setted panel
-		///// </summary>
-		///// <param Name="width">Width of Label</param>
-		///// <param Name="height">Height of Label</param>
-		///// <param Name="text">Text in Label</param>
-		///// <param Name="location">Relative position in Panel</param>
-		///// <param Name="order">Number of choice</param>
-		///// <param Name="panelToClose">Closing Panel</param>
-		///// <returns></returns>
-		//private SelectionLabel CreateSelectionLabel(int width, int height, string text, Point location, int order, Panel panelToClose, PopUpPanelControl controler,
-		//	object objectRef = null) {
-		//	var selectLabel = new SelectionLabel(order, objectRef, panelToClose, controler) {
-		//		Size = new Size(width, height),
-		//		Text = text,
-		//		Location = location
-
-		//	};
-		//	return selectLabel;
-		//}
 
 		/// <summary>
 		/// Strange Name for runtime generic calling (unique Name)
@@ -949,50 +923,42 @@ namespace Strategy.GameGUI {
 			return label;
 		}
 
-		private Panel CreatePopUpPanel(string text, PanelType type) {
-
-			var panel = new Panel() {
-				Width = screenWidth / 2,
-				Height = screenHeight * 4 / 7,
-				Location = new Point(screenWidth / 4, screenHeight / 5),
-				Skin = skinDict["PanelR"],
-				ResizeMode = ResizeModes.None,
-				Padding = new Thickness(5, 10, 0, 0)
-			};
-
-			// Title label
-			var label = new Label() {
-				Size = new Size(panel.Width / 2, textHeight + 1),
-				Text = text,
-				Location = new Point(panel.Width / 4, 0),
-				TextStyle = {
-					Alignment = Miyagi.Common.Alignment.TopCenter
-				}
-			};
-
-			panel.Controls.Add(label);
-
-			var closeButton = CreateCloseButton(panel.Width / 3,
-				panel.Height / 12,
-				"Cancel",
-				new Point(panel.Width * 5 / 8, panel.Height * 7 / 8),
-					type);
-			panel.Controls.Add(closeButton);
+		private Panel CreatePopUpPanel(string text, PanelType type, bool isSingleton) {
+			Panel panel;
+			if (isSingleton && openedPanelDict.ContainsKey(type.ToString())) {
+				throw new ShutdownException("Singleton PopUpPanel already exist.");
+			} else {
+				var name = GetUnusedPanelName(type.ToString(), isSingleton);
+				panel = new PopUpPanel(screenWidth, screenHeight, text, name, textHeight + 1, skinDict["PanelR"], skinDict["Button"]);
+				openedPanelDict.Add(name, panel);
+			}
 
 			return panel;
 		}
 
-		private CloseButton CreateCloseButton(int width, int height, string text, Point location, PanelType panelToClose) {
-			var b = new CloseButton(panelToClose) {
+		private CloseButton CreateCloseButton(int width, int height, string text, Point location, string name) {
+			var b = new CloseButton(name) {
 				Size = new Size(width, height),
 				Location = location,
 				Skin = skinDict["Button"],
 				Text = text,
 				TextStyle = new TextStyle {
 					Alignment = Alignment.MiddleCenter
-				}
+				},
+				Name = name
 			};
 			return b;
+		}
+
+		private string GetUnusedPanelName(string name, bool isSingleton) {
+			if (isSingleton) {
+				return name;
+			}
+			if (openedPanelDict.ContainsKey(name)) {
+				return GetUnusedPanelName(name + 1, isSingleton);
+			} else {
+				return name;
+			}
 		}
 
 		public int NumberOfPopUpPanels {
@@ -1014,9 +980,9 @@ namespace Strategy.GameGUI {
 		}
 
 
-		public void ShowTravelSelectionPanel(List<string> possibilities, string topic, object gameObject) {
+		public void ShowTravelSelectionPanel(List<string> possibilities, object gameObject) {
 
-			var panel = CreatePopUpPanel(" " + topic, PanelType.TravelPanel); // Don't need know if panel is closed or not
+			var panel = CreatePopUpPanel("Choose treval destiantion:", PanelType.TravelPanel, false); // Don't need know if panel is closed or not
 			gui.Controls.Add(panel);
 
 			int marginTop = 10;
@@ -1037,14 +1003,11 @@ namespace Strategy.GameGUI {
 
 				SelectionLabel selectionLabel = CreateSelectionLabel(
 					selectionLabelWidth, 25, possibilities[i],
-					new Point(0, i * selectionLabelMarginTop), i, PanelType.TravelPanel, gameObject
+					new Point(0, i * selectionLabelMarginTop), i, panel.Name, gameObject
 					);
 
 				innerScrollablePanel.Controls.Add(selectionLabel);
 			}
-
-
-
 		}
 
 		/// <summary>
@@ -1118,9 +1081,9 @@ namespace Strategy.GameGUI {
 			}
 		}
 
-		public void End(string printText) {
+		public void MissionEnd(string printText) {
 
-			if (openedPanelDict.ContainsKey(PanelType.MissionEndPanel)) {
+			if (openedPanelDict.ContainsKey(PanelType.MissionEndPanel.ToString())) {
 				return;
 			}
 
@@ -1139,10 +1102,11 @@ namespace Strategy.GameGUI {
 					Alignment = Alignment.MiddleCenter
 				}
 			};
-			var button = CreateCloseButton(panel.Width / 4, panel.Height / 6, "Ok", new Point(panel.Width * 3 / 8, panel.Height * 3 / 4), PanelType.MissionEndPanel);
+			var button = CreateCloseButton(panel.Width / 4, panel.Height / 6, "Ok", 
+				new Point(panel.Width * 3 / 8, panel.Height * 3 / 4), PanelType.MissionEndPanel.ToString());
 			button.MouseClick += EndMission;
 			panel.Controls.Add(button);
-			openedPanelDict.Add(PanelType.MissionEndPanel, panel);
+			openedPanelDict.Add(PanelType.MissionEndPanel.ToString(), panel);
 			gui.Controls.Add(panel);
 
 		}
@@ -1160,7 +1124,7 @@ namespace Strategy.GameGUI {
 			consoleLinesNumber = 0;
 		}
 
-		public void ClosePanel(PanelType type) {
+		public void ClosePanel(string type) {
 			if (openedPanelDict.ContainsKey(type)) {
 				openedPanelDict[type].Dispose();
 				openedPanelDict.Remove(type);

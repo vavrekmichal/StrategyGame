@@ -159,11 +159,11 @@ namespace Strategy {
 		}
 
 		public static void InterstellarTravel(IGameObject gameObject) {
-			gameGUI.ShowTravelSelectionPanel(gameObjectMgr.GroupManager.GetAllSolarSystemNames(), "Choose where you'll travel", gameObject);
+			gameGUI.ShowTravelSelectionPanel(gameObjectMgr.GroupManager.GetAllSolarSystemNames(), gameObject);
 		}
 
 		public static void EndGame(string printText) {
-			gameGUI.End(printText);
+			gameGUI.MissionEnd(printText);
 		}
 
 		#endregion

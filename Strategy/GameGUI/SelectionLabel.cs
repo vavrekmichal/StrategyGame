@@ -11,7 +11,7 @@ namespace Strategy.GameGUI {
 	/// </summary>
 	class SelectionLabel : Label {
 		protected int numberOfItem;
-		protected PanelType panelToClose;
+		protected string panelToClose;
 		protected object storedObject;
 
 		/// <summary>
@@ -19,34 +19,33 @@ namespace Strategy.GameGUI {
 		/// </summary>
 		/// <param name="position">The order of object.</param>
 		/// <param name="panel">The type of closing panel.</param>
-		public SelectionLabel(int position, PanelType panel)
+		public SelectionLabel(int position, string panelName)
 			: base() {
 			numberOfItem = position;
-			panelToClose = panel;
-			switch (panel) {
-				case PanelType.LoadPanel:
+			panelToClose = panelName;
+			switch (panelName) {
+				case "LoadPanel":
 					MouseClick += SelectLoadMission;
 					break;
-				case PanelType.SolarSystemPanel:
+				case "SolarSystemPanel":
 					MouseClick += SelectSolarSystem;
 					break;
-				case PanelType.TravelPanel:
-					MouseClick += Travel;
-					break;
 				default:
+					MouseClick += Travel;
 					break;
 			}
 		}
 
 		/// <summary>
-		/// Creates instance of Label and stored an order, a object to store and a panelType. 
+		/// Creates instance of Label and stored an order, a object to store and a panelType and closing panel reference. 
 		/// Also adds MouseClick action depending on the panelType.
 		/// </summary>
 		/// <param name="position">The order of object.</param>
 		/// <param name="objectRef">The object to store.</param>
 		/// <param name="panel">The type of closing panel.</param>
-		public SelectionLabel(int position, object objectRef, PanelType panel)
-			: this(position, panel) {
+		/// <param name="closingPanel">The reference on the closing Panel</param>
+		public SelectionLabel(int position, object objectRef, string panelName)
+			: this(position, panelName) {
 			storedObject = objectRef;
 		}
 
@@ -78,6 +77,7 @@ namespace Strategy.GameGUI {
 		/// <param name="e">The arguments of action.</param>
 		private void Travel(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
 			Game.GroupManager.CreateTraveler(numberOfItem, storedObject);
+
 			Game.IGameGUI.ClosePanel(panelToClose);
 
 		}

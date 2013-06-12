@@ -20,6 +20,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		private const string meshConst = "gate.mesh";
 		private const string animationPort = "funcionando3_eani_Clip";
 		private const string animationStay = "abrirse_eani_Clip";
+		private const string travelSound = "ltsaberon01.wav";
 		private readonly Vector3 gatePosition = new Vector3(1000, 0, 1000);
 
 		private AnimationState animationState; // The AnimationState the moving object
@@ -119,6 +120,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			if (gameObject is IMovableGameObject) {
 				if (from != to) {
 					IMovableGameObject imgo = (IMovableGameObject)gameObject;
+					Game.IEffectPlayer.PlayEffect(travelSound);
 					travelerList.Add(new Traveler(from, to, (IMovableGameObject)imgo));
 				}
 			}
