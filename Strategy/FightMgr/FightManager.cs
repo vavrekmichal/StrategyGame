@@ -167,7 +167,8 @@ namespace Strategy.FightMgr {
 		private bool CheckActionPossibility(GroupMovables group, IGameObject gameObject) {
 			foreach (var item in fightList) {
 				if (item.ContainsAttackingGroup(group, gameObject)) {
-					return false;
+					// Attack on other target.
+					return true;
 				}
 				if (item.Contains(gameObject)) {
 					item.AddGroup(group);
