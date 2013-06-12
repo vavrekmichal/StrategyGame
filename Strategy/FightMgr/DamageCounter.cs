@@ -27,7 +27,7 @@ namespace Strategy.FightMgr {
 		/// <summary>
 		/// Returns a random number from interval [-bulletPower/4, bulletPower/4].
 		/// </summary>
-		/// <param name="bulletPower">Power of IBullet</param>
+		/// <param name="bulletPower">Power of the IBullet</param>
 		/// <returns>Random number from interval [-bulletPower/4, bulletPower/4]</returns>
 		private static int GetRandomizeAttack(int bulletPower) {
 			int r = random.Next(bulletPower / 2);

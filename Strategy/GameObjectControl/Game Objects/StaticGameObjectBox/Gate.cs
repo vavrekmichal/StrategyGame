@@ -104,7 +104,6 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			foreach (var traveler in copy) {
 				if (traveler.IsDone) {
 					travelerList.Remove(traveler);
-
 				} else {
 					traveler.Update(delay);
 				}

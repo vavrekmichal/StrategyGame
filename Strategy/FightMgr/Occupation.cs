@@ -23,9 +23,9 @@ namespace Strategy.FightMgr {
 
 		// Occupy-distance is increased by this constant.
 		const float distanceConst = 1.2f;
-		// Sound of start the occupation
+		// Start sound of the occupation
 		const string occStart = "OccBegan1.wav";
-		// Sound of end the occupation
+		// End sound of the occupation
 		const string occEnd = "OccSucc1.wav";  
 
 		/// <summary>
@@ -136,7 +136,7 @@ namespace Strategy.FightMgr {
 		/// Check distance between the attacker's position and the target's position. Distance is compare with occupyDistance.
 		/// </summary>
 		/// <param Name="attackerPostion">The attacker's position</param>
-		/// <returns>Returns if attacker is in occupyDistance of target.</returns>
+		/// <returns>Returns if attacker is in occupyDistance of the target.</returns>
 		private bool CheckDistance(Mogre.Vector3 attackerPostion) {
 			float maxDist;
 			Mogre.Vector3 targetPosition;

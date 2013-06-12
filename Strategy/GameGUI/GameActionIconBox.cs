@@ -14,7 +14,7 @@ namespace Strategy.GameGUI {
 		private IGameAction action;
 
 		/// <summary>
-		/// Creates instance of GameActionIconBox and store reference on action. Also adds MouseClick action GameActionClicked.
+		/// Creates instance of the GameActionIconBox and store reference on action. Also adds MouseClick action GameActionClicked.
 		/// </summary>
 		/// <param name="action"></param>
 		public GameActionIconBox(IGameAction action) {
@@ -27,8 +27,8 @@ namespace Strategy.GameGUI {
 		/// <summary>
 		/// MouseClick action which calls OnMouseClick() and print answer to the game console.
 		/// </summary>
-		/// <param name="sender">The sender of action.</param>
-		/// <param name="e">The arguments of action.</param>
+		/// <param name="sender">The sender of the action.</param>
+		/// <param name="e">The arguments of the action.</param>
 		private void GameActionClicked(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
 			Game.PrintToGameConsole(action.OnMouseClick());
 		}

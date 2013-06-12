@@ -33,7 +33,7 @@ namespace Strategy.GameGUI {
 		/// <summary>
 		/// Sets SolarSystem's name in the relevant Label. 
 		/// </summary>
-		/// <param name="name">The name of SolarSystem</param>
+		/// <param name="name">The name of the SolarSystem</param>
 		void SetSolarSystemName(string name);
 
 		/// <summary>
@@ -46,14 +46,14 @@ namespace Strategy.GameGUI {
 		/// Shows panel with travel destinations (SolarSystem's names). Users answer will be sends
 		/// to Game.GroupManager.CreateTraveler().
 		/// </summary>
-		/// <param name="possibilities">The list with names of SolarSystems</param>
+		/// <param name="possibilities">The list with names of the SolarSystems</param>
 		/// <param name="gameObject">The potential traveler</param>
 		void ShowTravelSelectionPanel(List<string> possibilities, object gameObject);
 
 		/// <summary>
 		/// Creates information about materials in the dictionary. Prints names and values.
 		/// </summary>
-		/// <param name="materialDict">The dictionary with name of material and appropriate instance of material.</param>
+		/// <param name="materialDict">The dictionary with name of the material and appropriate instance of the material.</param>
 		void UpdatePlayerMaterialDict(Dictionary<string, IMaterial> materialDict);
 
 		/// <summary>
@@ -79,7 +79,7 @@ namespace Strategy.GameGUI {
 		void ClosePanel(string panelName);
 
 		/// <summary>
-		/// Returns number of actual opened panels.
+		/// Returns number of the actual opened panels.
 		/// </summary>
 		int NumberOfPopUpPanels { get; }
 	}

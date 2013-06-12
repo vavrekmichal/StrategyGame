@@ -14,9 +14,9 @@ namespace Strategy.GameGUI {
 		private string panelToClose;
 
 		/// <summary>
-		/// Creates instance of Button with infomation about closing panel type or panel reference. Also adds MouseClick action DisposePanel.
+		/// Creates instance of the Button with infomation about closing panel type or panel reference. Also adds MouseClick action DisposePanel.
 		/// </summary>
-		/// <param name="type">The type of closing panel.</param>
+		/// <param name="type">The type of the closing panel.</param>
 		/// <param name="panel">The reference on the closing Panel.</param>
 		public CloseButton(string panelName)
 			: base() {
@@ -25,10 +25,10 @@ namespace Strategy.GameGUI {
 		}
 
 		/// <summary>
-		/// MouseClick action which closing setted type of panel.
+		/// MouseClick action which closing setted type of the panel.
 		/// </summary>
-		/// <param name="sender">The sender of action.</param>
-		/// <param name="e">The arguments of action.</param>
+		/// <param name="sender">The sender of the action.</param>
+		/// <param name="e">The arguments of the action.</param>
 		private void DisposePanel(object sender, Miyagi.Common.Events.MouseEventArgs e) {
 			// Dispose the panel 
 

@@ -31,7 +31,7 @@ namespace Strategy.FightMgr {
 		private Dictionary<IMovableGameObject, IGameObject> attackersTarget; 
 
 		/// <summary>
-		/// Creates instance of FightManager and initializes objects.
+		/// Creates instance of the FightManager and initializes objects.
 		/// </summary>
 		public FightManager() {
 			attackersTarget = new Dictionary<IMovableGameObject, IGameObject>();
@@ -70,7 +70,7 @@ namespace Strategy.FightMgr {
 		/// <param name="gameObject">The attacked object.</param>
 		public void Attack(GroupMovables group, IGameObject gameObject) {
 
-			// Check if target is already under attack of this group or if the target is under attack so
+			// Check if target is already under attack of the this group or if the target is under attack so
 			// group is added to deffenders.
 			if (!CheckActionPossibility(group, gameObject)) {
 				return;

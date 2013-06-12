@@ -8,7 +8,7 @@ using Miyagi.UI.Controls;
 namespace Strategy.GameGUI {
 	/// <summary>
 	/// Extension of the CloseButton which has reference to TextBox to get text from it. 
-	/// TextBox text is used as name of saving game.
+	/// TextBox text is used as name of the saving game.
 	/// </summary>
 	class SaveGameButton : CloseButton {
 
@@ -16,10 +16,10 @@ namespace Strategy.GameGUI {
 		string panelToClose;
 
 		/// <summary>
-		/// Creates instance of CloseButton and stored textBox reference. Also adds MouseClick action SaveGame.
+		/// Creates instance of the CloseButton and stored textBox reference. Also adds MouseClick action SaveGame.
 		/// </summary>
 		/// <param name="panel">The panel type to close.</param>
-		/// <param name="textBox">The text box with name of save game.</param>
+		/// <param name="textBox">The text box with name of the save game.</param>
 		public SaveGameButton(string name, TextBox textBox)
 			: base(name) {
 			this.textBox = textBox;
@@ -30,8 +30,8 @@ namespace Strategy.GameGUI {
 		/// <summary>
 		/// Gets text from textBox and calls Save with the text from textBox. After that close panel.
 		/// </summary>
-		/// <param name="sender">The sender of action.</param>
-		/// <param name="e">The arguments of action.</param>
+		/// <param name="sender">The sender of the action.</param>
+		/// <param name="e">The arguments of the action.</param>
 		private void SaveGame(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
 			var saveName = textBox.Text;
 			if (saveName == "") {

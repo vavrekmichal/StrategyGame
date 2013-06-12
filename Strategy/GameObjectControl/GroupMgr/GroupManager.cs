@@ -16,10 +16,6 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		protected int lastSolarSystem = 0;
 
 		private TargetedGroupManager targetedMgr;
-		//private bool isMovableGroupActive; // Active is movable group
-
-		//private GroupMovables selectedGroupM; //not implemented ...will be actual selected group - need rectangular Select
-		//private GroupStatics selectedGroupS;
 
 		private int activeSolarSystem = 0; // Now active solarSystem
 
@@ -212,7 +208,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 				var inGroup = isgoList[0];
 				if (isgoList.Count > 1) {		// Check if there is more object
 					for (int i = 1; i < isgoList.Count; i++) {
-						if (inGroup.Team.Name == Game.PlayerName && inGroup.Team == isgoList[i].Team) {
+						if (inGroup.Team == isgoList[i].Team) {
 							group.InsertMemeber(isgoList[i]); // Insert player's isgo	
 						} else {
 							if (isgoList[i].Team.Name == Game.PlayerName) { // In some of elements in isgoList is players's -> has greater priority
@@ -452,12 +448,6 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		}
 
 		public void SelectGroup(GroupMovables group) {
-			targetedMgr.TargetGroup(group);
-			targetedMgr.ShowTargetedGroup();
-
-		}
-
-		public void SelectGroup(GroupStatics group) {
 			targetedMgr.TargetGroup(group);
 			targetedMgr.ShowTargetedGroup();
 		}

@@ -17,7 +17,7 @@ namespace Strategy.GameGUI {
 		protected string text;
 
 		/// <summary>
-		/// Creates instance of PropertyLabel which stores the text and the property.
+		/// Creates instance of the PropertyLabel which stores the text and the property.
 		/// </summary>
 		/// <param name="property">The porperty witch value to display.</param>
 		/// <param name="text">The text which will be printed before the property value.</param>

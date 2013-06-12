@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"  ?>
-
 <mission propertyFilePath="../../Media/Mission/Scripts/Properties2.csx">
   <teams>
     <friendlyTeams>
@@ -39,10 +38,11 @@
   </usedObjects>
   <solarSystems>
     <solarSystem name="This is my" position="3000;0;3000" gate="true">
+
       <isgo type="Sun" name="Sun">
         <argument>sun.mesh</argument>
       </isgo>
-      <isgo type="Planet" name="Mercury" team="Fun">
+      <isgo type="Planet" name="Mercury" team="Player">
         <argument>mercury.mesh</argument>
         <argument>200;200</argument>
         <argument>500</argument>
@@ -121,25 +121,6 @@
       <imgo type="SpaceShip" name="Ship" team="Player">
         <argument>450;450</argument>
       </imgo>
-      <imgo type="SpaceShip2" name="Ship" team="Player">
-        <argument>450;500</argument>
-      </imgo>
-      <imgo type="SpaceShip2" name="Ship" team="Player">
-        <argument>450;550</argument>
-      </imgo>
-      <imgo type="SpaceShip" name="ShipD" team="Devastator">
-        <argument>600;600</argument>
-      </imgo>
-      <imgo type="SpaceShip" name="ShipF" team="Funny">
-        <argument>750;600</argument>
-      </imgo>
-      <imgo type="SpaceShip" name="ShipF" team="Fun">
-        <argument>750;500</argument>
-      </imgo>
-      <imgo type="SpaceShip" name="ShipF" team="Fun">
-        <argument>750;450</argument>
-      </imgo>
-
     </solarSystem>
     <solarSystem name="FunnySystem" position="300;500;3000">
       <isgo type="Sun" name="FunnyThings">
@@ -162,49 +143,14 @@
       </isgo>
     </solarSystem>
     <solarSystem name="s1" position="30;0;100">
-      <isgo type="Sun" name="s10"  >
+      <isgo type="Sun" name="s10">
         <argument>jupiter.mesh</argument>
-      </isgo>
-    </solarSystem>
-    <solarSystem name="s2" position="300;0;3000">
-      <isgo type="Sun" name="s11" >
-        <argument>mars.mesh</argument>
-      </isgo>
-    </solarSystem>
-    <solarSystem name="s3" position="3600;0;3000">
-      <isgo type="Sun" name="s12" >
-        <argument>SpaceShip2.mesh</argument>
-      </isgo>
-    </solarSystem>
-    <solarSystem name="s4" position="3000;0;0">
-      <isgo type="Sun" name="s13" >
-        <argument>SpaceShip1.mesh</argument>
-      </isgo>
-    </solarSystem>
-    <solarSystem name="Dalsi z mnoha" position="20;0;3000">
-      <isgo type="Sun" name="s14" >
-        <argument>earth.mesh</argument>
-      </isgo>
-    </solarSystem>
-    <solarSystem name="s6" position="3000;0;600">
-      <isgo type="Sun" name="s15" >
-        <argument>neptune.mesh</argument>
-      </isgo>
-    </solarSystem>
-    <solarSystem name="s7" position="3000;5;1000" gate="true">
-      <isgo type="Sun" name="s16" >
-        <argument>uranus.mesh</argument>
-      </isgo>
-    </solarSystem>
-    <solarSystem name="s8" position="3000;0;250">
-      <isgo type="Sun" name="s17" >
-        <argument>gate.mesh</argument>
       </isgo>
     </solarSystem>
   </solarSystems>
   <missionTargets>
     <target name="SurviveTimeTarget">
-      <argument>50</argument>
+      <argument>10</argument>
     </target>
     <target name="KillTarget">
       <argument>ShipF</argument>
@@ -228,17 +174,5 @@
     <material name="Wolenium2" team="Player">
       <argument>600</argument>
     </material>
-    <material name="Wolenium2" team="Fun">
-      <argument>600</argument>
-    </material>
   </materials>
 </mission>
-<!--
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Media/Mission/mission.xsd"
-  <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="800;0;600"/>
-      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750;0;550"/>
-      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Devastator" position="700;0;550"/>
-      
-      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750;0;400"/>
-      <imgo type="SpaceShip" name="ShipF" mesh="SpaceShip2.mesh" team="Fun" position="750;0;350"/>
--->

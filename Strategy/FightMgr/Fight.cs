@@ -63,7 +63,7 @@ namespace Strategy.FightMgr {
 		}
 
 		/// <summary>
-		/// Creates instance of Fight and collect all defenders on shout distance. Also selectes both (attacker
+		/// Creates instance of the Fight and collect all defenders on shout distance. Also selectes both (attacker
 		/// and deffender) group and start fight.
 		/// </summary>
 		/// <param name="attackers">The attacking group (complete)</param>
@@ -89,10 +89,10 @@ namespace Strategy.FightMgr {
 
 		/// <summary>
 		/// Returns the object to be attacked. Object is representing as Property for better reactions
-		/// to death object. If one of sides has no member so the fight is ends.
+		/// to death object. If one of the sides has no member so the fight is ends.
 		/// </summary>
 		/// <param name="team">Used for find another oponent.</param>
-		/// <returns>Returns next target of asking team.</returns>
+		/// <returns>Returns next target of the asking team.</returns>
 		public Property<IGameObject> GetTarget(TeamControl.Team team) {
 			if (groupAttackers.Count == 0 || (imgoDeffenders.Count == 0 && isgoDeffenders.Count == 0)) {
 				// Fight ends
@@ -112,7 +112,7 @@ namespace Strategy.FightMgr {
 		/// Checks if gameObject can attack the target.  
 		/// </summary>
 		/// <param name="gameObject">The attacking object the target.</param>
-		/// <param name="target">The target of attack.</param>
+		/// <param name="target">The target of the attack.</param>
 		/// <param name="attackDistance">The maximum distance between the objects for attack.</param>
 		/// <returns>Returns if attacker can attack the target.</returns>
 		public bool TryAttack(IGameObject gameObject, IGameObject target, float attackDistance) {
