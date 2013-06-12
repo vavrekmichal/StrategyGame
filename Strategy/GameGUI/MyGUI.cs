@@ -883,7 +883,7 @@ namespace Strategy.GameGUI {
 			}
 
 			// Creates a PopUpPanel
-			var panel = CreatePopUpPanel("Load mission:", PanelType.LoadPanel, true);
+			var panel = CreatePopUpPanel("Load saved mission:", PanelType.LoadPanel, true);
 			gui.Controls.Add(panel);
 
 			// Creates a new scrollable panel for names of the new games.
@@ -905,7 +905,7 @@ namespace Strategy.GameGUI {
 				scrollablePanel.Controls.Add(label);
 			}
 
-			var labelSave = CreateLabel(panel.Height / 2 - textHeight - 10, panel.Width, textHeight, "Load saved mission:");
+			var labelSave = CreateLabel(panel.Height / 2 - textHeight - 10, panel.Width, textHeight, "Load new mission:");
 			panel.Controls.Add(labelSave);
 
 			// Creates a new scrollable panel for a names of the saved games.
