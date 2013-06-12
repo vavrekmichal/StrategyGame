@@ -100,7 +100,10 @@
     <Compile Include="GameObjectControl\Game Objects\GameActions\DieAction.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GameObjectControl\Game Objects\GameActions\DoNothingJustPrintText.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameActions\IGameAction.cs" />
+    <Compile Include="GameObjectControl\Game Objects\GameActions\PortalAction.cs" />
+    <Compile Include="GameObjectControl\Game Objects\GameActions\ProduceAction.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameActions\StopMoveAction.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -112,6 +115,7 @@
     <Compile Include="GameObjectControl\Game Objects\IGameObjectCreator.cs" />
     <Compile Include="GameObjectControl\Game Objects\MovableGameObjectBox\IMovableGameObject.cs" />
     <Compile Include="GameObjectControl\Game Objects\MovableGameObjectBox\SpaceShip.cs" />
+    <Compile Include="GameObjectControl\Game Objects\MovableGameObjectBox\SpaceShip2.cs" />
     <Compile Include="GameObjectControl\Game Objects\MyDieArgs.cs" />
     <Compile Include="GameObjectControl\Game Objects\NGLoader.cs" />
     <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\Gate.cs" />

@@ -37,6 +37,7 @@ namespace Strategy.GameObjectControl {
 		public void AddIBullet(IBullet bullet) {
 			if (!bulletDict.ContainsKey(bullet.Name)) {
 				bulletDict.Add(bullet.Name, bullet);
+				bullet.ChangeVisible(active);
 			}
 		}
 
