@@ -4,8 +4,6 @@ using System.Linq;
 using Mogre;
 using Strategy.TeamControl;
 using Strategy.GameObjectControl.RuntimeProperty;
-using Strategy.GameObjectControl.GroupMgr;
-
 
 
 namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 	/// <summary>
 	/// Represents bullet. Implements move in the space and when IBullet hits must report it to

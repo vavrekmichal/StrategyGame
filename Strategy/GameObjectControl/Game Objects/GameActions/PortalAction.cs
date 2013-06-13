@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 	/// <summary>
 	/// Begins travel (show destiantions). Can teleport owner to other SolarSystem as the Gate.

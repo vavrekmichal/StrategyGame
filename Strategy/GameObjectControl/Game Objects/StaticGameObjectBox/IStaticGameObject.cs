@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using Mogre;
-using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
-using Strategy.GameObjectControl.RuntimeProperty;
-using Strategy.TeamControl;
-
+﻿
 namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 	/// <summary>
 	/// Represents static game objects in the game. All object which implements this interface 

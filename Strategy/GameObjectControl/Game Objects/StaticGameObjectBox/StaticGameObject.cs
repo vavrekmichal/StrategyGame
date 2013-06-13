@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Strategy.TeamControl;
-using Strategy.GameObjectControl.Game_Objects.GameActions;
-using Strategy.GameMaterial;
+﻿using System.Collections.Generic;
 using Mogre;
-using System.Reflection;
-using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.RuntimeProperty;
-using Strategy.Exceptions;
 
 namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 	/// <summary>

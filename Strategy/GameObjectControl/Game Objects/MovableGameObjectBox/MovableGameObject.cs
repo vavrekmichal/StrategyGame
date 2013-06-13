@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mogre;
-using Strategy.Exceptions;
-using Strategy.GameObjectControl.GroupMgr;
-using Strategy.GameObjectControl.Game_Objects.GameActions;
 using Strategy.GameObjectControl.RuntimeProperty;
-using Strategy.MoveMgr;
-using Strategy.TeamControl;
 using Strategy.GameObjectControl.Game_Objects.Bullet;
 
 namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {

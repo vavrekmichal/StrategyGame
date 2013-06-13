@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
-using Strategy.GameObjectControl.RuntimeProperty;
+﻿using Strategy.GameObjectControl.RuntimeProperty;
 
 namespace Strategy.GameMaterial {
 	/// <summary>

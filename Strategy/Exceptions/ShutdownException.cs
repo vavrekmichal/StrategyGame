@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+﻿
 namespace Strategy.Exceptions {
 	/// <summary>
 	/// Exception is catched at OnFrameRenderingQueued (BaseApplication) and ends program. 
