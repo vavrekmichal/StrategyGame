@@ -60,7 +60,7 @@ namespace Strategy.GameGUI {
 		/// <param name="sender">The sender of the action.</param>
 		/// <param name="e">The arguments of the action.</param>
 		private void SelectSolarSystem(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
-			Game.GroupManager.ChangeSolarSystem(numberOfItem);
+			Game.SolarSystemManager.ChangeSolarSystem(numberOfItem);
 			Game.IGameGUI.ClosePanel(panelToClose);
 
 		}
@@ -71,10 +71,8 @@ namespace Strategy.GameGUI {
 		/// <param name="sender">The sender of the action.</param>
 		/// <param name="e">The arguments of the action.</param>
 		private void Travel(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
-			Game.GroupManager.CreateTraveler(numberOfItem, storedObject);
-
+			Game.SolarSystemManager.CreateTraveler(numberOfItem, storedObject);
 			Game.IGameGUI.ClosePanel(panelToClose);
-
 		}
 	}
 }

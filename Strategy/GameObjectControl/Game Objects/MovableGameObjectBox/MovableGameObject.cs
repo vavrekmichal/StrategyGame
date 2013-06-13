@@ -445,7 +445,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// </summary>
 		/// <returns>Returns Missile instance.</returns>
 		protected virtual IBullet CreateIBullet() {
-			var solS = Game.GroupManager.GetSolarSystem(this);
+			var solS = Game.SolarSystemManager.GetSolarSystem(this);
 			return new Missile(position.Value, solS, target.Value.Position, fight);
 		}
 		#endregion

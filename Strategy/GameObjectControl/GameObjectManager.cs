@@ -21,6 +21,7 @@ namespace Strategy.GameObjectControl {
 		protected PropertyManager propertyMgr;
 		protected TeamManager teamMgr;
 		protected GroupManager groupMgr;
+		protected SolarSystemManager solarSystemMgr;
 		protected HitTest hitTest;
 
 		const string groupSelectedSound = "power1.wav";
@@ -57,6 +58,7 @@ namespace Strategy.GameObjectControl {
 			groupMgr = new GroupManager();
 			propertyMgr = new PropertyManager();
 			hitTest = new HitTest();
+			solarSystemMgr = new SolarSystemManager();
 		}
 		#endregion
 
@@ -123,6 +125,15 @@ namespace Strategy.GameObjectControl {
 			}
 		}
 
+		public SolarSystemManager SolarSystemManager {
+			get {
+				if (solarSystemMgr == null) {
+					throw new NullReferenceException("SolarSystemManager is not initialized.");
+				}
+				return solarSystemMgr;
+			}
+		}
+
 		#region private
 
 		#endregion
@@ -132,6 +143,7 @@ namespace Strategy.GameObjectControl {
 		#region public
 
 		public void Update(float delay) {
+			solarSystemMgr.Update(delay);
 			fightMgr.Update(delay);
 			groupMgr.Update(delay);
 			moveMgr.Update();
@@ -146,8 +158,6 @@ namespace Strategy.GameObjectControl {
 
 
 		public void RemoveObject(IGameObject gameObject) {
-
-			//gameObject.takeDamage(1000); //TODO asdasdas
 
 			var castedImgo = gameObject as IMovableGameObject;
 			if (castedImgo != null) {
@@ -188,6 +198,7 @@ namespace Strategy.GameObjectControl {
 			groupMgr = new GroupManager();
 			propertyMgr = new PropertyManager();
 			hitTest = new HitTest();
+			solarSystemMgr = new SolarSystemManager();
 		}
 
 		/// <summary>
@@ -206,7 +217,7 @@ namespace Strategy.GameObjectControl {
 				}
 			}
 
-			groupMgr.CreateSolarSystems(objectCreator.GetInicializedSolarSystems());
+			solarSystemMgr.CreateSolarSystems(objectCreator.GetInicializedSolarSystems());
 			hitTest.CreateHitTestMap(objectCreator.GetInicializedSolarSystems());
 			teamMgr.Inicialization(objectCreator.GetTeams(), objectCreator.GetTeamsRelations());
 			groupMgr.DeselectGroup();

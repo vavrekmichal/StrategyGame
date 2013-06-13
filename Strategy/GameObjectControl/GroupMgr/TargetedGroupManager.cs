@@ -7,6 +7,9 @@ using Strategy.GameObjectControl.Game_Objects;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 
 namespace Strategy.GameObjectControl.GroupMgr {
+	/// <summary>
+	/// Contols targeted group. Creates indicators and shows the group to GUI.
+	/// </summary>
 	class TargetedGroupManager {
 
 		GroupMovables groupMovables;
@@ -16,6 +19,11 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 		List<TargetPointer> pointerList = new List<TargetPointer>();
 
+		/// <summary>
+		/// Creates a TargetPointer for each member of the group and destroys old pointers.
+		/// Also indicates that the static group is targeted.
+		/// </summary>
+		/// <param name="group">The targeted group.</param>
 		public void TargetGroup(GroupStatics group) {
 			targetedIsMovalbe = false;
 			groupStatics = group;
@@ -26,6 +34,11 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			}
 		}
 
+		/// <summary>
+		/// Creates a TargetPointer for each member of the group and destroys old pointers.
+		/// Also indicates that the movable group is targeted.
+		/// </summary>
+		/// <param name="group">The targeted group.</param>
 		public void TargetGroup(GroupMovables group) {
 			targetedIsMovalbe = true;
 			groupMovables = group;
@@ -36,6 +49,10 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			}
 		}
 
+		/// <summary>
+		/// Clears the TargetedGroupManager. Unsets static and movable group
+		/// and destroys TargetPointers.
+		/// </summary>
 		public void Clear() {
 			DestroyPointers();
 			groupMovables = null;
@@ -43,12 +60,19 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			targetedIsMovalbe = false;
 		}
 
+		/// <summary>
+		/// Updates all TargetPointers.
+		/// </summary>
+		/// <param name="delay"></param>
 		public void Update(float delay) {
 			foreach (var pointer in pointerList) {
 				pointer.Update(delay);
 			}
 		}
 
+		/// <summary>
+		/// Shows targeted group by GUI (static or movable by the setted indicator).
+		/// </summary>
 		public void ShowTargetedGroup() {
 			if (targetedIsMovalbe) {
 				Game.IGameGUI.ShowTargeted(groupMovables);
@@ -57,6 +81,10 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			}
 		}
 
+		/// <summary>
+		/// Returns the movable group if is really targeted.
+		/// </summary>
+		/// <returns>Returns the movable group.</returns>
 		public GroupMovables GetActiveMovableGroup() {
 			if (targetedIsMovalbe) {
 				return groupMovables;
@@ -66,6 +94,10 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 		}
 
+		/// <summary>
+		/// Returns the static group if is really targeted.
+		/// </summary>
+		/// <returns>Returns the static group.</returns>
 		public GroupStatics GetAtctiveStaticGroup() {
 			if (targetedIsMovalbe) {
 				return null;
@@ -74,11 +106,16 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			}
 		}
 
+		/// <summary>
+		/// Returns if the targeted group is movable.
+		/// </summary>
 		public bool TargetedIsMovable {
 			get { return targetedIsMovalbe; }
 		}
 
-
+		/// <summary>
+		/// Returns the Team of the targeted group.
+		/// </summary>
 		public TeamControl.Team ActiveTeam {
 			get {
 				if (targetedIsMovalbe) {
@@ -89,6 +126,9 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			}
 		}
 
+		/// <summary>
+		/// Destroys all TargetPointers.
+		/// </summary>
 		private void DestroyPointers() {
 			foreach (var pointer in pointerList) {
 				pointer.Destroy();

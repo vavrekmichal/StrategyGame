@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Strategy.GameObjectControl.RuntimeProperty {
+	/// <summary>
+	/// Enum with names of the base Properties.
+	/// </summary>
 	public enum PropertyEnum {
 		Attack = 1,
 		Deffence = 2,

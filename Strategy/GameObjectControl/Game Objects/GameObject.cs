@@ -291,7 +291,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// </summary>
 		/// <param name="objectsInDistance">The list in whitch will be inserted objects in ShoutDistance.</param>
 		public void Shout(List<IGameObject> objectsInDistance) {
-			var solarSystem = Game.GroupManager.GetSolarSystem(this);
+			var solarSystem = Game.SolarSystemManager.GetSolarSystem(this);
 
 			// Checks movable
 			foreach (var imgoPair in solarSystem.GetIMGOs()) {

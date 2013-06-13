@@ -45,7 +45,7 @@
       <isgo type="Planet" name="Mercury" team="Fun">
         <argument>mercury.mesh</argument>
         <argument>200;200</argument>
-        <argument>500;0</argument>
+        <argument>-250;250</argument>
         <gameAction name="DoNothingJustPrintText">
           <argument>Todle napis</argument>
         </gameAction>

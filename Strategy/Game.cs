@@ -97,6 +97,12 @@ namespace Strategy {
 			}
 		}
 
+		public static SolarSystemManager SolarSystemManager {
+			get {
+				return gameObjectMgr.SolarSystemManager;
+			}
+		}
+
 		public static TeamManager TeamManager {
 			get {
 				return gameObjectMgr.TeamManager;
@@ -159,7 +165,7 @@ namespace Strategy {
 		}
 
 		public static void InterstellarTravel(IGameObject gameObject) {
-			gameGUI.ShowTravelSelectionPanel(gameObjectMgr.GroupManager.GetAllSolarSystemNames(), gameObject);
+			gameGUI.ShowTravelSelectionPanel(gameObjectMgr.SolarSystemManager.GetAllSolarSystemNames(), gameObject);
 		}
 
 		public static void EndGame(string printText) {
@@ -199,7 +205,7 @@ namespace Strategy {
 
 		private static void Inicialization(string missionFileName) {
 			gameObjectMgr.Inicialization(missionFileName);
-			gameGUI.SetSolarSystemName(GroupManager.GetSolarSystemName(0));
+			gameGUI.SetSolarSystemName(SolarSystemManager.GetSolarSystemName(0));
 			mission.Initialize();
 			gameGUI.Enable = true;
 			gamePaused = false;

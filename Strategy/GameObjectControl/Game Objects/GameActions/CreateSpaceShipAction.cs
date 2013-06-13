@@ -57,7 +57,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 				string objectPosToString = gameObject.Position.x.ToString() + ';' + gameObject.Position.z.ToString();
 				args.Add(new object[] { objectPosToString });
 
-				var solSyst = Game.GroupManager.GetSolarSystem(gameObject);
+				var solSyst = Game.SolarSystemManager.GetSolarSystem(gameObject);
 				
 				// Creates new object.
 				var createdGameObject = Game.IGameObjectCreator.CreateImgo(creatingObject, args.ToArray(), solSyst);

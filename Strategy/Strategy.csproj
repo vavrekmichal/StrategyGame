@@ -129,7 +129,7 @@
     <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\Sun.cs" />
     <Compile Include="GameObjectControl\GroupMgr\TargetedGroupManager.cs" />
     <Compile Include="GameObjectControl\GroupMgr\TargetPointer.cs" />
-    <Compile Include="GameObjectControl\GroupMgr\Traveler.cs" />
+    <Compile Include="GameObjectControl\Traveler.cs" />
     <Compile Include="GameObjectControl\GameObjectManager.cs" />
     <Compile Include="GameObjectControl\RuntimeProperty\EditablePair.cs" />
     <Compile Include="GameObjectControl\RuntimeProperty\PropertyEnum.cs" />
@@ -141,6 +141,7 @@
     <Compile Include="GameObjectControl\RuntimeProperty\Property.cs" />
     <Compile Include="GameObjectControl\RuntimeProperty\PropertyManager.cs" />
     <Compile Include="GameObjectControl\SolarSystem.cs" />
+    <Compile Include="GameObjectControl\SolarSystemManager.cs" />
     <Compile Include="MissionControl\Mission.cs" />
     <Compile Include="MogreControl\MouseControl.cs" />
     <Compile Include="GameGUI\MyGUI.cs" />

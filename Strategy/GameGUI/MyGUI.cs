@@ -973,7 +973,7 @@ namespace Strategy.GameGUI {
 			gui.Controls.Add(panel);
 
 			// Gets names of the solar systems.
-			List<string> solarSystList = Game.GroupManager.GetAllSolarSystemNames();
+			List<string> solarSystList = Game.SolarSystemManager.GetAllSolarSystemNames();
 
 			int marginTop = textHeight + 6;
 
@@ -1012,7 +1012,7 @@ namespace Strategy.GameGUI {
 			scrollablePanel = CreateScrollablePanel(marginTop, panel.Width - 28, panel.Height / 4);
 			panel.Controls.Add(scrollablePanel);
 
-			var travList = Game.GroupManager.GetTravelers();
+			var travList = Game.SolarSystemManager.GetTravelers();
 			var travelLabelWidth = selectionLabelWidth / 2;
 
 			// Inserts labels with travelers (PropertyLabels).

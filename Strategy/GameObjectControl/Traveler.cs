@@ -8,7 +8,7 @@ using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.RuntimeProperty;
 
 
-namespace Strategy.GameObjectControl.GroupMgr {
+namespace Strategy.GameObjectControl {
 	public class Traveler {
 		private SolarSystem from;
 		private SolarSystem to;
