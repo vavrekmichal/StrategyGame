@@ -132,7 +132,7 @@ namespace Strategy {
 		}
 
 		public static IGameObject GetIGameObject(string name) {
-			if (gameObjectMgr.HitTest.IsObjectControlable(name)) {
+			if (gameObjectMgr.HitTest.IsObjectControllable(name)) {
 				return gameObjectMgr.HitTest.GetGameObject(name);
 			} else {
 				return null;

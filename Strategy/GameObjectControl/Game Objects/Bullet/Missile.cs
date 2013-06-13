@@ -188,7 +188,7 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 				if ((item.distance < farfarAway) && (item.distance > 0)) {
 					// Meet something 
 					var hitTest = Game.HitTest;
-					if (hitTest.IsObjectControlable(item.movable.Name)) {
+					if (hitTest.IsObjectControllable(item.movable.Name)) {
 						// Can hit just controlable game objects (no bullets, no pointers...)
 						hittedObject = hitTest.GetGameObject(item.movable.Name);
 						return true;
