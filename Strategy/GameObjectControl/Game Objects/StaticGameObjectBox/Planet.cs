@@ -9,22 +9,32 @@ using Strategy.GameObjectControl.GroupMgr;
 
 
 namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
+	/// <summary>
+	/// Represents basic type of a static game object. The planet circling around the given center and around vertical axis.
+	/// </summary>
 	class Planet : StaticGameObject {
 
 		protected double mDistance = 0.0f; //distance to positoin
 		protected Mogre.Vector3 mDirection = Mogre.Vector3.ZERO;   // The direction the object is moving
 
-		protected bool mFlying = false; //bool to detect if object walking or stay
+		// Detect if object is moving or stay
+		protected bool mFlying = false;
 
-
-		protected double travelledInvisible;
-
+		Vector3 nextPostion;
 
 		protected LinkedList<Mogre.Vector3> circularPositions;
 
 		private static Random random = new Random();
 		private static int circularNum = 30;
 
+		/// <summary>
+		/// Initializes Mogre properties, runtime Properties (Speed, Rotate - speed of rotation,
+		/// PickUp - pick up distance). Needs 3 arguments and fourth is optional (name of a mesh,
+		/// string with position - Vector2 converted to Vector3, distance from center and health).
+		/// </summary>
+		/// <param name="name">The name of the planet.</param>
+		/// <param name="myTeam">The planet's team.</param>
+		/// <param name="args">The array with arguments (3 required + 1 optional)</param>
 		public Planet(string name, Team myTeam, object[] args) {
 			this.name = name;
 			this.mesh = (string)args[0];
@@ -40,42 +50,49 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 
 			if (args.Count() == 4) {
 				setHp(Convert.ToInt32(args[3]));
-			} 
+			}
 
-			//prepare list of positions
-			circularPositions = CalculatePositions(circularNum, Convert.ToInt32(args[2]), ParseStringToVector3((string)args[1]));
-			RandomizeStartPosition(circularNum); // randomize start position
+			var planetPosition = ParseStringToVector3((string)args[2]);
+			var centerPosition = ParseStringToVector3((string)args[1]);
+
+			// Prepare list of positions
+			circularPositions = CalculatePositions(circularNum, CalculateDistance(planetPosition, centerPosition), centerPosition);
+
+			// Sets start position
+			SetStartPosition(circularNum, planetPosition);
+
 			position.Value = circularPositions.First();
 
-			//Mogre inicialization of object
+			// Mogre inicialization of object
 			entity = Game.SceneManager.CreateEntity(name, mesh);
 		}
 
 
 		/// <summary>
-		/// Rotating in visible mood, it means when planet is in active solar system
+		/// Moves in visible mood, it means when planet is in active solar system.
 		/// </summary>
-		/// <param name="delay">Delay between last two frames</param>
+		/// <param name="delay">The delay between last two frames</param>
 		public override void Rotate(float delay) {
 			Update(delay);
-			sceneNode.Roll(new Mogre.Degree((float)(GetProperty<float>(PropertyEnum.Speed).Value * GetProperty<float>(PropertyEnum.Rotate).Value * delay)));
-			//position in LinkedList now moving
+			sceneNode.Roll(new Mogre.Degree((float)(GetProperty<float>(PropertyEnum.Speed).Value * 
+				GetProperty<float>(PropertyEnum.Rotate).Value * delay)));
+
 			if (!mFlying) {
 				if (NextLocation()) {
 					mFlying = true;
-					position.Value = circularPositions.First.Value; //get the next destination.
+					nextPostion = circularPositions.First.Value; // Get the next destination.
 					PrepareNextPosition();
-					//update the direction and the distance
-					mDirection = position.Value - sceneNode.Position;
+					// Update the direction and the distance
+					mDirection = nextPostion - position.Value;
 					mDistance = mDirection.Normalise();
 				} else {
-				}//nothing to do so stay in position    
+				}// Nothing to do so stay in position    
 			} else {
 				double move = GetProperty<float>(PropertyEnum.Speed).Value * delay;
 				mDistance -= move;
-				if (mDistance <= .0f) { //reach destination
-					travelledInvisible = 0;
-					sceneNode.Position = position.Value;
+				if (mDistance <= .0f) { // Reached destination
+					sceneNode.Position = nextPostion;
+					position.Value = nextPostion;
 					mDirection = Mogre.Vector3.ZERO;
 					mFlying = false;
 				} else {
@@ -86,52 +103,83 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		}
 
 		/// <summary>
-		/// Function calculate moves in invisible mode
+		/// Calculates move in invisible mode
 		/// </summary>
-		/// <param name="delay">Delay between last two frames</param>
+		/// <param name="delay">The delay between last two frames</param>
 		public override void NonActiveRotate(float delay) {
 			Update(delay);
+
 			if (!mFlying) {
 				if (NextLocation()) {
 					mFlying = true;
-					position.Value = circularPositions.First.Value; //get the next destination.
+					nextPostion = circularPositions.First.Value; // Get the next destination.
 					PrepareNextPosition();
+					// Update the direction and the distance
+					mDirection = nextPostion - position.Value;
 					mDistance = mDirection.Normalise();
 				} else {
-				}
+				}// Nothing to do so stay in position    
 			} else {
 				double move = GetProperty<float>(PropertyEnum.Speed).Value * delay;
 				mDistance -= move;
-				if (mDistance <= .0f) { //reach destination
-					travelledInvisible = 0;
+				if (mDistance <= .0f) { // Reached destination
+					position.Value = nextPostion;
 					mDirection = Mogre.Vector3.ZERO;
 					mFlying = false;
-
 				} else {
-					travelledInvisible += move;
+					position.Value += (mDirection * (float)move);
 				}
 			}
 		}
 
-
-		//own functions 
+		/// <summary>
+		/// Returns value of PickUp Property.
+		/// </summary>
+		public override float PickUpDistance {
+			get { return GetProperty<float>(PropertyEnum.PickUp).Value; }
+		}
 
 		/// <summary>
-		/// Randomize starting position of planet
+		/// Returns value of PickUp Property.
 		/// </summary>
-		/// <param name="max">max of rotates</param>
-		private void RandomizeStartPosition(int max) {
-			for (int i = 0; i < GetRandomNumber(max); i++) {
+		public override float OccupyDistance {
+			get { return GetProperty<float>(PropertyEnum.PickUp).Value * 2; }
+		}
+
+		/// <summary>
+		/// Finds the nearest point in circularPositions and sets it as the start position.
+		/// </summary>
+		/// <param name="planetPosition">The loaded position of the planet.</param>
+		private void SetStartPosition(int max, Vector3 planetPosition) {
+			var sortedDistances = GetSortedDistances(planetPosition);
+
+			var nearestPoint = sortedDistances.First().Value[0];
+
+			while (circularPositions.First.Value != nearestPoint) {
 				PrepareNextPosition();
 			}
 		}
 
-		private static int GetRandomNumber(int max) {
-			return random.Next(max);
+		/// <summary>
+		/// Calculates distance between all points and puts them into sorted dictionary.
+		/// </summary>
+		/// <param name="planetPosition">The position of planet.</param>
+		/// <returns>Returns SortedDictionary with distances and vectors.</returns>
+		private SortedDictionary<double, List<Vector3>> GetSortedDistances(Vector3 planetPosition) {
+			var result = new SortedDictionary<double, List<Vector3>>();
+			foreach (var item in circularPositions) {
+				var distance = CalculateDistance(planetPosition, item);
+				if (result.ContainsKey(distance)) {
+					result[distance].Add(item);
+				} else {
+					result.Add(CalculateDistance(planetPosition, item), new List<Vector3>() { item });
+				}
+			}
+			return result;
 		}
 
 		/// <summary>
-		/// Cyclic remove from LinkedList and add on the end
+		/// Cyclic removes from LinkedList and adds on the end.
 		/// </summary>
 		private void PrepareNextPosition() {
 			var tmp = circularPositions.First; //save the node that held it
@@ -140,11 +188,11 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		}
 
 		/// <summary>
-		/// Calculate posistion on circle represent as ngon
+		/// Calculates posistions on circle represent as n-gon
 		/// </summary>
-		/// <param name="circularNum">Number of positions on circle</param>
-		/// <param name="distanceFromCenter">radius on circle</param>
-		/// <returns>linkedList with position on ngon (circle)</returns>
+		/// <param name="circularNum">The number of positions on circle</param>
+		/// <param name="distanceFromCenter">The radius of the circle</param>
+		/// <returns>The LinkedList with positions on n-gon (circle)</returns>
 		private LinkedList<Mogre.Vector3> CalculatePositions(int circularNum, double distanceFromCenter, Vector3 center) {
 			var list = new LinkedList<Mogre.Vector3>();
 			for (int i = 0; i < circularNum; i++) {
@@ -152,16 +200,13 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 				double y = System.Math.Sin(i * 2 * System.Math.PI / circularNum) * distanceFromCenter;
 				list.AddFirst(new Mogre.Vector3((float)x + center.x, 0, (float)y) + center.y);
 			}
-
 			return list;
 		}
 
-
-
 		/// <summary>
-		/// The NextLocation() check if exist next location to move
+		/// Checks if exist the next location to move.
 		/// </summary>
-		/// <returns>true ->exist / false -> not exist</returns>
+		/// <returns>Returns if the next location exists.</returns>
 		private bool NextLocation() {
 			if (circularPositions.Count == 0) {
 				return false;
@@ -169,33 +214,22 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			return true;
 		}
 
-		//public override Dictionary<string, object> getPropertyToDisplay() {
-		//	var propToDisp = new Dictionary<string, object>(propertyDict);
-		//	return propToDisp;
-		//}
-
-
 		/// <summary>
-		/// Called when object is displayed (invisible to visible)
+		/// Calculates distance between two points.
 		/// </summary>
-		protected override void OnDisplayed() {
-			sceneNode.Position = position.Value;
-			mFlying = false; //jump correction
+		/// <param name="vector1">The firtst vector.</param>
+		/// <param name="vector2">The second vecotr.</param>
+		/// <returns>Returns distance between two given points.</returns>
+		private double CalculateDistance(Vector3 vector1, Vector3 vector2) {
+			var xd = vector1.x - vector2.x;
+			var yd = vector1.z - vector2.z;
+			return System.Math.Sqrt(xd * xd + yd * yd);
 		}
 
 		/// <summary>
-		/// PickUpDistance is setted by runtime property
+		/// Does nothing.
 		/// </summary>
-		public override float PickUpDistance {
-			get { return GetProperty<float>(PropertyEnum.PickUp).Value; }
-		}
-
-		/// <summary>
-		/// OccupyDistance is overriden and now can be really occupied (value is not 0)
-		/// </summary>
-		public override float OccupyDistance {
-			get { return GetProperty<float>(PropertyEnum.PickUp).Value * 2; }
-		}
+		protected override void OnDisplayed() {	}
 
 	}
 }

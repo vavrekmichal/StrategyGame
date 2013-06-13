@@ -162,7 +162,7 @@ namespace Strategy.FightMgr {
 
 		/// <summary>
 		/// Receives information that the object interupted movement.
-		/// Do nothing with this object.
+		/// Does nothing with this object.
 		/// </summary>
 		/// <param name="imgo">The object interupted movement.</param>
 		public void MovementInterupted(IMovableGameObject imgo) {}

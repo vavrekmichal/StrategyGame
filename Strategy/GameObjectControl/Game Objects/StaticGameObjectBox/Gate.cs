@@ -11,13 +11,21 @@ using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.TeamControl;
 
 namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
+	/// <summary>
+	/// Teleports game objects between SolarSystems. Inherited from StaticGameObject 
+	/// to facilitate implementation (overrides just few methods).
+	/// </summary>
 	public class Gate : StaticGameObject {
 
 		private bool isPorting;
+
+		// Portal animation time
 		private const float portTime = 3.4483f;
+
 		private float portTimeDuration;
 
 		private const string meshConst = "gate.mesh";
+		// Animation's names
 		private const string animationPort = "funcionando3_eani_Clip";
 		private const string animationStay = "abrirse_eani_Clip";
 		private const string travelSound = "ltsaberon01.wav";
@@ -29,10 +37,12 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 
 		protected static Team gateTeam;
 
-		public Gate(string name, Team team) : this(name, team, new object[]{startHP}) { }
-
-		public Gate(string name, Team team, object[] args) {
-			setHp(Convert.ToInt32(args[0]));
+		/// <summary>
+		/// Initializes Mogre properties and sets base animation (animationStay);
+		/// </summary>
+		/// <param name="name">The name of the gate.</param>
+		/// <param name="team">The gate's team, it should be None team.</param>
+		public Gate(string name, Team team) {
 			this.name = name;
 			this.team = team;
 			position = new Property<Vector3>(gatePosition);
@@ -45,11 +55,15 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			animationState.Enabled = true;
 		}
 
-		public override void Rotate(float f) {
+		/// <summary>
+		/// Runs the appropriate animation (if porting - animationPort, else -animationStay)
+		/// </summary>
+		/// <param name="delay">The delay between last two frames.</param>
+		public override void Rotate(float delay) {
 			if (isPorting) {
 				animationState = entity.GetAnimationState(animationStay);
-				f *= 5;
-				portTimeDuration -= f / 10;
+				delay *= 5;
+				portTimeDuration -= delay / 10;
 				if (portTimeDuration < 0) {
 					isPorting = false;
 				}
@@ -58,39 +72,36 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			}
 			animationState.Loop = true;
 			animationState.Enabled = true;
-			animationState.AddTime(f / 10);
+			animationState.AddTime(delay / 10);
 		}
 
-		public override void NonActiveRotate(float f) { }
+		/// <summary>
+		/// Does nothing in invisible mode.
+		/// </summary>
+		/// <param name="delay">The delay between last two frames.</param>
+		public override void NonActiveRotate(float delay) { }
 
-		public override void ChangeVisible(bool visible) {
-			if (visible) {
-				if (sceneNode == null) {
-					if (entity == null) {
-						entity = Game.SceneManager.CreateEntity(name, meshConst);
-					}
-					sceneNode = Game.SceneManager.RootSceneNode.CreateChildSceneNode(name + "Node", position.Value);
-
-					sceneNode.Pitch(new Degree(-90f));
-					sceneNode.AttachObject(entity);
-				}
-			} else {
-				if (sceneNode != null) {
-					Game.SceneManager.DestroySceneNode(sceneNode);
-					sceneNode = null;
-				}
-			}
-		}
-
+		/// <summary>
+		/// Shows panel with possible travel destiantions (ShowTravelDestinations).
+		/// Answers None (ensures response itself).
+		/// </summary>
+		/// <param name="reason">The reason of calling this function.</param>
+		/// <param name="target">The target which invoke this calling.</param>
+		/// <returns>Always returns None.</returns>
 		public override ActionReaction ReactToInitiative(ActionReason reason, IMovableGameObject target) {
 			ShowTravelDestinations(target);
 			return ActionReaction.None;
 		}
 
-		protected override void OnDisplayed() {
+		/// <summary>
+		/// Does nothing on display.
+		/// </summary>
+		protected override void OnDisplayed() { }
 
-		}
-
+		/// <summary>
+		/// Shows GUI panel with possible travel destiantions and playes portal animation.
+		/// </summary>
+		/// <param name="imgo"></param>
 		public void ShowTravelDestinations(IMovableGameObject imgo) {
 			Game.InterstellarTravel(imgo);
 
@@ -98,7 +109,10 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 			portTimeDuration = portTime;
 		}
 
-
+		/// <summary>
+		/// Updates all current travelers. If traveler is isDone in the destination so it is removed from update list.
+		/// </summary>
+		/// <param name="delay">The delay between last two frames.</param>
 		public static void UpdateTravelers(float delay) {
 			List<Traveler> copy = new List<Traveler>(travelerList);
 			foreach (var traveler in copy) {
@@ -108,13 +122,24 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 					traveler.Update(delay);
 				}
 			}
-
 		}
 
+		/// <summary>
+		/// Returns list with all current travelers.
+		/// </summary>
+		/// <returns>Returns list with all current travelers.</returns>
 		public static List<Traveler> GetTravelers() {
 			return travelerList;
 		}
 
+		/// <summary>
+		/// Creates traveler from its current SolarSystem to new given SolarSystem.
+		/// Object is removed and insert to new one by Traveler class.
+		/// Also playes travel sound.
+		/// </summary>
+		/// <param name="from">The current object's SolarSystem.</param>
+		/// <param name="to">The future object's SolarSystem.</param>
+		/// <param name="gameObject">The traveling game object.</param>
 		public static void CreateTraveler(SolarSystem from, SolarSystem to, object gameObject) {
 			if (gameObject is IMovableGameObject) {
 				if (from != to) {

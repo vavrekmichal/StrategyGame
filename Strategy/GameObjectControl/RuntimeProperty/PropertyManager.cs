@@ -15,6 +15,7 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 		private Dictionary<Type, object> baseDict;
 
 		private static PropertyManager instance;
+		static FileSystemWatcher watcher;
 
 		// Static - file change
 		private static Session session;
@@ -22,8 +23,8 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 
 
 		private List<string> propertiesNameList;
-		//private XmlNode root;
-		//private XmlNode missionPropertyNode;
+
+
 
 
 		public PropertyManager() {
@@ -31,22 +32,6 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 			baseDict = new Dictionary<Type, object>();
 
 			propertiesNameList = new List<string>();
-
-			FileSystemWatcher watcher = new FileSystemWatcher();
-			watcher.Path = "../../Media/Mission/Scripts/";
-
-			watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName;
-			// Only watch text files.
-			watcher.Filter = "Properties.csx";
-			watcher.Changed += new FileSystemEventHandler(OnChanged);
-			// Begin watching.
-			watcher.EnableRaisingEvents = true;
-
-			// Create scriptEngine
-			var scriptEngine = new ScriptEngine();
-			session = scriptEngine.CreateSession();
-			session.AddReference("System");
-			session.AddReference("System.Core");
 
 		}
 
@@ -57,10 +42,11 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 		/// <param Name="source">Source</param>
 		/// <param Name="e">Changed file</param>
 		private static void OnChanged(object source, FileSystemEventArgs e) {
+			Console.WriteLine("Neco se deje ted");
 			DateTime lastWriteTime = File.GetLastWriteTime(e.FullPath); // Bug fix - function is called twice
 			DateTime now = DateTime.Now;
 			TimeSpan ts = new TimeSpan(0, 0, 5);
-			if (lastWriteTime != lastRead && (now-lastRead)>ts) {       // Reload is called once
+			if (lastWriteTime != lastRead && (now - lastRead) > ts) {       // Reload is called once
 				lastRead = lastWriteTime;
 				try {
 					session.ExecuteFile(e.FullPath);
@@ -69,7 +55,7 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 					Console.WriteLine(exception);
 					return;
 				}
-				
+
 				instance.LoadProperties();
 
 			}
@@ -87,7 +73,7 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 			if (baseDict.ContainsKey(type)) {
 				subDict = (Dictionary<string, Property<T>>)baseDict[type];
 				if (subDict.ContainsKey(key)) {
-					subDict[key].Value=value;
+					subDict[key].Value = value;
 				} else {
 					subDict.Add(key, new Property<T>(value));
 				}
@@ -96,6 +82,7 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 				subDict.Add(key, new Property<T>(value));
 				baseDict.Add(type, subDict);
 			}
+			propertiesNameList.Add(key);
 		}
 
 		/// <summary>
@@ -103,6 +90,27 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 		/// </summary>
 		/// <param Name="missionName">Mission Name</param>
 		public void LoadPropertyToMission(string missionPropFilePath) {
+			if (watcher != null) {
+				watcher.Dispose();
+			}
+
+			string[] splited = missionPropFilePath.Split('/');
+
+			watcher = new FileSystemWatcher();
+			watcher.Path = missionPropFilePath.Substring(0, missionPropFilePath.Length - 1 - splited[splited.Length - 1].Length);
+
+			watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName;
+			// Only watch text files.
+			watcher.Filter = splited[splited.Length - 1];
+			watcher.Changed += new FileSystemEventHandler(OnChanged);
+			// Begin watching.
+			watcher.EnableRaisingEvents = true;
+
+			// Create scriptEngine
+			var scriptEngine = new ScriptEngine();
+			session = scriptEngine.CreateSession();
+			session.AddReference("System");
+			session.AddReference("System.Core");
 			session.ExecuteFile(missionPropFilePath);
 			LoadProperties();
 		}
@@ -117,7 +125,7 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 			if (!propertiesNameList.Contains(key)) {
 				try {
 					LoadProperty(key);
-				}catch(Exception){
+				} catch (Exception) {
 					throw new PropertyMissingException("Missing property " + key);
 				}
 			}
@@ -131,7 +139,7 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 				}
 			}
 			throw new PropertyMissingException("Missing property " + key);
-			
+
 		}
 
 		private void LoadProperty(string name) {
@@ -156,7 +164,7 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 		/// </summary>
 		public void LoadProperties() {
 
-			foreach (var property in propertiesNameList) {
+			foreach (var property in new List<string>( propertiesNameList)) {
 				LoadProperty(property);
 			}
 		}

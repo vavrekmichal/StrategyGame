@@ -48,7 +48,6 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			this.teamDict = teams;
 			this.solarSystemList = solarSystems;
 			xml = new XmlDocument();
-			//TODO pridej tu sracku
 
 			XmlSchemaSet schemas = new XmlSchemaSet();
 			schemas.Add("", schemaPath);
@@ -135,7 +134,6 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 
 		public void Load(string missionPropFileName) {
-			//TODO thinks about try-block
 
 			bool hasSun = false;
 			IStaticGameObject sun = null;
@@ -212,7 +210,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 			}
 
-			// Finally load mission targets
+			// Finally load mission targets and materials
 			LoadMissionTargets(missionNode.SelectNodes("missionTargets[1]")[0]);
 			LoadMaterials(missionNode.SelectNodes("materials[1]")[0]);
 		}
@@ -397,12 +395,8 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// <param Name="solarSystName">Name of SolarSystem where will be</param>
 		/// <returns>Instance of Gate</returns>
 		private Gate CreateGate(string solarSystName) {
-			string team = "None";
-			if (!teamDict.ContainsKey(team)) {
-				throw new XmlException("Undefined Team " + team + " .");
-			}
 			var gate = new Gate("Gate " + solarSystName,
-				teamDict[team]);
+				teamDict["None"]);
 			gate.Team.AddISGO(gate);
 			return gate;
 		}

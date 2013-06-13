@@ -22,7 +22,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 		}
 
 		/// <summary>
-		/// Do nothing on Update.
+		/// Does nothing on Update.
 		/// </summary>
 		/// <param name="delay">The delay between last to frames.</param>
 		public void Update(float delay) {}

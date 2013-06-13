@@ -34,7 +34,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		float PickUpDistance { get; }
 		float OccupyDistance { get; }
 		int OccupyTime { get; }
-		int AttackPower { get; }
+		//int AttackPower { get; }
 		int DeffPower { get; }
 		Mogre.Vector3 Position { get; }
 

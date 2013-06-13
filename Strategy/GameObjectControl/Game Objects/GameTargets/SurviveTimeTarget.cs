@@ -52,7 +52,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 		}
 
 		/// <summary>
-		/// Do nothing, target is already initialized.
+		/// Does nothing, target is already initialized.
 		/// </summary>
 		/// <returns>Returns always true.</returns>
 		public bool Initialize() {

@@ -241,7 +241,7 @@ namespace Strategy.GameObjectControl {
 
 						}
 					}
-					imgoPair.Value.JumpNextLocation(addVect);
+					imgoPair.Value.JumpToLocation(addVect);
 				} else {
 					collision.Add(imgoPair.Value.Position, imgoPair.Value);
 				}

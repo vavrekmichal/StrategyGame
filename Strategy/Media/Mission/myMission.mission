@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"  ?>
 
-<mission propertyFilePath="../../Media/Mission/Scripts/Properties2.csx">
+<mission propertyFilePath="../../Media/Mission/Scripts/Properties.csx">
   <teams>
     <friendlyTeams>
       <team name="Player"/>
@@ -45,7 +45,7 @@
       <isgo type="Planet" name="Mercury" team="Fun">
         <argument>mercury.mesh</argument>
         <argument>200;200</argument>
-        <argument>500</argument>
+        <argument>500;0</argument>
         <gameAction name="DoNothingJustPrintText">
           <argument>Todle napis</argument>
         </gameAction>
@@ -61,7 +61,7 @@
       <isgo type="Planet" name="Venus" team="Fun">
         <argument>venus.mesh</argument>
         <argument>0;0</argument>
-        <argument>1500</argument>
+        <argument>1500;0</argument>
         <gameAction name="ProduceAction">
           <argument>Wolenium</argument>
         </gameAction>
@@ -69,7 +69,7 @@
       <isgo type="Planet" name="Earth" team="Fun">
         <argument>earth.mesh</argument>
         <argument>0;0</argument>
-        <argument>2500</argument>
+        <argument>2500;0</argument>
         <gameAction name="ProduceAction">
           <argument>Wolen</argument>
         </gameAction>
@@ -78,7 +78,7 @@
       <isgo type="Planet" name="Mars" team="Player">
         <argument>mars.mesh</argument>
         <argument>0;0</argument>
-        <argument>3500</argument>
+        <argument>3500;0</argument>
         <gameAction name="ProduceAction">
           <argument>Wolenium</argument>
         </gameAction>
@@ -86,7 +86,7 @@
       <isgo type="Planet" name="Jupiter" team="Player">
         <argument>jupiter.mesh</argument>
         <argument>0;0</argument>
-        <argument>6000</argument>
+        <argument>6000;0</argument>
         <gameAction name="ProduceAction">
           <argument>Wolenium3</argument>
         </gameAction>
@@ -94,17 +94,17 @@
       <isgo type="Planet" name="Saturn" team="Player">
         <argument>saturn.mesh</argument>
         <argument>0;0</argument>
-        <argument>8000</argument>
+        <argument>8000;0</argument>
       </isgo>
       <isgo type="Planet" name="Uranus" team="Player" >
         <argument>uranus.mesh</argument>
         <argument>0;0</argument>
-        <argument>10000</argument>
+        <argument>10000;0</argument>
       </isgo>
       <isgo type="Planet" name="Neptune" team="Fun">
         <argument>neptune.mesh</argument>
         <argument>0;0</argument>
-        <argument>12000</argument>
+        <argument>12000;0</argument>
       </isgo>
 
       <imgo type="SpaceShip" name="Mothership" team="Player">
@@ -148,17 +148,17 @@
       <isgo type="Planet" name="FunnyThings1" team="Fun">
         <argument>mercury.mesh</argument>
         <argument>0;0</argument>
-        <argument>1000</argument>
+        <argument>1000;0</argument>
       </isgo>
       <isgo type="Planet" name="FunnyThings2" team="Fun">
         <argument>venus.mesh</argument>
         <argument>0;0</argument>
-        <argument>2000</argument>
+        <argument>2000;0</argument>
       </isgo>
       <isgo type="Planet" name="FunnyThings3" team="Fun">
         <argument>earth.mesh</argument>
         <argument>0;0</argument>
-        <argument>4000</argument>
+        <argument>4000;0</argument>
       </isgo>
     </solarSystem>
     <solarSystem name="s1" position="30;0;100">

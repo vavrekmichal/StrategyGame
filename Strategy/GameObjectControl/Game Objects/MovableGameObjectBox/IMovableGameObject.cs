@@ -9,98 +9,104 @@ using Strategy.MoveMgr;
 using Strategy.TeamControl;
 
 namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
+	/// <summary>
+	/// Represents all movable game objects in the game. All object which implements this interface 
+	/// should have last optional argument the Hp.
+	/// </summary>
 	public interface IMovableGameObject : IGameObject {
-
 		/// <summary>
-		/// Active move - SceneNode is setted
+		/// Moves with the object in visible mode (Mogre.SceneNode is setted).
 		/// </summary>
-		/// <param Name="f">Delay between last two frames</param>
+		/// <param Name="f">The delay between last two frames</param>
 		void Move(float f);
 
 		/// <summary>
-		/// Function stops objects moving
+		/// Stops the movement of the object.
 		/// </summary>
 		void Stop();
 
 		/// <summary>
-		/// Non-Active move is called when SceneNode is unsetted (object is in hidden SolarSystem or travels between them)
+		/// Moves with the object in invisible mode (Mogre.SceneNode is unsetted).
 		/// </summary>
-		/// <param Name="f">Delay between last two frames</param>
+		/// <param Name="f">The delay between last two frames</param>
 		void NonActiveMove(float f);
 
 		/// <summary>
-		/// Add position in flyList on a firts place
+		/// Adds a new position where the object must go (firts). Older positions will be visited later.
 		/// </summary>
-		/// <param Name="placeToGo">Vectror3 with position to go</param>
+		/// <param Name="placeToGo">The Vectror3 with a position to go.</param>
 		void AddNextLocation(Vector3 placeToGo);
 
 		/// <summary>
-		/// Add list with positions in flyList (after actual)
+		/// Adds a list of the positions where the object must go (firts). Older positions will be visited later.
 		/// </summary>
-		/// <param Name="positionList">List with positions (Vector3)</param>
+		/// <param Name="positionList">The list with positions.</param>
 		void AddNextLocation(LinkedList<Vector3> positionList);
 
 		/// <summary>
-		/// Set given position in flyList (creates new)
+		/// Sets given position where the object must go. Older positions are cancelled.
 		/// </summary>
-		/// <param Name="placeToGo">Vectror3 with position to go</param>
+		/// <param Name="placeToGo">The Vectror3 with position to go.</param>
 		void SetNextLocation(Vector3 placeToGo);
 
 		/// <summary>
-		/// Set list with positions as flyList
+		/// Sets given list with positions where the object must go. Older positions are cancelled.
 		/// </summary>
-		/// <param Name="positionList">List with positions (Vector3)</param>
+		/// <param Name="positionList">The list with positions.</param>
 		void SetNextLocation(LinkedList<Vector3> positionList);
 
 		/// <summary>
-		/// Change actual position
+		/// Changes actual object's position.
 		/// </summary>
-		/// <param Name="placeToGo">new position</param>
-		void JumpNextLocation(Vector3 placeToGo);
+		/// <param Name="placeToGo">The new position.</param>
+		void JumpToLocation(Vector3 placeToGo);
 
 		/// <summary>
-		/// Controled movement of object. When object reached last position, must report to moveCntr.
+		/// Controles a movement of the object. When the object reachs the last position, must report to the MoveManager.
+		/// Sets given list with positions where the object must go. Older positions are cancelled.	 
 		/// </summary>
-		/// <param Name="positionList">List with positions (Vector3)</param>
+		/// <param Name="positionList">The list with positions.</param>
 		void GoToTarget(LinkedList<Vector3> positionList);
 
 		/// <summary>
-		/// Controled movement of object. When object reached position, must report to moveCntr.
+		/// Controles a movement of the object. When the object reachs the last position, must report to the MoveManager.
+		/// Sets given position where the object must go. Older positions are cancelled.
 		/// </summary>
-		/// <param Name="placeToGo">Vectror3 with position to go</param>
+		/// <param Name="placeToGo">The Vectror3 with position to go.</param>
 		void GoToTarget(Vector3 placeToGo);
 
 		/// <summary>
-		/// Controled movement of object. When object reached position, must report to moveCntr.
+		/// Controles a movement of the object. When the object reachs the last position, must report to the MoveManager.
+		/// The object follows given target (go to objectToGo's position).
 		/// </summary>
 		/// <param Name="objectToGo">IGameObject with position to go</param>
 		void GoToTarget(IGameObject objectToGo);
 
 		/// <summary>
-		/// BunusDict contains bonuses from group and members of group. Object can use them to count his properties.
+		/// Sets bunusDict to the object. The object should use them to update his propertis.
 		/// </summary>
-		/// <param Name="bonusDict">Dictionary with Property as object (runtime generic)</param>
+		/// <param Name="bonusDict">The dictionary with Properties as object (runtime generic)</param>
 		void SetGroupBonuses(Dictionary<string, object> bonusDict);
 
+		/// <summary>
+		/// Determines whether it is the object in visible mode or in invisible mode (Mogre.SceneNode is setted or unsetted).
+		/// </summary>
 		bool Visible { get; }
 
-		Mogre.Vector3 Direction { get; }
-
 		/// <summary>
-		/// Function handles communication between game control units and object. Object gets what happened and answed what it want to do.
+		/// Handles communication between game control units and object. Object gets a information about what happenes and it answes what it wants to do.
 		/// </summary>
-		/// <param Name="reason">Reason of calling function</param>
-		/// <param Name="point">Mouse position</param>
-		/// <param Name="hitObject">Hitted object</param>
-		/// <param Name="isFriendly">If object is in friendly team</param>
-		/// <param Name="isMovableGameObject">If object is movable or static</param>
-		/// <returns>Answer on action</returns>
+		/// <param name="point">The mouse position.</param>
+		/// <param name="hitObject">The result of a HitTest.</param>
+		/// <param name="isFriendly">The information if the hitted object is friendly.</param>
+		/// <param name="isMovableGameObject">The information if the hitted object is movable.</param>
+		/// <returns>Returns an action it wants to do.</returns>
 		ActionAnswer OnMouseAction(Vector3 point, MovableObject hitObject, bool isFriendly, bool isMovableGameObject);
 
 		/// <summary>
-		/// Returns bonuses for other members of group.
+		/// Returns bonuses for other members of the group.
 		/// </summary>
-		/// <returns>Dictionary with Property as object (runtime generic)</returns>
+		/// <returns>Returns the dictionary with Property as object (runtime generic)</returns>
 		Dictionary<string, object> OnGroupAdd();
 
 

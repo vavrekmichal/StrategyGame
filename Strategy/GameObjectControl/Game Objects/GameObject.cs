@@ -42,7 +42,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		public virtual void ChangeVisible(bool visible) {
 			if (visible && !this.isVisible) {
 
-				// Control if the entity is inicialized
+				// Controls if the entity is inicialized
 				if (entity == null) {
 					entity = Game.SceneManager.CreateEntity(name, mesh);
 				}
@@ -74,7 +74,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 
 		/// <summary>
-		/// Calls when object is showed by SolarSystem. This function do nothing.
+		/// Calls when object is showed by SolarSystem. This function does nothing.
 		/// </summary>
 		protected virtual void OnDisplayed() { }
 
@@ -218,10 +218,6 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 		public virtual int ShoutDistance {
 			get { return 70; }
-		}
-
-		public virtual int AttackPower {
-			get { return 0; }
 		}
 
 		public virtual int DeffPower {
