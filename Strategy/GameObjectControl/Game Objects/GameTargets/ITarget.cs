@@ -20,7 +20,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 		/// <summary>
 		/// Checks if the target is complete.
 		/// </summary>
-		/// <param name="delay">The delay between last two frames.</param>
+		/// <param name="delay">The delay between last two frames (seconds).</param>
 		/// <returns>Return if the target is complete.</returns>
 		bool Check(float delay);
 

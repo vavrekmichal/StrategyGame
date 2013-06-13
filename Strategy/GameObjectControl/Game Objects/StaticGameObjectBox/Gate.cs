@@ -58,7 +58,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// <summary>
 		/// Runs the appropriate animation (if porting - animationPort, else -animationStay)
 		/// </summary>
-		/// <param name="delay">The delay between last two frames.</param>
+		/// <param name="delay">The delay between last two frames (seconds).</param>
 		public override void Rotate(float delay) {
 			if (isPorting) {
 				animationState = entity.GetAnimationState(animationStay);
@@ -78,7 +78,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// <summary>
 		/// Does nothing in invisible mode.
 		/// </summary>
-		/// <param name="delay">The delay between last two frames.</param>
+		/// <param name="delay">The delay between last two frames (seconds).</param>
 		public override void NonActiveRotate(float delay) { }
 
 		/// <summary>
@@ -112,7 +112,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// <summary>
 		/// Updates all current travelers. If traveler is isDone in the destination so it is removed from update list.
 		/// </summary>
-		/// <param name="delay">The delay between last two frames.</param>
+		/// <param name="delay">The delay between last two frames (seconds).</param>
 		public static void UpdateTravelers(float delay) {
 			List<Traveler> copy = new List<Traveler>(travelerList);
 			foreach (var traveler in copy) {

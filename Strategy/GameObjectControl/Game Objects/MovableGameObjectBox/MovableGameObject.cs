@@ -63,7 +63,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// is in acitve SolarSystem (SceneNode is setted). Controls distance from destination,
 		/// collisions, and solves the collisions.
 		/// </summary>
-		/// <param Name="delay">The delay between last two frames.</param>
+		/// <param Name="delay">The delay between last two frames (seconds).</param>
 		public virtual void Move(float delay) {
 			Update(delay);
 			if (!moving) {
@@ -145,7 +145,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// is in hidden SolarSystem (SceneNode is null). Controls distance from destination,
 		/// and collisions.
 		/// </summary>
-		/// <param Name="delay">The delay between last two frames.</param>
+		/// <param Name="delay">The delay between last two frames (seconds).</param>
 		public virtual void NonActiveMove(float delay) {
 			Update(delay);
 			if (!moving) {
@@ -340,7 +340,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// Updates object's direction and distance when it is in "follow" mode
 		/// and calls TryAttack function (decrease the cooldown time and can attack a target).
 		/// </summary>
-		/// <param name="delay">The delay between last two frames.</param>
+		/// <param name="delay">The delay between last two frames (seconds).</param>
 		protected override void Update(float delay) {
 			base.Update(delay);
 			TryAttack(delay);
@@ -402,7 +402,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// <summary>
 		/// Decreases cooldowns by delay and if the object is in "attack" mode, it calls Attack()
 		/// </summary>
-		/// <param name="delay">The delay between last two frames.</param>
+		/// <param name="delay">The delay between last two frames (seconds).</param>
 		protected virtual void TryAttack(float delay) {
 			if (coolDownList.Count > 0) {
 				var delayTimeSpan = TimeSpan.FromSeconds(delay);

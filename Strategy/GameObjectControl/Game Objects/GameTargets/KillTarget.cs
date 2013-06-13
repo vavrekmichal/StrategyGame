@@ -30,7 +30,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 		/// <summary>
 		/// Checks of the target is still alive.
 		/// </summary>
-		/// <param name="delay">The delay between last two frames.</param>
+		/// <param name="delay">The delay between last two frames (seconds).</param>
 		/// <returns>Returns if the target is death.</returns>
 		public bool Check(float delay) {
 			if (gameObject.Hp < 0) {

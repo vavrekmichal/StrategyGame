@@ -10,117 +10,171 @@ using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.TeamControl;
 
 namespace Strategy.GameObjectControl.Game_Objects {
+	/// <summary>
+	/// Represents common interface for IMovableGameObject and for IStaticGameObject.
+	/// Specifies the basic properties and fucntions of game object.
+	/// 
+	/// </summary>
 	public interface IGameObject {
 
 		/// <summary>
-		/// Function inicializes or destroy SceneNode. It means hide or show object.
+		/// Creates or destroy a SceneNode. It means hide or show object.
 		/// </summary>
-		/// <param Name="visible">Object shoud be visible (true) or hide (false)</param>
+		/// <param name="visible">Object shoud be visible (true) or hidden (false).</param>
 		void ChangeVisible(bool visible);
 
 		/// <summary>
-		/// DieHandler is called when any IGameObject has less hp then 0
+		/// Is called when any IGameObject has less health then 0.
 		/// </summary>
 		DieEventHandler DieHandler { get; set; }
 
+		/// <summary>
+		/// Starts attacking and stores reference to the Fight.
+		/// </summary>
+		/// <param name="fight">The Fight which leads attack.</param>
 		void StartAttack(Fight fight);
+
+		/// <summary>
+		/// Ends attacking.
+		/// </summary>
 		void StopAttack();
 
-
+		/// <summary>
+		/// Returns unique object's name. The name is used for name of a creating
+		/// SceneNode and Entity (that is the reason why it must be unique).
+		/// </summary>
 		string Name { get; }
+
+		/// <summary>
+		/// Gets or sets object's Team. The team is indicator of a friendships and production.
+		/// Also can be controled if it is player object by team (team name is also unique).
+		/// </summary>
 		Team Team { get; set; }
+
+		/// <summary>
+		/// Returns the current state of health. The hp indicates if the object is alive (more than 0).
+		/// </summary>
 		int Hp { get; }
+
+		/// <summary>
+		/// Returns the distance where that object may contact the unit from its team.
+		/// </summary>
 		int ShoutDistance { get; }
+
+		/// <summary>
+		/// Returns the distance which is needed to reach this object.
+		/// </summary>
 		float PickUpDistance { get; }
+
+		/// <summary>
+		/// Returns the distance which is needed to occupy this object. Should be bigger than PickUpDistance.
+		/// </summary>
 		float OccupyDistance { get; }
+
+		/// <summary>
+		/// Returns the time which is needed to successful occupation.
+		/// </summary>
 		int OccupyTime { get; }
-		//int AttackPower { get; }
+
+		/// <summary>
+		/// Returns the deffence power of the object.
+		/// </summary>
 		int DeffPower { get; }
+
+		/// <summary>
+		/// Returns Vector3 with a current object's position.
+		/// </summary>
 		Mogre.Vector3 Position { get; }
 
 		/// <summary>
-		/// Returns Property with given Name (base properties)
+		/// Returns Property by given name (base properties)
 		/// </summary>
-		/// <typeparam Name="T">Type</typeparam>
-		/// <param Name="propertyName">Name of property from Enum (base properties)</param>
-		/// <returns>Instance of Property</returns>
+		/// <typeparam name="T">The typeof the Property.</typeparam>
+		/// <param name="propertyName">The name of the Property from Enum (base properties).</param>
+		/// <returns>Returns founded Property.</returns>
 		Property<T> GetProperty<T>(PropertyEnum propertyName);
 
 		/// <summary>
-		/// Returns Property with given Name (user defined properties)
+		/// Returns Property with given name (user defined properties)
 		/// </summary>
-		/// <typeparam Name="T">Type</typeparam>
-		/// <param Name="propertyName">Name of property (user defined properties)</param>
-		/// <returns>Instance of Property</returns>
+		/// <typeparam name="T">The typeof the Property.</typeparam>
+		/// <param name="propertyName">The name of the Property (user defined properties).</param>
+		/// <returns>Returns founded Property.</returns>
 		Property<T> GetProperty<T>(string propertyName);
 
 		/// <summary>
-		/// AddProperty inserts given Property in IGameObject's container.
+		/// Inserts given Property in IGameObject's Property container.
 		/// </summary>
-		/// <typeparam Name="T">Type of inserted Property</typeparam>
-		/// <param Name="Name">Property's Name is in this case a PropertyEnum. It is used
+		/// <typeparam name="T">The type of the inserted Property.</typeparam>
+		/// <param name="name">The Property's name is in this case a PropertyEnum. It is used
 		/// for quicker access to specific Property.</param>
-		/// <param Name="property">Property</param>
+		/// <param name="property">The inserting Property.</param>
 		void AddProperty<T>(PropertyEnum name, Property<T> property);
 
 		/// <summary>
-		/// AddProperty inserts given Property in IGameObject's container.
+		/// Inserts given Property in IGameObject's Property container.
 		/// </summary>
-		/// <typeparam Name="T">Type of inserted Property</typeparam>
-		/// <param Name="Name">Property's Name is in this case a string. It is usually used
+		/// <typeparam Name="T">The type of the inserted Property.</typeparam>
+		/// <param Name="Name">The Property's name is in this case a string. It is usually used
 		/// for user-defined Property.</param>
-		/// <param Name="property">Property</param>
+		/// <param Name="property">The inserting Property.</param>
 		void AddProperty<T>(string name, Property<T> property);
 
 		/// <summary>
-		/// Function removes Property from IGameObject's container by Name. 
+		/// Removes the Property from IGameObject's container by name. 
 		/// </summary>
-		/// <param Name="Name">PropertyEnum with Name of removing Property</param>
+		/// <param name="name">The PropertyEnum member with a name of the removing Property.</param>
 		void RemoveProperty(PropertyEnum name);
 
 		/// <summary>
-		/// Function removes Property from IGameObject's container by Name. 
+		/// Removes the Property from IGameObject's container by name. 
 		/// </summary>
-		/// <param Name="Name">String with Name of removing Property</param>
+		/// <param name="name">The string with a name of the removing Property.</param>
 		void RemoveProperty(string name);
 
 		/// <summary>
-		/// Destroy is called when a IGameObject is removed from the game, so the function
-		/// must unregister all Mogre components.
+		/// Unregisters all Mogre components (SceneNode, Entity,...).
 		/// </summary>
 		void Destroy();
 
 		/// <summary>
-		/// Function subtracts damaged hp and checks if object is alive (hp>0). When
+		/// Subtracts given damage from current hp and checks if object is alive (hp > 0). When
 		/// object is "dead" then DieHandler is executed.
 		/// </summary>
-		/// <param Name="damage">Received damage</param>
+		/// <param name="damage">The received damage.</param>
 		void TakeDamage(int damage);
 
 		/// <summary>
-		/// Return Dictionary with all object Property(ies).
+		/// Returns Dictionary with all object's Properties.
 		/// </summary>
-		/// <returns>Dictionary with Property as object (runtime generic)</returns>
+		/// <returns>Returns the dictionary with Properties as objects (runtime generic)</returns>
 		Dictionary<string, object> GetPropertyToDisplay();
 
 		/// <summary>
-		/// Function is reaction on some stimul (ActionReason)
+		/// Reacts on the ActionReason. Object can reacts itself or answers required action.
 		/// </summary>
-		/// <param Name="reason">Action stimul</param>
-		/// <param Name="target">Object that called the event</param>
-		/// <returns>Return reaction</returns>
+		/// <param name="reason">The reason of calling this function.</param>
+		/// <param name="target">The target which invoke this calling.</param>
+		/// <returns>The answer on the ActionReason.</returns>
 		ActionReaction ReactToInitiative(ActionReason reason, IMovableGameObject target);
 
 		/// <summary>
-		/// Shout return all IGameObjects in ShoutDistance around this object which are in same Team.
+		/// Sets all IGameObjects in ShoutDistance around this object (recursively) which are in same Team to given list.
 		/// </summary>
-		/// <param name="objectsInDistance">Objects in ShoutDistance are inserted in the List</param>
+		/// <param name="objectsInDistance">The list in whitch will be inserted objects in ShoutDistance.</param>
 		void Shout(List<IGameObject> objectsInDistance);
 
 
-		//developing
+		/// <summary>
+		/// Inserts given game action to object's IGameAction container. The object will update all his IGameActions.
+		/// </summary>
+		/// <param name="gameAction">The inserting game action.</param>
 		void AddIGameAction(IGameAction gameAction);
 
+		/// <summary>
+		/// Returns list with all object's game actions.
+		/// </summary>
+		/// <returns>Returns list with all object's game actions.</returns>
 		List<IGameAction> GetIGameActions();
 	}
 }

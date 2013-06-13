@@ -23,13 +23,13 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		/// <summary>
 		/// Updates IBullet position in a visible SolarSystem.
 		/// </summary>
-		/// <param name="delay">The delay between last two frames.</param>
+		/// <param name="delay">The delay between last two frames (seconds).</param>
 		void Update(float delay);
 
 		/// <summary>
 		/// Updates IBullet position in an invisible SolarSystem.
 		/// </summary>
-		/// <param name="delay">The delay between last two frames.</param>
+		/// <param name="delay">The delay between last two frames (seconds).</param>
 		void HiddenUpdate(float delay);
 
 		/// <summary>

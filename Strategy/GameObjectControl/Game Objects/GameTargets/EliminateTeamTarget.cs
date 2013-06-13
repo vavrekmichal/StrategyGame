@@ -30,7 +30,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 		/// <summary>
 		/// Controls if the team-target has any member.
 		/// </summary>
-		/// <param name="delay">The delay between last two frames.</param>
+		/// <param name="delay">The delay between last two frames (seconds).</param>
 		/// <returns>Returns if the team is without members.</returns>
 		public bool Check(float delay) {
 			if (team.Count == 0) {

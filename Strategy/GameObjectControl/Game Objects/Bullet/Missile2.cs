@@ -136,7 +136,7 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		/// <summary>
 		/// Updates bullet's position and check collision in a visible mode.
 		/// </summary>
-		/// <param name="delay">The delay between last two frames.</param>
+		/// <param name="delay">The delay between last two frames (seconds).</param>
 		public void Update(float delay) {
 			if (distance <= -100f) {
 				// Missed target.
@@ -158,7 +158,7 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		/// <summary>
 		/// Updates bullet's position and check collision in an invisible mode.
 		/// </summary>
-		/// <param name="delay">The delay between last two frames.</param>
+		/// <param name="delay">The delay between last two frames (seconds).</param>
 		public void HiddenUpdate(float delay) {
 			if (distance <= -100f) {
 				// Missed target.
@@ -206,7 +206,7 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		/// Calculates collistion from the distance between a point and a line. Calculates the general form of equation of a line
 		/// and calculates distance between the line and point (objects) in the SolarSystem. Uses delay to get a line form.
 		/// </summary>
-		/// <param name="delay">The delay between last two frames.</param>
+		/// <param name="delay">The delay between last two frames (seconds).</param>
 		/// <returns>Returns if bullet hits any target.</returns>
 		private bool HiddenCollision(float delay) {
 

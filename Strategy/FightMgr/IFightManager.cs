@@ -28,7 +28,7 @@ namespace Strategy.FightMgr {
 		/// <summary>
 		/// Updates all fights and occupations.
 		/// </summary>
-		/// <param name="delay">The delay between last two frames.</param>
+		/// <param name="delay">The delay between last two frames (seconds).</param>
 		void Update(float delay);
 	}
 }

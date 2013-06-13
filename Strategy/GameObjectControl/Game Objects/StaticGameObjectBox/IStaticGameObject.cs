@@ -14,13 +14,13 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// <summary>
 		/// Moves with the object in visible mode (the object is in active SolarSystem).
 		/// </summary>
-		/// <param name="f">The delay between last two frames.</param>
+		/// <param name="f">The delay between last two frames (seconds).</param>
 		void Rotate(float f);
 
 		/// <summary>
 		/// Moves with the object in invisible mode (the object is in non-active SolarSystem). 
 		/// </summary>
-		/// <param name="f">The delay between last two frames.</param>
+		/// <param name="f">The delay between last two frames (seconds).</param>
         void NonActiveRotate(float f);
 	}
 }

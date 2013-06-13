@@ -13,7 +13,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 		/// <summary>
 		/// Updates game action.
 		/// </summary>
-		/// <param name="delay">The delay between last two frames.</param>
+		/// <param name="delay">The delay between last two frames (seconds).</param>
 		void Update(float delay);
 
 		/// <summary>
