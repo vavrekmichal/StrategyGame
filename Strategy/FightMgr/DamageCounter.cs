@@ -6,7 +6,7 @@ namespace Strategy.FightMgr {
 	class DamageCounter {
 
 		/// <summary>
-		/// Randomize bullet's attack power and count real damage. The result is returned if it is greater than 0. When the result 
+		/// Randomize bullet attack power and count real damage. The result is returned if it is greater than 0. When the result 
 		/// is lower then 0 so function returns 0 (attack cannot "heal").
 		/// </summary>
 		/// <param name="gameObject">The object which defends itself.</param>

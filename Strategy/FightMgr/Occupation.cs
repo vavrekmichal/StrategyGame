@@ -60,8 +60,8 @@ namespace Strategy.FightMgr {
 		}
 
 		/// <summary>
-		/// Inserts given group to attacker's group and sends it
-		/// to target's destination and recalculates group. 
+		/// Inserts given group to attacker group and sends it
+		/// to target destination and recalculates group. 
 		/// </summary>
 		/// <param name="group">The inserting group.</param>
 		public void AddGroup(GroupMovables group) {
@@ -114,8 +114,8 @@ namespace Strategy.FightMgr {
 		#endregion
 		
 		/// <summary>
-		/// Removes property with occupation time from target's properties, play finish occupation sound 
-		/// and finally change target's team to attacker's team.
+		/// Removes property with occupation time from target properties, play finish occupation sound 
+		/// and finally change target team to attacker team.
 		/// </summary>
 		private void FinishOccupation() {
 
@@ -123,13 +123,13 @@ namespace Strategy.FightMgr {
 
 			Game.IEffectPlayer.PlayEffect(occEnd);
 
-			Game.ChangeObjectsTeam(target, attackers.OwnerTeam);
+			Game.ChangeObjectsTeam(target, attackers.Team);
 		}
 
 		/// <summary>
-		/// Check distance between the attacker's position and the target's position. Distance is compare with occupyDistance.
+		/// Check distance between the attacker position and the target position. Distance is compare with occupyDistance.
 		/// </summary>
-		/// <param Name="attackerPostion">The attacker's position</param>
+		/// <param Name="attackerPostion">The attacker position</param>
 		/// <returns>Returns if attacker is in occupyDistance of the target.</returns>
 		private bool CheckDistance(Mogre.Vector3 attackerPostion) {
 			float maxDist;

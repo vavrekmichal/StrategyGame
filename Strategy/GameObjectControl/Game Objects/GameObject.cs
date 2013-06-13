@@ -17,7 +17,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 	public delegate void DieEventHandler(IGameObject igo, MyDieArgs m);
 
 	/// <summary>
-	/// Implements all IGameObject's functions. Designed to facilitate the implementation of game objects.
+	/// Implements all IGameObject functions. Designed to facilitate the implementation of game objects.
 	/// </summary>
 	public abstract class GameObject : IGameObject {
 
@@ -45,7 +45,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 		#region Public
 		/// <summary>
-		/// Changes object's visibility. 
+		/// Changes object visibility. 
 		/// (true) Creates SceneNode and checks Entity (if is null -> initializes). Calls OnDisplayed.
 		/// (false) Destroys SceneNode and stored actual position.
 		/// </summary>
@@ -72,7 +72,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 		/// <summary>
-		/// Destroys object's Mogre components. Rest will be destroyd by Garbage Collector.
+		/// Destroys object Mogre components. Rest will be destroyd by Garbage Collector.
 		/// </summary>
 		public void Destroy() {
 			if (sceneNode != null) {
@@ -86,7 +86,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 		/// <summary>
-		/// Returns object's unique name.
+		/// Returns object unique name.
 		/// </summary>
 		public string Name {
 			get { return name; }
@@ -100,7 +100,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 		/// <summary>
-		/// Gets or sets object's team.
+		/// Gets or sets object team.
 		/// </summary>
 		public Team Team {
 			get {
@@ -133,7 +133,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 		/// <summary>
-		/// Returns Vector3 with a current object's position.
+		/// Returns Vector3 with a current object position.
 		/// </summary>
 		public virtual Vector3 Position {
 			get {
@@ -145,7 +145,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// Inserts given Property in propertyDict.
 		/// </summary>
 		/// <typeparam name="T">The type of the inserted Property.</typeparam>
-		/// <param name="name">The Property's name is in this case a PropertyEnum. It is used
+		/// <param name="name">The Property name is in this case a PropertyEnum. It is used
 		/// for quicker access to specific Property.</param>
 		/// <param name="property">The inserting Property.</param>
 		public void AddProperty<T>(PropertyEnum propertyName, Property<T> property) {
@@ -158,7 +158,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// Inserts given Property in userDefinedPropertyDict.
 		/// </summary>
 		/// <typeparam Name="T">The type of the inserted Property.</typeparam>
-		/// <param Name="Name">The Property's name is in this case a string. It is usually used
+		/// <param Name="Name">The Property name is in this case a string. It is usually used
 		/// for user-defined Property.</param>
 		/// <param Name="property">The inserting Property.</param>
 		public void AddProperty<T>(string propertyName, Property<T> property) {
@@ -220,7 +220,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 		/// <summary>
-		/// Returns Dictionary with all object's Properties. Joins properties from base dictionary (propertyDict) 
+		/// Returns Dictionary with all object Properties. Joins properties from base dictionary (propertyDict) 
 		/// and from user defined dictionary (userDefinedPropertyDict).
 		/// </summary>
 		/// <returns>Returns the dictionary with Properties as objects (runtime generic)</returns>
@@ -287,7 +287,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 		/// <summary>
 		/// Sets all IGameObjects in ShoutDistance around this object (recursively) which are in same Team to given list.
-		/// Searchs whole object's SolarSysten and checks distance between objects.
+		/// Searchs whole object SolarSysten and checks distance between objects.
 		/// </summary>
 		/// <param name="objectsInDistance">The list in whitch will be inserted objects in ShoutDistance.</param>
 		public void Shout(List<IGameObject> objectsInDistance) {
@@ -338,9 +338,9 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 		/// <summary>
-		/// Returns list with all object's game actions.
+		/// Returns list with all object game actions.
 		/// </summary>
-		/// <returns>Returns list with all object's game actions.</returns>
+		/// <returns>Returns list with all object game actions.</returns>
 		public List<GameActions.IGameAction> GetIGameActions() {
 			return gameActionList;
 		}
@@ -389,7 +389,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 		/// <summary>
-		/// Delegates the information about object's death.
+		/// Delegates the information about object death.
 		/// </summary>
 		protected void RaiseDie() {
 			if (die != null) {
@@ -411,7 +411,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 		
 		/// <summary>
-		/// Updates all object's game actions.
+		/// Updates all object game actions.
 		/// </summary>
 		/// <param name="delay">The delay between last two frames (seconds).</param>
 		protected virtual void Update(float delay) {

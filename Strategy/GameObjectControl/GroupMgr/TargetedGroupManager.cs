@@ -82,9 +82,9 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		public TeamControl.Team ActiveTeam {
 			get {
 				if (targetedIsMovalbe) {
-					return groupMovables.OwnerTeam;
+					return groupMovables.Team;
 				} else {
-					return groupStatics.OwnerTeam;
+					return groupStatics.Team;
 				}
 			}
 		}

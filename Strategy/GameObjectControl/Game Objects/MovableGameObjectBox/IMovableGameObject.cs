@@ -49,7 +49,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		void SetNextLocation(LinkedList<Vector3> positionList);
 
 		/// <summary>
-		/// Changes actual object's position.
+		/// Changes actual object position.
 		/// </summary>
 		/// <param Name="placeToGo">The new position.</param>
 		void JumpToLocation(Vector3 placeToGo);
@@ -70,7 +70,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 		/// <summary>
 		/// Controles a movement of the object. When the object reachs the last position, must report to the MoveManager.
-		/// The object follows given target (go to objectToGo's position).
+		/// The object follows given target (go to objectToGo position).
 		/// </summary>
 		/// <param Name="objectToGo">IGameObject with position to go</param>
 		void GoToTarget(IGameObject objectToGo);

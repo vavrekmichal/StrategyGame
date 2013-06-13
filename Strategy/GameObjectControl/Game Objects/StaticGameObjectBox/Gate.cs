@@ -20,7 +20,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		private float portTimeDuration;
 
 		private const string meshConst = "gate.mesh";
-		// Animation's names
+		// Animation names
 		private const string animationPort = "funcionando3_eani_Clip";
 		private const string animationStay = "abrirse_eani_Clip";
 		private const string travelSound = "ltsaberon01.wav";
@@ -36,7 +36,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// Initializes Mogre properties and sets base animation (animationStay);
 		/// </summary>
 		/// <param name="name">The name of the gate.</param>
-		/// <param name="team">The gate's team, it should be None team.</param>
+		/// <param name="team">The gate team, it should be None team.</param>
 		public Gate(string name, Team team) {
 			this.name = name;
 			this.team = team;
@@ -132,8 +132,8 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// Object is removed and insert to new one by Traveler class.
 		/// Also playes travel sound.
 		/// </summary>
-		/// <param name="from">The current object's SolarSystem.</param>
-		/// <param name="to">The future object's SolarSystem.</param>
+		/// <param name="from">The current object SolarSystem.</param>
+		/// <param name="to">The future object SolarSystem.</param>
 		/// <param name="gameObject">The traveling game object.</param>
 		public static void CreateTraveler(SolarSystem from, SolarSystem to, object gameObject) {
 			if (gameObject is IMovableGameObject) {

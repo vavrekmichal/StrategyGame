@@ -13,8 +13,8 @@ namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 		/// <summary>
 		/// Initializes an owner, a producing material and a producing quantity.
 		/// </summary>
-		/// <param name="gameObject">The game action's owner.</param>
-		/// <param name="args">The game action's arguments. Should be 2 (material name and quantity)</param>
+		/// <param name="gameObject">The game action owner.</param>
+		/// <param name="args">The game action arguments. Should be 2 (material name and quantity)</param>
 		public ProduceAction(IGameObject gameObject, object[] args) {
 			this.gameObject = gameObject;
 			produceMaterial = (string)args[0];

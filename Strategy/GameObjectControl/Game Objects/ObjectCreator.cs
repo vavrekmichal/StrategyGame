@@ -50,7 +50,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// </summary>
 		/// <param name="typeName">The type of the creating object.</param>
 		/// <param name="args">The arguments of the creating object.</param>
-		/// <param name="solSyst">The creating object's SolarSystem.</param>
+		/// <param name="solSyst">The creating object SolarSystem.</param>
 		/// <returns>Returns created IStaticGameObject.</returns>
 		public IStaticGameObject CreateIsgo(string typeName, object[] args, SolarSystem solSyst) {	// prepared...never used
 			var isgo =  loader.CreateISGO(typeName, args);
@@ -64,7 +64,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// </summary>
 		/// <param name="typeName">The type of the creating object.</param>
 		/// <param name="args">The arguments of the creating object.</param>
-		/// <param name="solSyst">The creating object's SolarSystem.</param>
+		/// <param name="solSyst">The creating object SolarSystem.</param>
 		/// <returns>Returns created IMovableGameObject.</returns>
 		public IMovableGameObject CreateImgo(string typeName, object[] args, SolarSystem solSyst) {	// prepared...never used
 			var imgo = loader.CreateIMGO(typeName, args);
@@ -76,7 +76,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// <summary>
 		/// Gets unused name from loader an returns it.
 		/// </summary>
-		/// <param name="name">The base of a object's name.</param>
+		/// <param name="name">The base of a object name.</param>
 		/// <returns>Returns unused name.</returns>
 		public string GetUnusedName(string name) {
 			return loader.GetUnusedName(name);

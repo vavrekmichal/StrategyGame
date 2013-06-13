@@ -4,7 +4,7 @@ using Strategy.GameObjectControl.RuntimeProperty;
 
 namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 	/// <summary>
-	/// Implements all IStaticGameObject's functions. Designed to facilitate the implementation of game objects.
+	/// Implements all IStaticGameObject functions. Designed to facilitate the implementation of game objects.
 	/// </summary>
 	public abstract class StaticGameObject : GameObject, IStaticGameObject {
 
@@ -22,7 +22,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 
 
 		/// <summary>
-		/// Rotates (Roll) with object's SceneNode and calls Update function.
+		/// Rotates (Roll) with object SceneNode and calls Update function.
 		/// </summary>
 		/// <param Name="delay">The deley between last two frames.</param>
 		public virtual void Rotate(float delay) {

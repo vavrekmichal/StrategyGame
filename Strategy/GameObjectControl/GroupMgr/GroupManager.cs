@@ -209,9 +209,9 @@ namespace Strategy.GameObjectControl.GroupMgr {
 				if (isgoList.Count > 1) {		// Check if there is more object
 					for (int i = 1; i < isgoList.Count; i++) {
 						if (inGroup.Team == isgoList[i].Team) {
-							group.InsertMemeber(isgoList[i]); // Insert player's isgo	
+							group.InsertMemeber(isgoList[i]); // Insert player isgo	
 						} else {
-							if (isgoList[i].Team.Name == Game.PlayerName) { // In some of elements in isgoList is players's -> has greater priority
+							if (isgoList[i].Team.Name == Game.PlayerName) { // In some of elements in isgoList is players -> has greater priority
 								group = new GroupStatics(isgoList[i].Team);
 								group.InsertMemeber(isgoList[i]);	// Insert firt
 								inGroup = isgoList[i];
@@ -257,11 +257,11 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 				if (imgoList.Count > 1) {		// Check if there is more object
 					for (int i = 1; i < imgoList.Count; i++) {
-						if (imgoList[i].Team.Name == Game.PlayerName && group.OwnerTeam.Name != Game.PlayerName) {
+						if (imgoList[i].Team.Name == Game.PlayerName && group.Team.Name != Game.PlayerName) {
 							group = new GroupMovables(imgoList[i].Team);
 							group.InsertMemeber(imgoList[i]);	// Insert first
 						} else {
-							if ( group.OwnerTeam == imgoList[i].Team) {
+							if ( group.Team == imgoList[i].Team) {
 								group.InsertMemeber(imgoList[i]);
 							}
 						}
@@ -291,11 +291,11 @@ namespace Strategy.GameObjectControl.GroupMgr {
 
 		/// <summary>
 		/// Function checks every IMovableGameObject in imgoList if is from player team.
-		/// When function found any player's object so it returns just player's objects, 
+		/// When function found any player object so it returns just player objects, 
 		/// else it return whole imgoList.
 		/// </summary>
 		/// <param name="imgoList">List with checking IMovableObjects</param>
-		/// <returns>Returns checked list with whole imgoList or just with player's objects</returns>
+		/// <returns>Returns checked list with whole imgoList or just with player objects</returns>
 		private List<IMovableGameObject> checkPlayersObjects(List<IMovableGameObject> imgoList) {
 
 			var resultList = new List<IMovableGameObject>();
@@ -399,7 +399,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 			if (targetedMgr.TargetedIsMovable) {
 				GroupMovables group = targetedMgr.GetActiveMovableGroup();
 
-				if (group.OwnerTeam.Name == Game.PlayerName) {
+				if (group.Team.Name == Game.PlayerName) {
 
 					// All members of group can die so movable group is deactive.
 					if (group.Count == 0) {

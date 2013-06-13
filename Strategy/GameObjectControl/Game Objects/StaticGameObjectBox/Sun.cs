@@ -37,7 +37,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		}
 
 		/// <summary>
-		/// Rotates with the sun's SceneNode. 
+		/// Rotates with the sun SceneNode. 
 		/// </summary>
 		/// <param name="f">The deley between last two frames.</param>
 		public virtual void Rotate(float f) {
@@ -106,7 +106,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		}
 
 		/// <summary>
-		/// Sets or gets a sun's team.
+		/// Sets or gets a sun team.
 		/// </summary>
 		public Team Team {
 			get {
@@ -118,7 +118,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		}
 
 		/// <summary>
-		/// Return sun's unique name.
+		/// Return sun unique name.
 		/// </summary>
 		public string Name {
 			get { return name; }
@@ -200,7 +200,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		public void RemoveProperty(string name) { }
 
 		/// <summary>
-		/// Returns a current sun's position.
+		/// Returns a current sun position.
 		/// </summary>
 		public Vector3 Position {
 			get {

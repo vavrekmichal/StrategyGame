@@ -275,7 +275,7 @@ namespace Strategy.GameObjectControl {
 
 			switch (answer) {
 				case ActionAnswer.Move:
-					Game.PrintToGameConsole("Group from team " + groupMgr.GetActiveMovableGroup().OwnerTeam.Name + " moving to " + clickedPoint.ToString()); //todo delete
+					Game.PrintToGameConsole("Group from team " + groupMgr.GetActiveMovableGroup().Team.Name + " moving to " + clickedPoint.ToString()); //todo delete
 					moveMgr.GoToLocation(groupMgr.GetActiveMovableGroup(), clickedPoint);
 					break;
 				case ActionAnswer.MoveTo:

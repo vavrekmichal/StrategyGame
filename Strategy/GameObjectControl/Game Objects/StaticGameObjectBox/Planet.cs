@@ -31,7 +31,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// string with position - Vector2 converted to Vector3, distance from center and health).
 		/// </summary>
 		/// <param name="name">The name of the planet.</param>
-		/// <param name="myTeam">The planet's team.</param>
+		/// <param name="myTeam">The planet team.</param>
 		/// <param name="args">The array with arguments (3 required + 1 optional)</param>
 		public Planet(string name, Team myTeam, object[] args) {
 			this.name = name;

@@ -62,15 +62,15 @@ namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 		}
 
 		/// <summary>
-		/// Return Property with a mission's target info.
+		/// Return Property with a mission target info.
 		/// </summary>
-		/// <returns>Return reference to Property with a mission's target info.</returns>
+		/// <returns>Return reference to Property with a mission target info.</returns>
 		public Property<string> GetTargetInfo() {
 			return targetInfo;
 		}
 
 		/// <summary>
-		/// Initializes mission's target: gets target object and controls if position is correctly parsed.
+		/// Initializes mission target: gets target object and controls if position is correctly parsed.
 		/// </summary>
 		/// <returns>Returns if initialization was successful.</returns>
 		public bool Initialize() {

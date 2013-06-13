@@ -288,7 +288,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// throw exception.
 		/// </summary>
 		/// <param Name="type">Type of compiling object.</param>
-		/// <param Name="args">Compiling object's argumentns.</param>
+		/// <param Name="args">Compiling object argumentns.</param>
 		/// <returns></returns>
 		private object CreateObject(XmlNode objectPath, object[] args) {
 			string type = objectPath.Attributes["name"].InnerText;
@@ -408,7 +408,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// <param Name="position">SolarSystem position in space (for count dostance between others)</param>
 		/// <param Name="isgoObjects">All IStaticGameObjects in this SolarSystem</param>
 		/// <param Name="imgoObjects">All IMovableGameObjects in this SolarSystem</param>
-		/// <param Name="sun">SolarSystem's Sun - can be null</param>
+		/// <param Name="sun">SolarSystem Sun - can be null</param>
 		/// <returns>Instance of SolarSystem</returns>
 		private SolarSystem CreateSolarSystem(string name, Vector3 position, List<IStaticGameObject> isgoObjects, List<IMovableGameObject> imgoObjects,
 			IStaticGameObject sun = null) {

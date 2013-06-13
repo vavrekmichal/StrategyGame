@@ -21,7 +21,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// Loads runtime properties from PropertyManager (Speed, Deffence and UserDefinedProperty). 
 		/// </summary>
 		/// <param name="name">The name of the creating object.</param>
-		/// <param name="myTeam">The object's team.</param>
+		/// <param name="myTeam">The object team.</param>
 		/// <param name="args">The argouments should contains one or two members (second is Hp).</param>
 		public SpaceShip2(string name, Team myTeam, object[] args) {
 			this.name = name;
@@ -61,7 +61,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		protected override void OnDisplayed() {}
 
 		/// <summary>
-		/// Gets speed bonus for each member of object's group.
+		/// Gets speed bonus for each member of object group.
 		/// </summary>
 		/// <returns>Returns the dictionary with speed bonus (200).</returns>
 		public override Dictionary<string, object> OnGroupAdd() {

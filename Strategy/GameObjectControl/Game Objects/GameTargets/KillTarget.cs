@@ -14,7 +14,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 		const string text2 = "Target completed. You killed ";
 
 		/// <summary>
-		/// Stores target's name to initialization and initialize info Property.
+		/// Stores target name to initialization and initialize info Property.
 		/// </summary>
 		/// <param name="args">The arguments should have just one member (target name).</param>
 		public KillTarget(object[] args) {
@@ -37,9 +37,9 @@ namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 		}
 
 		/// <summary>
-		/// Return Property with a mission's target info.
+		/// Return Property with a mission target info.
 		/// </summary>
-		/// <returns>Return reference to Property with a mission's target info.</returns>
+		/// <returns>Return reference to Property with a mission target info.</returns>
 		public Property<string> GetTargetInfo() {
 			return targetInfo;
 		}

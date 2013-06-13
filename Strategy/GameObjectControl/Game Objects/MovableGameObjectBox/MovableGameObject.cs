@@ -6,7 +6,7 @@ using Strategy.GameObjectControl.Game_Objects.Bullet;
 
 namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 	/// <summary>
-	/// Implements all IMovableGameObject's functions. Designed to facilitate the implementation of game objects.
+	/// Implements all IMovableGameObject functions. Designed to facilitate the implementation of game objects.
 	/// </summary>
 	public abstract class MovableGameObject : GameObject, IMovableGameObject {
 
@@ -85,7 +85,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 				}
 			} else {
 				if (!Collision()) { 
-					// Object's not in colision
+					// Object not in colision
 					float move = GetPropertyValue<float>(PropertyEnum.Speed) * delay;
 					distance -= move;
 					if (distance <= .0f) {
@@ -269,7 +269,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 
 		/// <summary>
-		/// Stops object's moving. Clears flyList. If the object was in "go to target" mode,
+		/// Stops object moving. Clears flyList. If the object was in "go to target" mode,
 		/// that sends information to IMoveManager.
 		/// </summary>
 		public void Stop() {
@@ -282,7 +282,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		}
 
 		/// <summary>
-		/// Controls if object can move forward. Function cast the Ray in object's direction
+		/// Controls if object can move forward. Function cast the Ray in object direction
 		/// and controls distance between objects.
 		/// </summary>
 		/// <returns>Returns if object crashed.</returns>
@@ -332,7 +332,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		}
 
 		/// <summary>
-		/// Updates object's direction and distance when it is in "follow" mode
+		/// Updates object direction and distance when it is in "follow" mode
 		/// and calls TryAttack function (decrease the cooldown time and can attack a target).
 		/// </summary>
 		/// <param name="delay">The delay between last two frames (seconds).</param>
@@ -479,7 +479,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		}
 		
 		/// <summary>
-		/// Returns Property's value from propertyBonusDict summed with group bonus. If object does't contains queried property,
+		/// Returns Property value from propertyBonusDict summed with group bonus. If object does't contains queried property,
 		/// returs new property with default value.
 		/// </summary>
 		/// <typeparam name="T">The type of queried property.</typeparam>
@@ -494,14 +494,14 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 				bonus = ((Property<T>)propertyBonusDict[name.ToString()]);
 			}
 
-			// Object's property
+			// Object property
 			Property<T> property = GetProperty<T>(name);
 			var op = Property<T>.Operator.Plus;
 			return bonus.SimpleMath(op, property).Value;
 		}
 
 		/// <summary>
-		/// Returns Property's value from propertyBonusDict summed with group bonus. If object does't contains queried property,
+		/// Returns Property value from propertyBonusDict summed with group bonus. If object does't contains queried property,
 		/// returs new property with default value. (User defined property - string name).
 		/// </summary>
 		/// <typeparam name="T">The type of queried property.</typeparam>

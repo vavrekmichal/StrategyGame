@@ -18,7 +18,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// Loads runtime properties from PropertyManager (Speed, Deffence). 
 		/// </summary>
 		/// <param name="name">The name of the creating object.</param>
-		/// <param name="myTeam">The object's team.</param>
+		/// <param name="myTeam">The object team.</param>
 		/// <param name="args">The argouments should contains one or two members (second is Hp).</param>
 		public SpaceShip(string name, Team myTeam, object[] args) {
 			this.name = name;
@@ -69,7 +69,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		protected override void OnDisplayed() {}
 
 		/// <summary>
-		/// Returns a deffence property's value.
+		/// Returns a deffence property value.
 		/// </summary>
 		public override int DeffPower {
 			get { return GetPropertyValue<int>(PropertyEnum.Deffence); }

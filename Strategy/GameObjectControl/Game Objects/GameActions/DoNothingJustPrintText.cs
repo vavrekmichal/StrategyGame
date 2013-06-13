@@ -10,7 +10,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 		/// <summary>
 		/// Just saves rafarence to owner.
 		/// </summary>
-		/// <param name="gameObject">The IGameAction's owner.</param>
+		/// <param name="gameObject">The IGameAction owner.</param>
 		/// <param name="args">The arguments should be empty.</param>
 		public DoNothingJustPrintText(IGameObject gameObject, object[] args) {
 			this.gameObject = gameObject;

@@ -20,7 +20,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 		/// <summary>
 		/// Returns path to a icon picture.
 		/// </summary>
-		/// <returns>Returns icon's path.</returns>
+		/// <returns>Returns icon path.</returns>
 		string IconPath();
 
 	}

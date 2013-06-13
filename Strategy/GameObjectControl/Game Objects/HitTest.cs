@@ -33,7 +33,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 		/// <summary>
-		/// Checks if the object is movable (the object's value in objectIsMovable is true).
+		/// Checks if the object is movable (the object value in objectIsMovable is true).
 		/// </summary>
 		/// <param name="name">Returns if the object is movable.</param>
 		/// <returns></returns>

@@ -95,7 +95,7 @@ namespace Strategy.FightMgr {
 				EndFight();
 				return null;
 			}
-			if (team == groupAttackers.OwnerTeam) {
+			if (team == groupAttackers.Team) {
 				// It is attacker
 				return attackerTarget;
 			} else {
@@ -246,7 +246,7 @@ namespace Strategy.FightMgr {
 		/// <param name="group">The inserting group.</param>
 		public void AddGroup(GroupMovables group) {
 			GroupManager groupMgr = Game.GroupManager;
-			if (group.OwnerTeam == groupAttackers.OwnerTeam) {
+			if (group.Team == groupAttackers.Team) {
 
 				// Group is attacker
 				int groupCount = group.Count;

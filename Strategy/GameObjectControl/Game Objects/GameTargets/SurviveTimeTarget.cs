@@ -3,7 +3,7 @@ using Strategy.GameObjectControl.RuntimeProperty;
 
 namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 	/// <summary>
-	/// Counting down the time required to complete the mission's target.
+	/// Counting down the time required to complete the mission target.
 	/// </summary>
 	class SurviveTimeTarget : ITarget{
 
@@ -16,7 +16,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 		/// <summary>
 		/// Initializes time from argument and info Property.
 		/// </summary>
-		/// <param name="args">The arguments should have just one member (the time required to complete the mission's target).</param>
+		/// <param name="args">The arguments should have just one member (the time required to complete the mission target).</param>
 		public SurviveTimeTarget(object[] args) {
 			time = TimeSpan.FromSeconds(Convert.ToInt32(args[0]));
 			targetInfo = new Property<string>(text1+ time.ToString());	

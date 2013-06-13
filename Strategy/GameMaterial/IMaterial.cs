@@ -9,7 +9,7 @@ namespace Strategy.GameMaterial {
 		/// Returns reference on Property with a current quantity of the material. Object with reference on this Property
 		/// can see the current quantity of the material.
 		/// </summary>
-		/// <returns>Returns refence to material's Property with a current quantity.</returns>
+		/// <returns>Returns refence to material Property with a current quantity.</returns>
         Property<int> GetQuantityOfMaterial();
 
 		/// <summary>

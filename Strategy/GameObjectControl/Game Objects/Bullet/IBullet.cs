@@ -28,7 +28,7 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		void HiddenUpdate(float delay);
 
 		/// <summary>
-		/// Changes IBullet's visibility (destroy Mogre SceneNode).
+		/// Changes IBullet visibility (destroy Mogre SceneNode).
 		/// </summary>
 		/// <param name="visible"></param>
 		void ChangeVisible(bool visible);

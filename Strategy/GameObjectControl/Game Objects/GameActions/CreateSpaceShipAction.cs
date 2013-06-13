@@ -17,7 +17,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 		/// <summary>
 		/// Initializes game action. Parses given argument (if are invalid so throw exception)
 		/// </summary>
-		/// <param name="gameObject">The IGameAction's owner.</param>
+		/// <param name="gameObject">The IGameAction owner.</param>
 		/// <param name="args">The arguments (creating type, [name of the material, quantity of the material])</param>
 		public CreateSpaceShipAction(IGameObject gameObject, object[] args) {
 			this.gameObject = gameObject;
@@ -39,14 +39,14 @@ namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 		public void Update(float delay) { }
 
 		/// <summary>
-		/// Checks if owner's team has enough of the materials. If team has enough, so the game action
+		/// Checks if owner team has enough of the materials. If team has enough, so the game action
 		/// creates new object and send it to a position (Vector3(100, 0, 100) + gameObject.Position) and returns
 		/// text that the creation was successful. Else returns text that the creation failed.
 		/// </summary>
 		/// <returns>Returns text about the creation.</returns>
 		public string OnMouseClick() {
 			if (gameObject.Team.CheckMaterials(neededMaterials)) {
-				// Removes team's material
+				// Removes team material
 				gameObject.Team.UseMaterials(neededMaterials);
 
 				// Creates arguments of the creation

@@ -10,7 +10,7 @@ namespace Strategy.GameGUI {
 		/// <summary>
 		/// Extension of the Panel which has Button to close itself and Label with title.
 		/// Position is calculate from given width and height (1/4 of the width and 1/5 of the height).
-		/// Also panel's width and height is calculate as 1/2 of the width and 4/7 of the hight.
+		/// Also panel width and height is calculate as 1/2 of the width and 4/7 of the hight.
 		/// </summary>
 		/// <param name="screenWidth">The width od screen.</param>
 		/// <param name="screenHeight">The height od screen.</param>

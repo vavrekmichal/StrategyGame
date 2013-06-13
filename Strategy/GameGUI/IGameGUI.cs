@@ -27,7 +27,7 @@ namespace Strategy.GameGUI {
 		void ShowTargeted(GroupMovables group);
 
 		/// <summary>
-		/// Sets SolarSystem's name in the relevant Label. 
+		/// Sets SolarSystem name in the relevant Label. 
 		/// </summary>
 		/// <param name="name">The name of the SolarSystem</param>
 		void SetSolarSystemName(string name);
@@ -39,7 +39,7 @@ namespace Strategy.GameGUI {
 		void PrintToGameConsole(string text);
 
 		/// <summary>
-		/// Shows panel with travel destinations (SolarSystem's names). Users answer will be sends
+		/// Shows panel with travel destinations (SolarSystem names). Users answer will be sends
 		/// to Game.GroupManager.CreateTraveler().
 		/// </summary>
 		/// <param name="possibilities">The list with names of the SolarSystems</param>
@@ -59,7 +59,7 @@ namespace Strategy.GameGUI {
 		void MissionEnd(string printText);
 
 		/// <summary>
-		/// Sets GUI enable or disable. Enable GUI display mission's informations. Disable GUI alows just Load or Exit.
+		/// Sets GUI enable or disable. Enable GUI display mission informations. Disable GUI alows just Load or Exit.
 		/// </summary>
 		bool Enable { get; set; }
 

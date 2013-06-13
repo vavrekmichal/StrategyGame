@@ -36,13 +36,13 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		void StopAttack();
 
 		/// <summary>
-		/// Returns unique object's name. The name is used for name of a creating
+		/// Returns unique object name. The name is used for name of a creating
 		/// SceneNode and Entity (that is the reason why it must be unique).
 		/// </summary>
 		string Name { get; }
 
 		/// <summary>
-		/// Gets or sets object's Team. The team is indicator of a friendships and production.
+		/// Gets or sets object Team. The team is indicator of a friendships and production.
 		/// Also can be controled if it is player object by team (team name is also unique).
 		/// </summary>
 		Team Team { get; set; }
@@ -78,7 +78,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		int DeffPower { get; }
 
 		/// <summary>
-		/// Returns Vector3 with a current object's position.
+		/// Returns Vector3 with a current object position.
 		/// </summary>
 		Mogre.Vector3 Position { get; }
 
@@ -99,31 +99,31 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		Property<T> GetProperty<T>(string propertyName);
 
 		/// <summary>
-		/// Inserts given Property in IGameObject's Property container.
+		/// Inserts given Property in IGameObject Property container.
 		/// </summary>
 		/// <typeparam name="T">The type of the inserted Property.</typeparam>
-		/// <param name="name">The Property's name is in this case a PropertyEnum. It is used
+		/// <param name="name">The Property name is in this case a PropertyEnum. It is used
 		/// for quicker access to specific Property.</param>
 		/// <param name="property">The inserting Property.</param>
 		void AddProperty<T>(PropertyEnum name, Property<T> property);
 
 		/// <summary>
-		/// Inserts given Property in IGameObject's Property container.
+		/// Inserts given Property in IGameObject Property container.
 		/// </summary>
 		/// <typeparam Name="T">The type of the inserted Property.</typeparam>
-		/// <param Name="Name">The Property's name is in this case a string. It is usually used
+		/// <param Name="Name">The Property name is in this case a string. It is usually used
 		/// for user-defined Property.</param>
 		/// <param Name="property">The inserting Property.</param>
 		void AddProperty<T>(string name, Property<T> property);
 
 		/// <summary>
-		/// Removes the Property from IGameObject's container by name. 
+		/// Removes the Property from IGameObject container by name. 
 		/// </summary>
 		/// <param name="name">The PropertyEnum member with a name of the removing Property.</param>
 		void RemoveProperty(PropertyEnum name);
 
 		/// <summary>
-		/// Removes the Property from IGameObject's container by name. 
+		/// Removes the Property from IGameObject container by name. 
 		/// </summary>
 		/// <param name="name">The string with a name of the removing Property.</param>
 		void RemoveProperty(string name);
@@ -141,7 +141,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		void TakeDamage(int damage);
 
 		/// <summary>
-		/// Returns Dictionary with all object's Properties.
+		/// Returns Dictionary with all object Properties.
 		/// </summary>
 		/// <returns>Returns the dictionary with Properties as objects (runtime generic)</returns>
 		Dictionary<string, object> GetPropertyToDisplay();
@@ -162,15 +162,15 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 
 		/// <summary>
-		/// Inserts given game action to object's IGameAction container. The object will update all his IGameActions.
+		/// Inserts given game action to object IGameAction container. The object will update all his IGameActions.
 		/// </summary>
 		/// <param name="gameAction">The inserting game action.</param>
 		void AddIGameAction(IGameAction gameAction);
 
 		/// <summary>
-		/// Returns list with all object's game actions.
+		/// Returns list with all object game actions.
 		/// </summary>
-		/// <returns>Returns list with all object's game actions.</returns>
+		/// <returns>Returns list with all object game actions.</returns>
 		List<IGameAction> GetIGameActions();
 	}
 }

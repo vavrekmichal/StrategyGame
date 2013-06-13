@@ -42,9 +42,9 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		/// <summary>
 		/// Creates instance at given position and traveling to given target (position).
 		/// </summary>
-		/// <param name="position">The bullet's start position.</param>
-		/// <param name="solSystem">The bullet's SolarSystem.</param>
-		/// <param name="targetPosition">The taget's position.</param>
+		/// <param name="position">The bullet start position.</param>
+		/// <param name="solSystem">The bullet SolarSystem.</param>
+		/// <param name="targetPosition">The taget position.</param>
 		/// <param name="rec">The bullet't hit reciever.</param>
 		public Missile(Vector3 position, SolarSystem solSystem, Vector3 targetPosition, IBulletStopReciever rec) {
 			this.position = position;
@@ -70,35 +70,35 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		}
 
 		/// <summary>
-		/// Returns bullet's power.
+		/// Returns bullet power.
 		/// </summary>
 		public int Attack {
 			get { return power.Value; }
 		}
 
 		/// <summary>
-		/// Returns bullet's name.
+		/// Returns bullet name.
 		/// </summary>
 		public string Name {
 			get { return name; }
 		}
 
 		/// <summary>
-		/// Returns bullet's maximum attack distance.
+		/// Returns bullet maximum attack distance.
 		/// </summary>
 		public static int AttackDistance {
 			get { return 200; }
 		}
 
 		/// <summary>
-		/// Returns bullet's cooldown.
+		/// Returns bullet cooldown.
 		/// </summary>
 		public static TimeSpan Cooldown {
 			get { return TimeSpan.FromSeconds(2); }
 		}
 
 		/// <summary>
-		/// Changes bullet's visibility. Visible is true -> Creates SceneNode and checks Entity (if is null -> initializes).
+		/// Changes bullet visibility. Visible is true -> Creates SceneNode and checks Entity (if is null -> initializes).
 		/// Visible is false -> Destroys SceneNode and save actual position.
 		/// </summary>
 		public virtual void ChangeVisible(bool visible) {
@@ -131,7 +131,7 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		}
 
 		/// <summary>
-		/// Updates bullet's position and check collision in a visible mode.
+		/// Updates bullet position and check collision in a visible mode.
 		/// </summary>
 		/// <param name="delay">The delay between last two frames (seconds).</param>
 		public void Update(float delay) {
@@ -153,7 +153,7 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		}
 
 		/// <summary>
-		/// Updates bullet's position and check collision in an invisible mode.
+		/// Updates bullet position and check collision in an invisible mode.
 		/// </summary>
 		/// <param name="delay">The delay between last two frames (seconds).</param>
 		public void HiddenUpdate(float delay) {
@@ -299,7 +299,7 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		}
 
 		/// <summary>
-		/// Destroy bullet's SceneNode and Entity.
+		/// Destroy bullet SceneNode and Entity.
 		/// </summary>
 		void IBullet.Destroy() {
 			if (entity != null) {

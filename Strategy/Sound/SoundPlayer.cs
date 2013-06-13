@@ -133,14 +133,14 @@ namespace Strategy {
 		}
 		
 		/// <summary>
-		/// The method increase ISoundEngine engine's volume
+		/// The method increase ISoundEngine engine volume
 		/// </summary>
 		public void VolumeUp(){
 			engine.SoundVolume = ChangeVolume(volumeJump);
 		}
 
 		/// <summary>
-		/// The method decrease ISoundEngine engine's volume
+		/// The method decrease ISoundEngine engine volume
 		/// </summary>
 		public void VolumeDown(){
 			engine.SoundVolume = ChangeVolume(-volumeJump);

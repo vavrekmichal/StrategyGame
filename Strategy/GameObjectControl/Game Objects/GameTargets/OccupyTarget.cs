@@ -2,7 +2,7 @@
 
 namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 	/// <summary>
-	/// Controls given target's team.
+	/// Controls given target team.
 	/// </summary>
 	class OccupyTarget : ITarget {
 
@@ -14,7 +14,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 		const string text2 = "Target completed. You're occupied ";
 
 		/// <summary>
-		/// Stored target's name to initialization. Also initializes info Property.
+		/// Stored target name to initialization. Also initializes info Property.
 		/// </summary>
 		/// <param name="args">The arguments should have just one member (target name).</param>
 		public OccupyTarget(object[] args) {
@@ -23,10 +23,10 @@ namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 		}
 
 		/// <summary>
-		/// Checks if the target's team is Player's team.
+		/// Checks if the target team is Player team.
 		/// </summary>
 		/// <param name="delay">The delay between last two frames (seconds).</param>
-		/// <returns>Returns if the target is in Player's team.</returns>
+		/// <returns>Returns if the target is in Player team.</returns>
 		public bool Check(float delay) {
 			if (gameObject.Team.Name == Game.PlayerName) {
 				targetInfo.Value = text2 + targetName;
@@ -37,9 +37,9 @@ namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 		}
 
 		/// <summary>
-		/// Return Property with a mission's target info.
+		/// Return Property with a mission target info.
 		/// </summary>
-		/// <returns>Return reference to Property with a mission's target info.</returns>
+		/// <returns>Return reference to Property with a mission target info.</returns>
 		public Property<string> GetTargetInfo() {
 			return targetInfo;
 		}

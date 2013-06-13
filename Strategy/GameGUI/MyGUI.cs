@@ -122,7 +122,7 @@ namespace Strategy.GameGUI {
 		#region Public
 
 		/// <summary>
-		/// Shows the group's properties and count or name of the object (if is just one in the group).
+		/// Shows the group properties and count or name of the object (if is just one in the group).
 		/// </summary>
 		/// <param Name="group">The showing group with IMovableGameObjects</param>
 		public void ShowTargeted(GroupMovables group) {
@@ -136,16 +136,16 @@ namespace Strategy.GameGUI {
 
 			ShowGroupProperties(group.GetPropertyToDisplay());
 
-			if (group.OwnerTeam.Name == Game.PlayerName) {
+			if (group.Team.Name == Game.PlayerName) {
 				ShowIGameActionIcons(group.GetGroupIGameActions());
 			}
 		}
 
 
 		/// <summary>
-		/// Shows group's properties and count or name of the object (if is just one in the group).
+		/// Shows group properties and count or name of the object (if is just one in the group).
 		/// Also can show "nothingSelect" constant if group is empty.
-		/// When it is player's group so shows gameActions icons.
+		/// When it is player group so shows gameActions icons.
 		/// </summary>
 		/// <param Name="group">The showing group with IStaticGameObjects</param>
 		public void ShowTargeted(GroupStatics group) {
@@ -165,7 +165,7 @@ namespace Strategy.GameGUI {
 
 			ShowGroupProperties(group.GetPropertyToDisplay());
 
-			if (group.OwnerTeam.Name == Game.PlayerName) {
+			if (group.Team.Name == Game.PlayerName) {
 				ShowIGameActionIcons(group.GetGroupIGameActions());
 			}
 
@@ -182,7 +182,7 @@ namespace Strategy.GameGUI {
 		/// <summary>
 		/// Prints the name as actual solar system name.
 		/// </summary>
-		/// <param Name="Name">The SolarSystem's Name</param>
+		/// <param Name="Name">The SolarSystem Name</param>
 		public void SetSolarSystemName(string name) {
 			nameOfSolarSystem.Text = name;
 		}
@@ -554,7 +554,7 @@ namespace Strategy.GameGUI {
 		}
 
 		/// <summary>
-		/// Creates mainmenu's subpanel. Initializes game controls buttons (Pause, Save, Load, End Mission and Exit) 
+		/// Creates mainmenu subpanel. Initializes game controls buttons (Pause, Save, Load, End Mission and Exit) 
 		/// and mission controls button (Mission info, Solar systems).
 		/// </summary>
 		/// <returns>Returns initialized Panel with buttons.</returns>
@@ -615,10 +615,10 @@ namespace Strategy.GameGUI {
 		}
 
 		/// <summary>
-		/// Creates mainmenu's subpanel. Initializes statPanelName label (for dispaly targeted group's name or count) 
-		/// and propertyPanel for targeted group's properties.
+		/// Creates mainmenu subpanel. Initializes statPanelName label (for dispaly targeted group name or count) 
+		/// and propertyPanel for targeted group properties.
 		/// </summary>
-		/// <returns>Returns initialized Panel with ScrollablePanel for group's properties.</returns>
+		/// <returns>Returns initialized Panel with ScrollablePanel for group properties.</returns>
 		private Panel CreateStatPanel() {
 			statPanel = CreateMainmenuSubpanel();
 			int x1 = statPanel.Width / 3;
@@ -638,7 +638,7 @@ namespace Strategy.GameGUI {
 			};
 			statPanel.Controls.Add(statPanelName);
 
-			// Creates ScrollablePanel for targeted group's properties.
+			// Creates ScrollablePanel for targeted group properties.
 			propertyPanel = CreateScrollablePanel(y, statPanel.Width - 30, statPanel.Height - (y + 10));
 			statPanel.Controls.Add(propertyPanel);
 
@@ -646,7 +646,7 @@ namespace Strategy.GameGUI {
 		}
 
 		/// <summary>
-		/// Clears panel with group's properties and with group's actions
+		/// Clears panel with group properties and with group actions
 		/// </summary>
 		private void ClearGroupPanels() {
 			propertyPanel.Controls.Clear();
@@ -654,13 +654,13 @@ namespace Strategy.GameGUI {
 		}
 
 		/// <summary>
-		/// Creates mainmenu's subpanel. Initializes gameActionPanel for targeted group's game actions and game console.
+		/// Creates mainmenu subpanel. Initializes gameActionPanel for targeted group game actions and game console.
 		/// </summary>
-		/// <returns>Returns initialized Panel with ScrollablePanel for group's action and with game console.</returns>
+		/// <returns>Returns initialized Panel with ScrollablePanel for group action and with game console.</returns>
 		private Panel CreateActionPanel() {
 			actionPanel = CreateMainmenuSubpanel();
 
-			// Creates ScrollablePanel for group's game actions.
+			// Creates ScrollablePanel for group game actions.
 			gameActionPanel = CreateScrollablePanel(5, actionPanel.Width - 30, actionPanel.Height / 2 - 10);
 			actionPanel.Controls.Add(gameActionPanel);
 
@@ -977,7 +977,7 @@ namespace Strategy.GameGUI {
 
 			int marginTop = textHeight + 6;
 
-			// Creates a scrollable panel which shows solar system's names (SelectionLabel - change current solar system)
+			// Creates a scrollable panel which shows solar system names (SelectionLabel - change current solar system)
 			var scrollablePanel = CreateScrollablePanel(marginTop, panel.Width - 28, panel.Height / 2 - ((textHeight + 1) * 2));
 			panel.Controls.Add(scrollablePanel);
 
@@ -1153,7 +1153,7 @@ namespace Strategy.GameGUI {
 		/// <param name="marginTop">The top indent.</param>
 		/// <param name="width">The width of the label.</param>
 		/// <param name="height">The height of the label.</param>
-		/// <param name="property">The property which value will be shows like label's text.</param>
+		/// <param name="property">The property which value will be shows like label text.</param>
 		/// <returns>Returns PropertyLabel with setted property and without a title.</returns>
 		private Label CreatePropertyLabelGeneric<T>(int marginLeft, int marginTop, int width, int height, Property<T> property) {
 			var propLabel = new PropertyLabel<T>(property, "") {
@@ -1172,7 +1172,7 @@ namespace Strategy.GameGUI {
 		/// </summary>
 		/// <param Name="width">The width of the button.</param>
 		/// <param Name="height">The height of the button.</param>
-		/// <param Name="text">The button's text.</param>
+		/// <param Name="text">The button text.</param>
 		/// <param Name="location">The relative position.</param>
 		/// <returns>Returns Button with setted text and text alignment.</returns>
 		private Button CreateButton(int width, int height, string text, Point location) {
@@ -1193,7 +1193,7 @@ namespace Strategy.GameGUI {
 		/// </summary>
 		/// <param Name="width">The width of the button.</param>
 		/// <param Name="height">The height of the button.</param>
-		/// <param Name="text">The button's text.</param>
+		/// <param Name="text">The button text.</param>
 		/// <param Name="location">The relative position.</param>
 		/// <param name="panelName">The name of the closing panel.</param>
 		/// <returns>Returns Button with setted text and on MouseClick action to close the panel.</returns>
@@ -1212,7 +1212,7 @@ namespace Strategy.GameGUI {
 		}
 
 		/// <summary>
-		/// Creates PictureBox and sets the action on MouseClick. Also loads the action's icon to PictureBox.
+		/// Creates PictureBox and sets the action on MouseClick. Also loads the action icon to PictureBox.
 		/// </summary>
 		/// <param name="action">The action which is setted to PictureBox and called its OnMouseClick() on MouseClick.</param>
 		/// <returns>Returns instance of the PictureBox that has setted the action.</returns>
