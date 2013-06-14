@@ -65,14 +65,11 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		}
 
 		/// <summary>
-		/// Doesn't react on any ActionReason, always answers None.
+		/// Doesn't react on the target in sight.
 		/// </summary>
-		/// <param name="reason">The reason of calling this function.</param>
 		/// <param name="target">The target which invoke this calling.</param>
-		/// <returns>Always returns None.</returns>
-		public virtual ActionReaction ReactToInitiative(ActionReason reason, IMovableGameObject target) {
-			return ActionReaction.None;
-		}
+
+		public virtual void TargetInSight(IMovableGameObject target) {	}
 
 		/// <summary>
 		/// Changes visibility of sun (creates or destroys SceneNode).

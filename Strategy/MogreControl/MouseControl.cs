@@ -12,7 +12,6 @@ using MOIS;
 namespace Strategy.MogreControl {
 	public class MouseControl {
 		protected static Mogre.TutorialFramework.CameraMan cameraMan;
-		protected SceneManager sceneMgr;
 
 		protected int changeMe = 1;
 
@@ -29,18 +28,17 @@ namespace Strategy.MogreControl {
 		bool bSelecting;
 
 
-		public static MouseControl GetInstance(CameraMan c, SceneManager m) {
+		public static MouseControl GetInstance(CameraMan c) {
 			if (instance == null) {
-				instance = new MouseControl(c, m);
+				instance = new MouseControl(c);
 			}
 			return instance;
 		}
 
-		private MouseControl(CameraMan c, SceneManager m) {
+		private MouseControl(CameraMan c) {
 			cameraMan = c;
-			sceneMgr = m;
 			mRect = new SelectionRectangle("RectangularSelect");
-			sceneMgr.RootSceneNode.CreateChildSceneNode().AttachObject(mRect);
+			Game.SceneManager.RootSceneNode.CreateChildSceneNode().AttachObject(mRect);
 		}
 
 
@@ -107,7 +105,7 @@ namespace Strategy.MogreControl {
 				case MouseButtonID.MB_Right:
 					Plane plane = new Plane(Mogre.Vector3.UNIT_Y, 0);
 					Mogre.Vector3 v;
-					using (Mogre.RaySceneQuery raySceneQuery = sceneMgr.CreateRayQuery(new Mogre.Ray())) {
+					using (Mogre.RaySceneQuery raySceneQuery = Game.SceneManager.CreateRayQuery(new Mogre.Ray())) {
 						float mouseX = (float)arg.state.X.abs / (float)arg.state.width;
 						float mouseY = (float)arg.state.Y.abs / (float)arg.state.height;
 
@@ -146,7 +144,7 @@ namespace Strategy.MogreControl {
 		}
 
 		private List<MovableObject> SimpleClick(MouseEvent arg) {
-			using (Mogre.RaySceneQuery raySceneQuery = sceneMgr.CreateRayQuery(new Mogre.Ray())) {
+			using (Mogre.RaySceneQuery raySceneQuery = Game.SceneManager.CreateRayQuery(new Mogre.Ray())) {
 				float mouseX = (float)arg.state.X.abs / (float)arg.state.width;
 				float mouseY = (float)arg.state.Y.abs / (float)arg.state.height;
 
@@ -176,7 +174,7 @@ namespace Strategy.MogreControl {
 
 			if ((right - left) * (bottom - top) < 0.0001) return;
 
-			Camera c = sceneMgr.GetCamera("myCam");
+			Camera c = Game.SceneManager.GetCamera("myCam");
 			Ray topLeft = c.GetCameraToViewportRay(left, top);
 			Ray topRight = c.GetCameraToViewportRay(right, top);
 			Ray bottomLeft = c.GetCameraToViewportRay(left, bottom);
@@ -191,14 +189,14 @@ namespace Strategy.MogreControl {
 
 			PlaneBoundedVolumeList volList = new PlaneBoundedVolumeList();
 			volList.Add(vol);
-			PlaneBoundedVolumeListSceneQuery volQuery = sceneMgr.CreatePlaneBoundedVolumeQuery(volList);
+			PlaneBoundedVolumeListSceneQuery volQuery = Game.SceneManager.CreatePlaneBoundedVolumeQuery(volList);
 			SceneQueryResult result = volQuery.Execute();
 
 			List<MovableObject> list = new List<MovableObject>(result.movables);
 
 			GameObjectManager.GetInstance().OnLeftClick(list);
 
-			sceneMgr.DestroyQuery(volQuery);
+			Game.SceneManager.DestroyQuery(volQuery);
 		}
 
 		// Static method tests

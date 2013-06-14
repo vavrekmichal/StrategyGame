@@ -85,7 +85,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 		/// <summary>
 		/// Sets all select group as new empty groups and shows empty (by targetedMgr).
 		/// </summary>
-		public void DeselectGroup() {
+		public void UntargetGroup() {
 			targetedMgr.Clear();
 			targetedMgr.ShowTargetedGroup();
 		}

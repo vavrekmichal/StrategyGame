@@ -78,14 +78,10 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 
 		/// <summary>
 		/// Shows panel with possible travel destiantions (ShowTravelDestinations).
-		/// Answers None (ensures response itself).
 		/// </summary>
-		/// <param name="reason">The reason of calling this function.</param>
 		/// <param name="target">The target which invoke this calling.</param>
-		/// <returns>Always returns None.</returns>
-		public override ActionReaction ReactToInitiative(ActionReason reason, IMovableGameObject target) {
+		public override void TargetInSight(IMovableGameObject target) {
 			ShowTravelDestinations(target);
-			return ActionReaction.None;
 		}
 
 		/// <summary>

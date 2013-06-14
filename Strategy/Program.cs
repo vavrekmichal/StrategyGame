@@ -38,7 +38,7 @@ namespace Strategy {
 		#region Create world and camera
 
 		/// <summary>
-		/// This overriden class inicializes whole world (objects, mission, sounds, camera)
+		/// This overriden class initializes whole world (objects, mission, sounds, camera)
 		/// </summary>
 		protected override void CreateScene() {
 
@@ -58,7 +58,7 @@ namespace Strategy {
 		}
 
 		/// <summary>
-		/// This method inicializes camere and cameraMan
+		/// This method initializes camere and cameraMan
 		/// </summary>
 		protected override void CreateCamera() {
 			mCamera = mSceneMgr.CreateCamera("myCam");

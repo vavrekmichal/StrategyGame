@@ -1,7 +1,7 @@
 ﻿
 namespace Strategy.GameObjectControl.RuntimeProperty {
 	/// <summary>
-	/// Enum with names of the base Properties.
+	/// Rpresents names of the base Properties.
 	/// </summary>
 	public enum PropertyEnum {
 		Attack = 1,

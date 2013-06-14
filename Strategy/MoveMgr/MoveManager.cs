@@ -71,7 +71,7 @@ namespace Strategy.MoveMgr {
 
 			if (imgo.Visible) {
 				imgo.Stop();
-				gameObject.ReactToInitiative(ActionReason.TargetInDistance, imgo);
+				gameObject.TargetInSight(imgo);
 
 			}
 

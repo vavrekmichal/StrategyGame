@@ -20,20 +20,10 @@ namespace Strategy.TeamControl {
 
         public Team playerTeam;
 
-        #region singleton and constructor
-        public static TeamManager instance;
-
-        public static TeamManager GetInstance() {
-            if (instance==null) {
-                instance = new TeamManager();
-            }
-            return instance;
-        }
-
-        private TeamManager() {
+        public TeamManager() {
             friendlyTeamDict= new Dictionary<Team,List<Team>>();
         }
-        #endregion
+
 
         // Public
         

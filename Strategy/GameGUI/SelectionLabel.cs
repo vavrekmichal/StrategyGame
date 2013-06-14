@@ -62,7 +62,6 @@ namespace Strategy.GameGUI {
 		private void SelectSolarSystem(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
 			Game.SolarSystemManager.ChangeSolarSystem(numberOfItem);
 			Game.IGameGUI.ClosePanel(panelToClose);
-
 		}
 
 		/// <summary>

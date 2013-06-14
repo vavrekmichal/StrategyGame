@@ -81,7 +81,6 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			metadataRef.Add(new MetadataFileReference(typeof(PropertyManager).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(GameObjectControl.Game_Objects.StaticGameObjectBox.IStaticGameObject).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(Strategy.Game).Assembly.Location));
-			metadataRef.Add(new MetadataFileReference(typeof(ActionReason).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(ActionAnswer).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(PropertyEnum).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(XmlLoadException).Assembly.Location));

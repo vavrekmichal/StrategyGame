@@ -26,7 +26,7 @@ namespace Strategy {
 		protected Random r; // Makes random number to Select song (sound)
 
 		/// <summary>
-		/// A constructor inicializes music player and randomizator. After that play first song
+		/// A constructor initializes music player and randomizator. After that play first song
 		/// (sound) and Set event receiver
 		/// </summary>
 		/// <param Name="mWindow">RenderWindow instance for making overlays</param>

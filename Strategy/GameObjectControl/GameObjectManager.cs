@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Mogre;
-using Strategy.GameGUI;
 using Strategy.GameObjectControl.GroupMgr;
 using Strategy.GameObjectControl.Game_Objects;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
@@ -9,10 +7,12 @@ using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.MoveMgr;
 using Strategy.TeamControl;
-using MOIS;
 using Strategy.FightMgr;
 
 namespace Strategy.GameObjectControl {
+	/// <summary>
+	/// Checks and updates the control elements of the game and allow access to them.
+	/// </summary>
 	public class GameObjectManager {
 
 		protected ObjectCreator objectCreator;
@@ -30,28 +30,21 @@ namespace Strategy.GameObjectControl {
 		private static GameObjectManager instance;
 
 		/// <summary>
-		/// Singleton instance
+		/// Returns the singleton instance of the GameObjectManager (if is the instance null, so initializes).
 		/// </summary>
-		/// <returns>Returning singleton instance</returns>
-		public static GameObjectManager GetInstance(SceneManager sceneMgr, Mouse m, Keyboard k, RenderWindow mWindow) {
-			if (instance == null) {
-				instance = new GameObjectManager(sceneMgr, m, k, mWindow);
-			}
-			return instance;
-		}
-
+		/// <returns>Returning the singleton instance.</returns>
 		public static GameObjectManager GetInstance() {
 			if (instance == null) {
-				throw new NullReferenceException("GameObjectManager is not initialized.");
+				instance = new GameObjectManager();
 			}
 			return instance;
 		}
 
 		/// <summary>
-		/// Private constructor
+		/// Initializes the object and all control elements of the game.
 		/// </summary>
-		private GameObjectManager(SceneManager sceneMgr, Mouse m, Keyboard k, RenderWindow mWindow) {
-			teamMgr = TeamManager.GetInstance();
+		private GameObjectManager() {
+			teamMgr = new TeamManager();
 			fightMgr = new FightManager();
 			objectCreator = new ObjectCreator();
 			moveMgr = new MoveManager();	
@@ -62,6 +55,9 @@ namespace Strategy.GameObjectControl {
 		}
 		#endregion
 
+		/// <summary>
+		/// Returns instance of GroupManager (if it is not initialize throws a exception).
+		/// </summary>
 		public GroupManager GroupManager {
 			get {
 				if (groupMgr == null) {
@@ -71,6 +67,9 @@ namespace Strategy.GameObjectControl {
 			}
 		}
 
+		/// <summary>
+		/// Returns instance of IGameObjectCreator (if it is not initialize throws a exception).
+		/// </summary>
 		public IGameObjectCreator IGameObjectCreator {
 			get {
 				if (objectCreator == null) {
@@ -80,6 +79,9 @@ namespace Strategy.GameObjectControl {
 			}
 		}
 
+		/// <summary>
+		/// Returns instance of HitTest (if it is not initialize throws a exception). 
+		/// </summary>
 		public HitTest HitTest {
 			get {
 				if (hitTest == null) {
@@ -89,6 +91,9 @@ namespace Strategy.GameObjectControl {
 			}
 		}
 
+		/// <summary>
+		/// Returns instance of IMoveManager (if it is not initialize throws a exception). 
+		/// </summary>
 		public IMoveManager IMoveManager {
 			get {
 				if (moveMgr == null) {
@@ -98,6 +103,9 @@ namespace Strategy.GameObjectControl {
 			}
 		}
 
+		/// <summary>
+		/// Returns instance of IFightManager (if it is not initialize throws a exception). 
+		/// </summary>
 		public IFightManager IFightManager {
 			get {
 				if (fightMgr == null) {
@@ -107,6 +115,9 @@ namespace Strategy.GameObjectControl {
 			}
 		}
 
+		/// <summary>
+		/// Returns instance of PropertyManager (if it is not initialize throws a exception). 
+		/// </summary>
 		public PropertyManager PropertyManager {
 			get {
 				if (propertyMgr == null) {
@@ -116,6 +127,9 @@ namespace Strategy.GameObjectControl {
 			}
 		}
 
+		/// <summary>
+		/// Returns instance of TeamManager (if it is not initialize throws a exception). 
+		/// </summary>
 		public TeamManager TeamManager {
 			get {
 				if (teamMgr == null) {
@@ -125,6 +139,9 @@ namespace Strategy.GameObjectControl {
 			}
 		}
 
+		/// <summary>
+		/// Returns instance of SolarSystemManager (if it is not initialize throws a exception).
+		/// </summary>
 		public SolarSystemManager SolarSystemManager {
 			get {
 				if (solarSystemMgr == null) {
@@ -136,41 +153,57 @@ namespace Strategy.GameObjectControl {
 
 		#region private
 
+		/// <summary>
+		/// Ensures delete of the death game object and prints information about its death to game console.
+		/// </summary>
+		/// <param name="igo">The death game object.</param>
+		/// <param name="m">The arguments contains information about death.</param>
+		private void OnDieEvent(IGameObject igo, MyDieArgs m) {
+			Game.PrintToGameConsole(igo.Name + " destroyed (Team " + igo.Team.Name + ").");
+			RemoveObject(igo);
+		}
 		#endregion
-
-
 
 		#region public
 
+		/// <summary>
+		/// Updates the control elements of the game (updates all game objects -SolarSystemManager, fights,
+		/// groups and controlled movements).
+		/// </summary>
+		/// <param name="delay">The delay between last two frames.</param>
 		public void Update(float delay) {
 			solarSystemMgr.Update(delay);
 			fightMgr.Update(delay);
 			groupMgr.Update(delay);
 			moveMgr.Update();
 		}
-
-		private void OnDieEvent(IGameObject igo, MyDieArgs m) {
-			Console.WriteLine(
-				"Object Hp is lower then 0.");
-			Game.PrintToGameConsole(igo.Name + " destroyed (Team " + igo.Team.Name + ").");
-			RemoveObject(igo);
-		}
-
-
+		
+		/// <summary>
+		/// Removes the object from the game (from TeamManager and from GroupManager).
+		/// </summary>
+		/// <param name="gameObject">The removing game object.</param>
 		public void RemoveObject(IGameObject gameObject) {
 
 			var castedImgo = gameObject as IMovableGameObject;
 			if (castedImgo != null) {
+				// Removes movebla object
 				teamMgr.RemoveFromOwnTeam(castedImgo);
 				groupMgr.DestroyGameObject(castedImgo);
 
 			} else {
+				// Removes static object
 				var castedIsgo = gameObject as IStaticGameObject;
 				teamMgr.RemoveFromOwnTeam(castedIsgo);
 				groupMgr.DestroyGameObject(castedIsgo);
 			}
 		}
 
+		/// <summary>
+		/// Changes the team of the given gameObject. Sets the newTeam as the objects team (ChangeTeam) and 
+		/// removes it from actual group (has new owner). 
+		/// </summary>
+		/// <param name="gameObject">The object which is changing team.</param>
+		/// <param name="newTeam">The new team of the object.</param>
 		public void ChangeObjectsTeam(IGameObject gameObject, Team newTeam) {
 			var castedImgo = gameObject as IMovableGameObject;
 			if (castedImgo != null) {
@@ -183,15 +216,20 @@ namespace Strategy.GameObjectControl {
 			}
 		}
 
+		/// <summary>
+		/// Destroys the current game (mission) and sets a new empty control elements of the game.
+		/// </summary>
 		public void DestroyGame() {
+			// Destroys targeted group (destroys pointers).
+			groupMgr.UntargetGroup();
 
-			groupMgr.DeselectGroup();
-
+			// Destroys all object in the game.
 			foreach (var item in objectCreator.GetInicializedSolarSystems()) {
 				item.Destroy();
 			}
 
-			teamMgr = TeamManager.GetInstance();
+			// Creates a new empty control elements of the game.
+			teamMgr = new TeamManager();
 			fightMgr = new FightManager();
 			objectCreator = new ObjectCreator();
 			moveMgr = new MoveManager();
@@ -202,12 +240,15 @@ namespace Strategy.GameObjectControl {
 		}
 
 		/// <summary>
-		/// Inicialization of managers, hittest...
+		/// Initializes control elements of the game. Loads given mission, creates all required game objects 
+		/// (and sets DieHandler) and registers them to control elements.
 		/// </summary>
-		/// <param Name="missionName">Name of choosen mission</param>
+		/// <param name="missionName">The name of the choosen mission.</param>
 		public void Inicialization(string missionName) {
+			// Creates game objects
 			objectCreator.InitializeWorld(missionName);
 
+			// Sets DieHandler
 			foreach (var solarSys in objectCreator.GetInicializedSolarSystems()) {
 				foreach (var gameObject in solarSys.GetIMGOs()) {
 					gameObject.Value.DieHandler += OnDieEvent;
@@ -216,15 +257,19 @@ namespace Strategy.GameObjectControl {
 					gameObject.Value.DieHandler += OnDieEvent;
 				}
 			}
-
+			// Registers SolarSystems
 			solarSystemMgr.CreateSolarSystems(objectCreator.GetInicializedSolarSystems());
+			// Initializes HitTest
 			hitTest.CreateHitTestMap(objectCreator.GetInicializedSolarSystems());
+			// Registers team
 			teamMgr.Inicialization(objectCreator.GetTeams(), objectCreator.GetTeamsRelations());
-			groupMgr.DeselectGroup();
+			groupMgr.UntargetGroup();
 		}
 
 		/// <summary>
-		/// Called from GUI when a left mouse button click or a rectangular Select in game area 
+		/// Processes the list and creates  the group from it. The movable object has a bigger priority,
+		/// so when the list contains both types (IMovableGameObject and IStaticGameObject) the movable 
+		/// group is created.
 		/// </summary>
 		/// <param Name="selectedObjects">Objects in clicked area</param>
 		public void OnLeftClick(List<Mogre.MovableObject> selectedObjects) {
@@ -244,6 +289,7 @@ namespace Strategy.GameObjectControl {
 				}
 			}
 
+			// Movables has bigger priority.
 			if (isMovableSelected) {
 				groupMgr.CreateInfoGroup(imgoList);
 			} else {
@@ -252,38 +298,46 @@ namespace Strategy.GameObjectControl {
 		}
 
 		/// <summary>
-		/// Called from GUI when right mouse button click in game area. Function selectes group and
-		/// evaluate the place where user clicked. After that is called OnRightMouseClick on group 
-		/// and depending on the response is called the appropriate action. 
+		/// Selectes the targeted group and finds out info about object where the mouse clicked.
+		/// After that calls OnRightMouseClick on group and depending on the response is called 
+		/// the appropriate action. 
 		/// </summary>
-		/// <param Name="clickedPoint">Mouse position</param>
-		/// <param Name="selectedObjects">Objects in clicked area</param>
+		/// <param Name="clickedPoint">The mouse position.</param>
+		/// <param Name="selectedObjects">The objects in clicked area.</param>
 		public void OnRightClick(Mogre.Vector3 clickedPoint, List<Mogre.MovableObject> selectedObjects) {
 
 			Mogre.MovableObject hitObject;
 			bool isFriendly = true;
 			bool isIMGO = true;
 
-
 			if (selectedObjects.Count == 0) {
+				// Nothing at clicked area.
 				hitObject = null;
 			} else {
 				hitObject = selectedObjects[0];
 				Team targetTeam;
+				// The clicked object is not controllable.
 				if (!hitTest.IsObjectControllable(hitObject.Name)) return;
-				if (hitTest.IsObjectMovable(hitObject.Name)) {
-					targetTeam = hitTest.GetIMGO(hitObject.Name).Team;
 
+				if (hitTest.IsObjectMovable(hitObject.Name)) {
+					// The clicked object is movable.
+					targetTeam = hitTest.GetIMGO(hitObject.Name).Team;
 				} else {
+					// The clicked object is static.
 					targetTeam = hitTest.GetISGO(hitObject.Name).Team;
 					isIMGO = false;
 				}
+
+				// Checks if the object is friendly.
 				isFriendly = teamMgr.AreFriendly(groupMgr.ActiveTeam, targetTeam);
 			}
+
+			// Gets the selected group answer on mouse action (clicked position).
 			var answer = groupMgr.SelectInfoGroup(clickedPoint, hitObject, isFriendly, isIMGO);
 
-			Game.IEffectPlayer.PlayEffect(groupSelectedSound); // Play effect
+			Game.IEffectPlayer.PlayEffect(groupSelectedSound); // Plays effect
 
+			// Chooses the next action by the group reply.
 			switch (answer) {
 				case ActionAnswer.Move:
 					Game.PrintToGameConsole("Group from team " + groupMgr.GetActiveMovableGroup().Team.Name + " moving to " + clickedPoint.ToString()); //todo delete
@@ -298,12 +352,8 @@ namespace Strategy.GameObjectControl {
 				case ActionAnswer.Occupy:
 					fightMgr.Occupy(groupMgr.GetActiveMovableGroup(), hitTest.GetGameObject(hitObject.Name));
 					break;
-
 			}
-			//groupMgr.ShowSelectedInfoGroup();
 		}
-
-
 		#endregion
 	}
 }

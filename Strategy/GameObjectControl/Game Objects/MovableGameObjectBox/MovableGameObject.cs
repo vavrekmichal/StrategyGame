@@ -571,13 +571,9 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		}
 
 		/// <summary>
-		/// This prototype of movable object always returns None (doesn't react on ActionReason).
+		/// This prototype of movable object doesn't react on the target in sight.
 		/// </summary>
-		/// <param name="reason">The reason of calling this function.</param>
 		/// <param name="target">The target which invoke this calling.</param>
-		/// <returns>Always returns None.</returns>
-		public override ActionReaction ReactToInitiative(ActionReason reason, IMovableGameObject target) {
-			return ActionReaction.None;
-		}
+		public override void TargetInSight(IMovableGameObject target) {	}
 	}
 }

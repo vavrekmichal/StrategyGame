@@ -48,11 +48,11 @@ namespace Strategy {
 			return instance;
 		}
 
-		private Game(SceneManager sceneManager, CameraMan c, RenderWindow mWindow, Mouse mouse, Keyboard keyboard) {
+		private Game(SceneManager sceneManager, CameraMan camera, RenderWindow mWindow, Mouse mouse, Keyboard keyboard) {
 			sceneMgr = sceneManager;
-			gameObjectMgr = GameObjectManager.GetInstance(sceneManager, mouse, keyboard, mWindow);
+			gameObjectMgr = GameObjectManager.GetInstance();
 			gameGUI = new MyGUI((int)mWindow.Width, (int)mWindow.Height, mouse, keyboard);
-			mouseControl = MouseControl.GetInstance(c, sceneManager);
+			mouseControl = MouseControl.GetInstance(camera);
 			gamePaused = true;
 			soundPlayer = new SoundPlayer(mWindow);
 			mission = new Mission();

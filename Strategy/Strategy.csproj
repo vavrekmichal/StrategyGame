@@ -89,7 +89,7 @@
     <Compile Include="GameMaterial\Matrial.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GameObjectControl\Action.cs" />
+    <Compile Include="GameObjectControl\ActionAnswer.cs" />
     <Compile Include="GameObjectControl\Game Objects\Bullet\Missile.cs">
       <SubType>Code</SubType>
     </Compile>

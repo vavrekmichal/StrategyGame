@@ -147,12 +147,10 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		Dictionary<string, object> GetPropertyToDisplay();
 
 		/// <summary>
-		/// Reacts on the ActionReason. Object can reacts itself or answers required action.
+		/// Reacts when the target is in sight.
 		/// </summary>
-		/// <param name="reason">The reason of calling this function.</param>
 		/// <param name="target">The target which invoke this calling.</param>
-		/// <returns>The answer on the ActionReason.</returns>
-		ActionReaction ReactToInitiative(ActionReason reason, IMovableGameObject target);
+		void TargetInSight(IMovableGameObject target);
 
 		/// <summary>
 		/// Sets all IGameObjects in ShoutDistance around this object (recursively) which are in same Team to given list.

@@ -233,14 +233,10 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 		/// <summary>
-		/// Doesn't react on any reason (objects should override).
+		/// Doesn't react on the target in sight (objects should override).
 		/// </summary>
-		/// <param name="reason">The reason of calling this function.</param>
 		/// <param name="target">The target which invoke this calling.</param>
-		/// <returns>The answer on the ActionReason is always None.</returns>
-		public virtual ActionReaction ReactToInitiative(ActionReason reason, IMovableGameObject target) {
-			return ActionReaction.None;
-		}
+		public virtual void TargetInSight( IMovableGameObject target) {	}
 
 		private DieEventHandler die = null;
 
