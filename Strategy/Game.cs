@@ -52,7 +52,7 @@ namespace Strategy {
 			sceneMgr = sceneManager;
 			gameObjectMgr = GameObjectManager.GetInstance();
 			gameGUI = new MyGUI((int)mWindow.Width, (int)mWindow.Height, mouse, keyboard);
-			mouseControl = MouseControl.GetInstance(camera);
+			mouseControl = MouseControl.GetInstance(camera, (int)mWindow.Width, (int)mWindow.Height);
 			gamePaused = true;
 			soundPlayer = new SoundPlayer(mWindow);
 			mission = new Mission();

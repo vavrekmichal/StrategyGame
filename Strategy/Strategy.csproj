@@ -145,6 +145,7 @@
     <Compile Include="MissionControl\Mission.cs" />
     <Compile Include="MogreControl\MouseControl.cs" />
     <Compile Include="GameGUI\MyGUI.cs" />
+    <Compile Include="MogreControl\SelectionRectangle.cs" />
     <Compile Include="MoveMgr\IFinishMovementReciever.cs" />
     <Compile Include="MoveMgr\IMoveManager.cs" />
     <Compile Include="MoveMgr\MoveManager.cs" />

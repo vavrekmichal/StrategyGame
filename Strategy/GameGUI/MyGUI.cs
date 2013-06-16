@@ -70,7 +70,6 @@ namespace Strategy.GameGUI {
 
 		/// <summary>
 		/// Initializes GUI systrem for Mogre and Load fonts, skins and creates GUI overlay.
-		/// Also creates the mouse bounds (app using Miagi cursor for control)
 		/// </summary>
 		/// <param Name="width">The window width</param>
 		/// <param Name="height">The window height</param>
@@ -114,9 +113,6 @@ namespace Strategy.GameGUI {
 			// Create panels
 			CreateMainMenu();
 			CreateTopMenu();
-
-			// Create bounds around screen to move the camera
-			CreateCameraBounds();
 		}
 
 		#region Public
@@ -371,94 +367,6 @@ namespace Strategy.GameGUI {
 			panel.Controls.Add(button);
 
 			gui.Controls.Add(panel);
-		}
-		#endregion
-
-		#region Camera bounds
-		/// <summary>
-		/// Creates invisible bounds for moving with camera
-		/// </summary>
-		private void CreateCameraBounds() {
-
-			// Top bound
-			var topSection = new Button() {
-				Size = new Size(screenWidth * 13 / 15, screenHeight / 10),
-				Location = new Point(screenWidth / 15, screenHeight * 2 / 30),
-				Name = "topSection"
-			};
-			topSection.MouseHover += MouseOver;
-			topSection.MouseLeave += MouseLeave;
-			gui.Controls.Add(topSection);
-
-			// Botton bound
-			var backSection = new Button() {
-				Size = new Size(screenWidth * 13 / 15, screenHeight / 10),
-				Location = new Point(screenWidth / 15, screenHeight * 7 / 10),
-				Name = "backSection"
-			};
-			backSection.MouseHover += MouseOver;
-			backSection.MouseLeave += MouseLeave;
-			gui.Controls.Add(backSection);
-
-			// Left bound
-			var leftSection = new Button() {
-				Size = new Size(screenWidth / 15, screenHeight - (screenHeight * 4 / 10)),
-				Location = new Point(0, screenHeight / 10),
-				Name = "leftSection"
-			};
-			leftSection.MouseHover += MouseOver;
-			leftSection.MouseLeave += MouseLeave;
-			gui.Controls.Add(leftSection);
-
-			// Right bound
-			var rightSection = new Button() {
-				Size = new Size(screenWidth / 15, screenHeight - (screenHeight * 4 / 10)),
-				Location = new Point(screenWidth * 14 / 15, screenHeight / 10),
-				Name = "rightSection"
-			};
-			rightSection.MouseHover += MouseOver;
-			rightSection.MouseLeave += MouseLeave;
-			gui.Controls.Add(rightSection);
-
-			// Rigth-up corner bound
-			var rightUpSection = new Button() {
-				Size = new Size(screenWidth / 15, screenHeight / 10),
-				Location = new Point(screenWidth * 14 / 15, 0),
-				Name = "rightUpSection"
-			};
-			rightUpSection.MouseHover += MouseOver;
-			rightUpSection.MouseLeave += MouseLeave;
-			gui.Controls.Add(rightUpSection);
-
-			// Right-down corner bound
-			var rightDownSection = new Button() {
-				Size = new Size(screenWidth / 15, screenHeight / 10),
-				Location = new Point(screenWidth * 14 / 15, screenHeight * 7 / 10),
-				Name = "rightDownSection"
-			};
-			rightDownSection.MouseHover += MouseOver;
-			rightDownSection.MouseLeave += MouseLeave;
-			gui.Controls.Add(rightDownSection);
-
-			// Left-down corner bound
-			var leftDownSection = new Button() {
-				Size = new Size(screenWidth / 15, screenHeight / 10),
-				Location = new Point(0, screenHeight * 7 / 10),
-				Name = "leftDownSection"
-			};
-			leftDownSection.MouseHover += MouseOver;
-			leftDownSection.MouseLeave += MouseLeave;
-			gui.Controls.Add(leftDownSection);
-
-			// Left-up corner bound
-			var leftUpSection = new Button() {
-				Size = new Size(screenWidth / 15, screenHeight / 10),
-				Location = new Point(0, 0),
-				Name = "leftUpSection"
-			};
-			leftUpSection.MouseHover += MouseOver;
-			leftUpSection.MouseLeave += MouseLeave;
-			gui.Controls.Add(leftUpSection);
 		}
 		#endregion
 
@@ -748,24 +656,6 @@ namespace Strategy.GameGUI {
 		/// <param name="e">The action argument.</param>
 		private void Pause(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
 			Game.Pause(!Game.GameStatus);
-		}
-
-		/// <summary>
-		/// Calls MouseControl.Move when mouse is over the button.
-		/// </summary>
-		/// <param name="sender">The action sender.</param>
-		/// <param name="e">The action argument.</param>
-		private void MouseOver(object sender, Miyagi.Common.Events.MouseEventArgs e) {
-			MogreControl.MouseControl.Move(((Button)sender).Name);
-		}
-
-		/// <summary>
-		/// Calls MouseControl.MoveStop when mouse is leave the button.
-		/// </summary>
-		/// <param name="sender">The action sender.</param>
-		/// <param name="e">The action argument.</param>
-		private void MouseLeave(object sender, Miyagi.Common.Events.MouseEventArgs e) {
-			MogreControl.MouseControl.MoveStop(((Button)sender).Name);
 		}
 
 		/// <summary>

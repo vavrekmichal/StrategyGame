@@ -1,41 +1,61 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Strategy.GameObjectControl;
 using Mogre;
-using Strategy.TeamControl;
 using Mogre.TutorialFramework;
-using Strategy.GameGUI;
 using MOIS;
 
 namespace Strategy.MogreControl {
+	/// <summary>
+	/// Controls mouse movement and mouse clicks.
+	/// </summary>
 	public class MouseControl {
 		protected static Mogre.TutorialFramework.CameraMan cameraMan;
-
-		protected int changeMe = 1;
 
 		private static MouseControl instance;
 
 		private static float mouseBoundY1 = BaseApplication.getRenderWindow().Height * 8 / 10;
 		private static float mouseBoundY2 = BaseApplication.getRenderWindow().Height / 15;
 
-		// Rectangular Select items
+		int upBorder;
+		int leftBorder;
+		int rightBorder;
+		int bottomBorder;
+
+		// Selection Rectangle items
 		bool isRectagularSelect;
 		Vector2 mStart, mStop;
 		List<MovableObject> mSelected = new List<MovableObject>();
 		SelectionRectangle mRect;
 		bool bSelecting;
 
-
-		public static MouseControl GetInstance(CameraMan c) {
+		/// <summary>
+		/// Initializes MouseControl and stores CameraMan reference. 
+		/// </summary>
+		/// <param name="c">The reference to the game CameraMan.</param>
+		/// <param name="sceneWidth">The width of the game window.</param>
+		/// <param name="sceneHeight">The height of the game window.</param>
+		/// <returns>Return initialized singleton instance.</returns>
+		public static MouseControl GetInstance(CameraMan c, int sceneWidth, int sceneHeight) {
 			if (instance == null) {
-				instance = new MouseControl(c);
+				instance = new MouseControl(c, sceneWidth, sceneHeight);
 			}
 			return instance;
 		}
 
-		private MouseControl(CameraMan c) {
+		/// <summary>
+		/// Creates SelectionRectangle which is used for plane selects and registers it at SceneManager.
+		/// Also sets the borders (for camera man movement borders).
+		/// </summary>
+		/// <param name="c">The reference to the game CameraMan.</param>
+		/// <param name="sceneWidth">The width of the game window.</param>
+		/// <param name="sceneHeight">The height of the game window.</param>
+		private MouseControl(CameraMan c, int sceneWidth, int sceneHeight) {
+			upBorder = sceneHeight / 6;
+			leftBorder = sceneWidth / 15;
+			rightBorder = sceneWidth - sceneWidth / 15;
+			bottomBorder = sceneHeight * 7 / 10;
+
 			cameraMan = c;
 			mRect = new SelectionRectangle("RectangularSelect");
 			Game.SceneManager.RootSceneNode.CreateChildSceneNode().AttachObject(mRect);
@@ -43,36 +63,24 @@ namespace Strategy.MogreControl {
 
 
 		/// <summary>
-		/// This special function is called when any mouse button is pressed
+		/// Controls if the mouse is in active area and is not captured. If the left button is pressed
+		/// updates the selection rectangle.
 		/// </summary>
-		/// <param Name="arg">Argument of press</param>
-		/// <param Name="id">Pressed button</param>
-		/// <returns>True</returns>
+		/// <param Name="arg">The argument of a mouse pressed.</param>
+		/// <param Name="id">The pressed button.</param>
+		/// <returns>Always returns true.</returns>
 		public bool OnMyMousePressed(MouseEvent arg, MouseButtonID id) {
 			if (arg.state.Y.abs > mouseBoundY1 || arg.state.Y.abs < mouseBoundY2 || Game.MouseCaptured) {
+				StopCameremanMove();
 				return true;
 			}
 			switch (id) {
-				case MouseButtonID.MB_Button3:
-					break;
-				case MouseButtonID.MB_Button4:
-					break;
-				case MouseButtonID.MB_Button5:
-					break;
-				case MouseButtonID.MB_Button6:
-					break;
-				case MouseButtonID.MB_Button7:
-					break;
 				case MouseButtonID.MB_Left:
-					// Rectangular Select
+					// Updates the selection rectangle.
 					mStart.x = (float)arg.state.X.abs / (float)arg.state.width;
 					mStart.y = (float)arg.state.Y.abs / (float)arg.state.height;
 					mStop = mStart;
 					bSelecting = true;
-
-					break;
-
-				case MouseButtonID.MB_Right:
 					break;
 				default:
 					break;
@@ -82,13 +90,17 @@ namespace Strategy.MogreControl {
 		}
 
 		/// <summary>
-		/// This special function is called when any mouse button is released
+		/// Controls if the mouse is in active area and is not captured. If the left button is pressed
+		/// checks if is simple click or the selection rectangle. Selets objects and reports it to GameObjectManager
+		/// (OnLeftClick). Else if the right click gets object on clicked point and reports it to GameObjectManager
+		/// (OnRightClick).
 		/// </summary>
-		/// <param Name="arg">Argument of release</param>
-		/// <param Name="id">Released button</param>
-		/// <returns>True</returns>
+		/// <param Name="arg">The argument of a mouse released.</param>
+		/// <param Name="id">The released button</param>
+		/// <returns>Always returns true.</returns>
 		public bool OnMyMouseReleased(MouseEvent arg, MouseButtonID id) {
 			if (arg.state.Y.abs > mouseBoundY1 || arg.state.Y.abs < mouseBoundY2 || Game.MouseCaptured) {
+				StopCameremanMove();
 				return true;
 			}
 			switch (id) {
@@ -118,11 +130,22 @@ namespace Strategy.MogreControl {
 			return true;
 		}
 
-
+		/// <summary>
+		/// Controls if the mouse is in active area and is not captured. 
+		/// (Right button)If the selection rectangle is active updates bounds and sets new corner.
+		/// (Middle button) Rotats with the game CameraMan.
+		/// (Mouse wheel) Zoom out/in by the argument.
+		/// </summary>
+		/// <param name="arg">The argument of a mouse mouved.</param>
+		/// <returns>Always returns true.</returns>
 		public bool OnMyMouseMoved(MouseEvent arg) {
 			if (arg.state.Y.abs > mouseBoundY1 || arg.state.Y.abs < mouseBoundY2 || Game.MouseCaptured) {
+				StopCameremanMove();
 				return true;
 			}
+
+			CheckMousePosition(arg);
+
 			if (bSelecting) {
 				if (!isRectagularSelect) {
 					mRect.Clear();
@@ -143,6 +166,62 @@ namespace Strategy.MogreControl {
 			return true;
 		}
 
+		/// <summary>
+		/// Stops movement of the CameraMan.
+		/// </summary>
+		private void StopCameremanMove() {
+			cameraMan.GoingUp = false;
+			cameraMan.GoingForward = false;
+			cameraMan.GoingBack = false;
+			cameraMan.GoingLeft = false;
+			cameraMan.GoingRight = false;
+			cameraMan.GoingDown = false;
+		}
+
+		/// <summary>
+		/// Check if the mouse is at the botders. If the mouse is in that position, so sets
+		/// appropriate CameraMan move indicators.
+		/// </summary>
+		/// <param name="arg">The arguments with mouse position.</param>
+		private void CheckMousePosition(MouseEvent arg) {
+			// Move up
+			if (arg.state.Y.abs < upBorder) {
+				cameraMan.GoingUp = true;
+				cameraMan.GoingForward = true;
+			} else {
+				cameraMan.GoingUp = false;
+				cameraMan.GoingForward = false;
+			}
+
+			// Move left
+			if (arg.state.X.abs < leftBorder) {
+				cameraMan.GoingLeft = true;
+			} else {
+				cameraMan.GoingLeft = false;
+			}
+
+			// Move right
+			if (arg.state.X.abs > rightBorder) {
+				cameraMan.GoingRight = true;
+			} else {
+				cameraMan.GoingRight = false;
+			}
+
+			// Move down
+			if (arg.state.Y.abs > bottomBorder) {
+				cameraMan.GoingDown = true;
+				cameraMan.GoingBack = true;
+			} else {
+				cameraMan.GoingDown = false;
+				cameraMan.GoingBack = false;
+			}
+		}
+
+		/// <summary>
+		/// Casts the Ray and gets hitted objects. Hitted objects returns in the List.
+		/// </summary>
+		/// <param name="arg">The arguments with mouse position.</param>
+		/// <returns>The List with hitted objects.</returns>
 		private List<MovableObject> SimpleClick(MouseEvent arg) {
 			using (Mogre.RaySceneQuery raySceneQuery = Game.SceneManager.CreateRayQuery(new Mogre.Ray())) {
 				float mouseX = (float)arg.state.X.abs / (float)arg.state.width;
@@ -156,15 +235,18 @@ namespace Strategy.MogreControl {
 				using (Mogre.RaySceneQueryResult result = raySceneQuery.Execute()) {
 					foreach (Mogre.RaySceneQueryResultEntry entry in result) {
 						list.Add(entry.movable);
-
 					}
 				}
 				return list;
-
 			}
 		}
 
-
+		/// <summary>
+		/// Casts the plane selection and selects all objects inside the SelectionRectangle. 
+		/// Hitted objects sends to the GameObjectManager (OnLeftClick).
+		/// </summary>
+		/// <param name="first">The firts corner.</param>
+		/// <param name="second">The second corner.</param>
 		private void PerformSelection(Vector2 first, Vector2 second) {
 			float left = first.x, right = second.x,
 			top = first.y, bottom = second.y;
@@ -199,131 +281,18 @@ namespace Strategy.MogreControl {
 			Game.SceneManager.DestroyQuery(volQuery);
 		}
 
-		// Static method tests
+		#region Static
 
+		/// <summary>
+		/// Swaps given floats.
+		/// </summary>
+		/// <param name="x">The firts number.</param>
+		/// <param name="y">The second number.</param>
 		static void Swap(ref float x, ref float y) {
 			float tmp = x;
 			x = y;
 			y = tmp;
 		}
-
-		public static void Move(string s) {
-			switch (s) {
-				case "topSection":
-					cameraMan.GoingUp = true;
-					cameraMan.GoingForward = true;
-					break;
-				case "backSection":
-					cameraMan.GoingDown = true;
-					cameraMan.GoingBack = true;
-					break;
-				case "leftSection":
-					cameraMan.GoingLeft = true;
-					break;
-				case "rightSection":
-					cameraMan.GoingRight = true;
-					break;
-				case "rightUpSection":
-					cameraMan.GoingUp = true;
-					cameraMan.GoingForward = true;
-					cameraMan.GoingRight = true;
-					break;
-				case "rightDownSection":
-					cameraMan.GoingDown = true;
-					cameraMan.GoingBack = true;
-					cameraMan.GoingRight = true;
-					break;
-				case "leftDownSection":
-					cameraMan.GoingDown = true;
-					cameraMan.GoingBack = true;
-					cameraMan.GoingLeft = true;
-					break;
-				case "leftUpSection":
-					cameraMan.GoingUp = true;
-					cameraMan.GoingForward = true;
-					cameraMan.GoingLeft = true;
-					break;
-				default: Console.WriteLine("Error mouse move");
-					break;
-			}
-
-		}
-
-		public static void MoveStop(string s) {
-			switch (s) {
-				case "topSection":
-					cameraMan.GoingUp = false;
-					cameraMan.GoingForward = false;
-					break;
-				case "backSection":
-					cameraMan.GoingDown = false;
-					cameraMan.GoingBack = false;
-					break;
-				case "leftSection":
-					cameraMan.GoingLeft = false;
-					break;
-				case "rightSection":
-					cameraMan.GoingRight = false;
-					break;
-				case "rightUpSection":
-					cameraMan.GoingUp = false;
-					cameraMan.GoingForward = false;
-					cameraMan.GoingRight = false;
-					break;
-				case "rightDownSection":
-					cameraMan.GoingDown = false;
-					cameraMan.GoingBack = false;
-					cameraMan.GoingRight = false;
-					break;
-				case "leftDownSection":
-					cameraMan.GoingDown = false;
-					cameraMan.GoingBack = false;
-					cameraMan.GoingLeft = false;
-					break;
-				case "leftUpSection":
-					cameraMan.GoingUp = false;
-					cameraMan.GoingForward = false;
-					cameraMan.GoingLeft = false;
-					break;
-				default: Console.WriteLine("Error mouse move");
-					break;
-			}
-		}
-	}
-
-	public class SelectionRectangle : ManualObject {
-		public SelectionRectangle(String name)
-			: base(name) {
-			RenderQueueGroup = (byte)RenderQueueGroupID.RENDER_QUEUE_OVERLAY; // when using this, ensure Depth Check is Off in the material
-			UseIdentityProjection = true;
-			UseIdentityView = true;
-			QueryFlags = 0;
-		}
-
-		/**
-		* Sets the corners of the SelectionRectangle.  Every parameter should be in the
-		* range [0, 1] representing a percentage of the screen the SelectionRectangle
-		* should take up.
-		*/
-		void SetCorners(float left, float top, float right, float bottom) {
-			left = left * 2 - 1;
-			right = right * 2 - 1;
-			top = 1 - top * 2;
-			bottom = 1 - bottom * 2;
-			Clear();
-			Begin("", RenderOperation.OperationTypes.OT_LINE_STRIP);
-			Position(left, top, -1);
-			Position(right, top, -1);
-			Position(right, bottom, -1);
-			Position(left, bottom, -1);
-			Position(left, top, -1);
-			End();
-			BoundingBox.SetInfinite();
-		}
-
-		public void SetCorners(Vector2 topLeft, Vector2 bottomRight) {
-
-			SetCorners(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
-		}
+		#endregion
 	}
 }
