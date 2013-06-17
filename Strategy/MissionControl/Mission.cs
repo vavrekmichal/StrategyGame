@@ -42,7 +42,7 @@ namespace Strategy.MissionControl {
 		public void Update(float delay) {
 			if (targetList.Count() == 0) {
 				// No target -> mission ends.
-				Game.EndGame(winText);
+				Game.EndMission(winText);
 			}
 			foreach (var target in new List<ITarget>(targetList)) {
 				if (target.Check(delay)) {

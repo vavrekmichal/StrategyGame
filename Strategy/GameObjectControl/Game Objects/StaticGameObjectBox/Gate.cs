@@ -94,7 +94,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// </summary>
 		/// <param name="imgo"></param>
 		public void ShowTravelDestinations(IMovableGameObject imgo) {
-			Game.InterstellarTravel(imgo);
+			Game.CreateInterstellarTravel(imgo);
 
 			isPorting = true;
 			portTimeDuration = portTime;

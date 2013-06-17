@@ -42,7 +42,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 		public bool Check(float delay) {
 
 			if (gameObject.Hp<0) {
-				Game.EndGame("Escorting target "+gameObject.Name +" is dead.");
+				Game.EndMission("Escorting target "+gameObject.Name +" is dead.");
 			}
 
 			if (PointIsAround(gameObject.Position, position)) {

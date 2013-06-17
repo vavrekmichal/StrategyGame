@@ -28,7 +28,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 		/// </summary>
 		/// <returns>Returns information that the port is ready.</returns>
 		public string OnMouseClick() {
-			Game.InterstellarTravel(gameObject);
+			Game.CreateInterstellarTravel(gameObject);
 			return "Portal is open.";
 		}
 

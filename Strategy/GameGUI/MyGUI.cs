@@ -343,7 +343,7 @@ namespace Strategy.GameGUI {
 			}
 
 			// Switchs to disable mode and clear mission data.
-			Game.Pause(true);
+			Game.Paused = true;
 			ClearMissionData();
 			DisableAllMissionControlButtons();
 
@@ -610,7 +610,7 @@ namespace Strategy.GameGUI {
 				item.Value.Dispose();
 				openedPanelDict.Remove(item.Key);
 			}
-			Game.DestroyGame();
+			Game.DestroyMission();
 		}
 
 		/// <summary>
@@ -655,7 +655,7 @@ namespace Strategy.GameGUI {
 		/// <param name="sender">The action sender.</param>
 		/// <param name="e">The action argument.</param>
 		private void Pause(object sender, Miyagi.Common.Events.MouseButtonEventArgs e) {
-			Game.Pause(!Game.GameStatus);
+			Game.Paused = !Game.Paused;
 		}
 
 		/// <summary>

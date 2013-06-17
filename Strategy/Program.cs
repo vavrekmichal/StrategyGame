@@ -211,7 +211,6 @@ namespace Strategy {
 
 		private void Quit() {
 			myGame.Quit();
-			throw new ShutdownException();
 		}
 
 		private void RestartCamera() {
