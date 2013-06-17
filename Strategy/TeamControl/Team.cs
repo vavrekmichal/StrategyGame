@@ -88,22 +88,11 @@ namespace Strategy.TeamControl {
 		}
 
 		/// <summary>
-		/// Creates string with the team name and all team members names.
+		/// Just returns the name of the Team.
 		/// </summary>
-		/// <returns>Returns the string with team name and members names.</returns>
+		/// <returns>Returns the name of the Team.</returns>
 		public override string ToString() {
-			StringBuilder s = new StringBuilder();
-			s.Append(name + "\n");
-			s.Append("\t ISGO" + "\n");
-			foreach (IStaticGameObject isgo in isgoObjects) {
-				s.Append("\t\t" + isgo.Name + "\n");
-			}
-
-			s.Append("\t IMGO" + "\n");
-			foreach (IMovableGameObject imgo in imgoObjects) {
-				s.Append("\t\t" + imgo.Name + "\n");
-			}
-			return s.ToString();
+			return Name;
 		}
 
 		/// <summary>

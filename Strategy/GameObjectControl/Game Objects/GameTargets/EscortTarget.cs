@@ -48,10 +48,6 @@ namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 			if (PointIsAround(gameObject.Position, position)) {
 				// Object is near to the target positon.
 				var solSyst = Game.SolarSystemManager.GetSolarSystem(gameObject);
-				if (solSyst != null) {
-					Console.WriteLine(solSyst.Name);
-					Console.WriteLine(solSystName);
-				}
 				if (solSyst != null && solSyst.Name == solSystName) {
 					// Object is at the target solar system.
 					targetInfo.Value = text2 + gameObject.Name;

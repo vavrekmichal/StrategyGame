@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Strategy.GameObjectControl.Game_Objects.GameLoad;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 using Strategy.TeamControl;
@@ -11,16 +12,17 @@ namespace Strategy.GameObjectControl.Game_Objects {
 	enum IsgoType { StaticObject, Sun }
 
 	/// <summary>
-	/// Loads and creates objects from given XML file.
-	/// Also implements IGameObjectCreator interface, so can creates objects during the game.
+	/// Loads and creates objects from given XML file (XmlLoader).
+	/// Also implements IGameObjectCreator interface, so can creates objects during the game (RunTimeCreator).
+	/// 
 	/// </summary>
 	public class ObjectCreator : IGameObjectCreator {
 
 		protected List<SolarSystem> solarSystems;
 		protected Dictionary<string, Team> teams;
 
-		protected NGLoader loader;
-
+		//protected NGLoader loader;
+		protected XmlLoader xmlLoader;
 
 		/// <summary>
 		/// Initializes ObjectCrator
@@ -33,14 +35,14 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 		/// <summary>
 		/// Initializes the mission from given file (missionFilePath).
-		/// Creates loader and loads given mission.
+		/// Creates xmlLoader and loads given mission.
 		/// Also sets the first SolarSystem as active.
 		/// </summary>
 		/// <param name="missionFilePath">Tha path to the mission.</param>
 		public void InitializeWorld(string missionFilePath) {
 
-			loader = new NGLoader(missionFilePath, teams, solarSystems);
-			loader.Load(missionFilePath);
+			xmlLoader = new XmlLoader(missionFilePath, teams, solarSystems);
+			xmlLoader.LoadMission();
 
 			solarSystems[0].ShowSolarSystem();
 		}
@@ -53,7 +55,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// <param name="solSyst">The creating object SolarSystem.</param>
 		/// <returns>Returns created IStaticGameObject.</returns>
 		public IStaticGameObject CreateIsgo(string typeName, object[] args, SolarSystem solSyst) {	// prepared...never used
-			var isgo =  loader.CreateISGO(typeName, args);
+			IStaticGameObject isgo = xmlLoader.CreateISGO(typeName, args);
 			solSyst.AddISGO(isgo);
 			Game.HitTest.RegisterISGO(isgo);
 			return isgo;
@@ -67,7 +69,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// <param name="solSyst">The creating object SolarSystem.</param>
 		/// <returns>Returns created IMovableGameObject.</returns>
 		public IMovableGameObject CreateImgo(string typeName, object[] args, SolarSystem solSyst) {	// prepared...never used
-			var imgo = loader.CreateIMGO(typeName, args);
+			IMovableGameObject imgo = xmlLoader.CreateIMGO(typeName, args);
 			solSyst.AddIMGO(imgo);
 			Game.HitTest.RegisterIMGO(imgo);
 			return imgo;
@@ -79,7 +81,7 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// <param name="name">The base of a object name.</param>
 		/// <returns>Returns unused name.</returns>
 		public string GetUnusedName(string name) {
-			return loader.GetUnusedName(name);
+			return xmlLoader.GetUnusedName(name);
 		}
 
 		/// <summary>
@@ -99,11 +101,11 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		}
 
 		/// <summary>
-		/// Returns initialized relations between teams by loader.
+		/// Returns initialized relations between teams by XmlLoader.
 		/// </summary>
 		/// <returns>Returns initialized relations between teams.</returns>
 		public Dictionary<Team, List<Team>> GetTeamsRelations() {
-			return loader.GetTeamsRelations();
+			return xmlLoader.GetTeamsRelations();
 		}
 
 	}

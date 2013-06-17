@@ -29,7 +29,6 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 			if (args.Count() == 2) {
 				setHp(Convert.ToInt32(args[1]));
 			} 
-			Console.WriteLine(position.Value);
 			base.SetProperty(PropertyEnum.Position, this.position);
 			base.SetProperty(PropertyEnum.Speed, Game.PropertyManager.GetProperty<float>("speed"));
 			base.SetProperty(PropertyEnum.Deffence, Game.PropertyManager.GetProperty<int>("basicDeff"));

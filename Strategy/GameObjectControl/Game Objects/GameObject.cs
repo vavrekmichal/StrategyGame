@@ -424,7 +424,6 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		protected static Mogre.Vector3 ParseStringToVector3(string input) {
 			string[] splitted = input.Split(';');
 			Mogre.Vector3 v;
-			Console.WriteLine(input);
 			try {
 				v = new Vector3(Single.Parse(splitted[0]), 0, Single.Parse(splitted[1]));
 			} catch (Exception) {

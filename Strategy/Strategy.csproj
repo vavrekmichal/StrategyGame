@@ -107,7 +107,8 @@
     <Compile Include="GameObjectControl\Game Objects\GameActions\StopMoveAction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GameObjectControl\Game Objects\GameLoad\GameLoader.cs" />
+    <Compile Include="GameObjectControl\Game Objects\GameLoad\RunTimeCreator.cs" />
+    <Compile Include="GameObjectControl\Game Objects\GameLoad\XmlLoader.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameObject.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameTargets\EliminateTeamTarget.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameTargets\EscortTarget.cs" />
@@ -120,9 +121,7 @@
     <Compile Include="GameObjectControl\Game Objects\IGameObjectCreator.cs" />
     <Compile Include="GameObjectControl\Game Objects\MovableGameObjectBox\IMovableGameObject.cs" />
     <Compile Include="GameObjectControl\Game Objects\MovableGameObjectBox\SpaceShip.cs" />
-    <Compile Include="GameObjectControl\Game Objects\MovableGameObjectBox\SpaceShip2.cs" />
     <Compile Include="GameObjectControl\Game Objects\MyDieArgs.cs" />
-    <Compile Include="GameObjectControl\Game Objects\NGLoader.cs" />
     <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\Gate.cs" />
     <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\IStaticGameObject.cs" />
     <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\Planet.cs" />
