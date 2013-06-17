@@ -185,13 +185,13 @@ namespace Strategy {
 					Game.IGameSoundMakerPlayer.VolumeDown();
 					break;
 				case MOIS.KeyCode.KC_N:
-					Game.IGameSoundMakerPlayer.StopActualSong();
+					Game.IGameSoundMakerPlayer.PlayNextSong();
 					break;
 				case MOIS.KeyCode.KC_M:
 					Game.IGameSoundMakerPlayer.Pause();
 					break;
 				case MOIS.KeyCode.KC_B:
-					Game.IGameSoundMakerPlayer.ActualPlaying();
+					Game.IGameSoundMakerPlayer.ShowCurrentlyPlayingSong();
 					break;
 				// End of music section
 				case MOIS.KeyCode.KC_R:

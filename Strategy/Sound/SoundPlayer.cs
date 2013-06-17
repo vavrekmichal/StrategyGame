@@ -7,29 +7,29 @@ using System.Collections.Generic;
 
 namespace Strategy {
 	/// <summary>
-	/// The SoundMaker class derives from ISoundStopEventReceiver to make infinite loop of playing
-	/// songs from given file.
+	/// Derives from ISoundStopEventReceiver to make infinite loop of playing songs from given file.
+	/// Implements IGameMusicPlayer and IEffectPlayer to play songs and effects.
 	/// </summary>
-	public class SoundPlayer :ISoundStopEventReceiver , IGameSoundMakerPlayer, IEffectPlayer {
+	public class SoundPlayer :ISoundStopEventReceiver , IGameMusicPlayer, IEffectPlayer {
 		
-		protected ISoundEngine engine; // Main thing of this music player
+		protected ISoundEngine engine; // Main object of this music player
 		protected const string songPath = "../../media/music"; // Path to folder witch songs (sounds) --mp3,ogg,wav
 		protected const string effectPath = "../../media/music/effects"; // Path to folder witch effects
+		protected const float volumeJump = 0.1f; // Difference to volume up/down
 
-		protected int actual = 0; // Number of actual song (sound)
-		protected float volumeJump = 0.1f; // Difference to volume up/down
-		protected string[] songs; // Names of each song (sound) from folder
-		protected Dictionary<string,string> effects; // Names of each song (effect) from folder
-		protected ISound sound; // Actual playing song (sound)
+		protected int current = 0; // Number of actual song
+		protected string[] songs; // Names of each song from folder
+		protected Dictionary<string,string> effects; // Names of each sound from folder
+		protected ISound sound; // Current playing song
 		protected Mogre.RenderWindow mWindow; // RenderWindow instance for making overlays
 		protected float mTimer; // Float as timer to determine of duration overlay
-		protected Random r; // Makes random number to Select song (sound)
+		protected Random r; // Makes random number to Select song 
 
 		/// <summary>
-		/// A constructor initializes music player and randomizator. After that play first song
-		/// (sound) and Set event receiver
+		/// Initializes music player and randomizer. After that plays first song
+		/// from file and sets event receiver.
 		/// </summary>
-		/// <param Name="mWindow">RenderWindow instance for making overlays</param>
+		/// <param name="mWindow">The RenderWindow instance for making overlays</param>
 		public SoundPlayer( Mogre.RenderWindow mWindow) {	
 			engine = new ISoundEngine();
 		    songs = Directory.GetFiles(songPath);
@@ -37,8 +37,10 @@ namespace Strategy {
 			this.mWindow = mWindow;
 			sound = engine.Play2D(songs[0]);
 			sound.setSoundStopEventReceiver(this);
-            NowPlaying(songs[actual]);
+            ShowCurrentPlaying(songs[current]);
+
 			engine.SoundVolume = 0; //TODO: DELETE
+
 			effects = new Dictionary<string, string>();
 			var tempEff = Directory.GetFiles(effectPath);
 			foreach (var effName in tempEff) {
@@ -47,32 +49,104 @@ namespace Strategy {
 			}
 		}
 
+		#region Public
+
 		/// <summary>
-		/// The method Select random number which is different than actual and play it.
-		/// After that call method for show overlay with playing song (sound) and Set
-		/// event receiver
+		/// Shows the name of the currently playing song.
 		/// </summary>
-		public void PlayMusic() { 
+		public void ShowCurrentlyPlayingSong() {
+			ShowCurrentPlaying(songs[current]);
+		}
+		/// <summary>
+		/// Checks if the MusicBox overlay is showed and decreases the duration of display.
+		/// If the duration indicator drops bellow zero so hides MusicBox overlay.
+		/// </summary>
+		/// <param Name="f">The delay between last two frames.</param>
+		public void Update(float f) {
+			if (mTimer > 0) {
+				mTimer -= f;
+				if (mTimer <= 0) {
+					Mogre.OverlayManager.Singleton.GetByName("MusicBox").Hide();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Stops currently playing song and ISoundStopEventReceiver plays the next one.
+		/// </summary>
+		public void PlayNextSong() {
+			engine.StopAllSounds();
+		}
+
+		/// <summary>
+		/// Plays or pauses ISoundEngine engine.
+		/// </summary>
+		public void Pause() {
+			if (sound.Paused) {
+				sound.Paused = false;
+			} else {
+				sound.Paused = true;
+			}
+		}
+
+		/// <summary>
+		/// Increases ISoundEngine engine volume.
+		/// </summary>
+		public void VolumeUp() {
+			engine.SoundVolume = ChangeVolume(volumeJump);
+		}
+
+		/// <summary>
+		/// Decreases ISoundEngine engine volume.
+		/// </summary>
+		public void VolumeDown() {
+			engine.SoundVolume = ChangeVolume(-volumeJump);
+		}
+
+		/// <summary>
+		/// Plays the next song.
+		/// </summary>
+		/// <param Name="sound">The ISound which has been stopped.</param>
+		/// <param Name="reason">The reason why the sound stop event was fired.</param>
+		/// <param Name="userData">UserData pointer sets by the user when registering the interface.</param>
+		public void OnSoundStopped(ISound sound, StopEventCause reason, object userData) {
+			PlayMusic();
+		}
+
+		/// <summary>
+		/// Plays the effect from the file with game effects by the given name.
+		/// </summary>
+		/// <param name="name">The name of the effect.</param>
+		public void PlayEffect(string name) {
+
+			// Controls if sound is in media/music/effect
+			if (effects.ContainsKey(name)) {
+				sound = engine.Play2D(effects[name]);
+			} else {
+				Console.WriteLine("Sound " + name + " missing");
+			}
+		}
+
+		#endregion
+
+		/// <summary>
+		/// Gets random number which is different than number of current playing song and play the new song.
+		/// After that shows the name of the new song and sets the SoundStopEventReceiver.
+		/// </summary>
+		private void PlayMusic() { 
 			int i;
-			while (actual == (i = r.Next(songs.Length))) { }
-			actual = i;
-			sound = engine.Play2D(songs[actual]);
-			NowPlaying(songs[actual]);
+			while (current == (i = r.Next(songs.Length))) { }
+			current = i;
+			sound = engine.Play2D(songs[current]);
+			ShowCurrentPlaying(songs[current]);
 			sound.setSoundStopEventReceiver(this);	
-		}
+		}	
 
 		/// <summary>
-		/// Call method for show overlay with playing song (sound)
+		/// Shows MusicBox overlay with currently playing song.
 		/// </summary>
-		public void ActualPlaying(){
-			NowPlaying(songs[actual]);
-		}
-
-		/// <summary>
-		/// The method shows MusicBox overlay with actual playing song
-		/// </summary>
-		/// <param Name="s">Name of playing song</param>
-		public void NowPlaying(string s) {
+		/// <param name="s">The name of the playing song.</param>
+		private void ShowCurrentPlaying(string s) {
 
 			var messageBox = Mogre.OverlayManager.Singleton.GetOverlayElement("MusicBox/MessageBox");
 			messageBox.Left =(mWindow.Width - messageBox.Width) / 2;
@@ -85,72 +159,27 @@ namespace Strategy {
 		}
 
 		/// <summary>
-		/// This method control mTimer (bigger 1 => MusicBox is showed) and if
-		/// mTimer is lower 0 => hide overlay MusicBox
-		/// </summary>
-		/// <param Name="f">Delay between last frames</param>
-		public void HideBox(float f){
-			if (mTimer > 0) {
-				mTimer -= f;
-				if (mTimer <= 0) {
-					Mogre.OverlayManager.Singleton.GetByName("MusicBox").Hide();
-				}
-			}
-		}
-
-		/// <summary>
-		/// The method stops actual song (sound) -> event OnSoundStopped() is called
-		/// </summary>
-		public void StopActualSong() {
-			engine.StopAllSounds();
-		}
-
-		/// <summary>
-		/// The method pauses ISoundEngine engine
+		/// Pauses the music player (engine).
 		/// </summary>
 		private void muteSound() {
 			engine.SetAllSoundsPaused(true);
-			//paused = true;
 		}
 
 		/// <summary>
-		/// The method play ISoundEngine engine
+		/// Continues the music player (engine).
 		/// </summary>
 		private void continueSound() {
 			engine.SetAllSoundsPaused(false);
-			//paused = false;
 		}
 
-		/// <summary>
-		/// The method plays or pauses ISoundEngine engine
-		/// </summary>
-		public void Pause() {
-			if (sound.Paused) {
-				sound.Paused = false;
-			} else {
-				sound.Paused = true;
-			}
-		}
 		
-		/// <summary>
-		/// The method increase ISoundEngine engine volume
-		/// </summary>
-		public void VolumeUp(){
-			engine.SoundVolume = ChangeVolume(volumeJump);
-		}
 
 		/// <summary>
-		/// The method decrease ISoundEngine engine volume
+		/// Changes the value of the music playr volume by a given number. Contols max and min bounds
+		/// of the volume (0-1).
 		/// </summary>
-		public void VolumeDown(){
-			engine.SoundVolume = ChangeVolume(-volumeJump);
-		}
-
-		/// <summary>
-		/// The method control music player volume.
-		/// </summary>
-		/// <param Name="f">Value to in(de)crease volume</param>
-		/// <returns>New value of volume (1 is max, 0 is min)</returns>
+		/// <param Name="f">The value is the volume change.</param>
+		/// <returns>The new value of volume from interval [0-1].</returns>
 		private float ChangeVolume(float f){
 			float help = engine.SoundVolume + f;
 			if (help<=0) {
@@ -160,30 +189,6 @@ namespace Strategy {
 				return 1;
 			}
 			return help;
-		}
-
-		/// <summary>
-		/// This method is called when the song stops.
-		/// </summary>
-		/// <param Name="sound">Sound which has been stopped</param>
-		/// <param Name="reason">The reason why the sound stop event was fired</param>
-		/// <param Name="userData">UserData pointer Set by the user when registering the interface</param>
-		public void OnSoundStopped(ISound sound, StopEventCause reason, object userData) {
-			PlayMusic();
-		}
-
-		/// <summary>
-		/// The function play 2D effect from media/music/effects
-		/// </summary>
-		/// <param Name="Name">Name of effect</param>
-		public void PlayEffect(string name) {
-
-			// Controls if sound is in media/music/effect
-			if (effects.ContainsKey(name)) {
-				sound = engine.Play2D(effects[name]);
-			} else {
-				Console.WriteLine("Sound " + name + " missing");
-			}
 		}
 	}
 }

@@ -121,7 +121,7 @@ namespace Strategy {
 			}
 		}
 
-		public static IGameSoundMakerPlayer IGameSoundMakerPlayer {
+		public static IGameMusicPlayer IGameSoundMakerPlayer {
 			get {
 				return soundPlayer;
 			}
@@ -186,7 +186,7 @@ namespace Strategy {
 		public void Update(float delay) {
 			gameGUI.Update();
 
-			soundPlayer.HideBox(delay);
+			soundPlayer.Update(delay);
 			if (!gamePaused) {
 				gameObjectMgr.Update(delay);
 				mission.Update(delay);
