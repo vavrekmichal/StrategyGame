@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Strategy.MoveMgr;
-using Strategy.FightMgr;
+﻿using System.Collections.Generic;
 using Strategy.GameMaterial;
-using Strategy.GameObjectControl;
-using Mogre;
-using Strategy.GameGUI;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 

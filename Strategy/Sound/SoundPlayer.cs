@@ -1,7 +1,6 @@
 ﻿using System;
 using IrrKlang;
 using System.IO;
-using System.Timers;
 using Strategy.Sound;
 using System.Collections.Generic;
 

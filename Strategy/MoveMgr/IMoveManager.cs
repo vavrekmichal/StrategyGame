@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Mogre;
-using Strategy.GameObjectControl;
+﻿using Mogre;
 using Strategy.GameObjectControl.GroupMgr;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
-using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects;
 
 namespace Strategy.MoveMgr {
