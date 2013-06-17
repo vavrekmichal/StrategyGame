@@ -31,6 +31,8 @@ namespace Strategy {
 		protected static SceneManager sceneMgr;
 		protected static Mission mission;
 
+		private static bool paused;
+		private static bool initialized = false;
 
 		#region Singleton, constructor and static properties and functions
 		private static Game instance;
@@ -66,7 +68,7 @@ namespace Strategy {
 			gameObjectMgr = GameObjectManager.GetInstance();
 			gameGUI = new MyGUI((int)mWindow.Width, (int)mWindow.Height, mouse, keyboard);
 			mouseControl = MouseControl.GetInstance(camera, (int)mWindow.Width, (int)mWindow.Height);
-			Paused = true;
+			paused = true;
 			soundPlayer = new SoundPlayer(mWindow);
 			mission = new Mission();
 		}
@@ -295,9 +297,10 @@ namespace Strategy {
 		public static void DestroyMission() {
 			gameGUI.ClearMissionData();
 			gameGUI.Enable = false;
-			Paused = true;
+			paused = true;
 			mission = new Mission();
 			gameObjectMgr.DestroyGame();
+			initialized = false;
 		}
 
 		/// <summary>
@@ -309,14 +312,32 @@ namespace Strategy {
 			gameGUI.SetSolarSystemName(SolarSystemManager.GetSolarSystemName(0));
 			mission.Initialize();
 			gameGUI.Enable = true;
-			Paused = false;
+			paused = false;
 			PrintToGameConsole("Game loaded");
+			initialized = true;
+		}
+
+		/// <summary>
+		/// Indicatas if the game is initialized. 
+		/// </summary>
+		public static bool Initialized {
+			get { return initialized; }
 		}
 
 		/// <summary>
 		/// Indicatas if the game is paused or not (if objects are updating or not).
 		/// </summary>
-		public static bool Paused { get; set; }
+		public static bool Paused {
+			get { return paused; }
+			set {
+				if (value) {
+					PrintToGameConsole("Game is paused.");
+				} else {
+					PrintToGameConsole("Game continues.");
+				}
+				paused = value;
+			}
+		}
 
 		/// <summary>
 		/// Indicatas if the keyboard is captured. 

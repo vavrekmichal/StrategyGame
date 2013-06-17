@@ -1,77 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
-using IrrKlang;
-using Strategy.GameObjectControl;
-using Strategy.MogreControl;
-using Strategy.Sound;
-using Strategy.TeamControl;
-using Mogre.TutorialFramework;
-using Strategy.Exceptions;
-
-
-
-
+﻿using Mogre.TutorialFramework;
 
 namespace Strategy {
 	/// <summary>
-	/// Main class derives BaseApplication for easier work with MOGRE
+	/// Main class derives BaseApplication for easier work with MOGRE and initialzes the Mogre framework.
 	/// </summary>
 	/// 
 	class MyMogre : Mogre.TutorialFramework.BaseApplication {
 
 		protected MOIS.InputManager mInputMgr; // Use for create control (mouse, keyborard) instance
-		protected float mTimer; // Float as timer to determine of duration overlay 
-		protected bool exit = false; // Controlor if player is alive
 
 		protected Mogre.ColourValue fadeColour = new Mogre.ColourValue(0.05f, 0.05f, 0.05f); // Color of fog and shadow
 		protected static readonly Mogre.Vector3 cameraStart = new Mogre.Vector3(0, 1000, 1000);
 
 		protected CameraMan cameraMan;
-
 		protected Game myGame;
 
-
+		/// <summary>
+		/// Starts the aplication.
+		/// </summary>
 		public static void Main() {
 			new MyMogre().Go();
-
 		}
+
 		#region Create world and camera
 
 		/// <summary>
-		/// This overriden class initializes whole world (objects, mission, sounds, camera)
+		/// Initializes the MOGRE world.
+		/// (shadows, lights, sky and loads fonts)
 		/// </summary>
 		protected override void CreateScene() {
-
-			//myGame.Inicialization();
-
 			LoadFont();
-
-			SetShadow(); //Set shadow (color, technique)
-
-			SetGround();	//Set a floor
-
-			SetSun(); //Set lights 
-
-			SetSky(); //Set sky texture
-
-
+			SetShadow(); 
+			SetLight(); 
+			SetFog(); 
 		}
 
 		/// <summary>
-		/// This method initializes camere and cameraMan
+		/// Initializes camera and cameraMan. Sets the near clip and far clip distance.
 		/// </summary>
 		protected override void CreateCamera() {
 			mCamera = mSceneMgr.CreateCamera("myCam");
 			mCamera.Position = cameraStart;
 			mCamera.LookAt(Mogre.Vector3.ZERO);
-			mCamera.NearClipDistance = 5;
-			mCamera.FarClipDistance = 30000;
+			mCamera.NearClipDistance = 1;
+			mCamera.FarClipDistance = 60000;
 			mCameraMan = new Mogre.TutorialFramework.CameraMan(mCamera);
 			cameraMan = mCameraMan;
 		}
 
 		/// <summary>
-		/// The CreateViewports Set camera and gives viewport to camera
+		/// Sets camera and sets the viewport to camera.
 		/// </summary>
 		protected override void CreateViewports() {
 			Mogre.Viewport viewport = mWindow.AddViewport(mCamera);
@@ -82,53 +60,35 @@ namespace Strategy {
 		#endregion
 
 		/// <summary>
-		/// Here is inicialized SceneManager from Root
+		/// Inicializes SceneManager.
 		/// </summary>
 		protected override void ChooseSceneManager() {
 			mSceneMgr = mRoot.CreateSceneManager(Mogre.SceneType.ST_EXTERIOR_CLOSE);
 		}
 
 		/// <summary>
-		/// This method add new FrameListener (Ninja moving)
-		/// </summary>
-		protected override void CreateFrameListeners() {
-			base.CreateFrameListeners();
-
-		}
-
-		/// <summary>
-		/// Antibug
+		/// Loads fonts to Mogre system.
 		/// </summary>
 		private void LoadFont() {
 			Mogre.FontManager.Singleton.Load("BlueHighway", Mogre.ResourceGroupManager.DEFAULT_RESOURCE_GROUP_NAME);
 		}
-		#region Animation
 
+		#region Update
 
 		/// <summary>
-		/// This method is called in each time in game loop method Update scene and call walk method of
-		/// movable objects
+		/// Updates the Game and the Mogre system.
 		/// </summary>
-		/// <param Name="evt">delay between last frames</param>
+		/// <param Name="evt">The delay between last two frames.</param>
 		protected override void UpdateScene(Mogre.FrameEvent evt) {
-
 			float f = evt.timeSinceLastFrame;
 
 			myGame.Update(f);
-
 			base.UpdateScene(evt);
-			if (mTimer > 0) { //if overlay showed
-				mTimer -= f;
-				if (mTimer <= 0) {
-					Mogre.OverlayManager.Singleton.GetByName("Author").Hide(); //timer is timeout -> hide overlay
-					exit = false;
-				}
-			}
 		}
 		#endregion
 
 		/// <summary>
-		/// Here is initialization of eventHadlers (keyboard and mouse)
+		/// Initializes the MOIS event listeners (mouse and keyboard).
 		/// </summary>
 		protected override void InitializeInput() {
 			base.InitializeInput();
@@ -145,39 +105,19 @@ namespace Strategy {
 			mMouse.MouseMoved += new MOIS.MouseListener.MouseMovedHandler(myGame.GetMouseControl().OnMyMouseMoved);
 		}
 
-		#region Keyboard control
-
-
 		/// <summary>
-		/// This function is called when any key is pressed
+		/// Processes input from keyboard (MusicPlayer control, Game pause or exit).
 		/// </summary>
-		/// <param Name="evt">Wwhich button was pressed</param>
-		/// <returns>kKey was pressed -> true</returns>
+		/// <param Name="evt">The information which button was pressed.</param>
+		/// <returns>Returns always true.</returns>
 		protected override bool OnKeyPressed(MOIS.KeyEvent evt) {
 			base.OnKeyPressed(evt);
 			switch (evt.key) {
 				case MOIS.KeyCode.KC_RETURN:
-					if (exit) {
-						try {
-							Shutdown();
-						} catch (System.Exception) {
-							Quit();
-						}
-					} else {
-						var messageBox = Mogre.OverlayManager.Singleton.GetOverlayElement("Author/MessageBox");
-						messageBox.Left = (mWindow.Width - messageBox.Width) / 2;
-						messageBox.Top = (mWindow.Height - messageBox.Height);
-
-						var messageBody = Mogre.OverlayManager.Singleton.GetOverlayElement("Author/MessageBox/Body");
-						messageBody.Caption = "Made by Wolen\nPress ENTER to exit";
-						messageBody.Top = messageBox.Height / 2;
-
-						Mogre.OverlayManager.Singleton.GetByName("Author").Show();
-						mTimer = 1;
-						exit = true;
+					if (Game.Initialized) {
+						Game.Paused = !Game.Paused;
 					}
 					break;
-				// Music section
 				case MOIS.KeyCode.KC_NUMPAD9:
 					Game.IGameSoundMakerPlayer.VolumeUp();
 					break;
@@ -193,26 +133,20 @@ namespace Strategy {
 				case MOIS.KeyCode.KC_B:
 					Game.IGameSoundMakerPlayer.ShowCurrentlyPlayingSong();
 					break;
-				// End of music section
 				case MOIS.KeyCode.KC_R:
 					RestartCamera();
 					break;
-
 				case MOIS.KeyCode.KC_ESCAPE:
-					Quit();
+					// Close the program.
+					myGame.Quit();
 					break;
 			}
-
 			return true;
 		}
 
-
-		#endregion
-
-		private void Quit() {
-			myGame.Quit();
-		}
-
+		/// <summary>
+		/// Restarts the camera position. Sets start position and sets look at ZERO vector.
+		/// </summary>
 		private void RestartCamera() {
 			mCamera.Position = cameraStart;
 			mCamera.LookAt(Mogre.Vector3.ZERO);
@@ -220,9 +154,10 @@ namespace Strategy {
 
 
 		/// <summary>
-		/// This override function Set basic setting to RenderSystem (Setup RenderSystem by code)
+		/// Sets rendering window properties and rendering system.
+		/// (OpenGL, 1280x720, Window mode)
 		/// </summary>
-		/// <returns>True</returns>
+		/// <returns>Always returns true.</returns>
 		protected override bool Configure() {
 			Mogre.RenderSystem rs = mRoot.GetRenderSystemByName("OpenGL Rendering Subsystem");
 			rs.SetConfigOption("Full Screen", "No");
@@ -236,7 +171,7 @@ namespace Strategy {
 
 
 		/// <summary>
-		/// The setShadow() is function to Set color and type of shadows
+		/// Sets color and type of shadows.
 		/// </summary>
 		private void SetShadow() {
 			mSceneMgr.AmbientLight = new Mogre.ColourValue(.1f, .1f, .1f);
@@ -244,25 +179,9 @@ namespace Strategy {
 		}
 
 		/// <summary>
-		/// The function to Set the ground
+		/// Sets lights to imitate sunlight.
 		/// </summary>
-		private void SetGround() {
-			//Mogre.Plane plane = new Mogre.Plane(Mogre.Vector3.UNIT_Y, 0);
-			////Inicialized ground
-			////my nota - poslendi  dve jsou hustota 4-5 je 2D vektor na velikost
-			//Mogre.MeshManager.Singleton.CreatePlane("ground", Mogre.ResourceGroupManager.DEFAULT_RESOURCE_GROUP_NAME, plane, 
-			//	150000, 150000, 200, 200, true, 1, 500, 500, Mogre.Vector3.NEGATIVE_UNIT_Z);
-			//Mogre.Entity groundEnt = mSceneMgr.CreateEntity("GroundEntity", "ground");
-			////register under root
-			//mSceneMgr.RootSceneNode.CreateChildSceneNode().AttachObject(groundEnt);
-			//groundEnt.CastShadows = false;
-		}
-
-
-		/// <summary>
-		/// The function Set lights one is directional and second is spot (to make shadows like sunshine)
-		/// </summary>
-		private void SetSun() {
+		private void SetLight() {
 
 			Mogre.Light directionalLight = mSceneMgr.CreateLight("directionalLight");
 			directionalLight.Type = Mogre.Light.LightTypes.LT_DIRECTIONAL;
@@ -282,14 +201,12 @@ namespace Strategy {
 			spotLight.SpecularColour = Mogre.ColourValue.Blue;
 			spotLight.Direction = new Mogre.Vector3(-1, -1, 0);
 			spotLight.Position = new Mogre.Vector3(-50, 5000, -3000);
-
 		}
 
 		/// <summary>
-		/// The function Set sky and fog
+		/// Sets fog
 		/// </summary>
-		private void SetSky() {
-			//mSceneMgr.SetSkyDome(true, "Examples/SpaceSkyBox", 10, 20);
+		private void SetFog() {
 			mSceneMgr.SetFog(Mogre.FogMode.FOG_EXP2, fadeColour, 0.0003f);
 		}
 	}

@@ -15,8 +15,6 @@ namespace Mogre.TutorialFramework {
         protected bool mShutDown = false;
         protected int mTextureMode = 0;
         protected int mRenderMode = 0;
-        // protected DebugOverlay mDebugOverlay;
-
 		private static RenderWindow mRenderWindow;
 
         public void Go() {
@@ -69,10 +67,6 @@ namespace Mogre.TutorialFramework {
             CreateScene();
 
             CreateFrameListeners();
-
-
-       
-
             return true;
         }
 
@@ -216,7 +210,6 @@ namespace Mogre.TutorialFramework {
         protected virtual void DestroyScene() {
         }
 
-		//added my fuction
 		public static RenderWindow getRenderWindow(){
 			return mRenderWindow;
 		}
