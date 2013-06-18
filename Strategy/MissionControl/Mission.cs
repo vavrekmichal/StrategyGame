@@ -72,5 +72,13 @@ namespace Strategy.MissionControl {
 			}
 			return list;
 		}
+
+		/// <summary>
+		/// Returns all mission targets.
+		/// </summary>
+		/// <returns>Returns all mission targets.</returns>
+		public List<ITarget> GetTargets() {
+			return new List<ITarget>(targetList);
+		}
 	}
 }

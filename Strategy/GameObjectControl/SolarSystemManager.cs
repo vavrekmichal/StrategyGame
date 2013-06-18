@@ -135,6 +135,14 @@ namespace Strategy.GameObjectControl {
 		}
 
 		/// <summary>
+		/// Returns all currently created SolarSystems.
+		/// </summary>
+		/// <returns>Returns the dictionary with all SolarSystem.</returns>
+		public Dictionary<int, SolarSystem> GetSolarSystems() {
+			return new Dictionary<int,SolarSystem>(solarSystemDict);
+		}
+
+		/// <summary>
 		/// Creates a travler between SolarSystems.
 		/// </summary>
 		/// <param name="solarSystemNumberTo">The number of the SolarSystem into which travels.</param>

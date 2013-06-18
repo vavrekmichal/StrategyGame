@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<mission name="s">
+  <usedObjects>
+    <ibullets>
+      <gameObject name="Missile2" path="Bullet/Missile2.cs" fullName="Strategy.GameObjectControl.Game_Objects.Bullet.Missile2" />
+    </ibullets>
+    <isgos>
+      <gameObject name="Planet" path="StaticGameObjectBox/Planet.cs" fullName="Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox.Planet" />
+      <gameObject name="Sun" path="StaticGameObjectBox/Sun.cs" fullName="Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox.Sun" />
+    </isgos>
+    <imgos>
+      <gameObject name="SpaceShip" path="MovableGameObjectBox/SpaceShip.cs" fullName="Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox.SpaceShip" />
+      <gameObject name="SpaceShip2" path="MovableGameObjectBox/SpaceShip2.cs" fullName="Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox.SpaceShip2" />
+    </imgos>
+    <gameActions>
+      <gameObject name="DoNothingJustPrintText" path="GameActions/DoNothingJustPrintText.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.DoNothingJustPrintText" />
+      <gameObject name="ProduceAction" path="GameActions/ProduceAction.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.ProduceAction" />
+      <gameObject name="PortalAction" path="GameActions/PortalAction.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.PortalAction" />
+      <gameObject name="CreateSpaceShipAction" path="GameActions/CreateSpaceShipAction.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.CreateSpaceShipAction" />
+    </gameActions>
+    <gameTargets>
+      <gameObject name="SurviveTimeTarget" path="GameTargets/SurviveTimeTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.SurviveTimeTarget" />
+      <gameObject name="KillTarget" path="GameTargets/KillTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.KillTarget" />
+      <gameObject name="OccupyTarget" path="GameTargets/OccupyTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.OccupyTarget" />
+      <gameObject name="EliminateTeamTarget" path="GameTargets/EliminateTeamTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.EliminateTeamTarget" />
+      <gameObject name="EscortTarget" path="GameTargets/EscortTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.EscortTarget" />
+    </gameTargets>
+  </usedObjects>
+  <solarSystems>
+    <solarSystem name="This is my" position="3000;0;3000" gate="true">
+      <isgo name="Sun" type="Sun" />
+      <isgo name="Mercury" type="Planet" team="Fun" />
+      <isgo name="Venus" type="Planet" team="Fun" />
+      <isgo name="Earth" type="Planet" team="Fun" />
+      <isgo name="Mars" type="Planet" team="Player" />
+      <isgo name="Jupiter" type="Planet" team="Player" />
+      <isgo name="Saturn" type="Planet" team="Player" />
+      <isgo name="Uranus" type="Planet" team="Player" />
+      <isgo name="Neptune" type="Planet" team="Fun" />
+      <isgo name="Mothership" type="SpaceShip" team="Player" />
+      <isgo name="Ship" type="SpaceShip" team="Player" />
+      <isgo name="Ship1" type="SpaceShip" team="Player" />
+      <isgo name="Ship2" type="SpaceShip" team="Player" />
+      <isgo name="Ship3" type="SpaceShip2" team="Player" />
+      <isgo name="Ship4" type="SpaceShip2" team="Player" />
+      <isgo name="ShipD" type="SpaceShip" team="Devastator" />
+      <isgo name="ShipF" type="SpaceShip" team="Funny" />
+      <isgo name="ShipF1" type="SpaceShip" team="Fun" />
+      <isgo name="ShipF2" type="SpaceShip" team="Fun" />
+    </solarSystem>
+    <solarSystem name="FunnySystem" position="300;500;3000">
+      <isgo name="FunnyThings" type="Sun" />
+      <isgo name="FunnyThings1" type="Planet" team="Fun" />
+      <isgo name="FunnyThings2" type="Planet" team="Fun" />
+      <isgo name="FunnyThings3" type="Planet" team="Fun" />
+    </solarSystem>
+    <solarSystem name="s1" position="30;0;100">
+      <isgo name="s10" type="Sun" />
+    </solarSystem>
+    <solarSystem name="s2" position="300;0;3000">
+      <isgo name="s11" type="Sun" />
+    </solarSystem>
+    <solarSystem name="s3" position="3600;0;3000">
+      <isgo name="s12" type="Sun" />
+    </solarSystem>
+    <solarSystem name="s4" position="3000;0;0">
+      <isgo name="s13" type="Sun" />
+    </solarSystem>
+    <solarSystem name="Dalsi z mnoha" position="20;0;3000">
+      <isgo name="s14" type="Sun" />
+    </solarSystem>
+    <solarSystem name="s6" position="3000;0;600">
+      <isgo name="s15" type="Sun" />
+    </solarSystem>
+    <solarSystem name="s7" position="3000;5;1000" gate="true">
+      <isgo name="s16" type="Sun" />
+    </solarSystem>
+    <solarSystem name="s8" position="3000;0;250">
+      <isgo name="s17" type="Sun" />
+    </solarSystem>
+  </solarSystems>
+  <materials>
+    <material name="Wolenium" team="Player">
+      <argument>629</argument>
+    </material>
+    <material name="Wolenium2" team="Player">
+      <argument>600</argument>
+    </material>
+    <material name="Wolenium3" team="Player">
+      <argument>29</argument>
+    </material>
+    <material name="Wolenium2" team="Fun">
+      <argument>600</argument>
+    </material>
+    <material name="Stone" team="Fun">
+      <argument>29</argument>
+    </material>
+    <material name="Wolenium" team="Fun">
+      <argument>29</argument>
+    </material>
+    <material name="Wolen" team="Fun">
+      <argument>29</argument>
+    </material>
+  </materials>
+  <missionTargets>
+    <target>SurviveTimeTarget</target>
+    <target>KillTarget</target>
+    <target>EliminateTeamTarget</target>
+  </missionTargets>
+</mission>

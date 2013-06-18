@@ -231,13 +231,7 @@ namespace Strategy {
 		/// </summary>
 		/// <param name="name">The name of the creating save.</param>
 		public static void Save(string name) {
-			Console.WriteLine(name);
-			new XDocument(
-				new XElement("root",
-					new XElement("someNode2", "someValue")
-				)
-			)
-			.Save("../../Media/Mission/Saves/foo.xml");
+			gameObjectMgr.GameSerializer.Save(name);
 		}
 
 		/// <summary>
@@ -308,7 +302,7 @@ namespace Strategy {
 		/// </summary>
 		/// <param name="missionFileName">The name of a file with the mission.</param>
 		private static void Inicialization(string missionFileName) {
-			gameObjectMgr.Inicialization(missionFileName);
+			gameObjectMgr.Initialize(missionFileName);
 			gameGUI.SetSolarSystemName(SolarSystemManager.GetSolarSystemName(0));
 			mission.Initialize();
 			gameGUI.Enable = true;

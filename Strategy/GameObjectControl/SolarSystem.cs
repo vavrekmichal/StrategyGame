@@ -17,6 +17,7 @@ namespace Strategy.GameObjectControl {
 		protected Dictionary<string, IBullet> bulletDict;
 
 		protected bool active = false;
+		protected bool hasGate = false;
 		// Absolute position at Space used for calculate distance between SolarSystems.
 		protected Mogre.Vector3 position;
 		protected string name;
@@ -86,11 +87,16 @@ namespace Strategy.GameObjectControl {
 
 		/// <summary>
 		/// Inserts the IStaticGameObject to the SolarSystem and sets SolarSystem visibility
-		/// to the object.
+		/// to the object. Also checks if the inserting item is Gate, if the object is so sets
+		/// the indicator;
 		/// </summary>
 		/// <param name="isgo">The inserting object.</param>
 		public void AddISGO(IStaticGameObject isgo) {
 			if (!isgoObjectDict.ContainsKey(isgo.Name)) {
+				var gate = isgo as Gate;
+				if (gate != null) {
+					hasGate = true;
+				}
 				isgoObjectDict.Add(isgo.Name, isgo);
 				isgo.ChangeVisible(active);
 			}
@@ -289,6 +295,13 @@ namespace Strategy.GameObjectControl {
 		/// </summary>
 		public Mogre.Vector3 Position {
 			get { return position; }
+		}
+
+		/// <summary>
+		/// Indicates if the SolarSystem has a Gate.
+		/// </summary>
+		public bool HasGate {
+			get { return hasGate; }
 		}
 
 		#endregion

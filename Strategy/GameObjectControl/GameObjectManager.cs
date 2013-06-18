@@ -8,6 +8,7 @@ using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.MoveMgr;
 using Strategy.TeamControl;
 using Strategy.FightMgr;
+using Strategy.GameObjectControl.Game_Objects.GameSave;
 
 namespace Strategy.GameObjectControl {
 	/// <summary>
@@ -23,6 +24,7 @@ namespace Strategy.GameObjectControl {
 		protected GroupManager groupMgr;
 		protected SolarSystemManager solarSystemMgr;
 		protected HitTest hitTest;
+		protected GameSerializer gameSerializer;
 
 		const string groupSelectedSound = "power1.wav";
 
@@ -52,6 +54,7 @@ namespace Strategy.GameObjectControl {
 			propertyMgr = new PropertyManager();
 			hitTest = new HitTest();
 			solarSystemMgr = new SolarSystemManager();
+			gameSerializer = new GameSerializer();
 		}
 		#endregion
 
@@ -151,6 +154,18 @@ namespace Strategy.GameObjectControl {
 			}
 		}
 
+		/// <summary>
+		/// Returns instance of SolarSystemManager (if it is not initialize throws a exception).
+		/// </summary>
+		public GameSerializer GameSerializer {
+			get {
+				if (gameSerializer == null) {
+					throw new NullReferenceException("GameSerializer is not initialized.");
+				}
+				return gameSerializer;
+			}
+		}
+
 		#region private
 
 		/// <summary>
@@ -244,7 +259,7 @@ namespace Strategy.GameObjectControl {
 		/// (and sets DieHandler) and registers them to control elements.
 		/// </summary>
 		/// <param name="missionName">The name of the choosen mission.</param>
-		public void Inicialization(string missionName) {
+		public void Initialize(string missionName) {
 			// Creates game objects
 			objectCreator.InitializeWorld(missionName);
 
@@ -262,8 +277,10 @@ namespace Strategy.GameObjectControl {
 			// Initializes HitTest
 			hitTest.CreateHitTestMap(objectCreator.GetInicializedSolarSystems());
 			// Registers team
-			teamMgr.Inicialization(objectCreator.GetTeams(), objectCreator.GetTeamsRelations());
+			teamMgr.Initialize(objectCreator.GetTeams(), objectCreator.GetTeamsRelations());
 			groupMgr.UntargetGroup();
+
+			gameSerializer.Initialize(missionName);
 		}
 
 		/// <summary>

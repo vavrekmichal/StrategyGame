@@ -26,7 +26,7 @@ namespace Strategy.TeamControl {
 		/// </summary>
 		/// <param name="settingTeam">The dictionary with teams (name of the team,team).</param>
 		/// <param name="friendlyDict">The relations between teams.</param>
-        public void Inicialization(Dictionary<string,Team> settingTeam, Dictionary<Team, List<Team>> friendlyDict) {
+        public void Initialize(Dictionary<string,Team> settingTeam, Dictionary<Team, List<Team>> friendlyDict) {
 			friendlyTeamDict = friendlyDict;
             teamDict = settingTeam;
             playerTeam = teamDict[Game.PlayerName];
@@ -103,6 +103,14 @@ namespace Strategy.TeamControl {
 				}
 			}
 			return null;
+		}
+
+		/// <summary>
+		/// Returns the dictionary with all Teams.
+		/// </summary>
+		/// <returns>Returns the dictionary with all Teams.</returns>
+		public Dictionary<string, Team> GetTeams() {
+			return new Dictionary<string, Team>(teamDict);
 		}
     }
 }
