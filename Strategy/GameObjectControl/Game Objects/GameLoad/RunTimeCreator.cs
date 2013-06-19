@@ -7,6 +7,7 @@ using Roslyn.Compilers;
 using Roslyn.Compilers.CSharp;
 using Strategy.Exceptions;
 using Strategy.GameObjectControl.Game_Objects.GameActions;
+using Strategy.GameObjectControl.Game_Objects.GameSave;
 using Strategy.GameObjectControl.Game_Objects.GameTargets;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
@@ -50,6 +51,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
 			metadataRef.Add(new MetadataFileReference(typeof(ActionAnswer).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(PropertyEnum).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(XmlLoadException).Assembly.Location));
+			metadataRef.Add(new MetadataFileReference(typeof(ConstructorFieldAttribute).Assembly.Location));
 
 			comilationOption = new CompilationOptions(OutputKind.DynamicallyLinkedLibrary);
 

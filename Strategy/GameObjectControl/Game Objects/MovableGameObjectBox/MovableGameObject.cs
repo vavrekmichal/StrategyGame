@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Mogre;
 using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.GameObjectControl.Game_Objects.Bullet;
+using Strategy.GameObjectControl.Game_Objects.GameSave;
 
 namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 	/// <summary>
@@ -58,7 +59,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// is in acitve SolarSystem (SceneNode is setted). Controls distance from destination,
 		/// collisions, and solves the collisions.
 		/// </summary>
-		/// <param Name="delay">The delay between last two frames (seconds).</param>
+		/// <param name="delay">The delay between last two frames (seconds).</param>
 		public virtual void Move(float delay) {
 			Update(delay);
 			if (!moving) {
@@ -140,7 +141,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// is in hidden SolarSystem (SceneNode is null). Controls distance from destination,
 		/// and collisions.
 		/// </summary>
-		/// <param Name="delay">The delay between last two frames (seconds).</param>
+		/// <param name="delay">The delay between last two frames (seconds).</param>
 		public virtual void NonActiveMove(float delay) {
 			Update(delay);
 			if (!moving) {
@@ -173,7 +174,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// <summary>
 		/// Adds new position to the flyList (on first place).
 		/// </summary>
-		/// <param Name="pointToGo">The new position to go.</param>
+		/// <param name="pointToGo">The new position to go.</param>
 		public virtual void AddNextLocation(Vector3 pointToGo) {
 			flyList.AddFirst(pointToGo);
 		}
@@ -181,7 +182,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// <summary>
 		/// Adds all positions from given LinkedList to flyList (before older).
 		/// </summary>
-		/// <param Name="positionList">The LinkedList with positions togo.</param>
+		/// <param name="positionList">The LinkedList with positions togo.</param>
 		public virtual void AddNextLocation(LinkedList<Vector3> positionList) {
 			PositionToMoveChanged();
 			var list = new LinkedList<Vector3>(positionList);
@@ -195,7 +196,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// Creates new LinkedList and sets given position to go.
 		/// Old positions to go are canceled.
 		/// </summary>
-		/// <param Name="pointToGo">The position to go.</param>
+		/// <param name="pointToGo">The position to go.</param>
 		public virtual void SetNextLocation(Vector3 pointToGo) {
 			PositionToMoveChanged();
 			flyList = new LinkedList<Vector3>();
@@ -206,7 +207,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// <summary>
 		/// Sets given LinkedList as flyList. Old positions to go are canceled.
 		/// </summary>
-		/// <param Name="positionList">The LinkedList with positions to go.</param>
+		/// <param name="positionList">The LinkedList with positions to go.</param>
 		public virtual void SetNextLocation(LinkedList<Vector3> positionList) {
 			PositionToMoveChanged();
 			flyList = positionList;
@@ -216,7 +217,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// <summary>
 		/// Sets MovableGameObject to given position.
 		/// </summary>
-		/// <param Name="pointToGo">The new position.</param>
+		/// <param name="pointToGo">The new position.</param>
 		public virtual void JumpToLocation(Vector3 pointToGo) {
 			if (sceneNode == null) {
 				// Invisible mode
@@ -231,7 +232,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// Sets given LinkedList as flyList. Old positions to go are canceled.
 		/// Sets the "go to target" indicator.
 		/// </summary>
-		/// <param Name="positionList">The LinkedList with positions to go.</param>
+		/// <param name="positionList">The LinkedList with positions to go.</param>
 		public void GoToTarget(LinkedList<Vector3> positionList) {
 			PositionToMoveChanged();
 			flyList = positionList;
@@ -243,7 +244,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// Creates new LinkedList and sets given position to go. Old positions to go are canceled.
 		/// Sets the "go to target" indicator.
 		/// </summary>
-		/// <param Name="placeToGo">The position to go.</param>
+		/// <param name="placeToGo">The position to go.</param>
 		public void GoToTarget(Vector3 placeToGo) {
 			PositionToMoveChanged();
 			flyList = new LinkedList<Vector3>();
@@ -256,7 +257,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// Creates new LinkedList and sets given position to go. Old positions to go are canceled.
 		/// Sets the "go to target" indicator and the "follow" indicator.
 		/// </summary>
-		/// <param Name="objectToGo">The following object.</param>
+		/// <param name="objectToGo">The following object.</param>
 		public void GoToTarget(IGameObject objectToGo) {
 			PositionToMoveChanged();
 			flyList = new LinkedList<Vector3>();
@@ -315,8 +316,6 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 				isMovingToTarget = false;
 			}
 		}
-
-		
 
 		/// <summary>
 		/// Check if exist next position to go.
@@ -522,8 +521,9 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		}
 
 		/// <summary>
-		/// Returns a current state of health.
+		/// Returns a current state of health. 
 		/// </summary>
+		[ConstructorField(Int32.MaxValue,AttributeType.Property)]
 		public override int Hp {
 			get { return ((Property<int>)propertyDict[PropertyEnum.Hp]).Value; }
 		}

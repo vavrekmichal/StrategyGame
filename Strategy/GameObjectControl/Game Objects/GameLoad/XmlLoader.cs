@@ -333,7 +333,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
 			string[] splitted = input.Split(';');
 			Mogre.Vector3 v;
 			try {
-				v = new Vector3(Int32.Parse(splitted[0]), Int32.Parse(splitted[1]), Int32.Parse(splitted[2]));
+				v = new Vector3(Single.Parse(splitted[0]), Single.Parse(splitted[1]), Single.Parse(splitted[2]));
 			} catch (Exception) {
 				throw new FormatException("Cannot parse string " + input + " to Mogre.Vector3. Given string was in a bad format (right format: \"x;y;z\")");
 			}

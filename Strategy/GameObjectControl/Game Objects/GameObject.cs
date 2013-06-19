@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Mogre;
 using Strategy.Exceptions;
 using Strategy.GameObjectControl.Game_Objects.GameActions;
+using Strategy.GameObjectControl.Game_Objects.GameSave;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.TeamControl;
@@ -35,7 +36,10 @@ namespace Strategy.GameObjectControl.Game_Objects {
 
 		protected Mogre.Entity entity;
 		protected Mogre.SceneNode sceneNode;
+
 		protected string mesh;
+
+		[ConstructorField(0,AttributeType.PropertyVector3)]
 		protected Property<Mogre.Vector3> position = new Property<Vector3>(Vector3.ZERO);
 
 		protected bool attack;

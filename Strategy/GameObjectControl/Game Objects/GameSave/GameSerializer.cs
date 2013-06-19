@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -13,9 +15,10 @@ using Strategy.MissionControl;
 using Strategy.TeamControl;
 
 namespace Strategy.GameObjectControl.Game_Objects.GameSave {
-	public class GameSerializer {
-		XElement usedObjectNode;
 
+	public class GameSerializer {
+
+		XElement usedObjectNode;
 
 		public GameSerializer() { }
 
@@ -165,6 +168,10 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 				new XAttribute("name", sun.Name),
 				new XAttribute("type", "Sun"));
 			rootElement.Add(element);
+			foreach (var item in GetSortedArgsToSerialization(sun)) {
+				SerializeArgument(element,item.Value);
+			}
+			
 		}
 
 		/// <summary>
@@ -179,6 +186,9 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 				new XAttribute("team", gameObject.Team)
 				);
 			rootElement.Add(element);
+			foreach (var item in GetSortedArgsToSerialization(gameObject)) {
+				SerializeArgument(element, item.Value);
+			}
 			Console.WriteLine("Saving " + gameObject.Name);
 		}
 
@@ -191,8 +201,69 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 			return vector.x.ToString() + ';' + vector.y + ';' + vector.z;
 		}
 
+		private string CreateSerializableVector2(Mogre.Vector3 vector) {
+			return vector.x.ToString() + ';' + vector.z;
+		}
+
 		#endregion
 
+		private SortedDictionary<int, string> GetSortedArgsToSerialization(IGameObject gameObject){
+			var sortedArgs = new SortedDictionary<int, string>();
+			var fieldInfo = gameObject.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public
+		| BindingFlags.Instance | BindingFlags.Static );
 
+			InsertConstrucotrFiledToSortedDict(fieldInfo, sortedArgs, gameObject);
+
+			var propInfo = gameObject.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Public
+		| BindingFlags.Instance | BindingFlags.Static);
+
+			InsertConstrucotrFiledToSortedDict(propInfo, sortedArgs, gameObject);
+
+			return sortedArgs;
+		}
+
+		private void InsertConstrucotrFiledToSortedDict(PropertyInfo[] propInfoList, SortedDictionary<int, string> dict, object instance) {
+			foreach (var item in propInfoList) {
+				var constuctAtt = item.GetCustomAttribute(typeof(ConstructorFieldAttribute), true);
+				if (constuctAtt != null) {
+					var castedAtt = (ConstructorFieldAttribute)constuctAtt;
+					switch (castedAtt.Type) {
+						case AttributeType.Vector3:
+							dict.Add(castedAtt.Order, CreateSerializableVector2((Mogre.Vector3)item.GetValue(instance)));
+							break;
+						case AttributeType.PropertyVector3:
+							var castedProp = item.GetValue(instance) as RuntimeProperty.Property<Mogre.Vector3>;
+							dict.Add(castedAtt.Order, CreateSerializableVector2(castedProp.Value));
+							break;
+						case AttributeType.Basic:
+						case AttributeType.Property:
+							dict.Add(castedAtt.Order, item.GetValue(instance).ToString());
+							break;
+					}
+				}
+			}
+		}
+
+		private void InsertConstrucotrFiledToSortedDict(FieldInfo[] propInfoList, SortedDictionary<int, string> dict, object instance) {
+			foreach (var item in propInfoList) {
+				var constuctAtt = item.GetCustomAttribute(typeof(ConstructorFieldAttribute), true);
+				if (constuctAtt != null) {
+					var castedAtt = (ConstructorFieldAttribute)constuctAtt;
+					switch (castedAtt.Type) {
+						case AttributeType.Vector3:
+							dict.Add(castedAtt.Order, CreateSerializableVector2((Mogre.Vector3)item.GetValue(instance)));
+							break;
+						case AttributeType.PropertyVector3:
+							var castedProp = item.GetValue(instance) as RuntimeProperty.Property<Mogre.Vector3>;
+							dict.Add(castedAtt.Order, CreateSerializableVector2(castedProp.Value));
+							break;
+						case AttributeType.Basic:
+						case AttributeType.Property:
+							dict.Add(castedAtt.Order, item.GetValue(instance).ToString());
+							break;
+					}
+				}
+			}
+		}
 	}
 }

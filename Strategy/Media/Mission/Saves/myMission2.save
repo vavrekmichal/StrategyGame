@@ -43,9 +43,9 @@
         <argument>sun.mesh</argument>
       </isgo>
       <isgo type="Planet" name="Mercury" team="Player">
+        <argument>500;0</argument>
         <argument>mercury.mesh</argument>
         <argument>200;200</argument>
-        <argument>500;0</argument>
         <gameAction name="DoNothingJustPrintText">
           <argument>Todle napis</argument>
         </gameAction>
@@ -59,52 +59,52 @@
         </gameAction>
       </isgo>
       <isgo type="Planet" name="Venus" team="Fun">
+        <argument>1500;0</argument>
         <argument>venus.mesh</argument>
         <argument>0;0</argument>
-        <argument>1500;0</argument>
         <gameAction name="ProduceAction">
           <argument>Wolenium</argument>
         </gameAction>
       </isgo>
       <isgo type="Planet" name="Earth" team="Fun">
+        <argument>2500;0</argument>
         <argument>earth.mesh</argument>
         <argument>0;0</argument>
-        <argument>2500;0</argument>
         <gameAction name="ProduceAction">
           <argument>Wolen</argument>
         </gameAction>
       </isgo>
 
       <isgo type="Planet" name="Mars" team="Player">
+        <argument>3500;0</argument>
         <argument>mars.mesh</argument>
         <argument>0;0</argument>
-        <argument>3500;0</argument>
         <gameAction name="ProduceAction">
           <argument>Wolenium</argument>
         </gameAction>
       </isgo>
       <isgo type="Planet" name="Jupiter" team="Player">
+        <argument>6000;0</argument>
         <argument>jupiter.mesh</argument>
         <argument>0;0</argument>
-        <argument>6000;0</argument>
         <gameAction name="ProduceAction">
           <argument>Wolenium3</argument>
         </gameAction>
       </isgo>
       <isgo type="Planet" name="Saturn" team="Player">
+        <argument>8000;0</argument>
         <argument>saturn.mesh</argument>
         <argument>0;0</argument>
-        <argument>8000;0</argument>
       </isgo>
       <isgo type="Planet" name="Uranus" team="Player" >
+        <argument>10000;0</argument>
         <argument>uranus.mesh</argument>
         <argument>0;0</argument>
-        <argument>10000;0</argument>
       </isgo>
       <isgo type="Planet" name="Neptune" team="Fun">
+        <argument>12000;0</argument>
         <argument>neptune.mesh</argument>
         <argument>0;0</argument>
-        <argument>12000;0</argument>
       </isgo>
 
       <imgo type="SpaceShip" name="Mothership" team="Player">

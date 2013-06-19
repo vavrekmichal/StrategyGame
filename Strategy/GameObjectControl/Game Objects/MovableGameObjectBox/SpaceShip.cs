@@ -3,6 +3,7 @@ using System.Linq;
 using Mogre;
 using Strategy.TeamControl;
 using Strategy.GameObjectControl.RuntimeProperty;
+using Strategy.GameObjectControl.Game_Objects.GameSave;
 
 namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 	/// <summary>

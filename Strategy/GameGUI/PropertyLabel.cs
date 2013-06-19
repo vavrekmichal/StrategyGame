@@ -23,10 +23,10 @@ namespace Strategy.GameGUI {
 		}
 
 		/// <summary>
-		/// Overredes function because needs to reload the property value.
+		/// Overrides function because needs to reload the property value.
 		/// </summary>
 		protected override void UpdateCore() {
-			Text = text + property.Value.ToString();
+			Text = text + property.ToString();
 			base.UpdateCore();
 		}
 

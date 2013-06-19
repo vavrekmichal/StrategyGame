@@ -4,6 +4,7 @@ using Strategy.TeamControl;
 using Strategy.GameObjectControl.RuntimeProperty;
 using Strategy.GameObjectControl.Game_Objects.GameActions;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
+using Strategy.GameObjectControl.Game_Objects.GameSave;
 
 namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 	/// <summary>
@@ -14,7 +15,10 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		protected string name;
 		protected Mogre.Entity entity;
 		protected Mogre.SceneNode sceneNode;
+
+		[ConstructorField(0,AttributeType.Basic)]
 		protected string mesh;
+
 		protected List<IGameAction> listOfAction = new List<IGameAction>();
 
 		protected static Team sunTeam = new Team("Sun");

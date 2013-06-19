@@ -4,6 +4,7 @@ using System.Linq;
 using Mogre;
 using Strategy.TeamControl;
 using Strategy.GameObjectControl.RuntimeProperty;
+using Strategy.GameObjectControl.Game_Objects.GameSave;
 
 
 namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
@@ -18,9 +19,13 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		// Detect if object is moving or stay
 		protected bool mFlying = false;
 
-		Vector3 nextPostion;
-
+		private Vector3 nextPostion;
 		protected LinkedList<Mogre.Vector3> circularPositions;
+
+		[ConstructorField(1, AttributeType.Basic)]
+		private new string mesh;
+		[ConstructorField(2, AttributeType.Vector3)]
+		private Vector3 centerPosition;
 
 		private static Random random = new Random();
 		private static int circularNum = 30;
@@ -35,7 +40,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		/// <param name="args">The array with arguments (3 required + 1 optional)</param>
 		public Planet(string name, Team myTeam, object[] args) {
 			this.name = name;
-			this.mesh = (string)args[0];
+			this.mesh = (string)args[1];
 			this.team = myTeam;
 
 			this.position = new Property<Vector3>(Vector3.ZERO);
@@ -50,8 +55,8 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 				setHp(Convert.ToInt32(args[3]));
 			}
 
-			var planetPosition = ParseStringToVector3((string)args[2]);
-			var centerPosition = ParseStringToVector3((string)args[1]);
+			var planetPosition = ParseStringToVector3((string)args[0]);
+			centerPosition = ParseStringToVector3((string)args[2]);
 
 			// Prepare list of positions
 			circularPositions = CalculatePositions(circularNum, CalculateDistance(planetPosition, centerPosition), centerPosition);

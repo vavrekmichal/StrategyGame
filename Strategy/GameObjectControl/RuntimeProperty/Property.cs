@@ -26,6 +26,14 @@ namespace Strategy.GameObjectControl.RuntimeProperty {
 		}
 
 		/// <summary>
+		/// Returns string with Property value.
+		/// </summary>
+		/// <returns>Returns string with Property value.</returns>
+		public override string ToString() {
+			return value.ToString();
+		}
+
+		/// <summary>
 		/// Creates copy of this Property.
 		/// </summary>
 		/// <returns></returns>

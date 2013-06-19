@@ -110,6 +110,7 @@
     <Compile Include="GameObjectControl\Game Objects\GameLoad\RunTimeCreator.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameLoad\XmlLoader.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameObject.cs" />
+    <Compile Include="GameObjectControl\Game Objects\GameSave\ConstructorFieldAttribute.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameSave\GameSerializer.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameTargets\EliminateTeamTarget.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameTargets\EscortTarget.cs" />
