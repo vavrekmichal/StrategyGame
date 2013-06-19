@@ -1,11 +1,12 @@
-﻿using Strategy.GameObjectControl.RuntimeProperty;
+﻿using Strategy.GameObjectControl.Game_Objects.GameSave;
+using Strategy.GameObjectControl.RuntimeProperty;
 
 namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 	/// <summary>
 	/// Controls if given target is alive (should be death).
 	/// </summary>
 	class KillTarget : ITarget {
-
+		[ConstructorField(0, AttributeType.Basic)]
 		string targetName;
 		Property<string> targetInfo;
 		IGameObject gameObject;

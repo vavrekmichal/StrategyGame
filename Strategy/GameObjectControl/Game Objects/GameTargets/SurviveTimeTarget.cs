@@ -1,4 +1,5 @@
 ﻿using System;
+using Strategy.GameObjectControl.Game_Objects.GameSave;
 using Strategy.GameObjectControl.RuntimeProperty;
 
 namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
@@ -8,6 +9,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 	class SurviveTimeTarget : ITarget{
 
 		TimeSpan time;
+
 		Property<string> targetInfo;
 
 		const string text1 = "You must survive ";
@@ -53,6 +55,11 @@ namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 		/// <returns>Returns always true.</returns>
 		public bool Initialize() {
 			return true;
+		}
+
+		[ConstructorField(0, AttributeType.Basic)]
+		private int RemainingTime {
+			get { return (int)time.TotalSeconds; }
 		}
 	}
 }

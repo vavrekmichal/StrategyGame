@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Strategy.GameObjectControl.Game_Objects.GameSave;
 using Strategy.GameObjectControl.RuntimeProperty;
 
 namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
@@ -9,11 +10,13 @@ namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 	class EscortTarget : ITarget {
 
 		Property<string> targetInfo;
-
+		[ConstructorField(0, AttributeType.Basic)]
 		string targetName;
+		[ConstructorField(1, AttributeType.Basic)]
 		string solSystName; // Doesn't check if exist, so unknown solar system means imposible target
 
 		IGameObject gameObject;
+		[ConstructorField(2, AttributeType.Vector3)]
 		Mogre.Vector3 position;
 
 		const int squaredMaxDistance = 5000;
@@ -73,9 +76,11 @@ namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 			gameObject = Game.GetIGameObject(targetName);
 
 			if (position == Mogre.Vector3.NEGATIVE_UNIT_Y) {
+				System.Console.WriteLine("Jedeeeee");
 				return false;
 			}
 			if (gameObject == null) {
+				System.Console.WriteLine("Jedeeeee2");
 				return false;
 			}
 
@@ -89,7 +94,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 		/// <param name="text">The converting string.</param>
 		/// <returns>Returns the converted string. If the  failed so returns NEGATIVE_UNIT_Y.</returns>
 		private Mogre.Vector3 ConvertStringToVector3(string text) {
-			var parsed = text.Split(',');
+			var parsed = text.Split(';');
 			if (parsed.Count() != 2) {
 				return Mogre.Vector3.NEGATIVE_UNIT_Y;
 			}

@@ -1,5 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<mission name="s">
+<mission propertyFilePath="../../Media/Mission/Scripts/Properties.csx">
+  <teams>
+    <friendlyTeams>
+      <team name="Player" />
+      <team name="Devastator" />
+    </friendlyTeams>
+    <friendlyTeams>
+      <team name="Fun" />
+      <team name="Funny" />
+    </friendlyTeams>
+  </teams>
   <usedObjects>
     <ibullets>
       <gameObject name="Missile2" path="Bullet/Missile2.cs" fullName="Strategy.GameObjectControl.Game_Objects.Bullet.Missile2" />
@@ -32,102 +42,102 @@
         <argument>sun.mesh</argument>
       </isgo>
       <isgo name="Mercury" type="Planet" team="Fun">
-        <argument>-140,2017;295,1132</argument>
+        <argument>-112,9416;325,3894</argument>
         <argument>mercury.mesh</argument>
         <argument>200;200</argument>
       </isgo>
       <isgo name="Venus" type="Planet" team="Fun">
-        <argument>1485,974;-133,3953</argument>
+        <argument>1481,681;-174,2999</argument>
         <argument>venus.mesh</argument>
         <argument>0;0</argument>
       </isgo>
       <isgo name="Earth" type="Planet" team="Fun">
-        <argument>2485,976;-133,3953</argument>
+        <argument>2481,683;-174,2999</argument>
         <argument>earth.mesh</argument>
         <argument>0;0</argument>
       </isgo>
       <isgo name="Mars" type="Planet" team="Player">
-        <argument>3485,976;-133,3953</argument>
+        <argument>3481,683;-174,2999</argument>
         <argument>mars.mesh</argument>
         <argument>0;0</argument>
       </isgo>
       <isgo name="Jupiter" type="Planet" team="Player">
-        <argument>5985,996;-133,3953</argument>
+        <argument>5981,677;-174,2999</argument>
         <argument>jupiter.mesh</argument>
         <argument>0;0</argument>
       </isgo>
       <isgo name="Saturn" type="Planet" team="Player">
-        <argument>7985,996;-133,3953</argument>
+        <argument>7981,677;-174,2999</argument>
         <argument>saturn.mesh</argument>
         <argument>0;0</argument>
       </isgo>
       <isgo name="Uranus" type="Planet" team="Player">
-        <argument>9985,953;-133,3953</argument>
+        <argument>9981,677;-174,2999</argument>
         <argument>uranus.mesh</argument>
         <argument>0;0</argument>
       </isgo>
       <isgo name="Neptune" type="Planet" team="Fun">
-        <argument>11985,95;-133,3953</argument>
+        <argument>11981,68;-174,2999</argument>
         <argument>neptune.mesh</argument>
         <argument>0;0</argument>
       </isgo>
-      <isgo name="Mothership" type="SpaceShip" team="Player">
+      <imgo name="Mothership" type="SpaceShip" team="Player">
         <argument>300;300</argument>
         <argument>25</argument>
-      </isgo>
-      <isgo name="Ship" type="SpaceShip" team="Player">
+      </imgo>
+      <imgo name="Ship" type="SpaceShip" team="Player">
         <argument>350;350</argument>
         <argument>100</argument>
-      </isgo>
-      <isgo name="Ship1" type="SpaceShip" team="Player">
+      </imgo>
+      <imgo name="Ship1" type="SpaceShip" team="Player">
         <argument>400;400</argument>
         <argument>100</argument>
-      </isgo>
-      <isgo name="Ship2" type="SpaceShip" team="Player">
+      </imgo>
+      <imgo name="Ship2" type="SpaceShip" team="Player">
         <argument>450;450</argument>
         <argument>100</argument>
-      </isgo>
-      <isgo name="Ship3" type="SpaceShip2" team="Player">
+      </imgo>
+      <imgo name="Ship3" type="SpaceShip2" team="Player">
         <argument>450;500</argument>
         <argument>100</argument>
-      </isgo>
-      <isgo name="Ship4" type="SpaceShip2" team="Player">
+      </imgo>
+      <imgo name="Ship4" type="SpaceShip2" team="Player">
         <argument>450;550</argument>
         <argument>100</argument>
-      </isgo>
-      <isgo name="ShipD" type="SpaceShip" team="Devastator">
+      </imgo>
+      <imgo name="ShipD" type="SpaceShip" team="Devastator">
         <argument>600;600</argument>
         <argument>100</argument>
-      </isgo>
-      <isgo name="ShipF" type="SpaceShip" team="Funny">
+      </imgo>
+      <imgo name="ShipF" type="SpaceShip" team="Funny">
         <argument>750;600</argument>
         <argument>100</argument>
-      </isgo>
-      <isgo name="ShipF1" type="SpaceShip" team="Fun">
+      </imgo>
+      <imgo name="ShipF1" type="SpaceShip" team="Fun">
         <argument>750;500</argument>
         <argument>100</argument>
-      </isgo>
-      <isgo name="ShipF2" type="SpaceShip" team="Fun">
+      </imgo>
+      <imgo name="ShipF2" type="SpaceShip" team="Fun">
         <argument>750;450</argument>
         <argument>100</argument>
-      </isgo>
+      </imgo>
     </solarSystem>
     <solarSystem name="FunnySystem" position="300;500;3000">
       <isgo name="FunnyThings" type="Sun">
         <argument>jupiter.mesh</argument>
       </isgo>
       <isgo name="FunnyThings1" type="Planet" team="Fun">
-        <argument>985,9815;-133,3953</argument>
+        <argument>981,6805;-174,2999</argument>
         <argument>mercury.mesh</argument>
         <argument>0;0</argument>
       </isgo>
       <isgo name="FunnyThings2" type="Planet" team="Fun">
-        <argument>1985,974;-133,3953</argument>
+        <argument>1981,681;-174,2999</argument>
         <argument>venus.mesh</argument>
         <argument>0;0</argument>
       </isgo>
       <isgo name="FunnyThings3" type="Planet" team="Fun">
-        <argument>3985,976;-133,3953</argument>
+        <argument>3981,683;-174,2999</argument>
         <argument>earth.mesh</argument>
         <argument>0;0</argument>
       </isgo>
@@ -173,32 +183,46 @@
       </isgo>
     </solarSystem>
   </solarSystems>
+  <missionTargets>
+    <target name="SurviveTimeTarget">
+      <argument>491</argument>
+    </target>
+    <target name="KillTarget">
+      <argument>ShipF</argument>
+    </target>
+    <target name="OccupyTarget">
+      <argument>Venus</argument>
+    </target>
+    <target name="EliminateTeamTarget">
+      <argument>Funny</argument>
+    </target>
+    <target name="EscortTarget">
+      <argument>Mothership</argument>
+      <argument>s4</argument>
+      <argument>-1000;-200</argument>
+    </target>
+  </missionTargets>
   <materials>
     <material name="Wolenium" team="Player">
-      <argument>607</argument>
+      <argument>608</argument>
     </material>
     <material name="Wolenium2" team="Player">
       <argument>600</argument>
     </material>
     <material name="Wolenium3" team="Player">
-      <argument>7</argument>
+      <argument>8</argument>
     </material>
     <material name="Wolenium2" team="Fun">
       <argument>600</argument>
     </material>
     <material name="Stone" team="Fun">
-      <argument>7</argument>
+      <argument>8</argument>
     </material>
     <material name="Wolenium" team="Fun">
-      <argument>7</argument>
+      <argument>8</argument>
     </material>
     <material name="Wolen" team="Fun">
-      <argument>7</argument>
+      <argument>8</argument>
     </material>
   </materials>
-  <missionTargets>
-    <target name="SurviveTimeTarget" />
-    <target name="KillTarget" />
-    <target name="EliminateTeamTarget" />
-  </missionTargets>
 </mission>

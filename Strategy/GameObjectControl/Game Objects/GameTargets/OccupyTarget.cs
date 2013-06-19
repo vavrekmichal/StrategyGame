@@ -1,4 +1,5 @@
-﻿using Strategy.GameObjectControl.RuntimeProperty;
+﻿using Strategy.GameObjectControl.Game_Objects.GameSave;
+using Strategy.GameObjectControl.RuntimeProperty;
 
 namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 	/// <summary>
@@ -6,6 +7,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 	/// </summary>
 	class OccupyTarget : ITarget {
 
+		[ConstructorField(0, AttributeType.Basic)]
 		string targetName;
 		Property<string> targetInfo;
 		IGameObject gameObject;

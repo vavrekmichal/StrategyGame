@@ -19,6 +19,8 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 	public class GameSerializer {
 
 		XElement usedObjectNode;
+		XElement teams;
+		string scriptFile;
 
 		public GameSerializer() { }
 
@@ -26,23 +28,26 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 
 			XDocument xml = XDocument.Load(missionFilePath);
 
+			scriptFile = xml.Descendants("mission").First().Attribute("propertyFilePath").Value;
 			usedObjectNode = xml.Descendants("usedObjects").First();
+			teams = xml.Descendants("teams").First();
 		}
 
 		public void Save(string saveName) {
 			var document = new XDocument();
-			var rootElement = new XElement("mission", new XAttribute("name", saveName.Substring(0, saveName.Length - 5)));
+			var rootElement = new XElement("mission", new XAttribute("propertyFilePath", scriptFile));
 			document.Add(rootElement);
+			rootElement.Add(teams);
 			rootElement.Add(usedObjectNode);
 
 			// Saves all SolarSystems
 			SerializeSolarSystems(rootElement, Game.SolarSystemManager.GetSolarSystems());
 
-			// Saves teams materials
-			SerializeMaterials(rootElement, Game.TeamManager.GetTeams());
-
 			// Saves mission
 			SerializeMission(rootElement, Game.Mission);
+
+			// Saves teams materials
+			SerializeMaterials(rootElement, Game.TeamManager.GetTeams());			
 
 			document.Save(Game.SavesGamePath + '/' + saveName);
 		}
@@ -70,6 +75,11 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 		private void SerializeITarget(XElement rootElement, ITarget target) {
 			var element = new XElement("target", new XAttribute("name", target.GetType().ToString().Split('.').Last()));
 			rootElement.Add(element);
+
+			foreach (var item in GetSortedArgsToSerialization(target)) {
+				SerializeArgument(element, item.Value);
+			}
+
 		}
 
 		/// <summary>
@@ -106,7 +116,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 		/// <param name="rootElement">The parent element.</param>
 		/// <param name="argument">The serializing value.</param>
 		private void SerializeArgument(XElement rootElement, string argument) {
-			var element = new XElement("argument",argument);
+			var element = new XElement("argument", argument);
 			rootElement.Add(element);
 		}
 
@@ -147,13 +157,13 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 			// Saves IStaticGameObjects
 			foreach (var isgo in solarSystem.GetISGOs()) {
 				if (!(isgo.Value is Gate)) {
-					SerializeIGameObject(element, isgo.Value);
+					SerializeIGameObject(element, isgo.Value, "isgo");
 				}
 			}
 
 			// Saves IMovableGameObjects
 			foreach (var imgo in solarSystem.GetIMGOs()) {
-				SerializeIGameObject(element, imgo.Value);
+				SerializeIGameObject(element, imgo.Value, "imgo");
 			}
 			rootElement.Add(element);
 		}
@@ -169,9 +179,9 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 				new XAttribute("type", "Sun"));
 			rootElement.Add(element);
 			foreach (var item in GetSortedArgsToSerialization(sun)) {
-				SerializeArgument(element,item.Value);
+				SerializeArgument(element, item.Value);
 			}
-			
+
 		}
 
 		/// <summary>
@@ -179,8 +189,8 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 		/// </summary>
 		/// <param name="rootElement">The parent element.</param>
 		/// <param name="gameObject">The serializing IGameObject.</param>
-		private void SerializeIGameObject(XElement rootElement, IGameObject gameObject) {
-			var element = new XElement("isgo",
+		private void SerializeIGameObject(XElement rootElement, IGameObject gameObject, string elementName) {
+			var element = new XElement(elementName,
 				new XAttribute("name", gameObject.Name),
 				new XAttribute("type", gameObject.GetType().ToString().Split('.').Last()),
 				new XAttribute("team", gameObject.Team)
@@ -207,13 +217,14 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 
 		#endregion
 
-		private SortedDictionary<int, string> GetSortedArgsToSerialization(IGameObject gameObject){
+		private SortedDictionary<int, string> GetSortedArgsToSerialization(object gameObject) {
 			var sortedArgs = new SortedDictionary<int, string>();
+			// Checks Fiealds
 			var fieldInfo = gameObject.GetType().GetFields(BindingFlags.NonPublic | BindingFlags.Public
-		| BindingFlags.Instance | BindingFlags.Static );
-
+		| BindingFlags.Instance | BindingFlags.Static);
 			InsertConstrucotrFiledToSortedDict(fieldInfo, sortedArgs, gameObject);
 
+			// Checks Properties
 			var propInfo = gameObject.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Public
 		| BindingFlags.Instance | BindingFlags.Static);
 

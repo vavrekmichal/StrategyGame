@@ -204,20 +204,20 @@
   </solarSystems>
   <missionTargets>
     <target name="SurviveTimeTarget">
-      <argument>50</argument>
+      <argument>500</argument>
     </target>
     <target name="KillTarget">
       <argument>ShipF</argument>
     </target>
     <target name="OccupyTarget">
-      <argument>Venusius</argument>
+      <argument>Venus</argument>
     </target>
     <target name="EliminateTeamTarget">
       <argument>Funny</argument>
     </target>
     <target name="EscortTarget">
       <argument>Mothership</argument>
-      <argument>s8</argument>
+      <argument>s4</argument>
       <argument>-1000;-200</argument>
     </target>
   </missionTargets>

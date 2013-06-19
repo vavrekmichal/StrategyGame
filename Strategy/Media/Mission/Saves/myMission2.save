@@ -127,19 +127,19 @@
         <argument>jupiter.mesh</argument>
       </isgo>
       <isgo type="Planet" name="FunnyThings1" team="Fun">
+        <argument>1000;0</argument>
         <argument>mercury.mesh</argument>
         <argument>0;0</argument>
-        <argument>1000;0</argument>
       </isgo>
       <isgo type="Planet" name="FunnyThings2" team="Fun">
+       <argument>2000;0</argument> 
         <argument>venus.mesh</argument>
         <argument>0;0</argument>
-        <argument>2000;0</argument>
       </isgo>
       <isgo type="Planet" name="FunnyThings3" team="Fun">
+        <argument>4000;0</argument>
         <argument>earth.mesh</argument>
         <argument>0;0</argument>
-        <argument>4000;0</argument>
       </isgo>
     </solarSystem>
     <solarSystem name="s1" position="30;0;100">
