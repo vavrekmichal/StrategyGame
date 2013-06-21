@@ -40,6 +40,11 @@ namespace Strategy.FightMgr {
 
 		#region public
 
+		/// <summary>
+		/// Initializes the FightManager from two given lists (occupation and fights).
+		/// </summary>
+		/// <param name="loadedOcc">The list with occupations.</param>
+		/// <param name="loadedFights">The list with fights.</param>
 		public void Initialize(List<Tuple<List<string>, string, int>> loadedOcc, List<Tuple<List<string>, List<string>>> loadedFights) {
 			if (loadedOcc != null) {
 				foreach (var occupation in loadedOcc) {

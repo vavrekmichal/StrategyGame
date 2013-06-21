@@ -64,6 +64,10 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 
 		#region Serializators
 
+		/// <summary>
+		/// Serializes the fights, occupations and controled movements.
+		/// </summary>
+		/// <param name="rootElement">The parent element.</param>
 		private void SerializeGameState(XElement rootElement) {
 			var element = new XElement("startState");
 			rootElement.Add(element);
@@ -77,7 +81,11 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 			SerializeAllFights(element, Game.IFightManager.GetFights());
 		}
 
-
+		/// <summary>
+		/// Serializes all given fights.
+		/// </summary>
+		/// <param name="rootElement">The parent element.</param>
+		/// <param name="fights">The serializing fights.</param>
 		private void SerializeAllFights(XElement rootElement, List<Tuple<List<IGameObject>, List<IGameObject>>> fights) {
 			var element = new XElement("fights");
 			rootElement.Add(element);
@@ -86,6 +94,11 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 			}
 		}
 
+		/// <summary>
+		/// Serializes the given fight (attackers, deffenders).
+		/// </summary>
+		/// <param name="rootElement">The parent element.</param>
+		/// <param name="fight">The serializing fight.</param>
 		private void SerializeFight(XElement rootElement, Tuple<List<IGameObject>, List<IGameObject>> fight) {
 			var element = new XElement("fight");
 			rootElement.Add(element);

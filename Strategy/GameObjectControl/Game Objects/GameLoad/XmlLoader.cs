@@ -257,7 +257,10 @@ namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
 			runtimeCtor.CompileUsedObjects(synatexTreeList);
 		}
 
-
+		/// <summary>
+		/// Loads saved movemenents, fights and occupations from XML file.
+		/// </summary>
+		/// <param name="stateNode">The node with fights, occupations and movements.</param>
 		private void LoadGameState(XmlNode stateNode) {
 			if (stateNode == null) {
 				return;
