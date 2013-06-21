@@ -232,7 +232,7 @@
   </materials>
   <startState>
     <controledMovement>
-      <movingObject movingObject="MotherShip" target="Venus"/>
+      <movingObject movingObject="Mothership" target="Venus"/>
     </controledMovement>
   </startState>
   

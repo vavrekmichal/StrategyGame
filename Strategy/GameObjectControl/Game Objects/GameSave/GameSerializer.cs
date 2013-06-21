@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
+using Strategy.FightMgr;
 using Strategy.GameObjectControl.Game_Objects.GameActions;
 using Strategy.GameObjectControl.Game_Objects.GameTargets;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
+using Strategy.GameObjectControl.GroupMgr;
 using Strategy.MissionControl;
 using Strategy.MoveMgr;
 using Strategy.TeamControl;
@@ -65,8 +67,29 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 		private void SerializeGameState(XElement rootElement) {
 			var element = new XElement("startState");
 			rootElement.Add(element);
-			// Save moving objects.
+			// Saves moving objects.
 			SerializeAllMovements(element, Game.IMoveManager);
+
+			// Saves occupations
+			SerializeAllOccupations(element, Game.IFightManager.GetOccupations());
+		}
+
+
+		private void SerializeAllOccupations(XElement rootElement, List<Tuple<List<IMovableGameObject>, IGameObject, int>> occupations) {
+			var element = new XElement("occupations");
+			rootElement.Add(element);
+			foreach (var item in occupations) {
+				SerializeOccupation(element, item);
+			}
+		}
+
+		private void SerializeOccupation(XElement rootElement, Tuple<List<IMovableGameObject>, IGameObject, int> occupation) {
+			var element = new XElement("occupation", new XAttribute("target", occupation.Item2.Name), new XAttribute("time", occupation.Item3));
+			rootElement.Add(element);
+			foreach (IMovableGameObject item in occupation.Item1) {
+				var subElement = new XElement("member", new XAttribute("name", item.Name));
+				element.Add(subElement);
+			}
 		}
 
 		/// <summary>

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Strategy.GameObjectControl.Game_Objects.GameLoad;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
@@ -114,6 +115,14 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		/// <returns>Returns dictionary with moving targets.</returns>
 		public Dictionary<string, string> GetLoadedMovements() {
 			return xmlLoader.GetLoadedMovements();
+		}
+
+		/// <summary>
+		/// Returns loaded occupations.
+		/// </summary>
+		/// <returns>Returns list with occupations.</returns>
+		public List<Tuple<List<string>, string, int>> GetLoadedOccupations() {
+			return xmlLoader.GetLoadedOccupations();
 		}
 	}
 }

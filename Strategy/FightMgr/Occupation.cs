@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Strategy.GameObjectControl.Game_Objects;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.GroupMgr;
@@ -9,7 +10,7 @@ namespace Strategy.FightMgr {
 	/// Represents occupying of the target by the attackers. Class controls distance between target and attackers
 	/// and occupying time.
 	/// </summary>
-	class Occupation {
+	public class Occupation {
 		private string name;
 		private GroupMovables attackers;
 		private IGameObject target;
@@ -45,7 +46,7 @@ namespace Strategy.FightMgr {
 
 		}
 
-		#region public 
+		#region Public 
 
 		/// <summary>
 		/// Checks if occupation contains given object.
@@ -111,6 +112,34 @@ namespace Strategy.FightMgr {
 			}
 		}
 
+		/// <summary>
+		/// Creates the List with all attackers.
+		/// </summary>
+		/// <returns>Returns the List with all attackers.</returns>
+		public List<IMovableGameObject> GetAttackers() {
+			var list = new List<IMovableGameObject>();
+			foreach (IMovableGameObject item in attackers) {
+				list.Add(item);
+			}
+			return list;
+		}
+
+		/// <summary>
+		/// Returns the target of the occupation.
+		/// </summary>
+		/// <returns>Returns the target of the occupation.</returns>
+		public IGameObject GetTarget() {
+			return target;
+		}
+
+		/// <summary>
+		/// Returns remaining time.
+		/// </summary>
+		/// <returns>Returns remaining time.</returns>
+		public TimeSpan GetTime() {
+			return remainingTime.Value;
+		}
+		
 		#endregion
 		
 		/// <summary>

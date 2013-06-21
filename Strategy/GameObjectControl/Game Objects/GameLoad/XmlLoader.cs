@@ -24,7 +24,10 @@ namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
 		private Dictionary<string, Team> teamDict;
 		private List<SolarSystem> solarSystemList;
 		private Dictionary<Team, List<Team>> teamRealationDict;
+
 		private Dictionary<string, string> loadedMovements;
+		private List<Tuple<List<string>, string, int>> loadedOccupations;
+
 		private XmlElement root;
 		XmlNode missionNode; // Selected mission
 
@@ -39,6 +42,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
 		public XmlLoader(string missionFilePath, Dictionary<string, Team> teams,
 			List<SolarSystem> solarSystems) {
 			loadedMovements = new Dictionary<string, string>();
+			loadedOccupations = new List<Tuple<List<string>, string, int>>();
 			teamRealationDict = new Dictionary<Team, List<Team>>();
 
 			this.teamDict = teams;
@@ -202,6 +206,14 @@ namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
 		}
 
 		/// <summary>
+		/// Returns loaded occupations.
+		/// </summary>
+		/// <returns>Returns list with occupations.</returns>
+		public List<Tuple<List<string>, string, int>> GetLoadedOccupations() {
+			return loadedOccupations; 
+		}
+
+		/// <summary>
 		/// Returns unused name with given base.
 		/// </summary>
 		/// <param name="name">The base of the name.</param>
@@ -235,6 +247,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
 			runtimeCtor.CompileUsedObjects(synatexTreeList);
 		}
 
+
 		private void LoadGameState(XmlNode stateNode) {
 			if (stateNode == null) {
 				return;
@@ -245,8 +258,17 @@ namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
 				var target = item.Attributes["target"].InnerText;
 				loadedMovements.Add(moving, target);
 			}
+			// Loads occupations
 
-
+			foreach (XmlNode item in stateNode.SelectNodes("//occupation")) {
+				var target = item.Attributes["target"].InnerText;
+				var time = Int32.Parse(item.Attributes["time"].InnerText);
+				var members = new List<string>();
+				foreach (XmlNode item1 in item.SelectNodes("//member")) {
+					members.Add(item1.Attributes["name"].InnerText);
+				}
+				loadedOccupations.Add(new Tuple<List<string>,string,int>(members,target,time));
+			}
 		}
 
 

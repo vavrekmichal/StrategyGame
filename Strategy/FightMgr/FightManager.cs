@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Strategy.GameObjectControl;
 using Strategy.GameObjectControl.Game_Objects;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
@@ -12,11 +13,11 @@ namespace Strategy.FightMgr {
 	class FightManager : IFightManager {
 
 		// Dictionary with information about group action (Occupy/Attack)
-		private Dictionary<GroupMovables, ActionAnswer> offensiveActionDict; 
+		private Dictionary<GroupMovables, ActionAnswer> offensiveActionDict;
 
 		// Occupations
 		private List<Occupation> occupationList;
- 
+
 		// Fights
 		private List<Fight> fightList;
 
@@ -24,7 +25,7 @@ namespace Strategy.FightMgr {
 		private Dictionary<IMovableGameObject, GroupMovables> onWayToTargetDict;
 
 		// Informations about which object attack an other
-		private Dictionary<IMovableGameObject, IGameObject> attackersTarget; 
+		private Dictionary<IMovableGameObject, IGameObject> attackersTarget;
 
 		/// <summary>
 		/// Creates instance of the FightManager and initializes objects.
@@ -37,7 +38,29 @@ namespace Strategy.FightMgr {
 			fightList = new List<Fight>();
 		}
 
-		#region public 
+		#region public
+
+		public void Initialize(List<Tuple<List<string>, string, int>> loadedOcc) {
+			if (loadedOcc != null) {
+				foreach (var item in loadedOcc) {
+					var firstObj = Game.HitTest.GetIMGO(item.Item1[0]);
+					GroupMovables group = Game.GroupManager.GetGroup(firstObj);
+
+					// Creates group
+					for (int i = 1; i < item.Item1.Count; i++) {
+						Game.GroupManager.AddToGroup(group, Game.HitTest.GetIMGO(item.Item1[i]));
+					}
+					var target = Game.HitTest.GetGameObject(item.Item2);
+					if (target.OccupyTime == item.Item3) {
+						Occupy(group, target);
+					} else {
+						// Create Occupation
+						occupationList.Add(new Occupation(group, target));
+					}
+
+				}
+			}
+		}
 
 		/// <summary>
 		/// Updates all fights and occupations.
@@ -94,8 +117,8 @@ namespace Strategy.FightMgr {
 			}
 
 			// The object is already occupied by this group 
-			if (offensiveActionDict.ContainsKey(group) && 
-				offensiveActionDict[group] == ActionAnswer.Occupy && 
+			if (offensiveActionDict.ContainsKey(group) &&
+				offensiveActionDict[group] == ActionAnswer.Occupy &&
 				attackersTarget[group[0]] == gameObject) {
 				return;
 			}
@@ -152,8 +175,40 @@ namespace Strategy.FightMgr {
 				attackersTarget.Remove(imgo);
 			}
 		}
+
+		/// <summary>
+		/// Creates and returns new a list with all current occupations. 
+		/// </summary>
+		/// <returns>Returns the new List with all current occupations.</returns>
+		public List<Tuple<List<IMovableGameObject>, IGameObject, int>> GetOccupations() {
+			var list = new List<Tuple<List<IMovableGameObject>, IGameObject, int>>();
+
+			foreach (var item in occupationList) {
+				list.Add(new Tuple<List<IMovableGameObject>, IGameObject, int>(item.GetAttackers(), item.GetTarget(), (int)item.GetTime().TotalSeconds));
+			}
+
+			foreach (var item in offensiveActionDict) {
+				if (item.Value == ActionAnswer.Occupy) {
+					var list1 = new List<IMovableGameObject>();
+					foreach (IMovableGameObject item1 in item.Key) {
+						list1.Add(item1);
+					}
+					list.Add(new Tuple<List<IMovableGameObject>, IGameObject, int>(list1, attackersTarget[item.Key[0]], attackersTarget[item.Key[0]].OccupyTime));
+				}
+			}
+
+			return list;
+		}
+
+		/// <summary>
+		/// Creates and returns new a list with all current fights.
+		/// </summary>
+		/// <returns>Returns the new List with all current fights.</returns>
+		public List<Fight> GetFights() {
+			return new List<Fight>(fightList);
+		}
 		#endregion
-		
+
 		/// <summary>
 		/// Checks if given group already fighting or occupying given object.
 		/// </summary>

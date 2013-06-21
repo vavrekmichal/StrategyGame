@@ -25,6 +25,10 @@ namespace Strategy.MoveMgr {
 
 		#region Public
 
+		/// <summary>
+		/// Initializes the loaded movements.
+		/// </summary>
+		/// <param name="loadedMovements"></param>
 		public void Initialize(Dictionary<string, string> loadedMovements) {
 			if (loadedMovements == null) {
 				return;
