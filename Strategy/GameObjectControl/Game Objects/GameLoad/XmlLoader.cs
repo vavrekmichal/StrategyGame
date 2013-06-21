@@ -27,6 +27,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
 
 		private Dictionary<string, string> loadedMovements;
 		private List<Tuple<List<string>, string, int>> loadedOccupations;
+		private List<Tuple<List<string>, List<string>>> loadedFights;
 
 		private XmlElement root;
 		XmlNode missionNode; // Selected mission
@@ -43,6 +44,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
 			List<SolarSystem> solarSystems) {
 			loadedMovements = new Dictionary<string, string>();
 			loadedOccupations = new List<Tuple<List<string>, string, int>>();
+			loadedFights = new List<Tuple<List<string>, List<string>>>();
 			teamRealationDict = new Dictionary<Team, List<Team>>();
 
 			this.teamDict = teams;
@@ -210,7 +212,15 @@ namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
 		/// </summary>
 		/// <returns>Returns list with occupations.</returns>
 		public List<Tuple<List<string>, string, int>> GetLoadedOccupations() {
-			return loadedOccupations; 
+			return loadedOccupations;
+		}
+
+		/// <summary>
+		/// Returns loaded fights.
+		/// </summary>
+		/// <returns>Returns list with fights.</returns>
+		public List<Tuple<List<string>, List<string>>> GetLoadedFights() {
+			return loadedFights;
 		}
 
 		/// <summary>
@@ -253,21 +263,37 @@ namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
 				return;
 			}
 			// Loads movemens
-			foreach (XmlNode item in stateNode.SelectNodes("//movingObject")) {
+			foreach (XmlNode item in stateNode.SelectNodes(".//movingObject")) {
 				var moving = item.Attributes["movingObject"].InnerText;
 				var target = item.Attributes["target"].InnerText;
 				loadedMovements.Add(moving, target);
 			}
-			// Loads occupations
 
-			foreach (XmlNode item in stateNode.SelectNodes("//occupation")) {
+			// Loads occupations
+			foreach (XmlNode item in stateNode.SelectNodes(".//occupation")) {
 				var target = item.Attributes["target"].InnerText;
 				var time = Int32.Parse(item.Attributes["time"].InnerText);
 				var members = new List<string>();
-				foreach (XmlNode item1 in item.SelectNodes("//member")) {
+				foreach (XmlNode item1 in item.SelectNodes(".//member")) {
 					members.Add(item1.Attributes["name"].InnerText);
 				}
-				loadedOccupations.Add(new Tuple<List<string>,string,int>(members,target,time));
+				loadedOccupations.Add(new Tuple<List<string>, string, int>(members, target, time));
+			}
+
+			// Loads fights
+			foreach (XmlNode item in stateNode.SelectNodes(".//fight")) {
+				var group1 = new List<string>();
+				var group2 = new List<string>();
+				var groupNodes = item.SelectNodes("./group");
+
+				foreach (XmlNode memberNode in groupNodes[0].SelectNodes("./object")) {
+					group1.Add(memberNode.Attributes["name"].InnerText);
+				}
+				foreach (XmlNode memberNode in groupNodes[1].SelectNodes("./object")) {
+					group2.Add(memberNode.Attributes["name"].InnerText);
+				}
+
+				loadedFights.Add(new Tuple<List<string>,List<string>>(group1, group2));
 			}
 		}
 

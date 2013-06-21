@@ -40,24 +40,57 @@ namespace Strategy.FightMgr {
 
 		#region public
 
-		public void Initialize(List<Tuple<List<string>, string, int>> loadedOcc) {
+		public void Initialize(List<Tuple<List<string>, string, int>> loadedOcc, List<Tuple<List<string>, List<string>>> loadedFights) {
 			if (loadedOcc != null) {
-				foreach (var item in loadedOcc) {
-					var firstObj = Game.HitTest.GetIMGO(item.Item1[0]);
+				foreach (var occupation in loadedOcc) {
+					var firstObj = Game.HitTest.GetIMGO(occupation.Item1[0]);
 					GroupMovables group = Game.GroupManager.GetGroup(firstObj);
 
 					// Creates group
-					for (int i = 1; i < item.Item1.Count; i++) {
-						Game.GroupManager.AddToGroup(group, Game.HitTest.GetIMGO(item.Item1[i]));
+					for (int i = 1; i < occupation.Item1.Count; i++) {
+						Game.GroupManager.AddToGroup(group, Game.HitTest.GetIMGO(occupation.Item1[i]));
 					}
-					var target = Game.HitTest.GetGameObject(item.Item2);
-					if (target.OccupyTime == item.Item3) {
+
+					var target = Game.HitTest.GetGameObject(occupation.Item2);
+					if (target.OccupyTime == occupation.Item3) {
 						Occupy(group, target);
 					} else {
 						// Create Occupation
-						occupationList.Add(new Occupation(group, target, TimeSpan.FromSeconds(item.Item3)));
+						occupationList.Add(new Occupation(group, target, TimeSpan.FromSeconds(occupation.Item3)));
 					}
 
+				}
+			}
+
+			if (loadedFights != null) {
+				foreach (var fight in loadedFights) {
+					var firstObj = Game.HitTest.GetIMGO(fight.Item1[0]);
+					GroupMovables group1 = Game.GroupManager.GetGroup(firstObj);
+					// Creates group1
+					for (int i = 1; i < fight.Item1.Count; i++) {
+						Game.GroupManager.AddToGroup(group1, Game.HitTest.GetIMGO(fight.Item1[i]));
+					}
+
+					// Second group can contains the static members
+					GroupMovables group2 = new GroupMovables(Game.HitTest.GetGameObject(fight.Item2[0]).Team);
+					GroupStatics group3 = new GroupStatics();
+					if (Game.HitTest.IsObjectMovable(fight.Item2[0])) {
+						var firstObj2 = Game.HitTest.GetIMGO(fight.Item2[0]);
+						group2 = Game.GroupManager.GetGroup(firstObj2);
+					} else {
+						var firstObj3 = Game.HitTest.GetISGO(fight.Item2[0]);
+						group3 = new GroupStatics(firstObj3.Team);
+						group3.InsertMemeber(firstObj3);
+					}
+
+					for (int i = 1; i < fight.Item2.Count; i++) {
+						if (Game.HitTest.IsObjectMovable(fight.Item2[i])) {
+							Game.GroupManager.AddToGroup(group2, Game.HitTest.GetIMGO(fight.Item2[i]));
+						} else {
+							group3.InsertMemeber(Game.HitTest.GetISGO(fight.Item2[i]));
+						}
+					}
+					fightList.Add(new Fight(group1,group2,group3));
 				}
 			}
 		}
@@ -204,8 +237,24 @@ namespace Strategy.FightMgr {
 		/// Creates and returns new a list with all current fights.
 		/// </summary>
 		/// <returns>Returns the new List with all current fights.</returns>
-		public List<Fight> GetFights() {
-			return new List<Fight>(fightList);
+		public List<Tuple<List<IGameObject>, List<IGameObject>>> GetFights() {
+			var list = new List<Tuple<List<IGameObject>, List<IGameObject>>>();
+
+			foreach (var item in fightList) {
+				list.Add(new Tuple<List<IGameObject>, List<IGameObject>>(item.GetAttackers(), item.GetDeffenders()));
+			}
+
+			foreach (var item in offensiveActionDict) {
+				if (item.Value == ActionAnswer.Attack) {
+					var list1 = new List<IGameObject>();
+					foreach (IMovableGameObject item1 in item.Key) {
+						list1.Add(item1);
+					}
+					list.Add(new Tuple<List<IGameObject>, List<IGameObject>>(list1,new List<IGameObject>(){attackersTarget[(IMovableGameObject)list1[0]]}));
+				}
+			}
+
+			return list;
 		}
 		#endregion
 

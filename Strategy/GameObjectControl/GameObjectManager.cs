@@ -280,8 +280,7 @@ namespace Strategy.GameObjectControl {
 			teamMgr.Initialize(objectCreator.GetTeams(), objectCreator.GetTeamsRelations());
 			groupMgr.UntargetGroup();
 			moveMgr.Initialize(objectCreator.GetLoadedMovements());
-			fightMgr.Initialize( objectCreator.GetLoadedOccupations());
-
+			fightMgr.Initialize( objectCreator.GetLoadedOccupations(),objectCreator.GetLoadedFights());
 			gameSerializer.Initialize(missionName);
 		}
 

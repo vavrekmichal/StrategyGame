@@ -40,12 +40,13 @@ namespace Strategy.FightMgr {
 		/// Creates and returns new a list with all current fights.
 		/// </summary>
 		/// <returns>Returns the new List with all current fights.</returns>
-		List<Fight> GetFights();
+		List<Tuple<List<IGameObject>, List<IGameObject>>> GetFights();
 
 		/// <summary>
 		/// Initializes loaded occupations and fights.
 		/// </summary>
 		/// <param name="loadedOccup">The list with loaded occuaptions.</param>
-		void Initialize(List<Tuple<List<string>, string, int>> loadedOccup);
+		/// <param name="loadedFights">The list with loaded fights.</param>
+		void Initialize(List<Tuple<List<string>, string, int>> loadedOccup, List<Tuple<List<string>,List<string>>> loadedFights);
 	}
 }

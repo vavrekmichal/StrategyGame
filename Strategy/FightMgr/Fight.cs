@@ -59,7 +59,7 @@ namespace Strategy.FightMgr {
 		}
 
 		/// <summary>
-		/// Creates instance of the Fight and collect all defenders on shout distance. Also selectes both (attacker
+		/// Creates instance of the Fight and collect all defenders on shout distance. Also selects both (attacker
 		/// and deffender) group and start fight.
 		/// </summary>
 		/// <param name="attackers">The attacking group (complete)</param>
@@ -76,6 +76,26 @@ namespace Strategy.FightMgr {
 			isgoDeffenders = Game.GroupManager.CreateSelectedGroupStatic(objectsInShoutDistance);
 
 			attackerTarget = new Property<IGameObject>(deffender);
+			deffenderTarget = new Property<IGameObject>(attackers[0]);
+
+			StartFight();
+		}
+
+		/// <summary>
+		/// Creates instance of the Fight. Also selects both (attacker and deffender) group and start fight.
+		/// </summary>
+		/// <param name="attackers">The attacking group (complete)</param>
+		/// <param name="deffendersM">The deffending movable group (complete)</param>
+		/// <param name="deffendersS">The deffending staic group (complete)</param>
+		public Fight(GroupMovables attackers, GroupMovables deffendersM, GroupStatics deffendersS) {
+			groupAttackers = attackers;
+			movingDict = new Dictionary<IMovableGameObject, IGameObject>();
+			damageCounter = new DamageCounter();
+
+			imgoDeffenders = deffendersM;
+			isgoDeffenders = deffendersS;
+
+			attackerTarget = new Property<IGameObject>(deffendersM[0]);
 			deffenderTarget = new Property<IGameObject>(attackers[0]);
 
 			StartFight();
@@ -273,6 +293,33 @@ namespace Strategy.FightMgr {
 			}
 		}
 
+		/// <summary>
+		/// Collects all attackers.
+		/// </summary>
+		/// <returns>Returns all attackers.</returns>
+		public List<IGameObject> GetAttackers() {
+			var list = new List<IGameObject>();
+			foreach (IMovableGameObject item in groupAttackers) {
+				list.Add(item);
+			}
+			return list;
+		}
+
+		/// <summary>
+		/// Collects all deffenders.
+		/// </summary>
+		/// <returns>Returns all deffenders.</returns>
+		public List<IGameObject> GetDeffenders() {
+			var list = new List<IGameObject>();
+			foreach (IMovableGameObject item in imgoDeffenders) {
+				list.Add(item);
+			}
+			foreach (IStaticGameObject item in isgoDeffenders) {
+				list.Add(item);
+			}
+			return list;
+		}
+
 		#endregion
 
 		/// <summary>
@@ -409,6 +456,7 @@ namespace Strategy.FightMgr {
 				isgoDeff.DieHandler -= OnDeffenderDieEvent;
 			}
 		}
+
 	}
 
 }

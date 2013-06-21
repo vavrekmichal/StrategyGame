@@ -272,6 +272,7 @@ namespace Strategy.GameObjectControl.GroupMgr {
 				group = imgoGroupDict[imgo];
 			} else {
 				group = new GroupMovables(imgo.Team);
+				group.InsertMemeber(imgo);
 				imgoGroupDict.Add(imgo, group);
 			}
 			return group;

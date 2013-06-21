@@ -72,9 +72,42 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 
 			// Saves occupations
 			SerializeAllOccupations(element, Game.IFightManager.GetOccupations());
+
+			// Saves fights
+			SerializeAllFights(element, Game.IFightManager.GetFights());
 		}
 
 
+		private void SerializeAllFights(XElement rootElement, List<Tuple<List<IGameObject>, List<IGameObject>>> fights) {
+			var element = new XElement("fights");
+			rootElement.Add(element);
+			foreach (var item in fights) {
+				SerializeFight(element, item);
+			}
+		}
+
+		private void SerializeFight(XElement rootElement, Tuple<List<IGameObject>, List<IGameObject>> fight) {
+			var element = new XElement("fight");
+			rootElement.Add(element);
+			var subElement = new XElement("group");
+			element.Add(subElement);
+			foreach (var item in fight.Item1) {
+				var subElement2 = new XElement("object", new XAttribute("name", item.Name));
+				subElement.Add(subElement2);
+			}
+			subElement = new XElement("group");
+			element.Add(subElement);
+			foreach (var item in fight.Item2) {
+				var subElement2 = new XElement("object", new XAttribute("name", item.Name));
+				subElement.Add(subElement2);
+			}
+		}
+
+		/// <summary>
+		/// Serializes all occupations. 
+		/// </summary>
+		/// <param name="rootElement">The parent element.</param>
+		/// <param name="occupations">The list which contains all occupations.</param>
 		private void SerializeAllOccupations(XElement rootElement, List<Tuple<List<IMovableGameObject>, IGameObject, int>> occupations) {
 			var element = new XElement("occupations");
 			rootElement.Add(element);
@@ -87,7 +120,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 		/// Serializes the given occupation (group, target and time).
 		/// </summary>
 		/// <param name="rootElement">The parent element.</param>
-		/// <param name="occupation"></param>
+		/// <param name="occupation">The serializing occupation.</param>
 		private void SerializeOccupation(XElement rootElement, Tuple<List<IMovableGameObject>, IGameObject, int> occupation) {
 			var element = new XElement("occupation", new XAttribute("target", occupation.Item2.Name), new XAttribute("time", occupation.Item3));
 			rootElement.Add(element);

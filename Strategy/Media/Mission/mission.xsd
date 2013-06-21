@@ -143,7 +143,11 @@
                     <xs:element name="occupation" minOccurs="0" maxOccurs="unbounded">
                       <xs:complexType>
                         <xs:sequence>
-                          <xs:element name="member" minOccurs="1" maxOccurs="unbounded"/>
+                          <xs:element name="member" minOccurs="1" maxOccurs="unbounded">
+                            <xs:complexType>
+                              <xs:attribute name="name"/>
+                            </xs:complexType>
+                          </xs:element>
                         </xs:sequence>
                         <xs:attribute name="target" type="xs:string"/>
                         <xs:attribute name="time" type="xs:int"/>
@@ -161,7 +165,11 @@
                           <xs:element name="group" minOccurs="2" maxOccurs="2">
                             <xs:complexType>
                               <xs:sequence>
-                                <xs:element name="object" minOccurs="1" maxOccurs="unbounded"/>
+                                <xs:element name="object" minOccurs="1" maxOccurs="unbounded">
+                                  <xs:complexType>
+                                    <xs:attribute name="name"/>
+                                  </xs:complexType>
+                                </xs:element>
                               </xs:sequence>
                             </xs:complexType>
                           </xs:element>

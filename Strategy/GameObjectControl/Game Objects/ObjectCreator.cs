@@ -124,5 +124,13 @@ namespace Strategy.GameObjectControl.Game_Objects {
 		public List<Tuple<List<string>, string, int>> GetLoadedOccupations() {
 			return xmlLoader.GetLoadedOccupations();
 		}
+
+		/// <summary>
+		/// Returns loaded fights.
+		/// </summary>
+		/// <returns>Returns list with fights.</returns>
+		public List<Tuple<List<string>, List<string>>> GetLoadedFights() {
+			return xmlLoader.GetLoadedFights();
+		}
 	}
 }
