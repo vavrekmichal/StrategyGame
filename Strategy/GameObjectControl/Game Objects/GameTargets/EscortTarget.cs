@@ -10,10 +10,13 @@ namespace Strategy.GameObjectControl.Game_Objects.GameTargets {
 	class EscortTarget : ITarget {
 
 		Property<string> targetInfo;
+
 		[ConstructorField(0, AttributeType.Basic)]
 		string targetName;
+
+		// Doesn't check if exist, so unknown solar system means imposible target.
 		[ConstructorField(1, AttributeType.Basic)]
-		string solSystName; // Doesn't check if exist, so unknown solar system means imposible target
+		string solSystName; 
 
 		IGameObject gameObject;
 		[ConstructorField(2, AttributeType.Vector3)]

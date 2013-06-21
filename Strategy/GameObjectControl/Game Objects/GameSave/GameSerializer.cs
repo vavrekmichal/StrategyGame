@@ -383,21 +383,21 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 					var castedAtt = (ConstructorFieldAttribute)constuctAtt;
 					switch (castedAtt.Type) {
 						case AttributeType.Vector3:
-							dict.Add(castedAtt.Order, CreateSerializableVector2((Mogre.Vector3)item.GetValue(instance)));
+							AddToSortedDictionary(castedAtt.Order, CreateSerializableVector2((Mogre.Vector3)item.GetValue(instance)),dict);
 							break;
 						case AttributeType.PropertyVector3:
 							var castedProp = item.GetValue(instance) as RuntimeProperty.Property<Mogre.Vector3>;
-							dict.Add(castedAtt.Order, CreateSerializableVector2(castedProp.Value));
+							AddToSortedDictionary(castedAtt.Order, CreateSerializableVector2(castedProp.Value),dict);
 							break;
 						case AttributeType.Basic:
 						case AttributeType.Property:
-							dict.Add(castedAtt.Order, item.GetValue(instance).ToString());
+							AddToSortedDictionary(castedAtt.Order, item.GetValue(instance).ToString(), dict);
 							break;
 						case AttributeType.List:
 							var v = (List<string>)item.GetValue(instance);
 							var order = castedAtt.Order;
 							foreach (var item2 in v) {
-								dict.Add(order, item2);
+								AddToSortedDictionary(order, item2, dict);
 								order++;
 							}
 							break;
@@ -419,26 +419,41 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 					var castedAtt = (ConstructorFieldAttribute)constuctAtt;
 					switch (castedAtt.Type) {
 						case AttributeType.Vector3:
-							dict.Add(castedAtt.Order, CreateSerializableVector2((Mogre.Vector3)item.GetValue(instance)));
+							AddToSortedDictionary(castedAtt.Order, CreateSerializableVector2((Mogre.Vector3)item.GetValue(instance)),dict);
 							break;
 						case AttributeType.PropertyVector3:
 							var castedProp = item.GetValue(instance) as RuntimeProperty.Property<Mogre.Vector3>;
-							dict.Add(castedAtt.Order, CreateSerializableVector2(castedProp.Value));
+							AddToSortedDictionary(castedAtt.Order, CreateSerializableVector2(castedProp.Value), dict);
 							break;
 						case AttributeType.Basic:
 						case AttributeType.Property:
-							dict.Add(castedAtt.Order, item.GetValue(instance).ToString());
+							AddToSortedDictionary(castedAtt.Order, item.GetValue(instance).ToString(),dict);
 							break;
 						case AttributeType.List:
 							var v = (List<string>)item.GetValue(instance);
 							var order = castedAtt.Order;
 							foreach (var item2 in v) {
-								dict.Add(order, item2);
+								AddToSortedDictionary(order, item2,dict);
 								order++;
 							}
 							break;
 					}
 				}
+			}
+		}
+
+		/// <summary>
+		/// Controls if the given sorted dictionary contains inserting key and if it is 
+		/// possible so inserts the value or throws a exception.
+		/// </summary>
+		/// <param name="number">The inserting key.</param>
+		/// <param name="value">The inserting value.</param>
+		/// <param name="dict">The dictionary which will be filled.</param>
+		private void AddToSortedDictionary(int number, string value, SortedDictionary<int,string> dict) {
+			if (dict.ContainsKey(number)) {
+				throw new ArgumentException("The field (property) "+value +" cannot have same order ("+number+"). The order must be unique.");
+			} else {
+				dict.Add(number, value);
 			}
 		}
 	}
