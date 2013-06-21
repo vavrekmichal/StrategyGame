@@ -24,6 +24,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
 		private Dictionary<string, Team> teamDict;
 		private List<SolarSystem> solarSystemList;
 		private Dictionary<Team, List<Team>> teamRealationDict;
+		private Dictionary<string, string> loadedMovements;
 		private XmlElement root;
 		XmlNode missionNode; // Selected mission
 
@@ -37,7 +38,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
 		/// <param name="solarSystems">The dictionary which will be filled by SolarSystem. (should be empty).</param>
 		public XmlLoader(string missionFilePath, Dictionary<string, Team> teams,
 			List<SolarSystem> solarSystems) {
-
+			loadedMovements = new Dictionary<string, string>();
 			teamRealationDict = new Dictionary<Team, List<Team>>();
 
 			this.teamDict = teams;
@@ -149,6 +150,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
 			// Finally load mission targets and materials
 			LoadMissionTargets(missionNode.SelectNodes("missionTargets[1]")[0]);
 			LoadMaterials(missionNode.SelectNodes("materials[1]")[0]);
+			LoadGameState(missionNode.SelectNodes("startState[1]")[0]);
 		}
 
 		/// <summary>
@@ -192,6 +194,14 @@ namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
 		}
 
 		/// <summary>
+		/// Returns loaded moving objects
+		/// </summary>
+		/// <returns>Returns dictionary with moving targets.</returns>
+		public Dictionary<string, string> GetLoadedMovements() {
+			return loadedMovements;
+		}
+
+		/// <summary>
 		/// Returns unused name with given base.
 		/// </summary>
 		/// <param name="name">The base of the name.</param>
@@ -199,6 +209,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
 		public string GetUnusedName(string name) {
 			return runtimeCtor.GetUnusedName(name);
 		}
+
 		#endregion
 
 
@@ -223,6 +234,21 @@ namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
 			}
 			runtimeCtor.CompileUsedObjects(synatexTreeList);
 		}
+
+		private void LoadGameState(XmlNode stateNode) {
+			if (stateNode == null) {
+				return;
+			}
+			// Loads movemens
+			foreach (XmlNode item in stateNode.SelectNodes("//movingObject")) {
+				var moving = item.Attributes["movingObject"].InnerText;
+				var target = item.Attributes["target"].InnerText;
+				loadedMovements.Add(moving, target);
+			}
+
+
+		}
+
 
 		/// <summary>
 		/// Loads the starting quantity of materials

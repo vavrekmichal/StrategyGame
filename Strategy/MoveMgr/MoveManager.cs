@@ -12,7 +12,7 @@ namespace Strategy.MoveMgr {
 
 		private const int randConst = 30;
 
-		private Dictionary<IMovableGameObject, object> moveMgrControledDict;
+		private Dictionary<IMovableGameObject, IGameObject> moveMgrControledDict;
 		private Dictionary<IMovableGameObject, IFinishMovementReciever> finishMoveRecDict;
 
 		/// <summary>
@@ -20,10 +20,22 @@ namespace Strategy.MoveMgr {
 		/// </summary>
 		public MoveManager() {
 			finishMoveRecDict = new Dictionary<IMovableGameObject, IFinishMovementReciever>();
-			moveMgrControledDict = new Dictionary<IMovableGameObject, object>();
+			moveMgrControledDict = new Dictionary<IMovableGameObject, IGameObject>();
 		}
 
 		#region Public
+
+		public void Initialize(Dictionary<string, string> loadedMovements) {
+			if (loadedMovements == null) {
+				return;
+			}
+			foreach (var item in loadedMovements) {
+				var movingObj = Game.HitTest.GetIMGO(item.Key);
+				var target = Game.HitTest.GetGameObject(item.Value);
+				GoToTargetIMGO(movingObj, target);
+			}
+
+		}
 
 		/// <summary>
 		/// Sends objects in the group to the given position. The objects are not sends to the same position,
@@ -55,9 +67,9 @@ namespace Strategy.MoveMgr {
 		/// is reached so sends the information to the controller.
 		/// </summary>
 		public void Update() {
-			var copy = new Dictionary<IMovableGameObject, object>(moveMgrControledDict);
+			var copy = new Dictionary<IMovableGameObject, IGameObject>(moveMgrControledDict);
 
-			foreach (KeyValuePair<IMovableGameObject, object> trev in copy) {
+			foreach (KeyValuePair<IMovableGameObject, IGameObject> trev in copy) {
 				float pickUpDistance;
 				Mogre.Vector3 position;
 
@@ -105,7 +117,7 @@ namespace Strategy.MoveMgr {
 		public void UnlogFromFinishMoveReciever(IMovableGameObject imgo) {
 			if (finishMoveRecDict.ContainsKey(imgo)) {
 				finishMoveRecDict.Remove(imgo);
-			}	
+			}
 		}
 
 		/// <summary>
@@ -202,7 +214,7 @@ namespace Strategy.MoveMgr {
 			if (imgo.Visible) {
 				imgo.Stop();
 				gameObject.TargetInSight(imgo);
-			}	
+			}
 		}
 
 		/// <summary>
@@ -252,9 +264,30 @@ namespace Strategy.MoveMgr {
 				destinations.RemoveAt(0);
 				moveMgrControledDict.Add(imgo, target);
 			}
-
 		}
 
-		
+		/// <summary>
+		/// Sends the given object to the given position. 
+		/// </summary>
+		/// <param name="imgo">The IMovableGameObject which is sended to the destiantion.</param>
+		/// <param name="target">The object where the group goes.</param>
+		private void GoToTargetIMGO(IMovableGameObject imgo, IGameObject target) {
+			imgo.GoToTarget(target);
+			moveMgrControledDict.Add(imgo, target);
+		}
+
+		/// <summary>
+		/// Creates dictionary with all controled movements and removes the movements with IFinishMovementReciever.
+		/// </summary>
+		/// <returns>Returns the movements without IFinishMovementReciever.</returns>
+		public Dictionary<IMovableGameObject, IGameObject> GetAllMovements() {
+			var dict = new Dictionary<IMovableGameObject, IGameObject>(moveMgrControledDict);
+
+			foreach (var item in finishMoveRecDict) {
+				dict.Remove(item.Key);
+			}
+
+			return dict;
+		}
 	}
 }

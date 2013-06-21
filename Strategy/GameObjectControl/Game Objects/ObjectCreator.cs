@@ -108,5 +108,12 @@ namespace Strategy.GameObjectControl.Game_Objects {
 			return xmlLoader.GetTeamsRelations();
 		}
 
+		/// <summary>
+		/// Returns loaded moving objects
+		/// </summary>
+		/// <returns>Returns dictionary with moving targets.</returns>
+		public Dictionary<string, string> GetLoadedMovements() {
+			return xmlLoader.GetLoadedMovements();
+		}
 	}
 }

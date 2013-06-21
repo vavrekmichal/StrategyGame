@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"  ?>
 
-<mission propertyFilePath="../../Media/Mission/Scripts/Properties.csx">
+<mission propertyFilePath="../../Media/Mission/Scripts/Properties.csx" >
   <teams>
     <friendlyTeams>
       <team name="Player"/>
@@ -46,9 +46,7 @@
         <argument>-250;250</argument>
         <argument>mercury.mesh</argument>
         <argument>200;200</argument>
-        <gameAction name="DoNothingJustPrintText">
-          <argument>Todle napis</argument>
-        </gameAction>
+        <gameAction name="DoNothingJustPrintText" />
         <gameAction name="ProduceAction">
           <argument>Stone</argument>
         </gameAction>
@@ -232,6 +230,12 @@
       <argument>600</argument>
     </material>
   </materials>
+  <startState>
+    <controledMovement>
+      <movingObject movingObject="MotherShip" target="Venus"/>
+    </controledMovement>
+  </startState>
+  
 </mission>
 <!--
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Media/Mission/mission.xsd"

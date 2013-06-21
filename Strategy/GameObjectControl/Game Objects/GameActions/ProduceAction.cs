@@ -1,4 +1,5 @@
-﻿using Strategy.GameObjectControl.RuntimeProperty;
+﻿using Strategy.GameObjectControl.Game_Objects.GameSave;
+using Strategy.GameObjectControl.RuntimeProperty;
 
 namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 	/// <summary>
@@ -7,7 +8,10 @@ namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 	class ProduceAction : IGameAction {
 		private IGameObject gameObject;
 
+
 		private Property<double> production;
+
+		[ConstructorField(0, AttributeType.Basic)]
 		private string produceMaterial;
 
 		/// <summary>
@@ -35,7 +39,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 		/// </summary>
 		/// <returns>Returns information about production of the material per second</returns>
 		public string OnMouseClick() {
-			return "Actual production is " + production.Value + " of "+produceMaterial+ " per second.";
+			return "Actual production is " + production.Value + " of " + produceMaterial + " per second.";
 		}
 
 		/// <summary>

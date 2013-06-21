@@ -30,8 +30,8 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 
 			this.position = new Property<Vector3>(ParseStringToVector3((string)args[0]));
 
-			if (args.Count() == 2) {
-				setHp(Convert.ToInt32(args[1]));
+			if (args.Count() > 1) {
+				setHp(Convert.ToInt32(args[args.Length - 1]));
 			} 
 
 			SetProperty(PropertyEnum.Position, this.position);

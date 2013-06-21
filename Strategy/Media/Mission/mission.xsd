@@ -77,7 +77,7 @@
                 <xs:complexType>
                   <xs:sequence>
                     <xs:element name="isgo" minOccurs="0" maxOccurs="unbounded" type="gameObject" />
-                     
+
                     <xs:element name="imgo" minOccurs="0" maxOccurs="unbounded" type="gameObject" />
                   </xs:sequence>
                   <xs:attribute name="name" use="required" type="xs:string"/>
@@ -122,6 +122,24 @@
           </xs:complexType>
         </xs:element>
 
+        <xs:element name="startState" maxOccurs="1" minOccurs="0">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name ="controledMovement">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="movingObject" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:attribute name="movingObject" type="xs:string"/>
+                        <xs:attribute name="target" type="xs:string"/>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
       </xs:sequence>
       <xs:attribute name="propertyFilePath" type="xs:string" use="required"/>
     </xs:complexType>
@@ -155,7 +173,6 @@
       <xs:field xpath="./@type"/>
     </xs:keyref>
 
-    
     <!--GameAction keys-->
     <xs:key name="gameActionKey">
       <xs:selector xpath="./usedObjects/gameActions/gameObject"/>

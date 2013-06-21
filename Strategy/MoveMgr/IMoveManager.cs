@@ -2,6 +2,7 @@
 using Strategy.GameObjectControl.GroupMgr;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects;
+using System.Collections.Generic;
 
 namespace Strategy.MoveMgr {
 	/// <summary>
@@ -60,5 +61,17 @@ namespace Strategy.MoveMgr {
 		/// Updates all controled movements.
 		/// </summary>
 		void Update();
+
+		/// <summary>
+		/// Returns all controled movements without the movements with setted IFinishMovementReciever.
+		/// </summary>
+		/// <returns>Returns all controled movements without the movements with setted IFinishMovementReciever.</returns>
+		Dictionary<IMovableGameObject, IGameObject> GetAllMovements();
+
+		/// <summary>
+		/// Initilizes loaded movements.
+		/// </summary>
+		/// <param name="loadedMovements">Contains loaded movements (moving object, target).</param>
+		void Initialize(Dictionary<string, string> loadedMovements);
 	}
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Strategy.Exceptions;
+using Strategy.GameObjectControl.Game_Objects.GameSave;
 
 namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 	/// <summary>
@@ -10,9 +11,12 @@ namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 	/// </summary>
 	class CreateSpaceShipAction : IGameAction {
 
+		[ConstructorField(0, AttributeType.Basic)]
 		private string creatingObject;
-		IGameObject gameObject;
-		Dictionary<string, int> neededMaterials;
+
+		private Dictionary<string, int> neededMaterials;
+
+		private IGameObject gameObject;
 
 		/// <summary>
 		/// Initializes game action. Parses given argument (if are invalid so throw exception)
@@ -58,7 +62,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 				args.Add(new object[] { objectPosToString });
 
 				var solSyst = Game.SolarSystemManager.GetSolarSystem(gameObject);
-				
+
 				// Creates new object.
 				var createdGameObject = Game.IGameObjectCreator.CreateImgo(creatingObject, args.ToArray(), solSyst);
 
@@ -80,6 +84,22 @@ namespace Strategy.GameObjectControl.Game_Objects.GameActions {
 		/// <returns>Returns path to a icon picture.</returns>
 		public string IconPath() {
 			return "../../media/icons/ship.png";
+		}
+
+		/// <summary>
+		/// Inserts all needed materials to serialization to the List.
+		/// </summary>
+		/// <returns>Retrurns the List with all materials and quantyties.</returns>
+		[ConstructorField(1, AttributeType.List)]
+		private List<string> ConstructorFields {
+			get {
+				var list = new List<string>();
+				foreach (var item in neededMaterials) {
+					list.Add(item.Key);
+					list.Add(item.Value.ToString());
+				}
+				return list;
+			}
 		}
 	}
 }

@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
 using System.Xml.Linq;
+using Strategy.GameObjectControl.Game_Objects.GameActions;
 using Strategy.GameObjectControl.Game_Objects.GameTargets;
 using Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox;
 using Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox;
-using Strategy.GameObjectControl.GroupMgr;
 using Strategy.MissionControl;
+using Strategy.MoveMgr;
 using Strategy.TeamControl;
 
 namespace Strategy.GameObjectControl.Game_Objects.GameSave {
@@ -24,6 +21,10 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 
 		public GameSerializer() { }
 
+		/// <summary>
+		/// Loads script file path, team node and used object node from mission file.
+		/// </summary>
+		/// <param name="missionFilePath">The path to the file with current mission.</param>
 		public void Initialize(string missionFilePath) {
 
 			XDocument xml = XDocument.Load(missionFilePath);
@@ -33,6 +34,10 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 			teams = xml.Descendants("teams").First();
 		}
 
+		/// <summary>
+		/// Serializes and saves current save of the mission to the file with the given name.
+		/// </summary>
+		/// <param name="saveName">The name of the save.</param>
 		public void Save(string saveName) {
 			var document = new XDocument();
 			var rootElement = new XElement("mission", new XAttribute("propertyFilePath", scriptFile));
@@ -47,12 +52,58 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 			SerializeMission(rootElement, Game.Mission);
 
 			// Saves teams materials
-			SerializeMaterials(rootElement, Game.TeamManager.GetTeams());			
+			SerializeMaterials(rootElement, Game.TeamManager.GetTeams());
+
+			// Saves game state (fights, movements)
+			SerializeGameState(rootElement);
 
 			document.Save(Game.SavesGamePath + '/' + saveName);
 		}
 
 		#region Serializators
+
+		private void SerializeGameState(XElement rootElement) {
+			var element = new XElement("startState");
+			rootElement.Add(element);
+			// Save moving objects.
+			SerializeAllMovements(element, Game.IMoveManager);
+		}
+
+		/// <summary>
+		/// Serializes all controled movements without IFinishMovementReciever.
+		/// </summary>
+		/// <param name="rootElement">The parent element.</param>
+		/// <param name="moveMgr">The MoveManager which has the movements.</param>
+		private void SerializeAllMovements(XElement rootElement, IMoveManager moveMgr) {
+			var element = new XElement("controledMovement");
+			rootElement.Add(element);
+			foreach (var item in moveMgr.GetAllMovements()) {
+				SerializeMovement(element, item);
+			}
+		}
+
+		/// <summary>
+		/// Serializes given movement (the moving object and the target).
+		/// </summary>
+		/// <param name="rootElement">The parent element.</param>
+		/// <param name="pair">The serializing object and its target.</param>
+		private void SerializeMovement(XElement rootElement, KeyValuePair<IMovableGameObject, IGameObject> pair) {
+			var element = new XElement("movingObject", new XAttribute("movingObject", pair.Key.Name), new XAttribute("target", pair.Value.Name));
+			rootElement.Add(element);
+		}
+
+		/// <summary>
+		/// Serializes the given IGameAction (all ContructorFields).
+		/// </summary>
+		/// <param name="rootElement">The parent element.</param>
+		/// <param name="gameAction">The serializing IGameAction.</param>
+		private void SerializeGameAction(XElement rootElement, IGameAction gameAction) {
+			var element = new XElement("gameAction", new XAttribute("name", gameAction.GetType().ToString().Split('.').Last()));
+			rootElement.Add(element);
+			foreach (var item in GetSortedArgsToSerialization(gameAction)) {
+				SerializeArgument(element, item.Value);
+			}
+		}
 
 		/// <summary>
 		/// Serializes the current Mission (all current ITargets).
@@ -199,24 +250,36 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 			foreach (var item in GetSortedArgsToSerialization(gameObject)) {
 				SerializeArgument(element, item.Value);
 			}
-			Console.WriteLine("Saving " + gameObject.Name);
+			foreach (var item in gameObject.GetIGameActions()) {
+				SerializeGameAction(element, item);
+			}
 		}
 
 		/// <summary>
-		/// Converts the vector into serializable form.
+		/// Converts the vector to serializable form (Vector3).
 		/// </summary>
 		/// <param name="vector">The converting Vector3.</param>
-		/// <returns>The converted vector.</returns>
+		/// <returns>The converted vector in string (as Vector3).</returns>
 		private string CreateSerializableVector3(Mogre.Vector3 vector) {
 			return vector.x.ToString() + ';' + vector.y + ';' + vector.z;
 		}
 
+		/// <summary>
+		/// Converts the vector to serializable form (Vector2).
+		/// </summary>
+		/// <param name="vector">The converting Vector3.</param>
+		/// <returns>The converted vector in string (as Vector2).</returns>
 		private string CreateSerializableVector2(Mogre.Vector3 vector) {
 			return vector.x.ToString() + ';' + vector.z;
 		}
 
 		#endregion
 
+		/// <summary>
+		/// Inserts targeted fields and properties (ConstructorFieldAttribute) of the given object to the sorted dictionary.
+		/// </summary>
+		/// <param name="gameObject">The object which fields and properties are returns in the dictionary.</param>
+		/// <returns>Returns dictionary with fields and properties from the object.</returns>
 		private SortedDictionary<int, string> GetSortedArgsToSerialization(object gameObject) {
 			var sortedArgs = new SortedDictionary<int, string>();
 			// Checks Fiealds
@@ -233,6 +296,12 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 			return sortedArgs;
 		}
 
+		/// <summary>
+		/// Inserts properties of the given instance to the given sorted dictionary.
+		/// </summary>
+		/// <param name="propInfoList">The list with properties.</param>
+		/// <param name="dict">The dictionary which will be filled.</param>
+		/// <param name="instance">The object with the properties.</param>
 		private void InsertConstrucotrFiledToSortedDict(PropertyInfo[] propInfoList, SortedDictionary<int, string> dict, object instance) {
 			foreach (var item in propInfoList) {
 				var constuctAtt = item.GetCustomAttribute(typeof(ConstructorFieldAttribute), true);
@@ -250,13 +319,27 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 						case AttributeType.Property:
 							dict.Add(castedAtt.Order, item.GetValue(instance).ToString());
 							break;
+						case AttributeType.List:
+							var v = (List<string>)item.GetValue(instance);
+							var order = castedAtt.Order;
+							foreach (var item2 in v) {
+								dict.Add(order, item2);
+								order++;
+							}
+							break;
 					}
 				}
 			}
 		}
 
-		private void InsertConstrucotrFiledToSortedDict(FieldInfo[] propInfoList, SortedDictionary<int, string> dict, object instance) {
-			foreach (var item in propInfoList) {
+		/// <summary>
+		/// Inserts fileds of the given instance to the given sorted dictionary.
+		/// </summary>
+		/// <param name="fieldInfoList">The list with fileds.</param>
+		/// <param name="dict">The dictionary which will be filled.</param>
+		/// <param name="instance">The object with the fileds.</param>
+		private void InsertConstrucotrFiledToSortedDict(FieldInfo[] fieldInfoList, SortedDictionary<int, string> dict, object instance) {
+			foreach (var item in fieldInfoList) {
 				var constuctAtt = item.GetCustomAttribute(typeof(ConstructorFieldAttribute), true);
 				if (constuctAtt != null) {
 					var castedAtt = (ConstructorFieldAttribute)constuctAtt;
@@ -271,6 +354,14 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 						case AttributeType.Basic:
 						case AttributeType.Property:
 							dict.Add(castedAtt.Order, item.GetValue(instance).ToString());
+							break;
+						case AttributeType.List:
+							var v = (List<string>)item.GetValue(instance);
+							var order = castedAtt.Order;
+							foreach (var item2 in v) {
+								dict.Add(order, item2);
+								order++;
+							}
 							break;
 					}
 				}

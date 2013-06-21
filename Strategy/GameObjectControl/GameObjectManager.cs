@@ -279,6 +279,7 @@ namespace Strategy.GameObjectControl {
 			// Registers team
 			teamMgr.Initialize(objectCreator.GetTeams(), objectCreator.GetTeamsRelations());
 			groupMgr.UntargetGroup();
+			moveMgr.Initialize(objectCreator.GetLoadedMovements());
 
 			gameSerializer.Initialize(missionName);
 		}
