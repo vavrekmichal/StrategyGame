@@ -55,7 +55,7 @@ namespace Strategy.FightMgr {
 						Occupy(group, target);
 					} else {
 						// Create Occupation
-						occupationList.Add(new Occupation(group, target));
+						occupationList.Add(new Occupation(group, target, TimeSpan.FromSeconds(item.Item3)));
 					}
 
 				}

@@ -152,6 +152,25 @@
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
+              <xs:element name="fights" minOccurs="0" maxOccurs="1">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="fight" minOccurs="0" maxOccurs="unbounded">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="group" minOccurs="2" maxOccurs="2">
+                            <xs:complexType>
+                              <xs:sequence>
+                                <xs:element name="object" minOccurs="1" maxOccurs="unbounded"/>
+                              </xs:sequence>
+                            </xs:complexType>
+                          </xs:element>
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
             </xs:sequence>
           </xs:complexType>
         </xs:element>

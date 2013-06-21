@@ -83,6 +83,11 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 			}
 		}
 
+		/// <summary>
+		/// Serializes the given occupation (group, target and time).
+		/// </summary>
+		/// <param name="rootElement">The parent element.</param>
+		/// <param name="occupation"></param>
 		private void SerializeOccupation(XElement rootElement, Tuple<List<IMovableGameObject>, IGameObject, int> occupation) {
 			var element = new XElement("occupation", new XAttribute("target", occupation.Item2.Name), new XAttribute("time", occupation.Item3));
 			rootElement.Add(element);

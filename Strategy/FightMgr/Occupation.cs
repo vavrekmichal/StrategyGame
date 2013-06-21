@@ -21,7 +21,7 @@ namespace Strategy.FightMgr {
 		// Start sound of the occupation
 		const string occStart = "OccBegan1.wav";
 		// End sound of the occupation
-		const string occEnd = "OccSucc1.wav";  
+		const string occEnd = "OccSucc1.wav";
 
 		/// <summary>
 		/// Creates Property with remaining time to end of the occupying.
@@ -30,8 +30,8 @@ namespace Strategy.FightMgr {
 		/// </summary>
 		/// <param name="occupier">The attacking group.</param>
 		/// <param name="occupied">The target of the occupation.</param>
-		public Occupation(GroupMovables occupier, IGameObject occupied) {
-			var time = TimeSpan.FromSeconds(occupied.OccupyTime);
+		/// <param name="time">The time of the occupation.</param>
+		public Occupation(GroupMovables occupier, IGameObject occupied, TimeSpan time) {
 
 			remainingTime = new Property<TimeSpan>(time);
 
@@ -43,6 +43,17 @@ namespace Strategy.FightMgr {
 			this.target = (IGameObject)occupied;
 			// Play occupation sound
 			Game.IEffectPlayer.PlayEffect(occStart);
+
+		}
+
+		/// <summary>
+		/// Creates Property with remaining time to end of the occupying.
+		/// This Property is added to occupied object (to objects properties).
+		/// Also runs the sound of the occupation. 
+		/// </summary>
+		/// <param name="occupier">The attacking group.</param>
+		/// <param name="occupied">The target of the occupation.</param>
+		public Occupation(GroupMovables occupier, IGameObject occupied) : this(occupier, occupied, TimeSpan.FromSeconds(occupied.OccupyTime)){
 
 		}
 
