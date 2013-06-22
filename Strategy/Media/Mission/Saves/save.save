@@ -42,7 +42,7 @@
         <argument>sun.mesh</argument>
       </isgo>
       <isgo name="Mercury" type="Planet" team="Fun">
-        <argument>-197,3116;212,4144</argument>
+        <argument>-156,8209;276,6563</argument>
         <argument>mercury.mesh</argument>
         <argument>200;200</argument>
         <gameAction name="DoNothingJustPrintText" />
@@ -56,7 +56,7 @@
         </gameAction>
       </isgo>
       <isgo name="Venus" type="Planet" team="Fun">
-        <argument>1496,589;-32,44922</argument>
+        <argument>1488,646;-108,371</argument>
         <argument>venus.mesh</argument>
         <argument>0;0</argument>
         <gameAction name="ProduceAction">
@@ -64,7 +64,7 @@
         </gameAction>
       </isgo>
       <isgo name="Earth" type="Planet" team="Fun">
-        <argument>2496,579;-32,44922</argument>
+        <argument>2488,614;-108,371</argument>
         <argument>earth.mesh</argument>
         <argument>0;0</argument>
         <gameAction name="ProduceAction">
@@ -72,7 +72,7 @@
         </gameAction>
       </isgo>
       <isgo name="Mars" type="Planet" team="Player">
-        <argument>3496,579;-32,44922</argument>
+        <argument>3488,614;-108,371</argument>
         <argument>mars.mesh</argument>
         <argument>0;0</argument>
         <gameAction name="ProduceAction">
@@ -80,7 +80,7 @@
         </gameAction>
       </isgo>
       <isgo name="Jupiter" type="Planet" team="Player">
-        <argument>5996,589;-32,44922</argument>
+        <argument>5988,657;-108,371</argument>
         <argument>jupiter.mesh</argument>
         <argument>0;0</argument>
         <gameAction name="ProduceAction">
@@ -88,22 +88,22 @@
         </gameAction>
       </isgo>
       <isgo name="Saturn" type="Planet" team="Player">
-        <argument>7996,589;-32,44922</argument>
+        <argument>7988,657;-108,371</argument>
         <argument>saturn.mesh</argument>
         <argument>0;0</argument>
       </isgo>
       <isgo name="Uranus" type="Planet" team="Player">
-        <argument>9996,57;-32,44922</argument>
+        <argument>9988,29;-108,371</argument>
         <argument>uranus.mesh</argument>
         <argument>0;0</argument>
       </isgo>
       <isgo name="Neptune" type="Planet" team="Fun">
-        <argument>11996,57;-32,44922</argument>
+        <argument>11988,29;-108,371</argument>
         <argument>neptune.mesh</argument>
         <argument>0;0</argument>
       </isgo>
       <imgo name="Mothership" type="SpaceShip" team="Player">
-        <argument>1413,243;1,355116</argument>
+        <argument>1414,969;1,229447</argument>
         <argument>25</argument>
         <gameAction name="PortalAction" />
       </imgo>
@@ -112,15 +112,15 @@
         <argument>100</argument>
       </imgo>
       <imgo name="Ship1" type="SpaceShip" team="Player">
-        <argument>1369,171;20,06085</argument>
+        <argument>400;400</argument>
         <argument>100</argument>
       </imgo>
       <imgo name="Ship2" type="SpaceShip" team="Player">
-        <argument>1398,921;14,74455</argument>
+        <argument>450;450</argument>
         <argument>100</argument>
       </imgo>
       <imgo name="Ship3" type="SpaceShip2" team="Player">
-        <argument>1418,525;10,19331</argument>
+        <argument>450;500</argument>
         <argument>100</argument>
       </imgo>
       <imgo name="Ship4" type="SpaceShip2" team="Player">
@@ -149,17 +149,17 @@
         <argument>jupiter.mesh</argument>
       </isgo>
       <isgo name="FunnyThings1" type="Planet" team="Fun">
-        <argument>996,5909;-32,44922</argument>
+        <argument>988,6004;-108,371</argument>
         <argument>mercury.mesh</argument>
         <argument>0;0</argument>
       </isgo>
       <isgo name="FunnyThings2" type="Planet" team="Fun">
-        <argument>1996,589;-32,44922</argument>
+        <argument>1988,646;-108,371</argument>
         <argument>venus.mesh</argument>
         <argument>0;0</argument>
       </isgo>
       <isgo name="FunnyThings3" type="Planet" team="Fun">
-        <argument>3996,579;-32,44922</argument>
+        <argument>3988,614;-108,371</argument>
         <argument>earth.mesh</argument>
         <argument>0;0</argument>
       </isgo>
@@ -207,7 +207,7 @@
   </solarSystems>
   <missionTargets>
     <target name="SurviveTimeTarget">
-      <argument>486</argument>
+      <argument>460</argument>
     </target>
     <target name="KillTarget">
       <argument>ShipF</argument>
@@ -226,31 +226,30 @@
   </missionTargets>
   <materials>
     <material name="Wolenium" team="Player">
-      <argument>613</argument>
+      <argument>639</argument>
     </material>
     <material name="Wolenium2" team="Player">
       <argument>600</argument>
     </material>
     <material name="Wolenium3" team="Player">
-      <argument>13</argument>
+      <argument>39</argument>
     </material>
     <material name="Wolenium2" team="Fun">
       <argument>600</argument>
     </material>
     <material name="Stone" team="Fun">
-      <argument>13</argument>
+      <argument>39</argument>
     </material>
     <material name="Wolenium" team="Fun">
-      <argument>13</argument>
+      <argument>39</argument>
     </material>
     <material name="Wolen" team="Fun">
-      <argument>13</argument>
+      <argument>39</argument>
     </material>
   </materials>
   <startState>
-    <controledMovement>
-      <movingObject movingObject="Ship1" target="Sun" />
-      <movingObject movingObject="Ship2" target="Sun" />
-    </controledMovement>
+    <controledMovement />
+    <occupations />
+    <fights />
   </startState>
 </mission>

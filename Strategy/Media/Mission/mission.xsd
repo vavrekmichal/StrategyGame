@@ -125,7 +125,7 @@
         <xs:element name="startState" maxOccurs="1" minOccurs="0">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name ="controledMovement">
+              <xs:element name ="controledMovement" minOccurs="0" maxOccurs="1">
                 <xs:complexType>
                   <xs:sequence>
                     <xs:element name="movingObject" minOccurs="0" maxOccurs="unbounded">

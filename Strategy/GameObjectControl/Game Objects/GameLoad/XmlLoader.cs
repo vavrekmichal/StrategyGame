@@ -276,6 +276,10 @@ namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
 			foreach (XmlNode item in stateNode.SelectNodes(".//occupation")) {
 				var target = item.Attributes["target"].InnerText;
 				var time = Int32.Parse(item.Attributes["time"].InnerText);
+				if (time < 1) {
+					// Invalid data
+					continue;
+				}
 				var members = new List<string>();
 				foreach (XmlNode item1 in item.SelectNodes(".//member")) {
 					members.Add(item1.Attributes["name"].InnerText);
@@ -296,7 +300,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
 					group2.Add(memberNode.Attributes["name"].InnerText);
 				}
 
-				loadedFights.Add(new Tuple<List<string>,List<string>>(group1, group2));
+				loadedFights.Add(new Tuple<List<string>, List<string>>(group1, group2));
 			}
 		}
 

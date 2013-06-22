@@ -92,6 +92,7 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 					if (distance <= .0f) {
 						// Reached the destination
 						sceneNode.Position = destination;
+						position.Value = sceneNode.Position;
 						detourReached = true;
 						direction = Vector3.ZERO;
 						moving = false;
@@ -219,13 +220,10 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		/// </summary>
 		/// <param name="pointToGo">The new position.</param>
 		public virtual void JumpToLocation(Vector3 pointToGo) {
-			if (sceneNode == null) {
-				// Invisible mode
-				position.Value = pointToGo;
-			} else {
-				// Visible mode
+			if (sceneNode != null) {
 				sceneNode.Position = pointToGo;
-			}
+			} 
+			position.Value = pointToGo;
 		}
 
 		/// <summary>

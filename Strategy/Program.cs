@@ -106,7 +106,7 @@ namespace Strategy {
 		}
 
 		/// <summary>
-		/// Processes input from keyboard (MusicPlayer control, Game pause or exit).
+		/// Processes input from keyboard (MusicPlayer control, Game pause, save or exit).
 		/// </summary>
 		/// <param Name="evt">The information which button was pressed.</param>
 		/// <returns>Returns always true.</returns>
@@ -139,6 +139,9 @@ namespace Strategy {
 				case MOIS.KeyCode.KC_ESCAPE:
 					// Close the program.
 					myGame.Quit();
+					break;
+				case MOIS.KeyCode.KC_F5:
+					Game.Save("QuickSave.save");
 					break;
 			}
 			return true;

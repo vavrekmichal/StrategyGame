@@ -34,9 +34,16 @@ namespace Strategy.MoveMgr {
 				return;
 			}
 			foreach (var item in loadedMovements) {
-				var movingObj = Game.HitTest.GetIMGO(item.Key);
-				var target = Game.HitTest.GetGameObject(item.Value);
-				GoToTargetIMGO(movingObj, target);
+				if (Game.HitTest.IsObjectControllable(item.Key) && Game.HitTest.IsObjectMovable(item.Key)) {
+					var movingObj = Game.HitTest.GetIMGO(item.Key);
+					IGameObject target;
+					if (Game.HitTest.IsObjectControllable(item.Value)) {
+						target = Game.HitTest.GetGameObject(item.Value);
+					} else {
+						continue;
+					}
+					GoToTargetIMGO(movingObj, target);
+				}
 			}
 
 		}

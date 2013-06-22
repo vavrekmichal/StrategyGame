@@ -231,7 +231,9 @@ namespace Strategy {
 		/// </summary>
 		/// <param name="name">The name of the creating save.</param>
 		public static void Save(string name) {
-			gameObjectMgr.GameSerializer.Save(name);
+			if (initialized) {
+				gameObjectMgr.GameSerializer.Save(name);
+			}
 		}
 
 		/// <summary>
