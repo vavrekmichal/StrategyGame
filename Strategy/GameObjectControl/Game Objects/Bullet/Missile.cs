@@ -38,6 +38,7 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		IBulletStopReciever reciever;
 
 		private const string missilePower = "missilePower";
+		private const float coolDownTime = 0.5f;
 
 		/// <summary>
 		/// Creates instance at given position and traveling to given target (position).
@@ -94,7 +95,7 @@ namespace Strategy.GameObjectControl.Game_Objects.Bullet {
 		/// Returns bullet cooldown.
 		/// </summary>
 		public static TimeSpan Cooldown {
-			get { return TimeSpan.FromSeconds(2); }
+			get { return TimeSpan.FromSeconds(coolDownTime); }
 		}
 
 		/// <summary>

@@ -60,6 +60,8 @@ namespace Strategy.GameObjectControl.Game_Objects.GameSave {
 			SerializeGameState(rootElement);
 
 			document.Save(Game.SavesGamePath + '/' + saveName);
+
+			Game.PrintToGameConsole("Game saved.");
 		}
 
 		#region Serializators

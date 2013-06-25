@@ -93,17 +93,10 @@
     <Compile Include="GameObjectControl\Game Objects\Bullet\Missile.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GameObjectControl\Game Objects\Bullet\Missile2.cs" />
-    <Compile Include="GameObjectControl\Game Objects\GameActions\CreateSpaceShipAction.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="GameObjectControl\Game Objects\GameActions\DieAction.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GameObjectControl\Game Objects\GameActions\DoNothingJustPrintText.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameActions\IGameAction.cs" />
-    <Compile Include="GameObjectControl\Game Objects\GameActions\PortalAction.cs" />
-    <Compile Include="GameObjectControl\Game Objects\GameActions\ProduceAction.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameActions\StopMoveAction.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -112,22 +105,14 @@
     <Compile Include="GameObjectControl\Game Objects\GameObject.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameSave\ConstructorFieldAttribute.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameSave\GameSerializer.cs" />
-    <Compile Include="GameObjectControl\Game Objects\GameTargets\EliminateTeamTarget.cs" />
-    <Compile Include="GameObjectControl\Game Objects\GameTargets\EscortTarget.cs" />
     <Compile Include="GameObjectControl\Game Objects\GameTargets\ITarget.cs" />
-    <Compile Include="GameObjectControl\Game Objects\GameTargets\KillTarget.cs" />
-    <Compile Include="GameObjectControl\Game Objects\GameTargets\OccupyTarget.cs" />
-    <Compile Include="GameObjectControl\Game Objects\GameTargets\SurviveTimeTarget.cs" />
     <Compile Include="GameObjectControl\Game Objects\IGameObject.cs" />
     <Compile Include="GameObjectControl\Game Objects\HitTest.cs" />
     <Compile Include="GameObjectControl\Game Objects\IGameObjectCreator.cs" />
     <Compile Include="GameObjectControl\Game Objects\MovableGameObjectBox\IMovableGameObject.cs" />
-    <Compile Include="GameObjectControl\Game Objects\MovableGameObjectBox\SpaceShip.cs" />
     <Compile Include="GameObjectControl\Game Objects\MyDieArgs.cs" />
     <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\Gate.cs" />
     <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\IStaticGameObject.cs" />
-    <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\Planet.cs" />
-    <Compile Include="GameObjectControl\Game Objects\StaticGameObjectBox\Sun.cs" />
     <Compile Include="GameObjectControl\GroupMgr\TargetedGroupManager.cs" />
     <Compile Include="GameObjectControl\GroupMgr\TargetPointer.cs" />
     <Compile Include="GameObjectControl\Traveler.cs" />

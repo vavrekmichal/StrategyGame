@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"  ?>
+
+<mission propertyFilePath="../../Media/Mission/Scripts/Properties.csx">
+  <teams>
+    <friendlyTeams>
+      <team name="Player"/>
+    </friendlyTeams>
+  </teams>
+  <usedObjects>
+    <isgos>
+      <gameObject name="Planet" path="StaticGameObjectBox/Planet.cs" fullName="Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox.Planet"/>
+      <gameObject name="Sun" path="StaticGameObjectBox/Sun.cs" fullName="Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox.Sun"/>
+    </isgos>
+    <imgos>
+      <gameObject name="SpaceShip" path="MovableGameObjectBox/SpaceShip.cs" fullName="Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox.SpaceShip"/>
+    </imgos>
+    <gameActions>
+      <gameObject name="ProduceAction" path="GameActions/ProduceAction.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.ProduceAction"/>
+      <gameObject name="PortalAction" path="GameActions/PortalAction.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.PortalAction"/>
+    </gameActions>
+    <gameTargets>
+      <gameObject name="EscortTarget" path="GameTargets/EscortTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.EscortTarget"/>
+    </gameTargets>
+  </usedObjects>
+  <solarSystems>
+    <solarSystem name="This is my" position="3000;0;3000" gate="true">
+      <isgo type="Sun" name="Sun">
+        <argument>sun.mesh</argument>
+      </isgo>
+      <isgo type="Planet" name="Mercury" team="Player">
+        <argument>-250;250</argument>
+        <argument>mercury.mesh</argument>
+        <argument>200;200</argument>
+        <gameAction name="ProduceAction">
+          <argument>Stone</argument>
+        </gameAction>
+      </isgo>
+      <isgo type="Planet" name="Venus" team="Player">
+        <argument>1500;0</argument>
+        <argument>venus.mesh</argument>
+        <argument>0;0</argument> 
+        <gameAction name="ProduceAction">
+          <argument>Wolenium</argument>
+        </gameAction>
+      </isgo>
+      <isgo type="Planet" name="Earth" team="Player">
+        <argument>2500;0</argument>
+        <argument>earth.mesh</argument>
+        <argument>0;0</argument>     
+      </isgo>
+
+      <imgo type="SpaceShip" name="Mothership" team="Player">
+        <argument>300;300</argument>
+        <argument>25</argument>
+      </imgo>
+      <imgo type="SpaceShip" name="Ship" team="Player">
+        <argument>350;350</argument>
+      </imgo>
+  
+    </solarSystem>
+    <solarSystem name="AlfaX2System" position="300;500;3000">
+      <isgo type="Sun" name="AflaX">
+        <argument>jupiter.mesh</argument>
+      </isgo>
+      <isgo type="Planet" name="Orion" team="Player">
+        <argument>1000;0</argument>
+        <argument>mercury.mesh</argument>
+        <argument>0;0</argument>  
+      </isgo>
+      <isgo type="Planet" name="PlanetZ" team="Player">
+        <argument>2000;0</argument>
+        <argument>venus.mesh</argument>
+        <argument>0;0</argument>   
+      </isgo>
+      <isgo type="Planet" name="Wolen-Invictus" team="Player">
+        <argument>4000;0</argument>
+        <argument>earth.mesh</argument>
+        <argument>0;0</argument>  
+      </isgo>
+    </solarSystem>
+  </solarSystems>
+  <missionTargets>
+    <target name="EscortTarget">
+      <argument>Mothership</argument>
+      <argument>AlfaX2System</argument>
+      <argument>-1000;-200</argument>
+    </target>
+  </missionTargets>
+  <materials>
+    <material name="Wolenium" team="Player">
+      <argument>600</argument>
+    </material>
+  </materials>
+  <startState>
+    <controledMovement>
+      <movingObject movingObject="Mothership" target="Venus"/>
+    </controledMovement>
+  </startState>
+</mission>

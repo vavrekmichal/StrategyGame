@@ -3,7 +3,6 @@
   <xs:element name="mission" >
     <xs:complexType>
       <xs:sequence>
-
         <xs:element name="teams" >
           <xs:complexType>
             <xs:sequence>
@@ -26,28 +25,28 @@
         <xs:element name ="usedObjects">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="ibullets">
+              <xs:element name="ibullets" minOccurs="0" maxOccurs="1">
                 <xs:complexType>
                   <xs:sequence>
                     <xs:element maxOccurs="unbounded" ref="gameObject"/>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
-              <xs:element name="isgos">
+              <xs:element name="isgos" minOccurs="0" maxOccurs="1">
                 <xs:complexType>
                   <xs:sequence>
                     <xs:element maxOccurs="unbounded" ref="gameObject"/>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
-              <xs:element name="imgos">
+              <xs:element name="imgos" minOccurs="0" maxOccurs="1">
                 <xs:complexType>
                   <xs:sequence>
                     <xs:element maxOccurs="unbounded" ref="gameObject"/>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
-              <xs:element name="gameActions">
+              <xs:element name="gameActions" minOccurs="0" maxOccurs="1">
                 <xs:complexType>
                   <xs:sequence>
                     <xs:element maxOccurs="unbounded" ref="gameObject"/>

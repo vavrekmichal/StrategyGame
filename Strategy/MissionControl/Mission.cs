@@ -11,8 +11,10 @@ namespace Strategy.MissionControl {
 	public class Mission {
 
 		List<ITarget> targetList;
+		TeamControl.Team playerTeam;
 
 		const string winText = "You are winner.";
+		const string loseText = "You are winner.";
 		const string targetCompEffect = "TargetComp.wav";
 
 		/// <summary>
@@ -32,6 +34,7 @@ namespace Strategy.MissionControl {
 					targetList.Remove(target);
 				}
 			}
+			playerTeam = Game.TeamManager.GetTeam(Game.PlayerName);
 		}
 
 		/// <summary>
@@ -40,6 +43,9 @@ namespace Strategy.MissionControl {
 		/// </summary>
 		/// <param name="delay">The delay between last two frames.</param>
 		public void Update(float delay) {
+			if (playerTeam.Count < 1) {
+				Game.EndMission(loseText);
+			}
 			if (targetList.Count() == 0) {
 				// No target -> mission ends.
 				Game.EndMission(winText);

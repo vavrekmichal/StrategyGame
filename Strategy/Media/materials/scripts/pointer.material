@@ -11,7 +11,7 @@ material PointerMaterial
 
 			texture_unit
 			{
-				texture New_Ogre_Border.png
+				texture gold.jpg
 			}
 		}
 
