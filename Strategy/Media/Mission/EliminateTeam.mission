@@ -25,7 +25,7 @@
     </gameTargets>
   </usedObjects>
   <solarSystems>
-    <solarSystem name="This is my" position="3000;0;3000" gate="true">
+    <solarSystem name="Solar System" position="3000;0;3000" gate="true">
       <isgo type="Sun" name="Sun">
         <argument>sun.mesh</argument>
       </isgo>

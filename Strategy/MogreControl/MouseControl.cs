@@ -22,6 +22,11 @@ namespace Strategy.MogreControl {
 		int rightBorder;
 		int bottomBorder;
 
+		int upBorderStop;
+		int leftBorderStop;
+		int rightBorderStop;
+		int bottomBorderStop;
+
 		// Selection Rectangle items
 		bool isRectagularSelect;
 		Vector2 mStart, mStop;
@@ -51,10 +56,16 @@ namespace Strategy.MogreControl {
 		/// <param name="sceneWidth">The width of the game window.</param>
 		/// <param name="sceneHeight">The height of the game window.</param>
 		private MouseControl(CameraMan c, int sceneWidth, int sceneHeight) {
-			upBorder = sceneHeight / 6;
+			var stopBoundX = sceneHeight / 20;
+			var stopBoundY = sceneWidth / 15;
+			upBorder = sceneHeight / 6; ;
+			upBorderStop = upBorder + stopBoundX;
 			leftBorder = sceneWidth / 15;
+			leftBorderStop = leftBorder + stopBoundY;
 			rightBorder = sceneWidth - sceneWidth / 15;
+			rightBorderStop = rightBorder - stopBoundY;
 			bottomBorder = sceneHeight * 7 / 10;
+			bottomBorderStop = bottomBorder - stopBoundX;
 
 			cameraMan = c;
 			mRect = new SelectionRectangle("RectangularSelect");
@@ -76,6 +87,7 @@ namespace Strategy.MogreControl {
 			}
 			switch (id) {
 				case MouseButtonID.MB_Left:
+					StopCameremanMove();
 					// Updates the selection rectangle.
 					mStart.x = (float)arg.state.X.abs / (float)arg.state.width;
 					mStart.y = (float)arg.state.Y.abs / (float)arg.state.height;
@@ -184,36 +196,52 @@ namespace Strategy.MogreControl {
 		/// </summary>
 		/// <param name="arg">The arguments with mouse position.</param>
 		private void CheckMousePosition(MouseEvent arg) {
-			// Move up
-			if (arg.state.Y.abs < upBorder) {
-				cameraMan.GoingUp = true;
-				cameraMan.GoingForward = true;
-			} else {
-				cameraMan.GoingUp = false;
-				cameraMan.GoingForward = false;
+			// Checks move up
+			if (arg.state.Y.abs < upBorderStop) {
+				if (arg.state.Y.abs < upBorder) {
+					// Move up
+					cameraMan.GoingUp = true;
+					cameraMan.GoingForward = true;
+				} else {
+					// Stop move up
+					cameraMan.GoingUp = false;
+					cameraMan.GoingForward = false;
+				}
 			}
 
-			// Move left
-			if (arg.state.X.abs < leftBorder) {
-				cameraMan.GoingLeft = true;
-			} else {
-				cameraMan.GoingLeft = false;
+			// Checks move left
+			if (arg.state.X.abs < leftBorderStop) {
+				if (arg.state.X.abs < leftBorder) {
+					// Move left
+					cameraMan.GoingLeft = true;
+				} else {
+					// Stop move left
+					cameraMan.GoingLeft = false;
+				}
 			}
 
-			// Move right
-			if (arg.state.X.abs > rightBorder) {
-				cameraMan.GoingRight = true;
-			} else {
-				cameraMan.GoingRight = false;
+			// Checks move right
+			if (arg.state.X.abs > rightBorderStop) {
+				if (arg.state.X.abs > rightBorder) {
+					// Move right
+					cameraMan.GoingRight = true;
+				} else {
+					// Stop move right
+					cameraMan.GoingRight = false;
+				}
 			}
 
-			// Move down
-			if (arg.state.Y.abs > bottomBorder) {
-				cameraMan.GoingDown = true;
-				cameraMan.GoingBack = true;
-			} else {
-				cameraMan.GoingDown = false;
-				cameraMan.GoingBack = false;
+			// Checks move down
+			if (arg.state.Y.abs > bottomBorderStop) {
+				if (arg.state.Y.abs > bottomBorder) {
+					// Move down
+					cameraMan.GoingDown = true;
+					cameraMan.GoingBack = true;
+				} else {
+					// Stop move down
+					cameraMan.GoingDown = false;
+					cameraMan.GoingBack = false;
+				}	
 			}
 		}
 

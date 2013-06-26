@@ -379,8 +379,7 @@ namespace Strategy.GameGUI {
 			upperMenu = new FlowLayoutPanel() {
 				Size = new Size(screenWidth * textHeight / 20, screenHeight / 14),
 				Location = new Point(screenWidth / 20, 0),
-				Skin = skinDict["Panel"],
-				Opacity = 0.5f
+				Skin = skinDict["Panel"]
 			};
 			upperMenu.Padding = new Thickness(5);
 			gui.Controls.Add(upperMenu);
@@ -392,7 +391,6 @@ namespace Strategy.GameGUI {
 				Text = "Current solar system: ",
 				TextStyle = {
 					Alignment = Miyagi.Common.Alignment.MiddleLeft,
-					ForegroundColour = Colours.White
 				},
 				Padding = new Thickness(10, 0, 0, 0)
 			};
@@ -417,8 +415,7 @@ namespace Strategy.GameGUI {
 				Size = new Size(upperMenu.Width / 6, upperMenu.Height * 4 / 5),
 				Text = "Material State: ",
 				TextStyle = {
-					Alignment = Miyagi.Common.Alignment.MiddleLeft,
-					ForegroundColour = Colours.White
+					Alignment = Miyagi.Common.Alignment.MiddleLeft
 				},
 				Padding = new Thickness(1)
 			};

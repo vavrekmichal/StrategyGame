@@ -24,7 +24,7 @@ namespace Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox {
 		private const string animationPort = "funcionando3_eani_Clip";
 		private const string animationStay = "abrirse_eani_Clip";
 		private const string travelSound = "ltsaberon01.wav";
-		private readonly Vector3 gatePosition = new Vector3(10000, 0, 10000);
+		private readonly Vector3 gatePosition = new Vector3(5000, 0, 1000);
 
 		private AnimationState animationState; // The AnimationState the moving object
 

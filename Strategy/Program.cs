@@ -4,15 +4,29 @@ namespace Strategy {
 	/// <summary>
 	/// Main class derives BaseApplication for easier work with MOGRE and initialzes the Mogre framework.
 	/// </summary>
-	/// 
 	class MyMogre : Mogre.TutorialFramework.BaseApplication {
 
+		/// <summary>
+		/// The m input MGR
+		/// </summary>
 		protected MOIS.InputManager mInputMgr; // Use for create control (mouse, keyborard) instance
 
+		/// <summary>
+		/// The fade colour
+		/// </summary>
 		protected Mogre.ColourValue fadeColour = new Mogre.ColourValue(0.05f, 0.05f, 0.05f); // Color of fog and shadow
+		/// <summary>
+		/// The camera start
+		/// </summary>
 		protected static readonly Mogre.Vector3 cameraStart = new Mogre.Vector3(0, 1000, 1000);
 
+		/// <summary>
+		/// The camera man
+		/// </summary>
 		protected CameraMan cameraMan;
+		/// <summary>
+		/// My game
+		/// </summary>
 		protected Game myGame;
 
 		/// <summary>
@@ -53,7 +67,7 @@ namespace Strategy {
 		/// </summary>
 		protected override void CreateViewports() {
 			Mogre.Viewport viewport = mWindow.AddViewport(mCamera);
-			viewport.BackgroundColour = new Mogre.ColourValue(0.05f, 0.05f, 0.05f);
+			viewport.BackgroundColour = new Mogre.ColourValue(0.1f, 0.1f, 0.1f);
 			mCamera.AspectRatio = (float)viewport.ActualWidth / viewport.ActualHeight;
 		}
 
@@ -78,7 +92,7 @@ namespace Strategy {
 		/// <summary>
 		/// Updates the Game and the Mogre system.
 		/// </summary>
-		/// <param Name="evt">The delay between last two frames.</param>
+		/// <param name="evt">The evt.</param>
 		protected override void UpdateScene(Mogre.FrameEvent evt) {
 			float f = evt.timeSinceLastFrame;
 
@@ -108,8 +122,10 @@ namespace Strategy {
 		/// <summary>
 		/// Processes input from keyboard (MusicPlayer control, Game pause, save or exit).
 		/// </summary>
-		/// <param Name="evt">The information which button was pressed.</param>
-		/// <returns>Returns always true.</returns>
+		/// <param name="evt">The evt.</param>
+		/// <returns>
+		/// Returns always true.
+		/// </returns>
 		protected override bool OnKeyPressed(MOIS.KeyEvent evt) {
 			base.OnKeyPressed(evt);
 			switch (evt.key) {
@@ -160,7 +176,9 @@ namespace Strategy {
 		/// Sets rendering window properties and rendering system.
 		/// (OpenGL, 1280x720, Window mode)
 		/// </summary>
-		/// <returns>Always returns true.</returns>
+		/// <returns>
+		/// Always returns true.
+		/// </returns>
 		protected override bool Configure() {
 			Mogre.RenderSystem rs = mRoot.GetRenderSystemByName("OpenGL Rendering Subsystem");
 			rs.SetConfigOption("Full Screen", "No");
@@ -172,9 +190,8 @@ namespace Strategy {
 		}
 
 
-
 		/// <summary>
-		/// Sets color and type of shadows.
+		/// Sets the shadow.
 		/// </summary>
 		private void SetShadow() {
 			mSceneMgr.AmbientLight = new Mogre.ColourValue(.1f, .1f, .1f);
@@ -198,6 +215,18 @@ namespace Strategy {
 			pointLight.SpecularColour = Mogre.ColourValue.Blue;
 			pointLight.Position = new Mogre.Vector3(0, 0, 0);
 
+			pointLight = mSceneMgr.CreateLight("pointLight2");
+			pointLight.Type = Mogre.Light.LightTypes.LT_POINT;
+			pointLight.DiffuseColour = Mogre.ColourValue.White;
+			pointLight.SpecularColour = Mogre.ColourValue.Blue;
+			pointLight.Position = new Mogre.Vector3(0, 1000, 0);
+
+			pointLight = mSceneMgr.CreateLight("pointLight3");
+			pointLight.Type = Mogre.Light.LightTypes.LT_POINT;
+			pointLight.DiffuseColour = Mogre.ColourValue.White;
+			pointLight.SpecularColour = Mogre.ColourValue.Blue;
+			pointLight.Position = new Mogre.Vector3(0, -1000, 0);
+
 			Mogre.Light spotLight = mSceneMgr.CreateLight("spotLight");
 			spotLight.Type = Mogre.Light.LightTypes.LT_SPOTLIGHT;
 			spotLight.DiffuseColour = Mogre.ColourValue.White;
@@ -206,8 +235,9 @@ namespace Strategy {
 			spotLight.Position = new Mogre.Vector3(-50, 5000, -3000);
 		}
 
+
 		/// <summary>
-		/// Sets fog
+		/// Sets the fog.
 		/// </summary>
 		private void SetFog() {
 			mSceneMgr.SetFog(Mogre.FogMode.FOG_EXP2, fadeColour, 0.0003f);

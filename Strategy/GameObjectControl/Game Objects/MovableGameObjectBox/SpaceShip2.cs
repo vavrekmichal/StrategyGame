@@ -44,15 +44,22 @@ namespace Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox {
 		}
 
 		/// <summary>
-		/// Doesn't react on a mouse action (reacts if is the in a group with a more powerful member - can order to move/attack..).
+		/// Reacts on enemy moveble object, starts occupation or just move.
 		/// </summary>
 		/// <param name="point">The mouse position.</param>
 		/// <param name="hitObject">The result of a HitTest.</param>
 		/// <param name="isFriendly">The information if the hitted object is friendly.</param>
 		/// <param name="isMovableGameObject">The information if the hitted object is movable.</param>
-		/// <returns>Returns None.</returns>
+		/// <returns>Returns a required action.</returns>
 		public override ActionAnswer OnMouseAction(Vector3 point, MovableObject hitTarget, bool isFriendly, bool isMovableGameObject) {
-			return ActionAnswer.None;
+			if (hitTarget != null) {
+				if (!isFriendly) {
+					if (isMovableGameObject) {
+						return ActionAnswer.Occupy;
+					}
+				}
+			}
+			return ActionAnswer.Move;
 		}
 
 		/// <summary>
