@@ -239,7 +239,7 @@ namespace Strategy.FightMgr {
 		/// Checks distance between object and target. Compares the distance with
 		/// maximum distance constant and return if the target is in range.
 		/// </summary>
-		/// <returns>Return if the target is in range distance.</returns>
+		/// <returns>Returns if the target is in range distance.</returns>
 		public bool CheckDistance() {
 			float xd = 0;
 			float yd = 0;

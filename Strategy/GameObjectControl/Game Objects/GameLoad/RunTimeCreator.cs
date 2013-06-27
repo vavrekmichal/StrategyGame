@@ -47,7 +47,6 @@ namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
 			metadataRef.Add(new MetadataFileReference(Path.GetFullPath((new Uri(t + "\\\\Mogre.dll")).LocalPath)));
 			metadataRef.Add(new MetadataFileReference(typeof(PropertyManager).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(GameObjectControl.Game_Objects.StaticGameObjectBox.IStaticGameObject).Assembly.Location));
-			metadataRef.Add(new MetadataFileReference(typeof(Strategy.Game).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(ActionAnswer).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(PropertyEnum).Assembly.Location));
 			metadataRef.Add(new MetadataFileReference(typeof(XmlLoadException).Assembly.Location));
@@ -67,7 +66,7 @@ namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
 		/// </summary>
 		/// <param name="syntaxTreeList">The List with SyntaxTrees (compiling classes).</param>
 		public void CompileUsedObjects(List<SyntaxTree> syntaxTreeList) {
-			var comp = Compilation.Create("Test.dll"
+			var comp = Compilation.Create("DynamicCompiledClasses.dll"
 							 , syntaxTrees: syntaxTreeList
 							 , references: metadataRef
 							 , options: comilationOption
@@ -161,11 +160,9 @@ namespace Strategy.GameObjectControl.Game_Objects.GameLoad {
 		/// <summary>
 		/// Creates a object in runtime from dynamic 
 		/// </summary>
-		/// <param name="type"></param>
-		/// <param name="fullPath"></param>
-		/// <param name="fullName"></param>
-		/// <param name="args"></param>
-		/// <returns></returns>
+		/// <param name="fullName">The string contains the type of a creating object.</param>
+		/// <param name="args">The arguments for a creating object.</param>
+		/// <returns>The created object by the given type name.</returns>
 		private object CreateObject(string fullName, object[] args) {
 
 			var o = moduleBuilder.GetType(fullName);
