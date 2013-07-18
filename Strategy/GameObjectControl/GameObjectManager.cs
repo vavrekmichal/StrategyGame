@@ -360,7 +360,7 @@ namespace Strategy.GameObjectControl {
 			// Chooses the next action by the group reply.
 			switch (answer) {
 				case ActionAnswer.Move:
-					Game.PrintToGameConsole("Group from team " + groupMgr.GetActiveMovableGroup().Team.Name + " moving to " + clickedPoint.ToString()); //todo delete
+					Game.PrintToGameConsole("Group from team " + groupMgr.GetActiveMovableGroup().Team.Name + " moving to " + clickedPoint.ToString());
 					moveMgr.GoToLocation(groupMgr.GetActiveMovableGroup(), clickedPoint);
 					break;
 				case ActionAnswer.MoveTo:

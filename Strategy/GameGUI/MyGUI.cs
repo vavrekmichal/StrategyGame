@@ -233,7 +233,7 @@ namespace Strategy.GameGUI {
 		/// <param name="gameObject">The potential traveler.</param>
 		public void ShowTravelSelectionPanel(List<string> possibilities, object gameObject) {
 			// Creates PopUpPanel (this is not singleton).
-			var panel = CreatePopUpPanel("Choose treval destiantion:", PanelType.TravelPanel, false);
+			var panel = CreatePopUpPanel("Choose travel destiantion:", PanelType.TravelPanel, false);
 			gui.Controls.Add(panel);
 
 			int marginTop = 11 + textHeight;
@@ -473,7 +473,7 @@ namespace Strategy.GameGUI {
 			int buttonWidth = buttonsPanel.Width / 3;
 
 			// Creates Pause button with MouseClick action Pause (disable, visible)
-			pauseButton = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Pause BUTTON", new Point(buttonMarginLeft, buttonMarginTop * row));
+			pauseButton = CreateButton(buttonWidth, buttonsPanel.Height / 5, "Pause", new Point(buttonMarginLeft, buttonMarginTop * row));
 			buttonsPanel.Controls.Add(pauseButton);
 			pauseButton.MouseClick += Pause;
 			pauseButton.Enabled = false;

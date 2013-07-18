@@ -42,18 +42,14 @@ namespace Mogre.TutorialFramework {
 			if (!Game.KeyboardCaptured) {
 				switch (evt.key) {
 					case KeyCode.KC_W:
-						mCameraMan.GoingUp = true;
-						mCameraMan.GoingForward = true;
-						break;
 					case KeyCode.KC_UP:
+						mCameraMan.GoingUp = true;
 						mCameraMan.GoingForward = true;
 						break;
 
 					case KeyCode.KC_S:
-						mCameraMan.GoingDown = true;
-						mCameraMan.GoingBack = true;
-						break;
 					case KeyCode.KC_DOWN:
+						mCameraMan.GoingDown = true;
 						mCameraMan.GoingBack = true;
 						break;
 
@@ -69,12 +65,12 @@ namespace Mogre.TutorialFramework {
 
 					case KeyCode.KC_E:
 					case KeyCode.KC_PGUP:
-						mCameraMan.GoingUp = true;
+						mCameraMan.GoingBack = true;
 						break;
 
 					case KeyCode.KC_Q:
 					case KeyCode.KC_PGDOWN:
-						mCameraMan.GoingDown = true;
+						mCameraMan.GoingForward = true;
 						break;
 
 					case KeyCode.KC_LSHIFT:
@@ -97,23 +93,16 @@ namespace Mogre.TutorialFramework {
 		protected virtual bool OnKeyReleased(KeyEvent evt) {
 			if (!Game.KeyboardCaptured) {
 				switch (evt.key) {
-					case KeyCode.KC_F5:
-						Game.Save("QuickSave.save");
-						break;
 					case KeyCode.KC_W:
+					case KeyCode.KC_UP:
 						mCameraMan.GoingForward = false;
 						mCameraMan.GoingUp = false;
 						break;
-					case KeyCode.KC_UP:
-						mCameraMan.GoingForward = false;
-						break;
 
 					case KeyCode.KC_S:
-						mCameraMan.GoingBack = false;
-						mCameraMan.GoingDown = false;
-						break;
 					case KeyCode.KC_DOWN:
 						mCameraMan.GoingBack = false;
+						mCameraMan.GoingDown = false;
 						break;
 
 					case KeyCode.KC_A:
@@ -128,12 +117,12 @@ namespace Mogre.TutorialFramework {
 
 					case KeyCode.KC_E:
 					case KeyCode.KC_PGUP:
-						mCameraMan.GoingUp = false;
+						mCameraMan.GoingBack = false;
 						break;
 
 					case KeyCode.KC_Q:
 					case KeyCode.KC_PGDOWN:
-						mCameraMan.GoingDown = false;
+						mCameraMan.GoingForward = false;
 						break;
 
 					case KeyCode.KC_LSHIFT:

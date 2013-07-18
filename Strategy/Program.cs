@@ -134,10 +134,10 @@ namespace Strategy {
 						Game.Paused = !Game.Paused;
 					}
 					break;
-				case MOIS.KeyCode.KC_NUMPAD9:
+				case MOIS.KeyCode.KC_I:
 					Game.IGameSoundMakerPlayer.VolumeUp();
 					break;
-				case MOIS.KeyCode.KC_NUMPAD6:
+				case MOIS.KeyCode.KC_K:
 					Game.IGameSoundMakerPlayer.VolumeDown();
 					break;
 				case MOIS.KeyCode.KC_N:
@@ -159,6 +159,7 @@ namespace Strategy {
 				case MOIS.KeyCode.KC_F5:
 					Game.Save("QuickSave.save");
 					break;
+
 			}
 			return true;
 		}

@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<mission propertyFilePath="../../Media/Mission/Scripts/Properties.csx">
+  <teams>
+    <friendlyTeams>
+      <team name="Player" />
+    </friendlyTeams>
+    <friendlyTeams>
+      <team name="Fun" />
+    </friendlyTeams>
+  </teams>
+  <usedObjects>
+    <isgos>
+      <gameObject name="Planet" path="StaticGameObjectBox/Planet.cs" fullName="Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox.Planet" />
+      <gameObject name="Sun" path="StaticGameObjectBox/Sun.cs" fullName="Strategy.GameObjectControl.Game_Objects.StaticGameObjectBox.Sun" />
+    </isgos>
+    <imgos>
+      <gameObject name="SpaceShip" path="MovableGameObjectBox/SpaceShip.cs" fullName="Strategy.GameObjectControl.Game_Objects.MovableGameObjectBox.SpaceShip" />
+    </imgos>
+    <gameActions>
+      <gameObject name="ProduceAction" path="GameActions/ProduceAction.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameActions.ProduceAction" />
+    </gameActions>
+    <gameTargets>
+      <gameObject name="KillTarget" path="GameTargets/KillTarget.cs" fullName="Strategy.GameObjectControl.Game_Objects.GameTargets.KillTarget" />
+    </gameTargets>
+  </usedObjects>
+  <solarSystems>
+    <solarSystem name="Solar System" position="3000;0;3000" gate="true">
+      <isgo name="Sun" type="Sun">
+        <argument>sun.mesh</argument>
+      </isgo>
+      <isgo name="Mercury" type="Planet" team="Player">
+        <argument>-210,7757;189,094</argument>
+        <argument>mercury.mesh</argument>
+        <argument>200;200</argument>
+        <gameAction name="ProduceAction">
+          <argument>Stone</argument>
+        </gameAction>
+      </isgo>
+      <isgo name="Venus" type="Planet" team="Player">
+        <argument>1499,4;-5,66878</argument>
+        <argument>venus.mesh</argument>
+        <argument>0;0</argument>
+        <gameAction name="ProduceAction">
+          <argument>Wolenium</argument>
+        </gameAction>
+      </isgo>
+      <isgo name="Earth" type="Planet" team="Player">
+        <argument>2499,402;-5,66878</argument>
+        <argument>earth.mesh</argument>
+        <argument>0;0</argument>
+      </isgo>
+      <imgo name="Mothership" type="SpaceShip" team="Player">
+        <argument>657,558;210,048</argument>
+        <argument>25</argument>
+      </imgo>
+      <imgo name="Ship" type="SpaceShip" team="Player">
+        <argument>350;350</argument>
+        <argument>100</argument>
+      </imgo>
+      <imgo name="ShipF" type="SpaceShip" team="Fun">
+        <argument>750;450</argument>
+        <argument>100</argument>
+      </imgo>
+    </solarSystem>
+    <solarSystem name="AlfaX2System" position="300;500;3000">
+      <isgo name="AflaX" type="Sun">
+        <argument>jupiter.mesh</argument>
+      </isgo>
+      <isgo name="Orion" type="Planet" team="Player">
+        <argument>999,4059;-5,66878</argument>
+        <argument>mercury.mesh</argument>
+        <argument>0;0</argument>
+      </isgo>
+      <isgo name="PlanetZ" type="Planet" team="Player">
+        <argument>1999,4;-5,66878</argument>
+        <argument>venus.mesh</argument>
+        <argument>0;0</argument>
+      </isgo>
+      <isgo name="Wolen-Invictus" type="Planet" team="Player">
+        <argument>3999,402;-5,66878</argument>
+        <argument>earth.mesh</argument>
+        <argument>0;0</argument>
+      </isgo>
+    </solarSystem>
+  </solarSystems>
+  <missionTargets>
+    <target name="KillTarget">
+      <argument>ShipF</argument>
+    </target>
+  </missionTargets>
+  <materials>
+    <material name="Wolenium" team="Player">
+      <argument>603</argument>
+    </material>
+    <material name="Stone" team="Player">
+      <argument>3</argument>
+    </material>
+  </materials>
+  <startState>
+    <controledMovement>
+      <movingObject movingObject="Mothership" target="Venus" />
+    </controledMovement>
+    <occupations />
+    <fights />
+  </startState>
+</mission>

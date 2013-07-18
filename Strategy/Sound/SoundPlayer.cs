@@ -38,8 +38,6 @@ namespace Strategy {
 			sound.setSoundStopEventReceiver(this);
             ShowCurrentPlaying(songs[current]);
 
-			engine.SoundVolume = 0; //TODO: DELETE
-
 			effects = new Dictionary<string, string>();
 			var tempEff = Directory.GetFiles(effectPath);
 			foreach (var effName in tempEff) {
